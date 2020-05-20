@@ -5,10 +5,11 @@ _Hinweis: Es gibt oftmals nicht nur eine richtige Lösung, dennoch sollten wir e
 ## Layout
 (Tendenziell eher nebensächlich) In pyCharm gibt es eine Funktion, die Python-Dateien automatisch an das PEP8-Layout anpasst: `Rechtsklick auf Datei > Reformat Code > Optimize Imports & Cleanup Code`
 ```python
-# ....................................................................|......|
+# ...........................................................................|
+# ....................................................................|
 """ Maximal 79 Zeichen pro Zeile!
-Die Länge von Docstrings oder Kommentaren sollte eine Zeile nicht mehr 
-als 72 Zeichen enthalten """
+Docstrings und Kommentare sollten nicht mehr als 72 Zeichen pro Zeile
+enthalten """
 
 # Ein Import pro Zeile, jedoch können mehrere Funktionen eines Moduls
 # in einer Zeile importiert werden
