@@ -116,16 +116,16 @@ class Group(BasisClass):
         """Datenbank-Funktion"""
         pass
 
-    #def search_member(self, email):
+    # def search_member(self, email):
     #    for member in self._members:
     #        if member.get_email() == email:
     #            return member
     #    return None
 
-    #def invite_member(self, email):
+    # def invite_member(self, email):
     #    pass
 
-    #def search_shoppinglist(self, name):
+    # def search_shoppinglist(self, name):
     #    results = []
     #    for shoppinglist in self._shoppinglists:
     #        if name in shoppinglist.get_name()
@@ -209,9 +209,12 @@ class ListEntry(BasisClass):
         self._purchasing_person = purchasing_person
         self._checked = False
         self._standardarticle = standardarticle
+
     def __str__(self):
-        return "- {}: {} {}, Beauftragt: {}, Ort: {}, Erledigt: {}".format(self._article.get_name(), self._amount, self._unit,
-                                                           self._purchasing_person.get_name(), self._retailer.get_name(), self._checked)
+        return "- {}: {} {}, Beauftragt: {}, Ort: {}, Erledigt: {}".format(self._article.get_name(), self._amount,
+                                                                           self._unit,
+                                                                           self._purchasing_person.get_name(),
+                                                                           self._retailer.get_name(), self._checked)
 
     def get_article(self):
         return self._article
@@ -299,14 +302,13 @@ class Person(BasisClass):
         for group in self._groups:
             group.delete_person(self)
 
-    #def set_email(self, email):
+    # def set_email(self, email):
     #    pass
 
 
 class User(Person):
     def __init__(self, name, email):
         super().__init__(name, email)
-
 
 
 # Familie
@@ -356,8 +358,10 @@ for shoppinglist in familie.get_shoppinglists():
 # Der Vater geht einkaufen und bekommt alles, bis auf die Tomaten
 print("")
 print("Vor dem Einkauf:")
-print("Wocheneinkauf {}/{} erledigt".format(wocheneinkauf.get_amout_of_list_entries_checked(), wocheneinkauf.get_amout_of_list_entries()))
-print("Silvesterparty {}/{} erledigt".format(silvesterparty.get_amout_of_list_entries_checked(), silvesterparty.get_amout_of_list_entries()))
+print("Wocheneinkauf {}/{} erledigt".format(wocheneinkauf.get_amout_of_list_entries_checked(),
+                                            wocheneinkauf.get_amout_of_list_entries()))
+print("Silvesterparty {}/{} erledigt".format(silvesterparty.get_amout_of_list_entries_checked(),
+                                             silvesterparty.get_amout_of_list_entries()))
 for list_entry in wocheneinkauf.get_list_entries():
     list_entry.check()
 for list_entry in silvesterparty.get_list_entries():
@@ -365,6 +369,7 @@ for list_entry in silvesterparty.get_list_entries():
         list_entry.check()
 print("")
 print("Nach dem Einkauf:")
-print("Wocheneinkauf {}/{} erledigt".format(wocheneinkauf.get_amout_of_list_entries_checked(), wocheneinkauf.get_amout_of_list_entries()))
-print("Silvesterparty {}/{} erledigt".format(silvesterparty.get_amout_of_list_entries_checked(), silvesterparty.get_amout_of_list_entries()))
-
+print("Wocheneinkauf {}/{} erledigt".format(wocheneinkauf.get_amout_of_list_entries_checked(),
+                                            wocheneinkauf.get_amout_of_list_entries()))
+print("Silvesterparty {}/{} erledigt".format(silvesterparty.get_amout_of_list_entries_checked(),
+                                             silvesterparty.get_amout_of_list_entries()))
