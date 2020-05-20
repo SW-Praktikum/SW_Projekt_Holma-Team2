@@ -81,7 +81,7 @@ print("Hello World!")
 # Formattierungs-Strings
 s1 = "{} World!".format("Hello")
 
-# Bei mehr als einer Formattierungs-Parametern: Betitelung der Variable
+# Bei mehrfacher Verwendung eines Parameters: Benennung der Parameters
 # durch eindeutige, verständliche Vereinfachung
-s2 = "{h} {w}!".format(h="Hello", w="World")
+s2 = "{h} {w}! This {w} is beautiful!".format(h="Hello", w="World")
 ```
