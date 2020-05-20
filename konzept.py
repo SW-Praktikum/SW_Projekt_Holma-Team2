@@ -2,7 +2,7 @@ import time
 import uuid
 
 
-class BasisClass(object):
+class BusinessObject(object):
     def __init__(self, name=""):
         """Basisklasse, die in allen anderen Klassen übernommen wird.
 
@@ -28,7 +28,7 @@ class BasisClass(object):
         self._name = name
 
 
-class Article(BasisClass):
+class Article(BusinessObject):
     def __init__(self, name, group):
         """Artikel, der für eine Gruppe erstellt wird.
 
@@ -45,7 +45,7 @@ class Article(BasisClass):
         self._group.delete_article(self)
 
 
-class Group(BasisClass):
+class Group(BusinessObject):
     def __init__(self, name, owner):
         """Gruppe, der Nutzer und Einkaufslisten hinzugefügt, oder entfernt werden. Eine Gruppe
         verfügt über Standardartikel, die bei der Erstellung von Einkaufslisten (wahlweise)
@@ -133,7 +133,7 @@ class Group(BasisClass):
     #    return results
 
 
-class Shoppinglist(BasisClass):
+class Shoppinglist(BusinessObject):
     def __init__(self, name, group, add_standardarticles=False):
         """Eine Einkaufsliste ist Teil *einer* Gruppe. Es können Listeinträge eingefügt werden - wahlweise auch
         Standardartikel. Für das UI gibt es Funktionen, um die Anzahl aller/erledigten Einträge einzusehen.
@@ -187,7 +187,7 @@ class Shoppinglist(BasisClass):
         self._group.delete_shoppinglist(self)
 
 
-class ListEntry(BasisClass):
+class ListEntry(BusinessObject):
     def __init__(self, list, article, amount=1, unit="", purchasing_person=None, retailer=None, standardarticle=False):
         """Ein Listeneintrag ist ein Eintrag in der Einkaufsliste, der sämtliche Informationen zum Artikel und der
         Zuordnung enthält. Ein Listeneintrag kann auch ein "Standardartikel" sein.
@@ -259,7 +259,7 @@ class ListEntry(BasisClass):
         self._list.delete_list_entry(self)
 
 
-class Retailer(BasisClass):
+class Retailer(BusinessObject):
     def __init__(self, name):
         """Einkaufsstelle, die später in einem Listeneintrag referenziert wird
 
@@ -268,7 +268,7 @@ class Retailer(BasisClass):
         super().__init__(name)
 
 
-class Person(BasisClass):
+class Person(BusinessObject):
     def __init__(self, name, email):
         """Person, die auf dem Portal angemeldet ist.
 
