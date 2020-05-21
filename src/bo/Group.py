@@ -6,7 +6,7 @@ class Group(BusinessObject):
         verfügt über Standardartikel, die bei der Erstellung von Einkaufslisten (wahlweise)
         hinzugefügt werden."""
         super().__init__()
-        self._owner = None
+        self._owner = None # nur als id (Fremdschlüssel)
 
     def __str__(self):
         return "Group: {}, owned by: {}".format(self.get_name(), self.get_owner())

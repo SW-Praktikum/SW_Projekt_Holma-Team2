@@ -6,12 +6,12 @@ class ListEntry(BusinessObject):
         """Ein Listeneintrag ist ein Eintrag in der Einkaufsliste, der sämtliche Informationen zum Artikel und der
         Zuordnung enthält. Ein Listeneintrag kann auch ein "Standardartikel" sein."""
         super().__init__()
-        self._article = None
+        self._article = None # nur als id (Fremdschlüssel)
         self._amount = ""
         self._unit = ""
-        self._retailer = None
-        self._purchasing_person = None
-        self._list = None
+        self._retailer = None # nur als id (Fremdschlüssel)
+        self._purchasing_person = None # nur als id (Fremdschlüssel)
+        self._list = None # nur als id (Fremdschlüssel)
         self._checked = False
         self._standardarticle = False
 
@@ -33,11 +33,11 @@ class ListEntry(BusinessObject):
     def get_unit(self):
         return self._unit
 
-    def get_purchasing_person(self):
-        return self._purchasing_person
-
     def get_retailer(self):
         return self._retailer
+
+    def get_purchasing_person(self):
+        return self._purchasing_person
 
     def get_list(self):
         return self._list
@@ -51,11 +51,14 @@ class ListEntry(BusinessObject):
     def set_unit(self, unit):
         self._unit = unit
 
+    def set_retailer(self, retailer_id):
+        self._retailer = retailer_id
+
     def set_purchasing_person(self, person_id):
         self._purchasing_person = person_id
 
-    def set_retailer(self, retailer_id):
-        self._retailer = retailer_id
+    def set_list(self, list_id):
+        self._list = list_id
 
     def set_checked(self, checked):
         self._checked = checked
@@ -80,8 +83,9 @@ class ListEntry(BusinessObject):
         list_entry.set_article(dictionary["article"])
         list_entry.set_amount(dictionary["amount"])
         list_entry.set_unit(dictionary["unit"])
-        list_entry.set_purchasing_person(dictionary["purchasingPerson"])
         list_entry.set_retailer(dictionary["retailer"])
+        list_entry.set_purchasing_person(dictionary["purchasingPerson"])
+        list_entry.set_list(dictionary["list"])
         list_entry.set_checked(dictionary["isChecked"])
         list_entry.set_standardarticle(dictionary["isStandardarticle"])
         return list_entry

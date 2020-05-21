@@ -4,7 +4,7 @@ class Article(BusinessObject):
     def __init__(self):
         """Artikel, der für eine Gruppe erstellt wird."""
         super().__init__()
-        self._group = None
+        self._group = None # nur als id (Fremdschlüssel)
 
     def __str__(self):
         return "Article: {}, part of group: {}".format(self.get_name(), self.get_group())

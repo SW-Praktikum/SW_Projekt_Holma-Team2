@@ -1,13 +1,12 @@
 from abc import ABC
 import time
-import random
 
 
 class BusinessObject(ABC):
     def __init__(self):
         """Basisklasse, die in allen anderen Klassen übernommen wird."""
         self._name = ""
-        self._id = random.randint(1, 1000)
+        self._id = 0
         self._creation_date = int(time.time())
 
     def __str__(self):
