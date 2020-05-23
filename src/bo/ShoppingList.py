@@ -1,11 +1,13 @@
 from bo.BusinessObject import BusinessObject
 
+
 class ShoppingList(BusinessObject):
     def __init__(self):
         """Eine Einkaufsliste ist Teil *einer* Gruppe. Es können Listeinträge eingefügt werden - wahlweise auch
         Standardartikel. Für das UI gibt es Funktionen, um die Anzahl aller/erledigten Einträge einzusehen."""
         super().__init__()
-        self._group = None # nur als id (Fremdschlüssel)
+        self._group = None  # nur als id (Fremdschlüssel)
+        self._last_changed = self._creation_date
 
     def __str__(self):
         return "Shopping list: {}, part of group: {}".format(self.get_name(), self.get_group())

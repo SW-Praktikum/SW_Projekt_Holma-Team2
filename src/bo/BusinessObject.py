@@ -5,9 +5,9 @@ import time
 class BusinessObject(ABC):
     def __init__(self):
         """Basisklasse, die in allen anderen Klassen übernommen wird."""
-        self._name = ""
         self._id = 0
-        self._creation_date = int(time.time())
+        self._name = ""
+        self._creation_date = time.time()
 
     def __str__(self):
         return str(self._id)

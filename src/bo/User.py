@@ -1,8 +1,8 @@
 from bo.BusinessObject import BusinessObject
 
-class Person(BusinessObject):
+class User(BusinessObject):
     def __init__(self):
-        """Person, die auf dem Portal angemeldet ist."""
+        """User, die auf dem Portal angemeldet ist."""
         super().__init__()
         self._email = ""
         self._google_id = ""
@@ -24,9 +24,9 @@ class Person(BusinessObject):
 
     @staticmethod
     def from_dict(dictionary=dict()):
-        person = Person()
-        person.set_id(dictionary["id"])
-        person.set_name(dictionary["name"])
-        person.set_email(dictionary["email"])
-        person.set_google_id(dictionary["google_id"])
-        return person
+        user = User()
+        user.set_id(dictionary["id"])
+        user.set_name(dictionary["name"])
+        user.set_email(dictionary["email"])
+        user.set_google_id(dictionary["google_id"])
+        return user

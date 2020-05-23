@@ -14,8 +14,8 @@ class Group(BusinessObject):
     def get_owner(self):
         return self._owner
 
-    def set_owner(self, person_id):
-        self._owner = person_id
+    def set_owner(self, user_id):
+        self._owner = user_id
 
     def from_dict(self, dictionary=dict()):
         group = Group()
