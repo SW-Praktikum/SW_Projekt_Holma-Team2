@@ -25,6 +25,11 @@ class Administration():
         #    return mapper.find_by_member_id(user.get_id())
         pass
 
+    def get_list_entries_by_user_id(self, user_id):
+        # with GroupMapper() as mapper:
+        #    return mapper.find_by_member_id(user.get_id())
+        pass
+
     def create_user(self, user):
         # user = User()
         # user.set_id(1)
