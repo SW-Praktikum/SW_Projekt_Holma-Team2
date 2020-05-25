@@ -28,6 +28,9 @@ class Mapper(AbstractContextManager, ABC):
     def insert(self, object):
         pass
 
+
+
+
     """
     Weitere Methoden folgen. Teste momentan noch mit dem Insert in den jeweiligen Mapper-Klassen herum.
     """
