@@ -11,17 +11,18 @@ class ListEntry(BusinessObject):
         self._unit = ""
         self._retailer = None # nur als id (Fremdschlüssel)
         self._purchasing_user = None # nur als id (Fremdschlüssel)
-        self._list = None # nur als id (Fremdschlüssel)
+        self._shopping_list = None # nur als id (Fremdschlüssel)
         self._checked = False
+        self._checked_ts = None
         self._standardarticle = False
 
     def __str__(self):
         return "Article: {}, amount: {} {}, purchasing user: {}, retailer: {}, checked: {}".format(
-            self._article.get_name(),
+            self._article,
             self._amount,
             self._unit,
-            self._purchasing_user.get_name(),
-            self._retailer.get_name(),
+            self._purchasing_user,
+            self._retailer,
             self._checked)
 
     def get_article(self):
@@ -39,8 +40,11 @@ class ListEntry(BusinessObject):
     def get_purchasing_user(self):
         return self._purchasing_user
 
-    def get_list(self):
-        return self._list
+    def get_shopping_list(self):
+        return self._shopping_list
+
+    def get_checked_ts(self):
+        return self._checked_ts
 
     def set_article(self, article_id):
         self._article = article_id
@@ -57,11 +61,14 @@ class ListEntry(BusinessObject):
     def set_purchasing_user(self, user_id):
         self._purchasing_user = user_id
 
-    def set_list(self, list_id):
-        self._list = list_id
+    def set_shopping_list(self, shopping_list_id):
+        self._shopping_list = shopping_list_id
 
     def set_checked(self, checked):
         self._checked = checked
+
+    def set_checked_ts(self, checked_ts):
+        self._checked_ts = checked_ts
 
     def set_standardarticle(self, standardarticle):
         self._standardarticle = standardarticle
@@ -85,12 +92,13 @@ class ListEntry(BusinessObject):
         list_entry.set_unit(dictionary["unit"])
         list_entry.set_retailer(dictionary["retailer"])
         list_entry.set_purchasing_user(dictionary["purchasingUser"])
-        list_entry.set_list(dictionary["list"])
+        list_entry.set_shopping_list(dictionary["shoppingList"])
         list_entry.set_checked(dictionary["isChecked"])
+        list_entry.set_checked_ts(dictionary["checkedTs"])
         list_entry.set_standardarticle(dictionary["isStandardarticle"])
         return list_entry
 
     """
     def delete(self):
-        self._list.delete_list_entry(self)
+        self._shopping_list.delete_shopping_list_entry(self)
     """

@@ -1,9 +1,4 @@
-from bo.Article import Article
-from bo.Group import Group
-from bo.ListEntry import ListEntry
-from bo.Retailer import Retailer
 from bo.ShoppingList import ShoppingList
-from bo.User import User
 
 
 class Administration():
@@ -30,7 +25,7 @@ class Administration():
         #    return mapper.find_by_member_id(user.get_id())
         pass
 
-    def create_user(self, user):
+    def create_user(self, name, email, google_id):
         # user = User()
         # user.set_id(1)
         # user.set_name(name)
@@ -62,6 +57,9 @@ class Administration():
     def get_group_by_id(self, group_id):
         pass
 
+    def get_groups_by_name(self, name):
+        pass
+
     def get_members_by_group_id(self, group_id):
         pass
 
@@ -86,12 +84,6 @@ class Administration():
     def remove_article_from_group(self, group_id, article_id):
         pass
 
-    def create_shopping_list(self, group_id, name):
-        shopping_list = ShoppingList()
-        shopping_list.set_id(1)
-        shopping_list.set_name(name)
-        shopping_list.set_group(group_id)
-
     def remove_shopping_list_from_group(self, group_id, shopping_list_id):
         pass
 
@@ -101,7 +93,7 @@ class Administration():
     def remove_standardarticle_from_group(self, group_id, list_entry_id):
         pass
 
-    def create_group(self, group):
+    def create_group(self, name, owner_id):
         # with GroupMapper() as mapper:
         #    return mapper.insert(group)
         pass
@@ -123,18 +115,15 @@ class Administration():
         #   mapper.update(group)
         pass
 
-    # def get_amout_of_shopping_lists_by_group_id(self, group_id):
-    #    return len(self.get_shopping_lists_by_group_id(group_id))
-
-    # def get_amout_of_standardarticles_by_group_id(self, group_id):
-    #    return len(self.get_standardarticles_by_group_id(group_id))
-
     # Artikel
 
     def get_article_by_id(self, article_id):
         pass
 
-    def create_article(self, article):
+    def get_article_by_name(self, name):
+        pass
+
+    def create_article(self, name, group_id):
         # with ArticleMapper() as mapper:
         #   return mapper.insert(article)
         pass
@@ -147,10 +136,13 @@ class Administration():
 
     # Listeintrag
 
+    def get_all_list_entries(self):
+        pass
+
     def get_list_entry_by_id(self, list_entry_id):
         pass
 
-    def create_list_entry(self, list_entry):
+    def create_list_entry(self, article_id, amount, unit, retailer_id, purchasing_user_id, shopping_list_id):
 
         pass
 
@@ -176,8 +168,18 @@ class Administration():
                 list_entries_checked.append(list_entry)
         return list_entries_checked
 
-    def add_shopping_list(self, shopping_list):
+    def add_list_entry_to_shopping_list(self, shopping_list_id, list_entry_id):
         pass
+
+    def delete_list_entry_from_shopping_list(self, shopping_list_id, list_entry_id):
+        pass
+
+    def create_shopping_list(self, name, group_id):
+        shopping_list = ShoppingList()
+        shopping_list.set_id(1)
+        shopping_list.set_name(name)
+        shopping_list.set_group(group_id)
+        return shopping_list
 
     def delete_shopping_list(self, shopping_list_id):
         pass
@@ -185,8 +187,42 @@ class Administration():
     def save_shopping_list(self, shopping_list):
         pass
 
-    # def get_amount_of_list_entries_by_shopping_list_id(self, shopping_list_id):
-    #    return len(self.get_list_entries_by_shopping_list_id(shopping_list_id))
+    # Retailer
 
-    # def get_amount_of_list_entries_checked_by_shopping_list_id(self, shopping_list_id):
-    #    return len(self.get_list_entries_checked_by_shopping_list_id(shopping_list_id))
+    def get_all_retailers(self):
+        pass
+
+    def get_retailer_by_id(self, retailer_id):
+        pass
+
+    def get_retailers_by_name(self, name):
+        pass
+
+    def create_retailer(self, name):
+        pass
+
+    def delete_retailer(self, retailer_id):
+        pass
+
+    def save_retailer(self, retailer):
+        pass
+
+
+class StatisticAdministration(object):
+    def __init__(self):
+        pass
+
+    def get_all_articles(self):
+        pass
+
+    def get_all_list_entries(self):
+        pass
+
+    def get_list_entries_by_retailer_id(self, retailer_id):
+        pass
+
+    def get_list_entries_in_time_period(self, start_date, end_date):
+        pass
+
+    def get_list_entries_by_article_id(self, article_id):
+        pass
