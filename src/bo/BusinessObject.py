@@ -1,13 +1,12 @@
 from abc import ABC
-import time
-
+from datetime import datetime
 
 class BusinessObject(ABC):
     def __init__(self):
         """Basisklasse, die in allen anderen Klassen übernommen wird."""
         self._id = 0
         self._name = ""
-        self._creation_date = time.time()
+        self._creation_date = datetime.now()
         self._last_changed = None
 
     def __str__(self):
