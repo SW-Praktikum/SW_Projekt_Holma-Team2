@@ -25,12 +25,13 @@ DROP TABLE IF EXISTS `article`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `article` (
-  `ID` int NOT NULL,
-  `name` varchar(100) NOT NULL,
+  `article_id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL DEFAULT ' ',
   `creation_date` datetime NOT NULL,
-  `group id` int DEFAULT NULL,
-  PRIMARY KEY (`ID`),
-  KEY `id_idx` (`group id`)
+  `group` int DEFAULT NULL,
+  `last_changed` datetime DEFAULT NULL,
+  PRIMARY KEY (`article_id`),
+  KEY `id_idx` (`group`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -51,14 +52,13 @@ DROP TABLE IF EXISTS `group`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `group` (
-  `id` int NOT NULL,
-  `name` varchar(100) NOT NULL,
+  `group_id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL DEFAULT ' ',
   `creation_date` datetime NOT NULL,
-  `owner` varchar(100) DEFAULT NULL,
-  `users` varchar(100) DEFAULT NULL,
-  `standardarticles` varchar(100) DEFAULT NULL,
-  `shopping_lists` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `owner` int NOT NULL DEFAULT '0',
+  `last_changed` datetime DEFAULT NULL,
+  PRIMARY KEY (`group_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,6 +67,7 @@ CREATE TABLE `group` (
 
 LOCK TABLES `group` WRITE;
 /*!40000 ALTER TABLE `group` DISABLE KEYS */;
+INSERT INTO `group` VALUES (1,'Strick-Club','2029-05-20 20:00:00',29,'2029-05-20 20:00:00'),(2,'Studium','2029-05-20 20:00:00',30,'2029-05-20 20:00:00'),(3,'Familie-Mustermann','2029-05-20 20:00:00',31,'2029-05-20 20:00:00');
 /*!40000 ALTER TABLE `group` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -78,17 +79,19 @@ DROP TABLE IF EXISTS `listentry`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `listentry` (
-  `ID` int NOT NULL,
-  `name` varchar(100) DEFAULT NULL,
+  `listentry_id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) DEFAULT ' ',
   `creation_date` datetime NOT NULL,
-  `purchasing_user` varchar(100) DEFAULT NULL,
+  `purchasing_user` int DEFAULT NULL,
   `amount` float DEFAULT '1',
-  `article` varchar(100) DEFAULT NULL,
-  `unit` varchar(100) DEFAULT 'Stück',
-  `retailer` varchar(100) DEFAULT NULL,
-  `standardarticle` tinyint DEFAULT '0',
-  `checked` tinyint DEFAULT '0',
-  PRIMARY KEY (`ID`)
+  `article` int NOT NULL,
+  `unit` varchar(100) DEFAULT ' ',
+  `retailer` int DEFAULT NULL,
+  `standardarticle` tinyint NOT NULL DEFAULT '0',
+  `checked` tinyint NOT NULL DEFAULT '0',
+  `shopping_list` int NOT NULL,
+  `last_changed` datetime DEFAULT NULL,
+  PRIMARY KEY (`listentry_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -109,10 +112,11 @@ DROP TABLE IF EXISTS `retailer`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `retailer` (
-  `ID` int NOT NULL,
-  `name` varchar(100) NOT NULL,
+  `retailer_id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL DEFAULT ' ',
   `creation_date` datetime NOT NULL,
-  PRIMARY KEY (`ID`)
+  `last_changed` datetime DEFAULT NULL,
+  PRIMARY KEY (`retailer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -133,11 +137,12 @@ DROP TABLE IF EXISTS `shoppinglist`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `shoppinglist` (
-  `ID` int NOT NULL,
-  `name` varchar(100) DEFAULT NULL,
+  `shoppinglist_id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL DEFAULT ' ',
   `creation_date` datetime NOT NULL,
-  `group` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`ID`),
+  `group` int DEFAULT NULL,
+  `last_changed` datetime DEFAULT NULL,
+  PRIMARY KEY (`shoppinglist_id`),
   KEY `id_idx` (`group`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -159,14 +164,14 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
-  `id` int NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `creation_date` datetime NOT NULL,
-  `email` varchar(100) NOT NULL DEFAULT '"',
-  `google_user_id` varchar(128) NOT NULL DEFAULT '"',
-  `groups` varchar(100) DEFAULT '"',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `user_id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL DEFAULT ' ',
+  `creation_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `email` varchar(100) NOT NULL DEFAULT ' ',
+  `google_user_id` varchar(128) NOT NULL DEFAULT ' ',
+  `last_changed` datetime DEFAULT NULL,
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -175,6 +180,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (28,'Dennis','2029-05-20 20:00:00','dennis@beispiel.de','1','2029-05-20 20:00:00'),(29,'Jonas','2029-05-20 20:00:00','jonas@beispiel.de','2','2029-05-20 20:00:00'),(30,'Christian','2029-05-20 20:00:00','christian@beispiel.de','3','2029-05-20 20:00:00'),(31,'Yassine','2029-05-20 20:00:00','yassine@beispiel.de','4','2029-05-20 20:00:00'),(32,'Dominik','2029-05-20 20:00:00','dominik@beispiel.de','5','2029-05-20 20:00:00'),(33,'Tim','2029-05-20 20:00:00','tim@beispiel.de','6','2029-05-20 20:00:00');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -191,4 +197,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-28 16:46:25
+-- Dump completed on 2020-05-29 16:17:48
