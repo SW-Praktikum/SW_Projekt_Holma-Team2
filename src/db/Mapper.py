@@ -17,7 +17,7 @@ class Mapper (AbstractContextManager, ABC):
             host="localhost",
             user="root",
             passwd="root",
-            database="shoppingtest"
+            database="holma"
         )
 
         print(type(self._connection))
