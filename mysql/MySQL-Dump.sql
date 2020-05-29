@@ -185,6 +185,34 @@ INSERT INTO `user` VALUES (28,'Dennis','2029-05-20 20:00:00','dennis@beispiel.de
 UNLOCK TABLES;
 
 --
+-- Table structure for table `user_group_relation`
+--
+
+DROP TABLE IF EXISTS `user_group_relation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_group_relation` (
+  `group_user_id` int NOT NULL AUTO_INCREMENT,
+  `group_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  PRIMARY KEY (`group_user_id`),
+  KEY `group_id` (`group_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `user_group_relation_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `group` (`group_id`),
+  CONSTRAINT `user_group_relation_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_group_relation`
+--
+
+LOCK TABLES `user_group_relation` WRITE;
+/*!40000 ALTER TABLE `user_group_relation` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_group_relation` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Dumping routines for database 'holma'
 --
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -197,4 +225,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-29 16:17:48
+-- Dump completed on 2020-05-29 16:49:51
