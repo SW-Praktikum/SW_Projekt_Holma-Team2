@@ -2,47 +2,45 @@ import mysql.connector
 from abc import ABC, abstractmethod
 from contextlib import AbstractContextManager
 
-class Mapper(AbstractContextManager, ABC):
+
+class Mapper (AbstractContextManager, ABC):
 
     def __init__(self):
-        self._connector = None
+        self._connection = None
 
     def __enter__(self):
         """
         Hier exestiert bisher nur der connect zur lokalen DB.
         """
 
-        self._connector = mysql.connector.connect(
+        self._connection = mysql.connector.connect(
             host="localhost",
             user="root",
             passwd="root",
-            database="shoppingtest"
-            )
+            database="holma"
+        )
 
-        print(type(self._connector))
-    def __exit__(self, type, value, traceback):
+        print(type(self._connection))
 
-        self._connector.close()
+        return self
+
+    def __exit__(self, exc_type, value, traceback):
+        self._connection.close()
 
     @abstractmethod
-    def insert(self, object):
+    def find_all(self):
         pass
-
-
-
 
     """
     Weitere Methoden folgen. Teste momentan noch mit dem Insert in den jeweiligen Mapper-Klassen herum.
     """
 
+# mycursor.execute("CREATE TABLE Person (name VARCHAR(50), email NVARCHAR(255), creation_date TIME, personID int PRIMARY KEY AUTO_INCREMENT)")
 
-#mycursor.execute("CREATE TABLE Person (name VARCHAR(50), email NVARCHAR(255), creation_date TIME, personID int PRIMARY KEY AUTO_INCREMENT)")
+# sql1 = "INSERT INTO person (name, email) VALUES (%s, %s)"
+# data1 = ("Dominik", "dk108@hdm-stuttgart.de")
 
-#sql1 = "INSERT INTO person (name, email) VALUES (%s, %s)"
-#data1 = ("Dominik", "dk108@hdm-stuttgart.de")
+# mycursor.execute(sql1, data1)
+# db.commit()
 
-#mycursor.execute(sql1, data1)
-#db.commit()
-
-#mycursor.execute("DESCRIBE Person")
 
