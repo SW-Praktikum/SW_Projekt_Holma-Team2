@@ -31,13 +31,6 @@ class Mapper (AbstractContextManager, ABC):
     def find_all(self):
         pass
 
-    @abstractmethod
-    def find_by_id(self, id):
-        pass
-
-    @abstractmethod
-    def find_by_name(self, name):
-        pass
 
     """
     Weitere Methoden folgen. Teste momentan noch mit dem Insert in den jeweiligen Mapper-Klassen herum.

@@ -11,15 +11,17 @@ class UserMapper(Mapper):
 
         result = []
         cursor = self._connection.cursor()
-        cursor.execute("SELECT * FROM user")
+        command = "SELECT * FROM user"
+        cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, name, email, google_id) in tuples:
+        for (id, name, email, google_id, last_update) in tuples:
             user = User()
             user.set_id(id)
             user.set_name(name)
             user.set_email(email)
             user.set_google_id(google_id)
+            user.set_last_updated(last_update)
             """"Funktion User.set_creation date"""
             result.append(user)
 
@@ -32,17 +34,19 @@ class UserMapper(Mapper):
 
         result = None
         cursor = self._connection.cursor()
-        command = "SELECT id, name, email, google_user_id FROM user WHERE id={}".format(id)
+        command = "SELECT user_id, name, email, google_user_id, last_changed FROM user WHERE user_id={}".format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         try:
-            (id, name, email, google_id) = tuples[0]
+            (id, name, email, google_id, last_update) = tuples[0]
             user = User()
             user.set_id(id)
             user.set_name(name)
             user.set_email(email)
             user.set_google_id(google_id)
+            user.set_last_updated(last_update)
+            """"Funktion User.set_creation date"""
             result = user
         except IndexError:
             result = None
@@ -58,16 +62,18 @@ class UserMapper(Mapper):
 
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT id, name, email, google_user_id FROM user WHERE name LIKE '{}' ORDER BY name".format(name)
+        command = "SELECT user_id, name, email, google_user_id, last_changed FROM user WHERE name LIKE '{}' ORDER BY name".format(name)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, name, email, google_id) in tuples:
+        for (id, name, email, google_id, last_update) in tuples:
             user = User()
             user.set_id(id)
             user.set_name(name)
             user.set_email(email)
             user.set_google_id(google_id)
+            user.set_last_updated(last_update)
+            """"Funktion User.set_creation date"""
             result.append(user)
 
         self._connection.commit()
@@ -83,6 +89,6 @@ if (__name__ == "__main__"):
 """
 if (__name__ == "__main__"):
     with UserMapper() as mapper:
-        result = mapper.find_by_id(1)
-        print(user)
+        result = mapper.find_by_id(28)
+        print(result)
 """

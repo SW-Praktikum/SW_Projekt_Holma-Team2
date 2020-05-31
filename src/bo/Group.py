@@ -9,7 +9,7 @@ class Group(BusinessObject):
         self._owner = None # nur als id (Fremdschlüssel)
 
     def __str__(self):
-        return "Group: {}, owned by: {}".format(self.get_name(), self.get_owner())
+        return "Group: {} {}, owned by: {}, last changed: {}".format(self.get_id(), self.get_name(), self.get_owner(), self.get_last_changed())
 
     def get_owner(self):
         return self._owner
@@ -22,4 +22,5 @@ class Group(BusinessObject):
         group.set_id(dictionary["id"])
         group.set_name(dictionary["name"])
         group.set_owner(dictionary["owner"])
+        return group
 
