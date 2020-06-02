@@ -161,7 +161,7 @@ class Administration():
 
     def get_shopping_list_by_name(self, name):
         pass
-    
+
     def get_list_entries_by_shopping_list_id(self, shopping_list_id):
         pass
 
