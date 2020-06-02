@@ -8,7 +8,7 @@ class User(BusinessObject):
         self._google_id = ""
 
     def __str__(self):
-        return "User: {} {}, E-Mail: {}, Google UserID: {}, last changed: {}".format(self.get_id(), self.get_name(), self.get_email(), self.get_google_id(), self.get_last_changed())
+        return "User: {} {}, created: {}, E-Mail: {}, Google UserID: {}, last changed: {}".format(self.get_id(), self.get_name(), self.get_creation_date(), self.get_email(), self.get_google_id(), self.get_last_updated())
 
     def get_email(self):
         return self._email

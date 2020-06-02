@@ -15,10 +15,11 @@ class GroupMapper(Mapper):
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (group_id, name, owner, last_update) in tuples:
+        for (group_id, name, date, owner, last_update) in tuples:
             group = Group()
             group.set_id(group_id)
             group.set_name(name)
+            group.set_creation_date(date)
             group.set_owner(owner)
             group.set_last_updated(last_update)
             result.append(group)
@@ -32,15 +33,16 @@ class GroupMapper(Mapper):
 
         result = None
         cursor = self._connection.cursor()
-        command = "SELECT group_id, name, owner, last_changed FROM holma.group WHERE group_id={}".format(id)
+        command = "SELECT * FROM holma.group WHERE group_id={}".format(id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
         try:
-            (id, name, owner, last_update) = tuples[0]
+            (id, name, date, owner, last_update) = tuples[0]
             group = Group()
             group.set_id(id)
             group.set_name(name)
+            group.set_creation_date(date)
             group.set_owner(owner)
             group.set_last_updated(last_update)
             result = group
@@ -57,14 +59,15 @@ class GroupMapper(Mapper):
 
         result = []
         cursor = self._connection.cursor()
-        command = "SELECT group_id, name, owner, last_changed FROM holma.group WHERE name LIKE '{}' ORDER BY name".format(name)
+        command = "SELECT * FROM holma.group WHERE name LIKE '{}' ORDER BY name".format(name)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        for (id, name, owner, last_update) in tuples:
+        for (id, name, date, owner, last_update) in tuples:
             group = Group()
             group.set_id(id)
             group.set_name(name)
+            group.set_creation_date(date)
             group.set_owner(owner)
             group.set_last_updated(last_update)
             result.append(group)
