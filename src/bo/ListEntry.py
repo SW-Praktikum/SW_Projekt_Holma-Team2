@@ -6,12 +6,12 @@ class ListEntry(BusinessObject):
         """Ein Listeneintrag ist ein Eintrag in der Einkaufsliste, der sämtliche Informationen zum Artikel und der
         Zuordnung enthält. Ein Listeneintrag kann auch ein "Standardartikel" sein."""
         super().__init__()
-        self._article = None # nur als id (Fremdschlüssel)
+        self._article = None  # nur als id (Fremdschlüssel)
         self._amount = 1.0
         self._unit = ""
-        self._retailer = None # nur als id (Fremdschlüssel)
-        self._purchasing_user = None # nur als id (Fremdschlüssel)
-        self._shopping_list = None # nur als id (Fremdschlüssel)
+        self._retailer = None  # nur als id (Fremdschlüssel)
+        self._purchasing_user = None  # nur als id (Fremdschlüssel)
+        self._shopping_list = None  # nur als id (Fremdschlüssel)
         self._checked = False
         self._checked_ts = None
         self._standardarticle = False
