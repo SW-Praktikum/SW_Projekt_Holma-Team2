@@ -127,7 +127,7 @@ class UserOperations(Resource):
             return '', 500
 
 
-"""@listingapp.route('/users/<string:name>')
+@listingapp.route('/users/<string:name>')
 @listingapp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @listingapp.param('name', 'Der Name des Users')
 class UserByNameOperations(Resource):
@@ -136,8 +136,8 @@ class UserByNameOperations(Resource):
     def get(self, name):
 
         adm = Administration()
-        us = adm.get_name(name)
-        return us """
+        us = adm.get_user_by_name(name)
+        return us
 
 @listingapp.route('/groups')
 @listingapp.response(500,'Falls es zu einem Server-seitigem Fehler kommt.')
