@@ -198,7 +198,7 @@ class UserRelatedGroupOperations(Resource):
 
         if us is not None:
             # Jetzt erst lesen wir die Konten des Customer aus.
-            group_list = adm.get_groups_of_user(us)
+            group_list = adm.get_groups_by_user_id(us)
             return group_list
         else:
             return "User not found", 500
@@ -212,7 +212,7 @@ class UserRelatedGroupOperations(Resource):
 
         if us is not None:
 
-            result = adm.create_group_for_user(us)
+            result = adm.create_group(us)
             return result
         else:
             return "User unknown", 500

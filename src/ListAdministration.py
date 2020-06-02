@@ -10,7 +10,7 @@ class Administration():
         pass
 
     def get_user_by_name(self, name):
-
+        #Dome Mapper
         pass
 
     def get_user_by_id(self, user_id):
