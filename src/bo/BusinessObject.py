@@ -7,7 +7,7 @@ class BusinessObject(ABC):
         self._id = 0
         self._name = ""
         self._creation_date = datetime.now()
-        self._last_changed = None
+        self._last_updated = None
 
     def __str__(self):
         return str(self._id)
@@ -21,8 +21,8 @@ class BusinessObject(ABC):
     def get_creation_date(self):
         return self._creation_date
 
-    def get_last_changed(self):
-        return self._last_changed
+    def get_last_updated(self):
+        return self._last_updated
 
     def set_name(self, name):
         self._name = name
@@ -30,5 +30,8 @@ class BusinessObject(ABC):
     def set_id(self, value):
         self._id = value
 
-    def set_last_updated(self, last_changed):
-        self._last_changed = last_changed
+    def set_creation_date(self, creation_date):
+        self._creation_date = creation_date
+
+    def set_last_updated(self, last_updated):
+        self._last_updated = last_updated
