@@ -10,8 +10,7 @@ class Administration():
         pass
 
     def get_user_by_name(self, name):
-        # with UserMapper() as mapper:
-        #    return mapper.find_all()
+
         pass
 
     def get_user_by_id(self, user_id):
