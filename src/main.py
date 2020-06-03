@@ -205,14 +205,15 @@ class UserRelatedGroupOperations(Resource):
 
     @listingapp.marshal_with(group, code=201)
     #@secured
-    def post(self, id):
+    def post(self, id, name):
 
         adm = Administration()
         us = adm.get_user_by_id(id)
+        na = adm.get_user_by_name(name)
 
         if us is not None:
 
-            result = adm.create_group(us)
+            result = adm.create_group(na, us)
             return result
         else:
             return "User unknown", 500
