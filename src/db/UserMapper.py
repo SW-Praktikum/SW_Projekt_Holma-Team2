@@ -135,6 +135,7 @@ class UserMapper(Mapper):
 
         return result
 
+    """UNVOLLSTÄNDIG"""
     def find_by_group(self, group):
 
         result = []
@@ -162,6 +163,48 @@ class UserMapper(Mapper):
 
         return result
 
+
+
+    def insert(self, user):
+
+        cursor = self._connection.cursor()
+        command = "INSERT INTO user (user_id, name, creation_date, email, google_id, last_updated) VALUES (%s,%s,%s,%s,%s,%s)"
+        data = (user.get_id(),
+                user.get_name(),
+                user.get_creation_date(),
+                user.get_email(),
+                user.get_google_id(),
+                user.get_last_updated())
+        cursor.execute(command, data)
+        tuples = cursor.fetchall()
+
+        self._connection.commit()
+        cursor.close()
+
+        return user
+
+    def update(self, user):
+
+        cursor = self._connection.cursor()
+        command = "UPDATE user" + "SET name=%s, email=%s, last_updated=%s  WHERE user_id=%s"
+        data = (user.get_name(), user.get_email(), user.get_last_updated(), user.get_id())
+        cursor.execute(command, data)
+
+        self._connection.commit()
+        cursor.close()
+
+        return user
+
+    def delete(self, user):
+
+        cursor = self._connection.cursor()
+
+        command = "DELETE FROM user WHERE user_id={}".format(user.get_id())
+        cursor.execute(command)
+
+        self._connection.commit()
+        cursor.close()
+
 if (__name__ == "__main__"):
     with UserMapper() as mapper:
         result = mapper.find_all()
@@ -170,5 +213,5 @@ if (__name__ == "__main__"):
 
 if (__name__ == "__main__"):
     with UserMapper() as mapper:
-        result = mapper.find_by_group(1)
+        result = mapper.delete()
         print(result)
