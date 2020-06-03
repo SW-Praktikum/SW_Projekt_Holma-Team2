@@ -9,6 +9,10 @@ class Administration():
         #    return mapper.find_all()
         pass
 
+    def get_user_by_name(self, name):
+        #Dome Mapper
+        pass
+
     def get_user_by_id(self, user_id):
         # with UserMapper() as mapper:
         #    return mapper.find_by_id(user.get_id())

@@ -127,7 +127,7 @@ class UserOperations(Resource):
             return '', 500
 
 
-"""@listingapp.route('/users/<string:name>')
+@listingapp.route('/users/<string:name>')
 @listingapp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @listingapp.param('name', 'Der Name des Users')
 class UserByNameOperations(Resource):
@@ -136,8 +136,8 @@ class UserByNameOperations(Resource):
     def get(self, name):
 
         adm = Administration()
-        us = adm.get_name(name)
-        return us """
+        us = adm.get_user_by_name(name)
+        return us
 
 @listingapp.route('/groups')
 @listingapp.response(500,'Falls es zu einem Server-seitigem Fehler kommt.')
@@ -198,25 +198,27 @@ class UserRelatedGroupOperations(Resource):
 
         if us is not None:
             # Jetzt erst lesen wir die Konten des Customer aus.
-            group_list = adm.get_groups_of_user(us)
+            group_list = adm.get_groups_by_user_id(us)
             return group_list
         else:
             return "User not found", 500
 
     @listingapp.marshal_with(group, code=201)
     #@secured
-    def post(self, id):
+    def post(self, id, name):
 
         adm = Administration()
         us = adm.get_user_by_id(id)
+        na = adm.get_user_by_name(name)
 
         if us is not None:
 
-            result = adm.create_group_for_user(us)
+            result = adm.create_group(na, us)
             return result
         else:
             return "User unknown", 500
 
+#Neu
 
 
 @listingapp.route('/group/<int:id>/users')
