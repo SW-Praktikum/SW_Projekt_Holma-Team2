@@ -29,7 +29,7 @@ CREATE TABLE `article` (
   `name` varchar(100) NOT NULL DEFAULT ' ',
   `creation_date` datetime NOT NULL,
   `group` int DEFAULT NULL,
-  `last_changed` datetime DEFAULT NULL,
+  `last_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`article_id`),
   KEY `id_idx` (`group`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -56,7 +56,7 @@ CREATE TABLE `group` (
   `name` varchar(100) NOT NULL DEFAULT ' ',
   `creation_date` datetime NOT NULL,
   `owner` int NOT NULL DEFAULT '0',
-  `last_changed` datetime DEFAULT NULL,
+  `last_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`group_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -90,7 +90,8 @@ CREATE TABLE `listentry` (
   `standardarticle` tinyint NOT NULL DEFAULT '0',
   `checked` tinyint NOT NULL DEFAULT '0',
   `shopping_list` int NOT NULL,
-  `last_changed` datetime DEFAULT NULL,
+  `last_updated` datetime DEFAULT NULL,
+  `checkd_ts` tinyint DEFAULT NULL,
   PRIMARY KEY (`listentry_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -115,7 +116,7 @@ CREATE TABLE `retailer` (
   `retailer_id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL DEFAULT ' ',
   `creation_date` datetime NOT NULL,
-  `last_changed` datetime DEFAULT NULL,
+  `last_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`retailer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -141,7 +142,7 @@ CREATE TABLE `shoppinglist` (
   `name` varchar(100) NOT NULL DEFAULT ' ',
   `creation_date` datetime NOT NULL,
   `group` int DEFAULT NULL,
-  `last_changed` datetime DEFAULT NULL,
+  `last_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`shoppinglist_id`),
   KEY `id_idx` (`group`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -168,8 +169,8 @@ CREATE TABLE `user` (
   `name` varchar(100) NOT NULL DEFAULT ' ',
   `creation_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `email` varchar(100) NOT NULL DEFAULT ' ',
-  `google_user_id` varchar(128) NOT NULL DEFAULT ' ',
-  `last_changed` datetime DEFAULT NULL,
+  `google_id` varchar(128) NOT NULL DEFAULT ' ',
+  `last_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -225,4 +226,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-29 16:49:51
+-- Dump completed on 2020-06-02 15:32:54
