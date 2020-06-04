@@ -80,7 +80,6 @@ class UserMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
-
         return result
 
     def find_by_email(self, email):
@@ -136,34 +135,31 @@ class UserMapper(Mapper):
         return result
 
     """UNVOLLSTÄNDIG"""
+
     def find_by_group(self, group):
 
-        result = []
+        result = ["D",]
         cursor = self._connection.cursor()
-        command = "SELECT * FROM user INNER JOIN user_group_relation ON user.user_id = " \
-                  "user_group_relation.user_id; WHERE group_id={}".format(group)
+        command = "SELECT user_group_relation.group_id, user_group_relation.user_id, user.name FROM user_group_relation " \
+                  "INNER JOIN user ON user_group_relation.user_id=user.user_id WHERE user_group_relation.group_id ={}".format(group)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        try:
-            (id, name, date, email, google_id, last_update) = tuples[0]
+
+        """Wohin die group_id? Womöglich doch ein Attribut in User; group_id = None und diese dann wenn nötig vergeben"""
+        for (group_id, id, name) in tuples:
             user = User()
+            user.set_group(group_id)
             user.set_id(id)
             user.set_name(name)
-            user.set_creation_date(date)
-            user.set_email(email)
-            user.set_google_id(google_id)
-            user.set_last_updated(last_update)
-            result = user
-        except IndexError:
-            result = None
+            result.append(user)
+            """Reicht uns das User-Objekt oder muss dieses wirklich als String ausgegeben werden?"""
+            print(repr(user))
 
         self._connection.commit()
         cursor.close()
 
-        return result
-
-
+        return str(result)
 
     def insert(self, user):
 
@@ -205,13 +201,16 @@ class UserMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
-if (__name__ == "__main__"):
+
+if __name__ == "__main__":
     with UserMapper() as mapper:
         result = mapper.find_all()
         for user in result:
             print(user)
 
-if (__name__ == "__main__"):
+if __name__ == "__main__":
     with UserMapper() as mapper:
-        result = mapper.delete()
+        result = mapper.find_by_group(1)
         print(result)
+
+
