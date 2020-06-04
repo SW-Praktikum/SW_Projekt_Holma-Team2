@@ -134,18 +134,17 @@ class UserByNameOperations(Resource):
     @listingapp.marshal_with(user)
     # @secured
     def get(self, name):
-
         adm = Administration()
         us = adm.get_user_by_name(name)
         return us
 
+
 @listingapp.route('/groups')
-@listingapp.response(500,'Falls es zu einem Server-seitigem Fehler kommt.')
+@listingapp.response(500, 'Falls es zu einem Server-seitigem Fehler kommt.')
 class GroupListOperations(Resource):
     @listingapp.marshal_list_with(group)
-    #@secured
+    # @secured
     def get(self):
-
         adm = Administration()
         group_list = adm.get_all_groups()
         return group_list
@@ -156,14 +155,14 @@ class GroupListOperations(Resource):
 @listingapp('id', 'Die ID des Group-Objekts')
 class GroupOperations(Resource):
     @listingapp.marshal_with(group)
-    #@secured
+    # @secured
     def get(self, id):
 
         adm = Administration()
         grp = adm.get_group_by_id(id)
         return grp
 
-    #@secured
+    # @secured
     def delete(self, id):
 
         adm = Administration()
@@ -173,7 +172,7 @@ class GroupOperations(Resource):
 
     @listingapp.marshal_with(group)
     @listingapp.expect(group, validate=True)
-    #@secured
+    # @secured
     def put(self, id):
         adm = Administration()
         u = Group.from_dict(api.payload)
@@ -185,12 +184,13 @@ class GroupOperations(Resource):
         else:
             return '', 500
 
+
 @listingapp.route('/users/<int:id>/groups')
 @listingapp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @listingapp.param('id', 'Die ID des user-Objekts')
 class UserRelatedGroupOperations(Resource):
     @listingapp.marshal_with(group)
-    #@secured
+    # @secured
     def get(self, id):
 
         adm = Administration()
@@ -204,7 +204,7 @@ class UserRelatedGroupOperations(Resource):
             return "User not found", 500
 
     @listingapp.marshal_with(group, code=201)
-    #@secured
+    # @secured
     def post(self, id, name):
 
         adm = Administration()
@@ -218,7 +218,8 @@ class UserRelatedGroupOperations(Resource):
         else:
             return "User unknown", 500
 
-#Neu
+
+# Neu
 
 
 @listingapp.route('/group/<int:id>/users')
@@ -226,7 +227,7 @@ class UserRelatedGroupOperations(Resource):
 @listingapp.param('id', 'Die ID des Group-Objekts')
 class GroupRelatedUserOperations(Resource):
     @listingapp.marshal_with(group)
-    #@secured
+    # @secured
     def get(self, id):
         adm = Administration()
         # Diese Classe habe ich mir dazu wiedermal überlegt
@@ -237,8 +238,3 @@ class GroupRelatedUserOperations(Resource):
             return user_list
         else:
             return "User not found", 500
-
-
-
-
-
