@@ -18,6 +18,9 @@ class Administration():
         #    return mapper.find_by_id(user.get_id())
         pass
 
+    def get_user_by_name(self, name):
+        pass
+
     def get_groups_by_user_id(self, user_id):
         # with GroupMapper() as mapper:
         #    return mapper.find_by_member_id(user.get_id())
@@ -158,6 +161,9 @@ class Administration():
     # Einkaufsliste
 
     def get_shopping_list_by_id(self, shopping_list_id):
+        pass
+
+    def get_shopping_list_by_name(self, name):
         pass
 
     def get_list_entries_by_shopping_list_id(self, shopping_list_id):
