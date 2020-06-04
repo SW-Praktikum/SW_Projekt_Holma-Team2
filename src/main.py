@@ -28,7 +28,7 @@ bo = api.model('BusinessObject', {
 
 user = api.inherit('User', bo, {
     'email': fields.String(attribute='_email', description='E-Mail-Adresse eines Benutzers'),
-    'google_id': fields.List(attribute='_google_id'),
+    'google_id': fields.List(attribute='_google_id', description='google id eines Benutzers'),
 })
 
 group = api.inherit('Group', bo, {
