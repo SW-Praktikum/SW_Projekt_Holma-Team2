@@ -63,17 +63,14 @@ class GroupMapper(Mapper):
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        try:
-            (id, name, date, owner, last_update) = tuples[0]
+        for (group_id, name, date, owner, last_update) in tuples:
             group = Group()
-            group.set_id(id)
+            group.set_id(group_id)
             group.set_name(name)
             group.set_creation_date(date)
             group.set_owner(owner)
             group.set_last_updated(last_update)
-            result = group
-        except IndexError:
-            result = None
+            result.append(group)
 
         self._connection.commit()
         cursor.close()
@@ -110,21 +107,22 @@ class GroupMapper(Mapper):
 
         result = []
         cursor = self._connection.cursor()
-        command = "".format(member)
+        command = "SELECT user_group_relation.group_id, user_group_relation.user_id, " \
+                  "holma.group.name, holma.group.creation_date, holma.group.owner, holma.group.last_updated FROM user_group_relation " \
+                  "INNER JOIN holma.group ON user_group_relation.group_id=group.group_id WHERE user_group_relation.user_id ={}".format(member)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        try:
-            (id, name, date, owner, last_update) = tuples[0]
+        for (group_id, name, date, owner, user_id, last_update) in tuples:
             group = Group()
-            group.set_id(id)
+            group.set_id(group_id)
             group.set_name(name)
             group.set_creation_date(date)
             group.set_owner(owner)
+            """Hier liegt irgendwo ein Fehler idk"""
+            group.set_member(user_id)
             group.set_last_updated(last_update)
-            result = group
-        except IndexError:
-            result = None
+            result.append(group)
 
         self._connection.commit()
         cursor.close()
@@ -178,5 +176,7 @@ if (__name__ == "__main__"):
 
 if (__name__ == "__main__"):
     with GroupMapper() as mapper:
-        result = mapper.find_by_owner(30)
-        print(result)
+        result = mapper.find_by_member(28)
+        for group in result:
+            print(repr(group))
+

@@ -64,8 +64,7 @@ class UserMapper(Mapper):
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        try:
-            (id, name, date, email, google_id, last_update) = tuples[0]
+        for (id, name, date, email, google_id, last_update) in tuples:
             user = User()
             user.set_id(id)
             user.set_name(name)
@@ -73,9 +72,10 @@ class UserMapper(Mapper):
             user.set_email(email)
             user.set_google_id(google_id)
             user.set_last_updated(last_update)
-            result = user
-        except IndexError:
-            result = None
+            result.append(user)
+
+        self._connection.commit()
+        cursor.close()
 
         self._connection.commit()
         cursor.close()
@@ -134,32 +134,33 @@ class UserMapper(Mapper):
 
         return result
 
-    """UNVOLLSTÄNDIG"""
-
     def find_by_group(self, group):
 
-        result = ["D",]
+        result = []
         cursor = self._connection.cursor()
-        command = "SELECT user_group_relation.group_id, user_group_relation.user_id, user.name FROM user_group_relation " \
+        command = "SELECT user_group_relation.group_id, user_group_relation.user_id, " \
+                  "user.name, user.creation_date, user.email, user.google_id, user.last_updated FROM user_group_relation " \
                   "INNER JOIN user ON user_group_relation.user_id=user.user_id WHERE user_group_relation.group_id ={}".format(group)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
 
-        """Wohin die group_id? Womöglich doch ein Attribut in User; group_id = None und diese dann wenn nötig vergeben"""
-        for (group_id, id, name) in tuples:
+        """Wohin die group_id? Womöglich doch ein Attribut in User; group_id = None und diese dann wenn nötig vergeben, funktioniert auch ohne"""
+        for (group_id, id, name, date, email, google_id, last_update) in tuples:
             user = User()
             user.set_group(group_id)
             user.set_id(id)
             user.set_name(name)
+            user.set_creation_date(date)
+            user.set_email(email)
+            user.set_google_id(google_id)
+            user.set_last_updated(last_update)
             result.append(user)
-            """Reicht uns das User-Objekt oder muss dieses wirklich als String ausgegeben werden?"""
-            print(repr(user))
 
         self._connection.commit()
         cursor.close()
 
-        return str(result)
+        return result
 
     def insert(self, user):
 
@@ -210,7 +211,13 @@ if __name__ == "__main__":
 
 if __name__ == "__main__":
     with UserMapper() as mapper:
+        result = mapper.find_by_name("Dennis")
+        for user in result:
+            print(user)
+
+
+if __name__ == "__main__":
+    with UserMapper() as mapper:
         result = mapper.find_by_group(1)
-        print(result)
-
-
+        for user in result:
+            print(repr(user))
