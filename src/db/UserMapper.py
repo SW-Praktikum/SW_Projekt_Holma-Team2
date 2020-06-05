@@ -1,5 +1,5 @@
-from db.Mapper import Mapper
 from bo.User import User
+from db.Mapper import Mapper
 
 
 class UserMapper(Mapper):
@@ -144,11 +144,8 @@ class UserMapper(Mapper):
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-
-        """Wohin die group_id? Womöglich doch ein Attribut in User; group_id = None und diese dann wenn nötig vergeben, funktioniert auch ohne"""
         for (group_id, id, name, date, email, google_id, last_update) in tuples:
             user = User()
-            user.set_group(group_id)
             user.set_id(id)
             user.set_name(name)
             user.set_creation_date(date)
@@ -165,7 +162,8 @@ class UserMapper(Mapper):
     def insert(self, user):
 
         cursor = self._connection.cursor()
-        command = "INSERT INTO user (user_id, name, creation_date, email, google_id, last_updated) VALUES (%s,%s,%s,%s,%s,%s)"
+        command = "INSERT INTO user (user_id, name, creation_date, email, google_id, last_updated) VALUES (%s,%s,%s," \
+                  "%s,%s,%s) "
         data = (user.get_id(),
                 user.get_name(),
                 user.get_creation_date(),
@@ -173,7 +171,6 @@ class UserMapper(Mapper):
                 user.get_google_id(),
                 user.get_last_updated())
         cursor.execute(command, data)
-        tuples = cursor.fetchall()
 
         self._connection.commit()
         cursor.close()
@@ -183,7 +180,7 @@ class UserMapper(Mapper):
     def update(self, user):
 
         cursor = self._connection.cursor()
-        command = "UPDATE user" + "SET name=%s, email=%s, last_updated=%s  WHERE user_id=%s"
+        command = "UPDATE user SET name=%s, email=%s, last_updated=%s  WHERE user_id=%s"
         data = (user.get_name(), user.get_email(), user.get_last_updated(), user.get_id())
         cursor.execute(command, data)
 
@@ -215,9 +212,8 @@ if __name__ == "__main__":
         for user in result:
             print(user)
 
-
 if __name__ == "__main__":
     with UserMapper() as mapper:
-        result = mapper.find_by_group(1)
+        result = mapper.find_by_group(2)
         for user in result:
-            print(repr(user))
+            print(user)
