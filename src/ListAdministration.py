@@ -1,30 +1,30 @@
+from datetime import datetime
+
+from bo.Group import Group
 from bo.ShoppingList import ShoppingList
+from bo.User import User
+from db.GroupMapper import GroupMapper
+from db.UserMapper import UserMapper
 
 
 class Administration():
+    """User"""
 
-    # Useren
     def get_all_users(self):
-        # with UserMapper() as mapper:
-        #    return mapper.find_all()
-        pass
+        with UserMapper() as mapper:
+            return mapper.find_all()
 
     def get_user_by_name(self, name):
-        #Dome Mapper
-        pass
+        with UserMapper() as mapper:
+            return mapper.find_by_name(name)
 
     def get_user_by_id(self, user_id):
-        # with UserMapper() as mapper:
-        #    return mapper.find_by_id(user.get_id())
-        pass
-
-    def get_user_by_name(self, name):
-        pass
+        with UserMapper() as mapper:
+            return mapper.find_by_id(user_id)
 
     def get_groups_by_user_id(self, user_id):
-        # with GroupMapper() as mapper:
-        #    return mapper.find_by_member_id(user.get_id())
-        pass
+        with GroupMapper() as mapper:
+            return mapper.find_by_member(user_id)
 
     def get_list_entries_by_user_id(self, user_id):
         # with GroupMapper() as mapper:
@@ -32,14 +32,13 @@ class Administration():
         pass
 
     def create_user(self, name, email, google_id):
-        # user = User()
-        # user.set_id(1)
-        # user.set_name(name)
-        # user.set_email(email)
-        # user.set_google_id(google_id)
-        # with UserMapper() as mapper:
-        #   mapper.insert(user)
-        pass
+        user = User()
+        user.set_id(0)
+        user.set_name(name)
+        user.set_email(email)
+        user.set_google_id(google_id)
+        with UserMapper() as mapper:
+            mapper.insert(user)
 
     def delete_user(self, user_id):
         # with UserMapper() as mapper:
@@ -51,23 +50,27 @@ class Administration():
         pass
 
     def save_user(self, user):
-        # with UserMapper() as mapper:
-        #   mapper.update(user)
-        pass
+        user.set_last_updated(datetime.now())
+        with UserMapper() as mapper:
+            mapper.update(user)
 
-    # Gruppe
+    """Gruppe"""
 
     def get_all_groups(self):
-        pass
+        with GroupMapper() as mapper:
+            return mapper.find_all()
 
     def get_group_by_id(self, group_id):
-        pass
+        with GroupMapper() as mapper:
+            return mapper.find_by_id(group_id)
 
     def get_groups_by_name(self, name):
-        pass
+        with GroupMapper() as mapper:
+            return mapper.find_by_name(name)
 
     def get_members_by_group_id(self, group_id):
-        pass
+        with UserMapper() as mapper:
+            return mapper.find_by_group(group_id)
 
     def get_articles_by_group_id(self, group_id):
         pass
@@ -99,10 +102,13 @@ class Administration():
     def remove_standardarticle_from_group(self, group_id, list_entry_id):
         pass
 
-    def create_group(self, name, owner_id):
-        # with GroupMapper() as mapper:
-        #    return mapper.insert(group)
-        pass
+    def create_group(self, name, user_id):
+        group = Group()
+        group.set_id(0)
+        group.set_name(name)
+        group.set_owner(user_id)
+        with GroupMapper() as mapper:
+            return mapper.insert(group)
 
     def delete_group(self, group_id):
         # with GroupMapper() as mapper:
@@ -117,9 +123,9 @@ class Administration():
         pass
 
     def save_group(self, group):
-        # with GroupMapper() as mapper:
-        #   mapper.update(group)
-        pass
+        group.set_last_updated(datetime.now())
+        with GroupMapper() as mapper:
+            mapper.update(group)
 
     # Artikel
 
