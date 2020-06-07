@@ -38,7 +38,7 @@ class User(BusinessObject):
         return user
 
     @staticmethod
-    def from_tuples(tuples=[]):
+    def from_tuples(tuples=list()):
         result = []
         for (user_id, name, creation_date, email, google_id, last_updated) in tuples:
             user = User()

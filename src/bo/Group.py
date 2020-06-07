@@ -29,7 +29,7 @@ class Group(BusinessObject):
         return group
 
     @staticmethod
-    def from_tuples(tuples=[]):
+    def from_tuples(tuples=list()):
         result = []
         for (group_id, name, creation_date, owner, last_update) in tuples:
             group = Group()

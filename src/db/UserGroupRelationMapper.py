@@ -9,8 +9,8 @@ class UserGroupRelationMapper(Mapper):
 
     def find_groups_by_user_id(self, user_id):
         cursor = self._connection.cursor()
-        command = "SELECT user_group_relation.group_id, user_group_relation.user_id, " \
-                  "holma.group.name, holma.group.creation_date, holma.group.owner, holma.group.last_updated " \
+        command = "SELECT user_group_relation.group_id, user_group_relation.user_id, holma.group.name, " \
+                  "holma.group.creation_date, holma.group.owner, holma.group.last_updated " \
                   "FROM user_group_relation INNER JOIN holma.group ON user_group_relation.group_id=group.group_id " \
                   "WHERE user_group_relation.user_id ={}".format(user_id)
         cursor.execute(command)
@@ -54,7 +54,7 @@ class UserGroupRelationMapper(Mapper):
 
 if __name__ == "__main__":
     with UserGroupRelationMapper() as mapper:
-        print("All groups where User #28 is part of:")
+        print("All groups where user #28 is part of:")
         groups = mapper.find_groups_by_user_id(28)
         for group in groups:
             print(group)
