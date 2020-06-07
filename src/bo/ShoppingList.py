@@ -7,7 +7,7 @@ class ShoppingList(BusinessObject):
         Standardartikel. Für das UI gibt es Funktionen, um die Anzahl aller/erledigten Einträge einzusehen."""
         super().__init__()
         self._group = None  # nur als id (Fremdschlüssel)
-
+        
     def __str__(self):
         return "Shopping list: {}, part of group: {}".format(self.get_name(), self.get_group())
 
