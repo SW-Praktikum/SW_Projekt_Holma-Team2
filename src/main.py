@@ -1,10 +1,10 @@
 from flask import Flask
-from flask_restx import Api, Resource, fields
 from flask_cors import CORS
+from flask_restx import Api, Resource, fields
 
 from ListAdministration import Administration
-from bo.User import User
 from bo.Group import Group
+from bo.User import User
 
 app = Flask(__name__)
 
@@ -92,35 +92,35 @@ class UserListOperations(Resource):
             return '', 500
 
 
-@listingapp.route('/users/<int:id>')
+@listingapp.route('/users/<int:user_id>')
 @listingapp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @listingapp.param('id', 'Die ID des User-Objekts')
 class UserOperations(Resource):
     @listingapp.marshal_with(user)
     # @secured
-    def get(self, id):
+    def get(self, user_id):
 
         adm = Administration()
-        usr = adm.get_user_by_id(id)
+        usr = adm.get_user_by_id(user_id)
         return usr
 
     # @secured
-    def delete(self, id):
+    def delete(self, user_id):
 
         adm = Administration()
-        us = adm.get_user_by_id(id)
+        us = adm.get_user_by_id(user_id)
         adm.delete_user(us)
         return '', 200
 
     @listingapp.marshal_with(user)
     @listingapp.expect(user, validate=True)
     # @secured
-    def put(self, id):
+    def put(self, user_id):
         adm = Administration()
         u = User.from_dict(api.payload)
 
         if u is not None:
-            u.set_id(id)
+            u.set_id(user_id)
             adm.save_user(u)
             return '', 200
         else:
@@ -150,51 +150,51 @@ class GroupListOperations(Resource):
         return group_list
 
 
-@listingapp.route('/groups/<int:id>')
+@listingapp.route('/groups/<int:group_id>')
 @listingapp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @listingapp('id', 'Die ID des Group-Objekts')
 class GroupOperations(Resource):
     @listingapp.marshal_with(group)
     # @secured
-    def get(self, id):
+    def get(self, group_id):
 
         adm = Administration()
-        grp = adm.get_group_by_id(id)
+        grp = adm.get_group_by_id(group_id)
         return grp
 
     # @secured
-    def delete(self, id):
+    def delete(self, group_id):
 
         adm = Administration()
-        grp = adm.get_group_by_id(id)
+        grp = adm.get_group_by_id(group_id)
         adm.delete_group(grp)
         return '', 200
 
     @listingapp.marshal_with(group)
     @listingapp.expect(group, validate=True)
     # @secured
-    def put(self, id):
+    def put(self, group_id):
         adm = Administration()
         u = Group.from_dict(api.payload)
 
         if u is not None:
-            u.set_id(id)
+            u.set_id(group_id)
             adm.save_group(u)
             return '', 200
         else:
             return '', 500
 
 
-@listingapp.route('/users/<int:id>/groups')
+@listingapp.route('/users/<int:user_id>/groups')
 @listingapp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @listingapp.param('id', 'Die ID des user-Objekts')
 class UserRelatedGroupOperations(Resource):
     @listingapp.marshal_with(group)
     # @secured
-    def get(self, id):
+    def get(self, user_id):
 
         adm = Administration()
-        us = adm.get_user_by_id(id)
+        us = adm.get_user_by_id(user_id)
 
         if us is not None:
             # Jetzt erst lesen wir die Konten des Customer aus.
@@ -205,10 +205,10 @@ class UserRelatedGroupOperations(Resource):
 
     @listingapp.marshal_with(group, code=201)
     # @secured
-    def post(self, id, name):
+    def post(self, user_id, name):
 
         adm = Administration()
-        us = adm.get_user_by_id(id)
+        us = adm.get_user_by_id(user_id)
         na = adm.get_user_by_name(name)
 
         if us is not None:
@@ -222,16 +222,16 @@ class UserRelatedGroupOperations(Resource):
 # Neu
 
 
-@listingapp.route('/group/<int:id>/users')
+@listingapp.route('/group/<int:group_id>/users')
 @listingapp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @listingapp.param('id', 'Die ID des Group-Objekts')
 class GroupRelatedUserOperations(Resource):
     @listingapp.marshal_with(group)
     # @secured
-    def get(self, id):
+    def get(self, group_id):
         adm = Administration()
         # Diese Classe habe ich mir dazu wiedermal überlegt
-        grp = adm.get_group_by_id(id)
+        grp = adm.get_group_by_id(group_id)
 
         if grp is not None:
             user_list = adm.get_members_by_group_id(grp)
