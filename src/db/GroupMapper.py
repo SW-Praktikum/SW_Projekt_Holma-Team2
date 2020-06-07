@@ -1,5 +1,4 @@
 from bo.Group import Group
-
 from db.Mapper import Mapper
 
 
