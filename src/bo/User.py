@@ -36,3 +36,17 @@ class User(BusinessObject):
         user.set_email(dictionary["email"])
         user.set_google_id(dictionary["google_id"])
         return user
+
+    @staticmethod
+    def from_tuples(tuples=list()):
+        result = []
+        for (user_id, name, creation_date, email, google_id, last_updated) in tuples:
+            user = User()
+            user.set_id(user_id)
+            user.set_name(name)
+            user.set_creation_date(creation_date)
+            user.set_email(email)
+            user.set_google_id(google_id)
+            user.set_last_updated(last_updated)
+            result.append(user)
+        return result

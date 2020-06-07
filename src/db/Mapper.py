@@ -1,9 +1,10 @@
-import mysql.connector
 from abc import ABC, abstractmethod
 from contextlib import AbstractContextManager
 
+import mysql.connector
 
-class Mapper (AbstractContextManager, ABC):
+
+class Mapper(AbstractContextManager, ABC):
 
     def __init__(self):
         self._connection = None
@@ -19,9 +20,6 @@ class Mapper (AbstractContextManager, ABC):
             passwd="root",
             database="holma"
         )
-
-        print(type(self._connection))
-
         return self
 
     def __exit__(self, exc_type, value, traceback):
@@ -50,5 +48,3 @@ class Mapper (AbstractContextManager, ABC):
 
 # mycursor.execute(sql1, data1)
 # db.commit()
-
-
