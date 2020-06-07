@@ -2,9 +2,9 @@ from flask import Flask
 from flask_restx import Api, Resource, fields
 from flask_cors import CORS
 
-from src.ListAdministration import Administration
-from src.bo.User import User
-from src.bo.Group import Group
+from ListAdministration import Administration
+from bo.User import User
+from bo.Group import Group
 
 app = Flask(__name__)
 
@@ -28,7 +28,7 @@ bo = api.model('BusinessObject', {
 
 user = api.inherit('User', bo, {
     'email': fields.String(attribute='_email', description='E-Mail-Adresse eines Benutzers'),
-    'google_id': fields.List(attribute='_google_id', description='google id eines Benutzers'),
+    'google_id': fields.String(attribute='_google_id', description='google id eines Benutzers'),
 })
 
 group = api.inherit('Group', bo, {
@@ -86,8 +86,8 @@ class UserListOperations(Resource):
         proposal = User.from_dict(api.payload)
 
         if proposal is not None:
-            u = adm.create_user(proposal.get_email(), proposal.get_google_id())
-            return u, 200
+            usr = adm.create_user(proposal.get_name(), proposal.get_email(), proposal.get_google_id())
+            return usr, 200
         else:
             return '', 500
 
@@ -101,8 +101,8 @@ class UserOperations(Resource):
     def get(self, id):
 
         adm = Administration()
-        us = adm.get_user_by_id(id)
-        return us
+        usr = adm.get_user_by_id(id)
+        return usr
 
     # @secured
     def delete(self, id):
