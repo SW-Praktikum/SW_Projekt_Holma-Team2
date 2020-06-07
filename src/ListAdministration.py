@@ -4,6 +4,7 @@ from bo.Group import Group
 from bo.ShoppingList import ShoppingList
 from bo.User import User
 from db.GroupMapper import GroupMapper
+from db.UserGroupRelationMapper import UserGroupRelationMapper
 from db.UserMapper import UserMapper
 
 
@@ -40,14 +41,12 @@ class Administration():
         with UserMapper() as mapper:
             mapper.insert(user)
 
-    def delete_user(self, user_id):
-        # with UserMapper() as mapper:
-        #   groups = self.get_groups_of_user(user)
-        #   if not (groups is None):
-        #       for group in groups:
-        #           group.delete_member(user)
-        #   mapper.delete(user)
-        pass
+    def delete_user(self, user):
+        with UserGroupRelationMapper() as mapper:
+            mapper.delete_user_relations(user.get_id())
+
+        with UserMapper() as mapper:
+            mapper.delete(user)
 
     def save_user(self, user):
         user.set_last_updated(datetime.now())
@@ -81,11 +80,14 @@ class Administration():
     def get_standardarticles_by_group_id(self, group_id):
         pass
 
-    def add_member_to_group(self, group_id, user_id):
+    def add_member_to_group(self, group, user):
+        with UserGroupRelationMapper() as mapper:
+            mapper.add_user_to_group(group, user)
         pass
 
-    def delete_member_from_group(self, group_id, user_id):
-        pass
+    def remove_member_from_group(self, group, user):
+        with UserGroupRelationMapper() as mapper:
+            mapper.remove_user_from_group(group, user)
 
     def add_article_to_group(self, group_id, article_id):
         pass
@@ -110,17 +112,12 @@ class Administration():
         with GroupMapper() as mapper:
             return mapper.insert(group)
 
-    def delete_group(self, group_id):
-        # with GroupMapper() as mapper:
-        #    group_id = group.get_id()
-        #    members = self.get_members_by_group_id(group_id)
-        #    for member in members:
-        #        self.delete_group_from_user(group, member)
-        #    shopping_lists = self.get_shopping_lists_by_group_id(group_id)
-        #    for shopping_list in shopping_lists:
-        #        self.delelte_shopping_list(shopping_list)
-        #    mapper.delte(group)
-        pass
+    def delete_group(self, group):
+        with UserGroupRelationMapper() as mapper:
+            mapper.delete_group_relations(group)
+
+        with GroupMapper() as mapper:
+            mapper.delete(group)
 
     def save_group(self, group):
         group.set_last_updated(datetime.now())
