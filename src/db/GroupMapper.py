@@ -31,7 +31,7 @@ class GroupMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
-        if len(result) is 0:
+        if len(result) == 0:
             return None
         return result[0]
 

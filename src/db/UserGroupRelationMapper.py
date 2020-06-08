@@ -7,6 +7,15 @@ class UserGroupRelationMapper(Mapper):
     def __init__(self):
         super().__init__()
 
+    def find_all(self):
+        pass
+
+    def find_by_name(self, name):
+        pass
+
+    def find_by_id(self, id):
+        pass
+
     def find_groups_by_user_id(self, user_id):
         cursor = self._connection.cursor()
         command = "SELECT user_group_relation.group_id, user_group_relation.user_id, holma.group.name, " \
@@ -16,7 +25,7 @@ class UserGroupRelationMapper(Mapper):
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        result = Group.from_tuples(tuples)
+        result = Group.from_tuples2(tuples)
 
         self._connection.commit()
         cursor.close()
@@ -32,7 +41,7 @@ class UserGroupRelationMapper(Mapper):
         cursor.execute(command)
         tuples = cursor.fetchall()
 
-        result = User.from_tuples(tuples)
+        result = User.from_tuples2(tuples)
 
         self._connection.commit()
         cursor.close()
@@ -40,16 +49,45 @@ class UserGroupRelationMapper(Mapper):
         return result
 
     def add_user_to_group(self, group, user):
-        pass
+
+        cursor = self._connection.cursor()
+        command = "INSERT INTO holma.user_group_relation (group_id, user_id) VALUES (%s, %s)".format(group, user)
+        data = (group.get_id(),
+                user.get_id())
+        cursor.execute(command, data)
+
+        self._connection.commit()
+        cursor.close()
 
     def remove_user_from_group(self, group, user):
-        pass
+
+        cursor = self._connection.cursor()
+        command = "DELETE FROM holma.user_group_relation WHERE group_id={} and user_id={}".format(group.get_id(),user.get_id())
+        cursor.execute(command)
+
+        self._connection.commit()
+        cursor.close()
+
 
     def delete_user_relations(self, user):
-        pass
+
+        cursor = self._connection.cursor()
+        command = "DELETE FROM holma.user_group_relation WHERE user_id={}".format(user.get_id())
+        cursor.execute(command)
+
+        self._connection.commit()
+        cursor.close()
+
 
     def delete_group_relations(self, group):
-        pass
+
+        cursor = self._connection.cursor()
+        command = "DELETE FROM holma.user_group_relation WHERE user_id={}".format(group.get_id())
+        cursor.execute(command)
+
+        self._connection.commit()
+        cursor.close()
+
 
 
 if __name__ == "__main__":

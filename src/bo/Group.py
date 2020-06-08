@@ -40,3 +40,16 @@ class Group(BusinessObject):
             group.set_last_updated(last_update)
             result.append(group)
         return result
+
+    @staticmethod
+    def from_tuples2(tuples=list()):
+        result = []
+        for (user_id, group_id, name, creation_date, owner, last_update) in tuples:
+            group = Group()
+            group.set_id(group_id)
+            group.set_name(name)
+            group.set_creation_date(creation_date)
+            group.set_owner(owner)
+            group.set_last_updated(last_update)
+            result.append(group)
+        return result
