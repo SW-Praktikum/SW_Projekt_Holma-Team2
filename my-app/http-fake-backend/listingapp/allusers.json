@@ -1,0 +1,41 @@
+[
+    {
+        "email": "123@test.com",
+        "name": "Herbert",  
+        "id": 1
+    },
+    {
+        "email": "234@test.com",
+        "name": "Elfriede",  
+        "id": 2
+    },
+    {
+        "email": "345@test.com",
+        "name": "Gudrun",  
+        "id": 3
+    },
+    {
+        "email": "456@test.com",
+        "name": "Gerd",  
+        "id": 4
+    },
+    {
+        "email": "567@test.com",
+        "name": "Schorsch",  
+        "id": 5
+    },
+    {
+        "email": "678@test.com",
+        "name": "Annegret",  
+        "id": 6
+    },
+    {
+        "email": "789@test.com",
+        "name": "Brunhilde",  
+        "id": 7
+    },{
+        "email": "890@test.com",
+        "name": "Gertraude",  
+        "id": 8
+    }
+]

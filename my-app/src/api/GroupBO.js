@@ -24,7 +24,7 @@ export default class GroupBO extends BusinessObject {
                 result.push(g)
             })
         } else {
-            // Es handelt sich offenbar um ein singuläres Objekt
+            
             let g = groups
             Object.setPrototypeOf(g, GroupBO.prototype)
             result.push(g)
