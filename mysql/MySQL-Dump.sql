@@ -192,15 +192,13 @@ DROP TABLE IF EXISTS `user_group_relation`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_group_relation` (
-  `group_user_id` int NOT NULL AUTO_INCREMENT,
   `group_id` int NOT NULL,
   `user_id` int NOT NULL,
-  PRIMARY KEY (`group_user_id`),
-  KEY `group_id` (`group_id`),
+  PRIMARY KEY (`group_id`,`user_id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `user_group_relation_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `group` (`group_id`),
   CONSTRAINT `user_group_relation_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -209,7 +207,7 @@ CREATE TABLE `user_group_relation` (
 
 LOCK TABLES `user_group_relation` WRITE;
 /*!40000 ALTER TABLE `user_group_relation` DISABLE KEYS */;
-INSERT INTO `user_group_relation` VALUES (1,1,28),(2,2,28),(3,2,28),(4,3,28),(5,2,29),(6,1,29),(7,2,30),(8,3,30),(9,2,31),(10,1,31),(11,2,32),(12,3,32);
+INSERT INTO `user_group_relation` VALUES (1,29),(3,29),(2,30),(1,31),(2,31);
 /*!40000 ALTER TABLE `user_group_relation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -226,4 +224,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-06-04 10:09:38
+-- Dump completed on 2020-06-09 17:10:32
