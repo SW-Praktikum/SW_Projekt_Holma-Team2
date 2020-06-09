@@ -40,3 +40,4 @@ class Group(BusinessObject):
             group.set_last_updated(last_update)
             result.append(group)
         return result
+
