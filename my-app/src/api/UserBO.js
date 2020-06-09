@@ -34,6 +34,7 @@ export default class UserBO extends BusinessObject {
                 result.push(u)
             })
         } else {
+
             let u = users;
             Object.setPrototypeOf(u, UserBO.prototype)
             result.push(u)
