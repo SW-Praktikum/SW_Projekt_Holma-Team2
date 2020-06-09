@@ -1,7 +1,13 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import { Container, ThemeProvider, CssBaseline } from '@material-ui/core';
 import './App.css';
 import firebase from "firebase/app";
 import "firebase/auth";
+import Theme from '.Theme';
+import SignIn from '.components/pages/SignIn';
+import LoadingProgress from './components/dialogs/LoadingProgress';
+import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 
 class App extends React.Component {
   #firebaseConfig = {
@@ -78,12 +84,38 @@ class App extends React.Component {
     const {
       currentUser, appError, authError, authLoading} =this.state;
     return (
-      <div className="App">
-        <header className="App-header">
-          This is a App
-        </header>
-      </div>
-    );
+        <ThemeProvider theme={Theme}>
+        <CssBaseline />
+        <Router basename={ProcessingInstruction.env.PUBLIC_URL}>
+          <Container maxWidth='md'>
+            <Header user={currentUser} />
+            {
+              currentUser ?
+                <>
+                  <Redirect from='/' to='user' /> {/*hier habe ich user statt customer verwendet*/}
+                  <Route exact path='/user'>
+                  </Route>
+                  <Route path='/group'>
+                  </Route>
+                  <Route path='/about' component={About} />
+                </>
+                :
+                <>
+                  <Redirect to='/index.html' />
+                  <SignIn onSignIn={this.handleSignIn}
+                  />
+                </>            
+            }
+            <LoadingProgress show={authLoading} />
+            <ContentErrorMessage error={authError}
+            contextErrorMsg={'Es lief wohl etwas schief während deiner Anmeldung.'} onReload={this.handleSignIn}
+            />
+            <ContextErrorMessage error={appError}
+            contextErrorMsg={'Es lief wohl etwas innerhalb des Programms schief. Bitte lade die Seite nochmals, danke!'} />
+          </Container>
+        </Router>
+        </ThemeProvider>
+  );
   }
 }
 export default App;
