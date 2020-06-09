@@ -7,7 +7,7 @@
 * Just place in ./server/api folder.
 */
 
-const SetupEndpoint = require('./setup/');
+const SetupEndpoint = require('./setup');
 
 const prefix = "/listingapp"
 
