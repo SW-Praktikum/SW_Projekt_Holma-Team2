@@ -31,7 +31,7 @@ class GroupMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
-        if len(result) is 0:
+        if len(result) == 0:
             return None
         return result[0]
 
@@ -63,13 +63,9 @@ class GroupMapper(Mapper):
 
     def insert(self, group):
         cursor = self._connection.cursor()
-        command = "INSERT INTO holma.group (group_id, name, creation_date, owner, last_updated) VALUES (%s,%s,%s,%s,%s)"
-        data = (group.get_id(),
-                group.get_name(),
-                group.get_creation_date(),
-                group.get_owner(),
-                group.get_last_updated())
-        cursor.execute(command, data)
+        command = "INSERT INTO holma.group (group_id, name, creation_date, owner, last_updated) VALUES ({},{},{},{},{})".format(
+            group.get_id(), group.get_name(), group.get_creation_date(), group.get_owner(), group.get_last_updated())
+        cursor.execute(command)
 
         self._connection.commit()
         cursor.close()
@@ -78,9 +74,9 @@ class GroupMapper(Mapper):
 
     def update(self, group):
         cursor = self._connection.cursor()
-        command = "UPDATE holma.group SET name=%s, owner=%s, last_updated=%s  WHERE group_id=%s"
-        data = (group.get_name(), group.get_owner(), group.get_last_updated(), group.get_id())
-        cursor.execute(command, data)
+        command = "UPDATE holma.group SET name={}, owner={}, last_updated={}  WHERE group_id={}".format(
+            group.get_name(), group.get_owner(), group.get_last_updated(), group.get_id())
+        cursor.execute(command)
 
         self._connection.commit()
         cursor.close()
@@ -89,7 +85,6 @@ class GroupMapper(Mapper):
 
     def delete(self, group):
         cursor = self._connection.cursor()
-
         command = "DELETE FROM holma.group WHERE group_id={}".format(group.get_id())
         cursor.execute(command)
 
