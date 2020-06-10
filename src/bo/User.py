@@ -29,10 +29,24 @@ class User(BusinessObject):
         self._google_id = google_id
 
     @staticmethod
+    def to_dict(obj):
+        result = {
+            "id": obj.get_id(),
+            "name": obj.get_name(),
+            "creationDate": obj.get_creation_date(),
+            "lastUpdated": obj.get_last_updated(),
+            "email": obj.get_email(),
+            "googleId": obj.get_google_id()
+        }
+        return result
+
+    @staticmethod
     def from_dict(dictionary=dict()):
         user = User()
         user.set_id(dictionary["id"])
         user.set_name(dictionary["name"])
+        user.set_creation_date(dictionary["creationDate"])
+        user.set_last_updated(dictionary["lastUpdated"])
         user.set_email(dictionary["email"])
         user.set_google_id(dictionary["google_id"])
         return user
