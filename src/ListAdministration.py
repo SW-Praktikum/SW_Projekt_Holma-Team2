@@ -4,7 +4,7 @@ from bo.Group import Group
 from bo.ShoppingList import ShoppingList
 from bo.User import User
 from db.GroupMapper import GroupMapper
-from db.UserGroupRelationsMapper import UserGroupRelationMapper
+from db.UserGroupRelationsMapper import UserGroupRelationsMapper
 from db.UserMapper import UserMapper
 
 
@@ -24,7 +24,7 @@ class Administration():
             return mapper.find_by_id(user_id)
 
     def get_groups_by_user_id(self, user_id):
-        with UserGroupRelationMapper() as mapper:
+        with UserGroupRelationsMapper() as mapper:
             return mapper.find_groups_by_user_id(user_id)
 
     def get_list_entries_by_user_id(self, user_id):
@@ -42,7 +42,7 @@ class Administration():
             mapper.insert(user)
 
     def delete_user(self, user):
-        with UserGroupRelationMapper() as mapper:
+        with UserGroupRelationsMapper() as mapper:
             mapper.delete_user_relations(user.get_id())
 
         with UserMapper() as mapper:
@@ -68,7 +68,7 @@ class Administration():
             return mapper.find_by_name(name)
 
     def get_members_by_group_id(self, group_id):
-        with UserGroupRelationMapper() as mapper:
+        with UserGroupRelationsMapper() as mapper:
             return mapper.find_users_by_group_id(group_id)
 
     def get_articles_by_group_id(self, group_id):
@@ -81,12 +81,12 @@ class Administration():
         pass
 
     def add_member_to_group(self, group, user):
-        with UserGroupRelationMapper() as mapper:
+        with UserGroupRelationsMapper() as mapper:
             mapper.add_user_to_group(group, user)
         pass
 
     def remove_member_from_group(self, group, user):
-        with UserGroupRelationMapper() as mapper:
+        with UserGroupRelationsMapper() as mapper:
             mapper.remove_user_from_group(group, user)
 
     def add_standardarticle_to_group(self, group, list_entry):
@@ -104,7 +104,7 @@ class Administration():
             return mapper.insert(group)
 
     def delete_group(self, group):
-        with UserGroupRelationMapper() as mapper:
+        with UserGroupRelationsMapper() as mapper:
             mapper.delete_group_relations(group)
 
         with GroupMapper() as mapper:

@@ -18,10 +18,10 @@ class UserGroupRelationsMapper(Mapper):
 
     def find_groups_by_user_id(self, user_id):
         cursor = self._connection.cursor()
-        command = "SELECT user_group_relation.group_id, holma.group.name, " \
+        command = "SELECT user_group_relations.group_id, holma.group.name, " \
                   "holma.group.creation_date, holma.group.owner, holma.group.last_updated " \
-                  "FROM user_group_relation INNER JOIN holma.group ON user_group_relation.group_id=group.group_id " \
-                  "WHERE user_group_relation.user_id ={}".format(user_id)
+                  "FROM user_group_relations INNER JOIN holma.group ON user_group_relations.group_id=group.group_id " \
+                  "WHERE user_group_relations.user_id ={}".format(user_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -34,10 +34,10 @@ class UserGroupRelationsMapper(Mapper):
 
     def find_users_by_group_id(self, group_id):
         cursor = self._connection.cursor()
-        command = "SELECT user_group_relation.user_id, " \
+        command = "SELECT user_group_relations.user_id, " \
                   "user.name, user.creation_date, user.email, user.google_id, user.last_updated " \
-                  "FROM user_group_relation INNER JOIN user ON user_group_relation.user_id=user.user_id " \
-                  "WHERE user_group_relation.group_id ={}".format(group_id)
+                  "FROM user_group_relations INNER JOIN user ON user_group_relations.user_id=user.user_id " \
+                  "WHERE user_group_relations.group_id ={}".format(group_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -50,7 +50,7 @@ class UserGroupRelationsMapper(Mapper):
 
     def add_user_to_group(self, group, user):
         cursor = self._connection.cursor()
-        command = "INSERT INTO holma.user_group_relation (group_id, user_id) VALUES ({}, {})".format(group.get_id(),
+        command = "INSERT INTO holma.user_group_relations (group_id, user_id) VALUES ({}, {})".format(group.get_id(),
                                                                                                      user.get_id())
         cursor.execute(command)
 
@@ -59,7 +59,7 @@ class UserGroupRelationsMapper(Mapper):
 
     def remove_user_from_group(self, group, user):
         cursor = self._connection.cursor()
-        command = "DELETE FROM holma.user_group_relation WHERE group_id={} and user_id={}".format(group.get_id(),
+        command = "DELETE FROM holma.user_group_relations WHERE group_id={} and user_id={}".format(group.get_id(),
                                                                                                   user.get_id())
         cursor.execute(command)
 
@@ -68,7 +68,7 @@ class UserGroupRelationsMapper(Mapper):
 
     def delete_user_relations(self, user):
         cursor = self._connection.cursor()
-        command = "DELETE FROM holma.user_group_relation WHERE user_id={}".format(user.get_id())
+        command = "DELETE FROM holma.user_group_relations WHERE user_id={}".format(user.get_id())
         cursor.execute(command)
 
         self._connection.commit()
@@ -76,7 +76,7 @@ class UserGroupRelationsMapper(Mapper):
 
     def delete_group_relations(self, group):
         cursor = self._connection.cursor()
-        command = "DELETE FROM holma.user_group_relation WHERE group_id={}".format(group.get_id())
+        command = "DELETE FROM holma.user_group_relations WHERE group_id={}".format(group.get_id())
         cursor.execute(command)
 
         self._connection.commit()
@@ -84,9 +84,10 @@ class UserGroupRelationsMapper(Mapper):
 
 
 if __name__ == "__main__":
-    with UserGroupRelationMapper() as mapper:
+    with UserGroupRelationsMapper() as mapper:
+
         print("All groups where user #28 is part of:")
-        groups = mapper.find_groups_by_user_id(28)
+        groups = mapper.find_groups_by_user_id(29)
         for group in groups:
             print(group)
 
