@@ -24,8 +24,8 @@ class Administration():
             return mapper.find_by_id(user_id)
 
     def get_groups_by_user_id(self, user_id):
-        with GroupMapper() as mapper:
-            return mapper.find_by_member(user_id)
+        with UserGroupRelationMapper() as mapper:
+            return mapper.find_groups_by_user_id(user_id)
 
     def get_list_entries_by_user_id(self, user_id):
         # with GroupMapper() as mapper:
@@ -68,8 +68,8 @@ class Administration():
             return mapper.find_by_name(name)
 
     def get_members_by_group_id(self, group_id):
-        with UserMapper() as mapper:
-            return mapper.find_by_group(group_id)
+        with UserGroupRelationMapper() as mapper:
+            return mapper.find_users_by_group_id(group_id)
 
     def get_articles_by_group_id(self, group_id):
         pass
@@ -89,19 +89,10 @@ class Administration():
         with UserGroupRelationMapper() as mapper:
             mapper.remove_user_from_group(group, user)
 
-    def add_article_to_group(self, group_id, article_id):
+    def add_standardarticle_to_group(self, group, list_entry):
         pass
 
-    def remove_article_from_group(self, group_id, article_id):
-        pass
-
-    def remove_shopping_list_from_group(self, group_id, shopping_list_id):
-        pass
-
-    def add_standardarticle_to_group(self, group_id, list_entry_id):
-        pass
-
-    def remove_standardarticle_from_group(self, group_id, list_entry_id):
+    def remove_standardarticle_from_group(self, group, list_entry):
         pass
 
     def create_group(self, name, user_id):
@@ -124,7 +115,20 @@ class Administration():
         with GroupMapper() as mapper:
             mapper.update(group)
 
-    # Artikel
+    """ eventuell reichen die delete-methoden der objekte selbst"
+
+    def add_article_to_group(self, group, article):
+        pass
+
+    def remove_article_from_group(self, group, article):
+        pass
+
+    def remove_shopping_list_from_group(self, group, shopping_list):
+        pass
+
+    """
+
+    """Artikel"""
 
     def get_article_by_id(self, article_id):
         pass
@@ -137,13 +141,13 @@ class Administration():
         #   return mapper.insert(article)
         pass
 
-    def delete_article(self, article_id):
+    def delete_article(self, article):
         pass
 
     def save_article(self, article):
         pass
 
-    # Listeintrag
+    """Listeintrag"""
 
     def get_all_list_entries(self):
         pass
@@ -155,13 +159,13 @@ class Administration():
 
         pass
 
-    def delete_list_entry(self, list_entry_id):
+    def delete_list_entry(self, list_entry):
         pass
 
     def save_list_entry(self, list_entry):
         pass
 
-    # Einkaufsliste
+    """Einkaufsliste"""
 
     def get_shopping_list_by_id(self, shopping_list_id):
         pass
@@ -180,10 +184,10 @@ class Administration():
                 list_entries_checked.append(list_entry)
         return list_entries_checked
 
-    def add_list_entry_to_shopping_list(self, shopping_list_id, list_entry_id):
+    def add_list_entry_to_shopping_list(self, shopping_list, list_entry):
         pass
 
-    def delete_list_entry_from_shopping_list(self, shopping_list_id, list_entry_id):
+    def delete_list_entry_from_shopping_list(self, shopping_list, list_entry):
         pass
 
     def create_shopping_list(self, name, group_id):
@@ -193,13 +197,13 @@ class Administration():
         shopping_list.set_group(group_id)
         return shopping_list
 
-    def delete_shopping_list(self, shopping_list_id):
+    def delete_shopping_list(self, shopping_list):
         pass
 
     def save_shopping_list(self, shopping_list):
         pass
 
-    # Retailer
+    """Retailer"""
 
     def get_all_retailers(self):
         pass
@@ -213,7 +217,7 @@ class Administration():
     def create_retailer(self, name):
         pass
 
-    def delete_retailer(self, retailer_id):
+    def delete_retailer(self, retailer):
         pass
 
     def save_retailer(self, retailer):
