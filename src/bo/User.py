@@ -1,5 +1,6 @@
-from bo.BusinessObject import BusinessObject
 from datetime import datetime
+
+from bo.BusinessObject import BusinessObject
 
 
 class User(BusinessObject):

@@ -1,5 +1,7 @@
-from bo.BusinessObject import BusinessObject
 from datetime import datetime
+
+from bo.BusinessObject import BusinessObject
+
 
 class Group(BusinessObject):
     def __init__(self):
@@ -7,7 +9,7 @@ class Group(BusinessObject):
         verfügt über Standardartikel, die bei der Erstellung von Einkaufslisten (wahlweise)
         hinzugefügt werden."""
         super().__init__()
-        self._owner = None # nur als id (Fremdschlüssel)
+        self._owner = None  # nur als id (Fremdschlüssel)
 
     def __str__(self):
         return "Group: {} {}, created: {}, owned by: {}, last changed: {}".format(self.get_id(), self.get_name(),
@@ -54,4 +56,3 @@ class Group(BusinessObject):
             group.set_owner(owner)
             result.append(group)
         return result
-
