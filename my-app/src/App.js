@@ -18,7 +18,6 @@ class App extends React.Component {
     storageBucket: "swprojekt-team2.appspot.com",
     messagingSenderId: "243051164107",
     appId: "1:243051164107:web:7233ae995fc88619bcc64e",
-    //measurementId: "G-Z0GE8FXSJ0"
   };
 
   constructor(props) {
