@@ -1,4 +1,7 @@
+from datetime import datetime
+
 from bo.BusinessObject import BusinessObject
+
 
 class Group(BusinessObject):
     def __init__(self):
@@ -6,7 +9,7 @@ class Group(BusinessObject):
         verfügt über Standardartikel, die bei der Erstellung von Einkaufslisten (wahlweise)
         hinzugefügt werden."""
         super().__init__()
-        self._owner = None # nur als id (Fremdschlüssel)
+        self._owner = None  # nur als id (Fremdschlüssel)
 
     def __str__(self):
         return "Group: {} {}, created: {}, owned by: {}, last changed: {}".format(self.get_id(), self.get_name(),
@@ -25,8 +28,8 @@ class Group(BusinessObject):
         result = {
             "id": obj.get_id(),
             "name": obj.get_name(),
-            "creationDate": obj.get_creation_date(),
-            "lastUpdated": obj.get_last_updated(),
+            "creationDate": obj.get_creation_date().isoformat(),
+            "lastUpdated": obj.get_last_updated().isoformat(),
             "owner": obj.get_owner()
         }
         return result
@@ -36,8 +39,8 @@ class Group(BusinessObject):
         group = Group()
         group.set_id(dictionary["id"])
         group.set_name(dictionary["name"])
-        group.set_creation_date(dictionary["creationDate"])
-        group.set_last_updated(dictionary["lastUpdated"])
+        group.set_creation_date(datetime.fromisoformat(dictionary["creationDate"]))
+        group.set_last_updated(datetime.fromisoformat(dictionary["lastUpdated"]))
         group.set_owner(dictionary["owner"])
         return group
 
@@ -53,4 +56,3 @@ class Group(BusinessObject):
             group.set_owner(owner)
             result.append(group)
         return result
-
