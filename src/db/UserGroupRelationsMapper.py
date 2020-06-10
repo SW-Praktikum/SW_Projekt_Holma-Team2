@@ -3,7 +3,7 @@ from bo.User import User
 from db.Mapper import Mapper
 
 
-class UserGroupRelationMapper(Mapper):
+class UserGroupRelationsMapper(Mapper):
     def __init__(self):
         super().__init__()
 
