@@ -2,6 +2,7 @@ from bo.User import User
 from db.UserMapper import UserMapper
 from ListAdministration import Administration
 from db.UserGroupRelationsMapper import UserGroupRelationsMapper
+import json
 
 """user1 = User()
 
@@ -30,12 +31,21 @@ print(Gruppe5)
 adm.save_group(Gruppe5)
 print(Gruppe5)"""
 
-print(User1.to_dict(User1))
-print(User2.to_dict(User2))
-print(User3.to_dict(User3))
-print(Gruppe3.to_dict(Gruppe3))
-print(Gruppe4.to_dict(Gruppe4))
-print(Gruppe5.to_dict(Gruppe5))
+users = [
+(User1.to_dict(User1)),
+(User2.to_dict(User2)),
+(User3.to_dict(User3))
+    ]
+with open('users.json', 'w') as f:
+    json.dump(users, f, indent=4)
+
+groups = [
+(Gruppe3.to_dict(Gruppe3)),
+(Gruppe4.to_dict(Gruppe4)),
+(Gruppe5.to_dict(Gruppe5))
+]
+with open('groups.json', 'w') as f:
+    json.dump(groups, f, indent=4)
 
 """with UserGroupRelationsMapper() as mapper:
     result = mapper.add_user_to_group(Gruppe5, User1)
