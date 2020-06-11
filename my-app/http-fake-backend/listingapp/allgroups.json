@@ -1,22 +1,23 @@
 [
     {
-        "name": "Swingerclub Schaffhausen",
-        "id": 10,
-        "owner": 1
+        "id": 1,
+        "name": "Strick-Club",
+        "creationDate": "2029-05-20T20:00:00",
+        "lastUpdated": "2029-05-20T20:00:00",
+        "owner": 29
     },
     {
-        "name": "Altherren Fußball",
-        "id": 11,
-        "owner": 4
+        "id": 3,
+        "name": "Familie-Mustermann",
+        "creationDate": "2029-05-20T20:00:00",
+        "lastUpdated": "2029-05-20T20:00:00",
+        "owner": 31
     },
     {
-        "name": "Familie",
-        "id": 12,
-        "owner": 2
-    },
-    {
-        "name": "Brauereifreunde Gutmann e.V.",
-        "id": 13,
-        "owner": 6
+        "id": 2,
+        "name": "Studium",
+        "creationDate": "2029-05-20T20:00:00",
+        "lastUpdated": "2029-05-20T20:00:00",
+        "owner": 30
     }
 ]

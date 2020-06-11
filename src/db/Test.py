@@ -36,7 +36,7 @@ users = [
 (User2.to_dict(User2)),
 (User3.to_dict(User3))
     ]
-with open('users.json', 'w') as f:
+with open('../../my-app/http-fake-backend/listingapp/allusers.json', 'w') as f:
     json.dump(users, f, indent=4)
 
 groups = [
@@ -44,7 +44,7 @@ groups = [
 (Gruppe4.to_dict(Gruppe4)),
 (Gruppe5.to_dict(Gruppe5))
 ]
-with open('groups.json', 'w') as f:
+with open('../../my-app/http-fake-backend/listingapp/allgroups.json', 'w') as f:
     json.dump(groups, f, indent=4)
 
 """with UserGroupRelationsMapper() as mapper:
