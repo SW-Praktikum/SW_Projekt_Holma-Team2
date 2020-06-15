@@ -3,45 +3,45 @@ export default class BusinessObject {
     constructor(name) {
         this.id = 0;
         this.name = name;
-        this.creation_date = datetime.now();
-        this.last_updated = this.creation_date;
+        this.creationDate = new Date.now(); // datetime.now();
+        this.lastUpated = this.creationDate;
     }
 
 
-    get_ID() {
+    getId() {
         return this.id
     }
 
-    get_name() {
+    getName() {
         return this.name
     }
 
-    get_creation_date() {
-        return this.creation_date
+    getCreationDate() {
+        return this.creationDate
     }
 
-    get_last_updated() {
-        return this._last_updated
+    getLastUpated() {
+        return this.lastUpated
     }
 
-    setID(id) {
+    setId(id) {
         this.id = id
     }
 
-    set_name(self, name) {
+    setName(name) {
         this.name = name
     }
 
-    set_creation_date(self, creation_date) {
-        this.creation_date = creation_date
+    setCreationDate(creationDate) {
+        this.creationDate = creationDate
     }
 
-    set_last_updated(self, last_updated) {
-        this.last_updated = last_updated
+    setLastUpated(lastUpated) {
+        this.lastUpated = lastUpated
     }
 
     toString() {
-        let result = ''
+        let result = '';
         for (var prop in this) {
             result += prop + ': ' + this[prop] + ' ';
         }

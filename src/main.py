@@ -127,7 +127,7 @@ class UserOperations(Resource):
             return '', 500
 
 
-@listingapp.route('/users/<string:name>')
+@listingapp.route('/users/by-name/<string:name>')
 @listingapp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @listingapp.param('name', 'Der Name des Users')
 class UserByNameOperations(Resource):
@@ -209,11 +209,12 @@ class UserRelatedGroupOperations(Resource):
 
         adm = Administration()
         us = adm.get_user_by_id(user_id)
+        # ? das ist der Gruppenname
         na = adm.get_user_by_name(name)
 
         if us is not None:
 
-            result = adm.create_group(na, us)
+            result = adm.create_group(name, us)
             return result
         else:
             return "User unknown", 500
@@ -230,11 +231,17 @@ class GroupRelatedUserOperations(Resource):
     # @secured
     def get(self, group_id):
         adm = Administration()
+        user_list = adm.get_members_by_group_id(group_id)
+        return user_list
+
+        """
         # Diese Classe habe ich mir dazu wiedermal überlegt
+        # objekt nicht benötigt, nur group ID
+
         grp = adm.get_group_by_id(group_id)
 
         if grp is not None:
-            user_list = adm.get_members_by_group_id(grp)
+            user_list = adm.get_members_by_group_id(group_id)
             return user_list
         else:
-            return "User not found", 500
+            return "User not found", 500"""

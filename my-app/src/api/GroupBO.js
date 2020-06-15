@@ -2,17 +2,17 @@ import BusinessObject from './BusinessObject';
 
 export default class GroupBO extends BusinessObject {
 
-    constructor(o) {
-        super();
-        this.owner = o;
+    constructor(name, owner) {
+        super(name);
+        this.owner = owner;
    }
 
-    setOwner(o) {
-        this.owner = o
+    setOwner(owner) {
+        this.owner = owner;
     }
 
     getOwner() {
-        return this.owner
+        return this.owner;
     }
 
     static fromJSON(groups) {
@@ -20,13 +20,13 @@ export default class GroupBO extends BusinessObject {
 
         if (Array.isArray(groups)) {
             groups.forEach((g) => {
-                Object.setPrototypeOf(g, GroupBO.prototype)
+                Object.setPrototypeOf(g, GroupBO.prototype);
                 result.push(g)
             })
         } else {
             
-            let g = groups
-            Object.setPrototypeOf(g, GroupBO.prototype)
+            let g = groups;
+            Object.setPrototypeOf(g, GroupBO.prototype);
             result.push(g)
         }
 
