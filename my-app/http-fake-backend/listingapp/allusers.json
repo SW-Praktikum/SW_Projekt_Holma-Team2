@@ -1,41 +1,26 @@
 [
     {
-        "email": "123@test.com",
-        "name": "Herbert",
-        "id": 1
+        "id": 29,
+        "name": "Jonas",
+        "creationDate": "2029-05-20T20:00:00",
+        "lastUpdated": "2029-05-20T20:00:00",
+        "email": "jonas@beispiel.de",
+        "googleId": "2"
     },
     {
-        "email": "234@test.com",
-        "name": "Elfriede",
-        "id": 2
+        "id": 30,
+        "name": "Christian",
+        "creationDate": "2029-05-20T20:00:00",
+        "lastUpdated": "2029-05-20T20:00:00",
+        "email": "christian@beispiel.de",
+        "googleId": "3"
     },
     {
-        "email": "345@test.com",
-        "name": "Gudrun",
-        "id": 3
-    },
-    {
-        "email": "456@test.com",
-        "name": "Gerd",
-        "id": 4
-    },
-    {
-        "email": "567@test.com",
-        "name": "Schorsch",
-        "id": 5
-    },
-    {
-        "email": "678@test.com",
-        "name": "Annegret",
-        "id": 6
-    },
-    {
-        "email": "789@test.com",
-        "name": "Brunhilde",
-        "id": 7
-    },{
-        "email": "890@test.com",
-        "name": "Gertraude",
-        "id": 8
+        "id": 31,
+        "name": "Yassine",
+        "creationDate": "2029-05-20T20:00:00",
+        "lastUpdated": "2029-05-20T20:00:00",
+        "email": "yassine@beispiel.de",
+        "googleId": "4"
     }
 ]
