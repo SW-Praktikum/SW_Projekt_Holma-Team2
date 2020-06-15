@@ -4,9 +4,8 @@
 /node_modules
 /.pnp
 .pnp.js
-SW_Projekt_Holma-Team2/venv
 
-# testing  
+# testing
 /coverage
 
 # production
