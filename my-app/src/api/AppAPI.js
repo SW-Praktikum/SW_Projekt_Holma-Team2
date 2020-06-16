@@ -1,7 +1,7 @@
 import GroupBO from './GroupBO';
 import UserBO from './UserBO';
 
-export default class AppAPI{
+export default class AppAPI {
 
     static #api = null;
 

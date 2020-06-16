@@ -82,7 +82,6 @@ class UserListOperations(Resource):
     # @secured
     def post(self):
         adm = Administration()
-
         proposal = User.from_dict(api.payload)
 
         if proposal is not None:
@@ -205,19 +204,16 @@ class UserRelatedGroupOperations(Resource):
 
     @listingapp.marshal_with(group, code=201)
     # @secured
-    def post(self, user_id, name):
-
+    def post(self, user_id):
         adm = Administration()
         us = adm.get_user_by_id(user_id)
-        # ? das ist der Gruppenname
-        na = adm.get_user_by_name(name)
+        proposal = Group.from_dict(api.payload)
 
-        if us is not None:
-
-            result = adm.create_group(name, us)
+        if us is not None and proposal is not None:
+            result = adm.create_group(proposal.get_name(), user_id)
             return result
         else:
-            return "User unknown", 500
+            return "User unkown or payload not valid", 500
 
 
 # Neu
@@ -230,18 +226,13 @@ class GroupRelatedUserOperations(Resource):
     @listingapp.marshal_with(group)
     # @secured
     def get(self, group_id):
-        adm = Administration()
-        user_list = adm.get_members_by_group_id(group_id)
-        return user_list
-
-        """
         # Diese Classe habe ich mir dazu wiedermal überlegt
         # objekt nicht benötigt, nur group ID
-
+        adm = Administration()
         grp = adm.get_group_by_id(group_id)
 
         if grp is not None:
             user_list = adm.get_members_by_group_id(group_id)
             return user_list
         else:
-            return "User not found", 500"""
+            return "Group not found", 500
