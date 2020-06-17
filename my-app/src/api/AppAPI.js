@@ -148,5 +148,64 @@ export default class AppAPI {
             })
         })
     }
+
+    getGroups() {
+        return this.#fetchAdv(this.#geGroupsURL()).then((responseJSON) => {
+            let responseGroups = GroupBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+                resolve(responseGroups)
+            })
+        })
+    }
+
+    getGroupById(groupId) {
+        return this.#fetchAdv(this.#getGroupByIdURL(groupId)).then((responseJSON) => {
+            let responseGroup = GroupBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseGroup)
+            })
+        })
+    }
+
+    updateGroup(group) {
+        return this.#fetchAdv(this.#updateGroupURL(group.getId()), {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(group)
+        }).then((responseJSON) => {
+            let responseGroup = GroupBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseGroup)
+            })
+        })
+    }
+
+    deleteGroup(group) {
+        return this.#fetchAdv(this.#deleteGroupURL(user.getId()), {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(group)
+        }).then((responseJSON) => {
+            let responseGroup = GroupBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseGroup)
+            })
+        })
+    }
+
+    getUsersByGroupId(groupId) {
+        return this.#fetchAdv(this.#getUserByGroupIdURL(groupId)).then((responseJSON) => {
+            let responseUsers = UserBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+                resolve(responseUsers)
+            })
+        })
+    }
 }
 
