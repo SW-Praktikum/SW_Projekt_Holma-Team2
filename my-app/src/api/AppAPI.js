@@ -150,12 +150,17 @@ export default class AppAPI {
     }
 
     getGroups() {
+<<<<<<< HEAD
         return this.#fetchAdv(this.#getGroupsURL()).then((responseJSON) => {
+=======
+        return this.#fetchAdv(this.#geGroupsURL()).then((responseJSON) => {
+>>>>>>> ce9bc51a42c93ac35d3fde1a44b1bab882a65aa8
             let responseGroups = GroupBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
                 resolve(responseGroups)
             })
         })
+<<<<<<< HEAD
     };
 
     getGroupById(groupId) {
@@ -163,6 +168,15 @@ export default class AppAPI {
             let responseGroups = GroupBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
                 resolve(responseGroups)
+=======
+    }
+
+    getGroupById(groupId) {
+        return this.#fetchAdv(this.#getGroupByIdURL(groupId)).then((responseJSON) => {
+            let responseGroup = GroupBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseGroup)
+>>>>>>> ce9bc51a42c93ac35d3fde1a44b1bab882a65aa8
             })
         })
     }
@@ -184,7 +198,11 @@ export default class AppAPI {
     }
 
     deleteGroup(group) {
+<<<<<<< HEAD
         return this.#fetchAdv(this.#deleteGroupURL(group.getId()), {
+=======
+        return this.#fetchAdv(this.#deleteGroupURL(user.getId()), {
+>>>>>>> ce9bc51a42c93ac35d3fde1a44b1bab882a65aa8
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json, text/plain',
@@ -200,7 +218,11 @@ export default class AppAPI {
     }
 
     getUsersByGroupId(groupId) {
+<<<<<<< HEAD
         return this.#fetchAdv(this.#getUsersByGroupIdURL(groupId)).then((responseJSON) => {
+=======
+        return this.#fetchAdv(this.#getUserByGroupIdURL(groupId)).then((responseJSON) => {
+>>>>>>> ce9bc51a42c93ac35d3fde1a44b1bab882a65aa8
             let responseUsers = UserBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
                 resolve(responseUsers)
