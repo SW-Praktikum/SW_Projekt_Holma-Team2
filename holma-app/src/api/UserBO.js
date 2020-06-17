@@ -5,24 +5,23 @@ export default class UserBO extends BusinessObject {
     constructor(name, email) {
         super(name);
         this.email = email;
-        this.google_id = "";
+        this.googleId = "";
    }
 
-
-    get_email() {
-        return this._email
+    getEmail() {
+        return this.email
     }
 
-    get_google_id(){
-        return this._google_id
+    getGoogleId(){
+        return this.googleId
     }   
 
-    set_email(email){
-        this._email = email
+    setEmail(email){
+        this.email = email
     }
 
-    set_google_id(google_id){
-        this.google_id = google_id
+    setGoogleId(googleId){
+        this.googleId = googleId
     }
 
     static fromJSON(users) {
@@ -30,13 +29,12 @@ export default class UserBO extends BusinessObject {
 
         if (Array.isArray(users)) {
             users.forEach((u) => {
-                Object.setPrototypeOf(u, UserBO.prototype)
+                Object.setPrototypeOf(u, UserBO.prototype);
                 result.push(u)
             })
         } else {
-
             let u = users;
-            Object.setPrototypeOf(u, UserBO.prototype)
+            Object.setPrototypeOf(u, UserBO.prototype);
             result.push(u)
         }
 
