@@ -8,6 +8,7 @@ SW_Projekt_Holma-Team2/venv
 
 # testing  
 /coverage
+/http-fake-backend
 
 # production
 /build

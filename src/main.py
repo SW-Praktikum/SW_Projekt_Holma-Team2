@@ -151,7 +151,7 @@ class GroupListOperations(Resource):
 
 @listingapp.route('/groups/<int:group_id>')
 @listingapp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@listingapp('id', 'Die ID des Group-Objekts')
+@listingapp.param('id', 'Die ID des Group-Objekts')
 class GroupOperations(Resource):
     @listingapp.marshal_with(group)
     # @secured
@@ -236,3 +236,7 @@ class GroupRelatedUserOperations(Resource):
             return user_list
         else:
             return "Group not found", 500
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
