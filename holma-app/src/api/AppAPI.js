@@ -5,7 +5,7 @@ export default class AppAPI {
 
     static #api = null;
 
-    #appServerBaseURL = '/app';
+    #appServerBaseURL = 'http://localhost:5000/app';
 
 
 

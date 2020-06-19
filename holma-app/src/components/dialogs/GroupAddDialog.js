@@ -33,13 +33,13 @@ class GroupAddDialog extends Component {
         console.log(this.state.group)
 
         //close Window
-    }
+    };
     
     addGroup1 = () => {
         var grp = new GroupBO(this.state.groupName, 29);
 
         AppAPI.getAPI().createGroup(grp)
-    }
+    };
         /*.getID().then(groupBO => {
             this.setState({
                 groups: [...this.state.groups, groupBO],

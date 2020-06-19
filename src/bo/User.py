@@ -35,8 +35,8 @@ class User(BusinessObject):
         result = {
             "id": obj.get_id(),
             "name": obj.get_name(),
-            "creationDate": obj.get_creation_date().isoformat(),
-            "lastUpdated": obj.get_last_updated().isoformat(),
+            "creationDate": datetime.strftime(obj.get_creation_date(), "%Y-%m-%dT%H:%M:%S.%fZ"),
+            "lastUpdated": datetime.strftime(obj.get_last_updated(), "%Y-%m-%dT%H:%M:%S.%fZ"),
             "email": obj.get_email(),
             "googleId": obj.get_google_id()
         }
@@ -47,8 +47,8 @@ class User(BusinessObject):
         user = User()
         user.set_id(dictionary["id"])
         user.set_name(dictionary["name"])
-        user.set_creation_date(datetime.fromisoformat(dictionary["creationDate"]))
-        user.set_last_updated(datetime.fromisoformat(dictionary["lastUpdated"]))
+        user.set_creation_date(datetime.strptime(dictionary["creationDate"], "%Y-%m-%dT%H:%M:%S.%fZ"))
+        user.set_creation_date(datetime.strptime(dictionary["lastUpdated"], "%Y-%m-%dT%H:%M:%S.%fZ"))
         user.set_email(dictionary["email"])
         user.set_google_id(dictionary["googleId"])
         return user

@@ -28,8 +28,8 @@ class Group(BusinessObject):
         result = {
             "id": obj.get_id(),
             "name": obj.get_name(),
-            "creationDate": obj.get_creation_date().isoformat(),
-            "lastUpdated": obj.get_last_updated().isoformat(),
+            "creationDate": datetime.strftime(obj.get_creation_date(), "%Y-%m-%dT%H:%M:%S.%fZ"),
+            "lastUpdated": datetime.strftime(obj.get_last_updated(), "%Y-%m-%dT%H:%M:%S.%fZ"),
             "owner": obj.get_owner()
         }
         return result
@@ -39,8 +39,8 @@ class Group(BusinessObject):
         group = Group()
         group.set_id(dictionary["id"])
         group.set_name(dictionary["name"])
-        group.set_creation_date(datetime.fromisoformat(dictionary["creationDate"]))
-        group.set_last_updated(datetime.fromisoformat(dictionary["lastUpdated"]))
+        group.set_creation_date(datetime.strptime(dictionary["creationDate"], "%Y-%m-%dT%H:%M:%S.%fZ"))
+        group.set_creation_date(datetime.strptime(dictionary["lastUpdated"], "%Y-%m-%dT%H:%M:%S.%fZ"))
         group.set_owner(dictionary["owner"])
         return group
 
