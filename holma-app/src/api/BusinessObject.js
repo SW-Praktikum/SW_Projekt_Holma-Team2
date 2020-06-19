@@ -3,7 +3,7 @@ export default class BusinessObject {
     constructor(name) {
         this.id = 0;
         this.name = name;
-        this.creationDate = new Date.now(); // datetime.now();
+        this.creationDate = new Date(); // datetime.now();
         this.lastUpated = this.creationDate;
     }
 

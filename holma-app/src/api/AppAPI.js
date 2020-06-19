@@ -134,6 +134,7 @@ export default class AppAPI {
     }
 
     createGroup(group) {
+        console.log(group)
         return this.#fetchAdv(this.#createGroupURL(group.getOwner()), {
             method: 'POST',
             headers: {
