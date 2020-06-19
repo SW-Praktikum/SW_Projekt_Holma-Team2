@@ -20,15 +20,15 @@ listingapp = api.namespace('app', description="Funktionen der App")
 bo = api.model('BusinessObject', {
     'name': fields.String(attribute='_name', description='Name eines Objekts'),
     'id': fields.Integer(attribute='_id', description='Der Unique Identifier eines Business Object'),
-    'creation_date': fields.Date(attribute='_creation_date',
+    'creationDate': fields.Date(attribute='_creation_date',
                                  description='Erstellungsdatum des BOs, wird durch Unix Time Stamp ermittlet'),
-    'last_changed': fields.Date(attribute='_last_changed',
+    'lastUpdated': fields.Date(attribute='_last_changed',
                                 description='Änderungsdatum des BOs, wird durch Unix Time Stamp ermittlet')
 })
 
 user = api.inherit('User', bo, {
     'email': fields.String(attribute='_email', description='E-Mail-Adresse eines Benutzers'),
-    'google_id': fields.String(attribute='_google_id', description='google id eines Benutzers'),
+    'googleId': fields.String(attribute='_google_id', description='google id eines Benutzers'),
 })
 
 group = api.inherit('Group', bo, {
@@ -151,7 +151,7 @@ class GroupListOperations(Resource):
 
 @listingapp.route('/groups/<int:group_id>')
 @listingapp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@listingapp.param('id', 'Die ID des Group-Objekts')
+@listingapp.param('group_id', 'Die ID des Group-Objekts')
 class GroupOperations(Resource):
     @listingapp.marshal_with(group)
     # @secured
@@ -186,7 +186,7 @@ class GroupOperations(Resource):
 
 @listingapp.route('/users/<int:user_id>/groups')
 @listingapp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@listingapp.param('id', 'Die ID des user-Objekts')
+@listingapp.param('user_id', 'Die ID des user-Objekts')
 class UserRelatedGroupOperations(Resource):
     @listingapp.marshal_with(group)
     # @secured
@@ -197,7 +197,7 @@ class UserRelatedGroupOperations(Resource):
 
         if us is not None:
             # Jetzt erst lesen wir die Konten des Customer aus.
-            group_list = adm.get_groups_by_user_id(us)
+            group_list = adm.get_groups_by_user_id(user_id)
             return group_list
         else:
             return "User not found", 500
@@ -221,7 +221,7 @@ class UserRelatedGroupOperations(Resource):
 
 @listingapp.route('/group/<int:group_id>/users')
 @listingapp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@listingapp.param('id', 'Die ID des Group-Objekts')
+@listingapp.param('group_id', 'Die ID des Group-Objekts')
 class GroupRelatedUserOperations(Resource):
     @listingapp.marshal_with(group)
     # @secured
