@@ -37,14 +37,14 @@ class Mapper(AbstractContextManager, ABC):
     def find_by_name(self, name):
         pass
 
-    """
-    Weitere Methoden folgen. Teste momentan noch mit dem Insert in den jeweiligen Mapper-Klassen herum.
-    """
+    @abstractmethod
+    def insert(self, object):
+        pass
 
-# mycursor.execute("CREATE TABLE Person (name VARCHAR(50), email NVARCHAR(255), creation_date TIME, personID int PRIMARY KEY AUTO_INCREMENT)")
+    @abstractmethod
+    def update(self, object):
+        pass
 
-# sql1 = "INSERT INTO person (name, email) VALUES (%s, %s)"
-# data1 = ("Dominik", "dk108@hdm-stuttgart.de")
-
-# mycursor.execute(sql1, data1)
-# db.commit()
+    @abstractmethod
+    def delete(self, object):
+        pass
