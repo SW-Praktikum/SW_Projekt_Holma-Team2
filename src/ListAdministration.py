@@ -43,7 +43,7 @@ class Administration():
 
     def delete_user(self, user):
         with UserGroupRelationsMapper() as mapper:
-            mapper.delete_user_relations(user.get_id())
+            mapper.delete_user_relations(user)
 
         with UserMapper() as mapper:
             mapper.delete(user)

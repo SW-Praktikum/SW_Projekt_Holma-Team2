@@ -20,15 +20,15 @@ listingapp = api.namespace('app', description="Funktionen der App")
 bo = api.model('BusinessObject', {
     'name': fields.String(attribute='_name', description='Name eines Objekts'),
     'id': fields.Integer(attribute='_id', description='Der Unique Identifier eines Business Object'),
-    'creation_date': fields.Date(attribute='_creation_date',
+    'creationDate': fields.Date(attribute='_creation_date',
                                  description='Erstellungsdatum des BOs, wird durch Unix Time Stamp ermittlet'),
-    'last_changed': fields.Date(attribute='_last_changed',
+    'lastUpdated': fields.Date(attribute='_last_updated',
                                 description='Änderungsdatum des BOs, wird durch Unix Time Stamp ermittlet')
 })
 
 user = api.inherit('User', bo, {
     'email': fields.String(attribute='_email', description='E-Mail-Adresse eines Benutzers'),
-    'google_id': fields.String(attribute='_google_id', description='google id eines Benutzers'),
+    'googleId': fields.String(attribute='_google_id', description='google id eines Benutzers'),
 })
 
 group = api.inherit('Group', bo, {
@@ -197,7 +197,7 @@ class UserRelatedGroupOperations(Resource):
 
         if us is not None:
             # Jetzt erst lesen wir die Konten des Customer aus.
-            group_list = adm.get_groups_by_user_id(us)
+            group_list = adm.get_groups_by_user_id(user_id)
             return group_list
         else:
             return "User not found", 500
