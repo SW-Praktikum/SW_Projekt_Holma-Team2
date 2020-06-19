@@ -107,20 +107,23 @@ class UserOperations(Resource):
     def delete(self, user_id):
 
         adm = Administration()
-        us = adm.get_user_by_id(user_id)
-        adm.delete_user(us)
-        return '', 200
+        usr = adm.get_user_by_id(user_id)
+        if usr is not None:
+            adm.delete_user(usr)
+            return '', 200
+        else:
+            return '', 500
 
     @listingapp.marshal_with(user)
     @listingapp.expect(user, validate=True)
     # @secured
     def put(self, user_id):
         adm = Administration()
-        u = User.from_dict(api.payload)
+        usr = User.from_dict(api.payload)
 
-        if u is not None:
-            u.set_id(user_id)
-            adm.save_user(u)
+        if usr is not None:
+            usr.set_id(user_id)
+            adm.save_user(usr)
             return '', 200
         else:
             return '', 500
@@ -166,19 +169,22 @@ class GroupOperations(Resource):
 
         adm = Administration()
         grp = adm.get_group_by_id(group_id)
-        adm.delete_group(grp)
-        return '', 200
+        if grp is not None:
+            adm.delete_group(grp)
+            return '', 200
+        else:
+            return '', 500
 
     @listingapp.marshal_with(group)
     @listingapp.expect(group, validate=True)
     # @secured
     def put(self, group_id):
         adm = Administration()
-        u = Group.from_dict(api.payload)
+        grp = Group.from_dict(api.payload)
 
-        if u is not None:
-            u.set_id(group_id)
-            adm.save_group(u)
+        if grp is not None:
+            grp.set_id(group_id)
+            adm.save_group(grp)
             return '', 200
         else:
             return '', 500
