@@ -93,7 +93,7 @@ class UserListOperations(Resource):
 
 @listingapp.route('/users/<int:user_id>')
 @listingapp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@listingapp.param('id', 'Die ID des User-Objekts')
+@listingapp.param('user_id', 'Die ID des User-Objekts')
 class UserOperations(Resource):
     @listingapp.marshal_with(user)
     # @secured
@@ -223,7 +223,7 @@ class UserRelatedGroupOperations(Resource):
 @listingapp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @listingapp.param('group_id', 'Die ID des Group-Objekts')
 class GroupRelatedUserOperations(Resource):
-    @listingapp.marshal_with(group)
+    @listingapp.marshal_with(user)
     # @secured
     def get(self, group_id):
         # Diese Classe habe ich mir dazu wiedermal überlegt
