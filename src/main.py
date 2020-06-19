@@ -83,7 +83,7 @@ class UserListOperations(Resource):
     def post(self):
         adm = Administration()
         proposal = User.from_dict(api.payload)
-
+        print(proposal)
         if proposal is not None:
             usr = adm.create_user(proposal.get_name(), proposal.get_email(), proposal.get_google_id())
             return usr, 200
