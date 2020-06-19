@@ -79,17 +79,15 @@ class UserMapper(Mapper):
         return result[0]
 
     def insert(self, user):
-        print(user.get_id(),
+        cursor = self._connection.cursor()
+        command = "INSERT INTO user (user_id, name, creation_date, email, google_id, last_updated) VALUES ({},{},{},{},{},{})".format(
+            user.get_id(),
             user.get_name(),
             user.get_creation_date(),
             user.get_email(),
             user.get_google_id(),
             user.get_last_updated())
-        cursor = self._connection.cursor()
-        command = "INSERT INTO user (user_id, name, email, google_id, last_updated) VALUES (%s,%s,%s,%s,%s,%s)"
-        data = (user.get_id(), user.get_name(), user.get_creation_date(), user.get_email(), user.get_google_id(),
-                user.get_last_updated())
-        cursor.execute(command, data)
+        cursor.execute(command)
 
         self._connection.commit()
         cursor.close()
