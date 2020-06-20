@@ -9,11 +9,11 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import { red } from '@material-ui/core/colors';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import CardActionArea from '@material-ui/core/CardActionArea';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import {Paper, Typography, Tabs, Tab, AppBar, CardActionArea }from '@material-ui/core';
+
 
 class GroupEntry extends Component {
     render() {
@@ -41,29 +41,30 @@ const useStyles = makeStyles({
     avatar: {
         backgroundColor: red,
       },
+      media: {
+        height: 0,
+        paddingTop: '56.25%',
+        marginTop:'30'
+      },
   });
-
+  
     export default function OutlinedCard() {
         const classes = useStyles();
 
     return (
-      <Card className={classes.root} variant="outlined">
-          <CardHeader>
+      <Card className={classes.root}>
+          <CardActionArea>
+          <CardMedia 
+          className={classes.media}
+          image="https://cdn.icon-icons.com/icons2/902/PNG/512/group_icon-icons.com_69369.png"
+          title="Groupname"
+          />
+          <CardContent>
           <Typography className={classes.title} color="textSecondary">
-            Groupname
-        </Typography>
-          </CardHeader>
-
-        <CardContent>
-          <Typography className={classes.pos} color="textSecondary">
-            adjective
-          </Typography>
-          <CardMedia
-              classname={classes.media}
-              image="/holma-app/src/components/images/groupIcon.png"
-              title="GroupIcon"/>
-        </CardContent>
-
+                Groupname
+            </Typography>
+          </CardContent>
+        </CardActionArea>     
         <CardActions>
           <Button size="small">Anzeigen</Button>
         </CardActions>
