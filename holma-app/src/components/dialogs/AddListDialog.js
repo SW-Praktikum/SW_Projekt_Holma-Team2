@@ -9,7 +9,10 @@ import AppAPI from '../../api/AppAPI';
 import GroupBO from '../../api/GroupBO';
 import AddIcon from '@material-ui/icons/Add';
 
-class GroupAddDialog extends Component {
+
+// API for Lists needs to be created first
+
+class AddListDialog extends Component {
     constructor (props) {
         super(props)
         this.state = {
@@ -61,10 +64,10 @@ class GroupAddDialog extends Component {
                 variant="outlined" 
                 color="primary"
                 startIcon={<AddIcon />} 
-                onClick={this.handleClickOpen}>Add Group
+                onClick={this.handleClickOpen}>Add List
                 </Button>
               <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Neue Gruppe erstellen</DialogTitle>
+                <DialogTitle id="form-dialog-title">Neue Liste erstellen</DialogTitle>
                 <DialogContent>
                   <TextField
                     autoFocus
@@ -73,7 +76,7 @@ class GroupAddDialog extends Component {
                     margin="dense"
                     id="outlined-basic"
                     variant="outlined"
-                    label="Gruppenname"
+                    label="Listenname"
                     type="email"
                     fullWidth
                   />
@@ -92,4 +95,4 @@ class GroupAddDialog extends Component {
     }
 }
 
-export default GroupAddDialog
+export default AddListDialog

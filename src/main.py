@@ -3,6 +3,7 @@ from flask_cors import CORS
 from flask_restx import Api, Resource, fields
 
 from ListAdministration import Administration
+from ListAdministration import StatisticAdministration
 from bo.Group import Group
 from bo.User import User
 
@@ -231,7 +232,6 @@ class UserRelatedGroupOperations(Resource):
 
 # Neu
 
-
 @listingapp.route('/group/<int:group_id>/users')
 @listingapp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @listingapp.param('group_id', 'Die ID des Group-Objekts')
@@ -250,6 +250,81 @@ class GroupRelatedUserOperations(Resource):
         else:
             return "Group not found", 500
 
+"""@listingapp.route('/articles')
+@listingapp.response(500,'Falls es zu einem Server-seitigem Fehler kommt.')
+class ArticleListOperations(Resource):
+    @listingapp.marshal_list_with(article)
+    # @secured
+    def get(self):
+        adm = StatisticAdministration()
+        art = adm.get_all_articles()
+        return art
+
+@listingapp.route('/articles/<int:id>')
+@listingapp.response(500,'Falls es zu einem Server-seitigen Fehler kommt.')
+@listingapp('id', 'Die ID des article-Objekts')
+class ArticleOperations(Resource):
+    @listingapp.marshal_with(article)
+    # @secured
+    def get(self, article_id):
+
+        adm = Administration()
+        art = adm.get_article_by_id(id)
+        return art
+
+    # @secured
+    def delete(self, article_id):
+
+        adm = Administration()
+        art = adm.get_article_by_id(article_id)
+        adm.delete_article(art)
+        return '', 200
+
+    @listingapp.marshal_with(article)
+    @listingapp.expect(article, validate=True)
+    # @secured
+    def post(self, article_id):
+        adm = Administration()
+        art = Group.from_dict(api.payload)
+
+        if art is not None:
+            art.set_id(article_id)
+            adm.save_group(art)
+            return '', 200
+        else:
+            return '', 500
+
+@listingapp.route('/groups/<int:id>/articles')
+@listingapp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@listingapp.param('id', 'Die ID des person-Objekts')
+class GroupRelatedArticleOperations(Resource):
+    @listingapp.marshal_with(article)
+    # @secured
+    def get(self, group_id):
+
+        adm = Administration()
+        grp = adm.get_group_by_id(id)
+
+        if grp is not None:
+            # Jetzt erst lesen wir die Konten des Customer aus.
+            articles_list = adm.get_articles_by_group_id(grp)
+            return articles_list
+        else:
+            return "No articles found", 500
+
+    @listingapp.marshal_with(article, code=201)
+    # @secured
+    def post(self, group_id):
+        adm = Administration()
+        art = adm.get_group_by_id(group_id)
+
+        proposal = Article.from_dict(api.payload)
+
+        if art is not None and proposal is not None:
+            result = adm.create_group(proposal.get_name(), group_id)
+            return result
+        else:
+            return "Group unkown or payload not valid", 500"""
 
 if __name__ == '__main__':
     app.run(debug=True)
