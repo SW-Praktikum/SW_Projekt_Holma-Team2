@@ -1,9 +1,6 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '@material-ui/core';
-import Alert from '@material-ui/lab/Alert';
-import AlertTitle from '@material-ui/lab/AlertTitle';
-import AutorenewIcon from '@material-ui/icons/Autorenew';
+//Hier müssen verschiedene Elemente von Material-UI importiert werden
 
 class ContextErrorMessage extends Component {
     #defaultText = 'Das hätte nicht passieren sollen, entschuldige!';
@@ -13,39 +10,16 @@ class ContextErrorMessage extends Component {
 
         return (
             (error !== null) ?
-            <Alert severity='error' className={classes.root}>
                 <div>
                     {this.#defaultText}
                 </div>
-                <AlertTitle>
-                {contextErrorMsg}
-                </AlertTitle>
                 <div className={classes.margins}>
-                    Die Fehlermeldung (for debugging only) lautet:
+                    Die Fehlermeldung lautet: {error.message} 
                 </div>
-                    <div>
-                    {error.message}
-                </div>
-                    {
-                onReload ?
-                <div className={classes.margins}>
-                <Button variant='contained' color='primary' startIcon={<AutorenewIcon />}onClick={onReload}>
-                  Reload
-            </Button>
-              </div>
-              : null
-          }
-           </Alert>
-            : null
         );
     }
 }
 
-// const styles = theme => ({
-//     margins: {
-//       marginTop: theme.spacing(2)
-//     }
-//   });
 //Component specific styles hab ich mal weggelassen
 
 ContextErrorMessage.propTypes ={

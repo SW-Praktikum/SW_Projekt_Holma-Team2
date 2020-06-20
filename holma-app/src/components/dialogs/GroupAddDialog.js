@@ -40,7 +40,7 @@ class GroupAddDialog extends Component {
 
         AppAPI.getAPI().createGroup(grp)
     };
-        /*getID().then(groupBO => {
+        /*.getID().then(groupBO => {
             this.setState({
                 groups: [...this.state.groups, groupBO],
                 loadingInProgress:false,
