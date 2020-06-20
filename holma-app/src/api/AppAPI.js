@@ -5,7 +5,7 @@ export default class AppAPI {
 
     static #api = null;
 
-    #appServerBaseURL = '/app';
+    #appServerBaseURL = 'http://localhost:5000/app';
 
 
 
@@ -134,6 +134,7 @@ export default class AppAPI {
     }
 
     createGroup(group) {
+        console.log(group)
         return this.#fetchAdv(this.#createGroupURL(group.getOwner()), {
             method: 'POST',
             headers: {
