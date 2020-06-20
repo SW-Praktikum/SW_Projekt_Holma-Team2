@@ -1,25 +1,4 @@
 import React from 'react';
-<<<<<<< HEAD
-import './App.css';
-//import GroupAddDialog from './components/dialogs/GroupAddDialog';
-import Startpage from './components/layout/Startpage';
-import Header from './components/layout/Header';
-import Navigation from './components/navigation';
-
-
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <div>
-          <Header />
-        </div>
-          <Navigation />
-          <Startpage />
-      </header>
-    </div>
-  );
-=======
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import { Container, ThemeProvider, CssBaseline } from '@material-ui/core';
 import theme from './components/theme';
@@ -138,6 +117,5 @@ class App extends React.Component {
         </ThemeProvider>
     );
   }
->>>>>>> a8ffdc95455d31d9a45c65b11015a6e8008bef1b
 }
 export default App;

@@ -53,27 +53,6 @@ class GroupAddDialog extends Component {
         //valdieren, dass Gruppe erstellt wurde, Fenster schließen
     }
 
-<<<<<<< HEAD
-=======
-        AppAPI.getAPI().createGroup(grp)
-    };
-        /*.getID().then(groupBO => {
-            this.setState({
-                groups: [...this.state.groups, groupBO],
-                loadingInProgress:false,
-                addingGroupError: null
-            })
-        })
-        .catch(e =>
-            this.setState({
-                groups: [],
-                loadingInProgress:false,
-                addingGroupError: e
-            })
-        )
-        )}*/
-    
->>>>>>> master
     render() {
         return (
             <div>
