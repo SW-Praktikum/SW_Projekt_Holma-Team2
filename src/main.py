@@ -19,24 +19,29 @@ listingapp = api.namespace('app', description="Funktionen der App")
 
 bo = api.model('BusinessObject', {
     'name': fields.String(attribute='_name', description='Name eines Objekts'),
-    'id': fields.Integer(attribute='_id', description='Der Unique Identifier eines Business Object'),
+    'id': fields.Integer(attribute='_id',
+                         description='Der Unique Identifier eines Business Object'),
     'creationDate': fields.Date(attribute='_creation_date',
-                                 description='Erstellungsdatum des BOs, wird durch Unix Time Stamp ermittlet'),
+                                description='Erstellungsdatum des BOs, wird durch Unix Time Stamp ermittlet'),
     'lastUpdated': fields.Date(attribute='_last_updated',
-                                description='Änderungsdatum des BOs, wird durch Unix Time Stamp ermittlet')
+                               description='Änderungsdatum des BOs, wird durch Unix Time Stamp ermittlet')
 })
 
 user = api.inherit('User', bo, {
-    'email': fields.String(attribute='_email', description='E-Mail-Adresse eines Benutzers'),
-    'googleId': fields.String(attribute='_google_id', description='google id eines Benutzers'),
+    'email': fields.String(attribute='_email',
+                           description='E-Mail-Adresse eines Benutzers'),
+    'googleId': fields.String(attribute='_google_id',
+                              description='google id eines Benutzers'),
 })
 
 group = api.inherit('Group', bo, {
-    'owner': fields.Integer(attribute='_owner', description='Unique Id des Gruppeninhabers'),
+    'owner': fields.Integer(attribute='_owner',
+                            description='Unique Id des Gruppeninhabers'),
 })
 
 shoppingList = api.inherit('ShoppingList', bo, {
-    'group': fields.Integer(attribute='_group', description='ID der Gruppe zu der diese Liste gehört'),
+    'group': fields.Integer(attribute='_group',
+                            description='ID der Gruppe zu der diese Liste gehört'),
 })
 
 listEntry = api.inherit('ListEntry', bo, {
@@ -46,22 +51,23 @@ listEntry = api.inherit('ListEntry', bo, {
                            description='Menge des Entries '),
     'unit': fields.String(attribute='_unit',
                           description='Einheit des Entries '),
-    'purchasing_user': fields.String(attribute='_purchasing_user',
-                                     description='Wer das Artikle kaufen muss '),
-    'shopping_list': fields.Integer(attribute='_Shopping_list',
-                                    description='zu welcher Liste diese Entry gehört?'),
+    'purchasingUser': fields.String(attribute='_purchasing_user',
+                                    description='Wer das Artikle kaufen muss '),
+    'shoppingList': fields.Integer(attribute='_Shopping_list',
+                                   description='zu welcher Liste diese Entry gehört?'),
     'retailer': fields.String(attribute='_retailer',
                               description='Bei wem das Artikle gekauft  '),
     'checked': fields.Boolean(attribute='_checked',
                               description='wurde es bereits gekauft'),
-    'checked_ts': fields.DateTime(attribute='_checked_ts',
-                                  description='wann wurde es gekauft'),
+    'checkedTs': fields.DateTime(attribute='_checked_ts',
+                                 description='wann wurde es gekauft'),
     'standardarticle': fields.Boolean(attribute='_standardarticle',
-                                      description='ist es ein Standardartikle '),
+                                      description='ist es ein Standardartikle')
 })
 
 article = api.inherit('Article', bo, {
-    'group': fields.Integer(attribute='_group', description='zu welcher Groupe dieses Artikle gehört?'),
+    'group': fields.Integer(attribute='_group',
+                            description='zu welcher Groupe dieses Artikle gehört?'),
 })
 
 retailer = api.inherit('Retailer', bo)
@@ -85,7 +91,8 @@ class UserListOperations(Resource):
         proposal = User.from_dict(api.payload)
         print(proposal)
         if proposal is not None:
-            usr = adm.create_user(proposal.get_name(), proposal.get_email(), proposal.get_google_id())
+            usr = adm.create_user(proposal.get_name(), proposal.get_email(),
+                                  proposal.get_google_id())
             return usr, 200
         else:
             return '', 500

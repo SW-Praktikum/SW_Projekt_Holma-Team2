@@ -1,16 +1,16 @@
 import React from 'react';
 import './App.css';
-import GroupListEntry from'./components/GroupListEntry';
-//import AllGroupList from'./components/AllGroupList';
- 
- 
+
+import GroupAddDialog from './components/dialogs/GroupAddDialog';
+import ListWithBoxes from "./components/GroupListEntry"
 function App() {
-    return (
-        <div className="App">
-            <header className="App-header">
-                <GroupListEntry/>
-            </header>
-                </div>
+  //ListWithBoxes
+  return (
+    <div className="App">
+      <header className="App-header">
+        <ListWithBoxes /> 
+      </header>
+    </div>
   );
 }
  

@@ -3,8 +3,10 @@ from bo.BusinessObject import BusinessObject
 
 class ListEntry(BusinessObject):
     def __init__(self):
-        """Ein Listeneintrag ist ein Eintrag in der Einkaufsliste, der sämtliche Informationen zum Artikel und der
-        Zuordnung enthält. Ein Listeneintrag kann auch ein "Standardartikel" sein."""
+        """Ein Listeneintrag ist ein Eintrag in der Einkaufsliste, der
+        sämtliche Informationen zum Artikel und der Zuordnung enthält.
+        Ein Listeneintrag kann auch ein "Standardartikel" sein."""
+
         super().__init__()
         self._article = None  # nur als id (Fremdschlüssel)
         self._amount = 1.0
@@ -17,13 +19,11 @@ class ListEntry(BusinessObject):
         self._standardarticle = False
 
     def __str__(self):
-        return "Article: {}, amount: {} {}, purchasing user: {}, retailer: {}, checked: {}".format(
-            self._article,
-            self._amount,
-            self._unit,
-            self._purchasing_user,
-            self._retailer,
-            self._checked)
+        s = "Article: {}, amount: {} {}, purchasing user: {}, retailer: {}, " \
+            "checked: {}".format(self._article, self._amount, self._unit,
+                                 self._purchasing_user, self._retailer,
+                                 self._checked)
+        return s
 
     def get_article(self):
         return self._article

@@ -2,7 +2,9 @@ from bo.BusinessObject import BusinessObject
 
 class Retailer(BusinessObject):
     def __init__(self):
-        """Einkaufsstelle, die später in einem Listeneintrag referenziert wird."""
+        """Einkaufsstelle, die später in einem Listeneintrag
+        referenziert wird."""
+
         super().__init__()
 
     def from_dict(self, dictionary=dict()):
