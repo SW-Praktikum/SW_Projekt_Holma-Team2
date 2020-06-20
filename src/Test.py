@@ -4,7 +4,7 @@ from ListAdministration import Administration
 from db.UserGroupRelationsMapper import UserGroupRelationsMapper
 import json
 
-"""user1 = User()
+user1 = User()
 
 user1.set_name("Dominik")
 user1.set_google_id(123)
@@ -13,7 +13,7 @@ user1.set_id(36)
 print(user1)
 
 with UserMapper() as mapper:
-    result = mapper.delete(user1)
+    result = mapper.insert(user1)
 """
 
 adm = Administration()
@@ -25,11 +25,11 @@ Gruppe3 = adm.get_group_by_id(1)
 Gruppe4 = adm.get_group_by_id(3)
 Gruppe5 = adm.get_group_by_id(2)
 
-"""print(Gruppe5)
+print(Gruppe5)
 Gruppe5.set_owner(29)
 print(Gruppe5)
 adm.save_group(Gruppe5)
-print(Gruppe5)"""
+print(Gruppe5)
 
 users = [
 (User1.to_dict(User1)),
@@ -47,6 +47,6 @@ groups = [
 with open('../../my-app/http-fake-backend/listingapp/allgroups.json', 'w') as f:
     json.dump(groups, f, indent=4)
 
-"""with UserGroupRelationsMapper() as mapper:
-    result = mapper.add_user_to_group(Gruppe5, User1)
-"""
+with UserGroupRelationsMapper() as mapper:
+    result = mapper.add_user_to_group(Gruppe5, User1)"""
+

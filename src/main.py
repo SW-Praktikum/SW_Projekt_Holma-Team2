@@ -21,7 +21,7 @@ bo = api.model('BusinessObject', {
     'name': fields.String(attribute='_name', description='Name eines Objekts'),
     'id': fields.Integer(attribute='_id', description='Der Unique Identifier eines Business Object'),
     'creationDate': fields.Date(attribute='_creation_date',
-                                 description='Erstellungsdatum des BOs, wird durch Unix Time Stamp ermittlet'),
+                                description='Erstellungsdatum des BOs, wird durch Unix Time Stamp ermittlet'),
     'lastUpdated': fields.Date(attribute='_last_updated',
                                 description='Änderungsdatum des BOs, wird durch Unix Time Stamp ermittlet')
 })
