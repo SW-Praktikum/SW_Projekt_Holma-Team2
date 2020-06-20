@@ -11,3 +11,4 @@ src/db/__pycache__/
 .DS_Store
 src/db/.DS_Store
 holma-app/http-fake-backend/
+node_modules

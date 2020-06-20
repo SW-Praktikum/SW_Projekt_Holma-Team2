@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import GroupAddDialog from './components/dialogs/GroupAddDialog';
 
+
 function App() {
   return (
     <div className="App">

@@ -1,77 +1,80 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import AppAPI from '../../api/AppAPI';
 import GroupBO from '../../api/GroupBO';
+import AddIcon from '@material-ui/icons/Add';
 
+export default function FormDialog() {
+  const [open, setOpen] = React.useState(false);
+  let groupName = ""
+  let userID = 29
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
-class GroupAddDialog extends Component {
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleChange = (e) => {
+    groupName = e.target.value
+  }
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            groupName: '',
-            group: null
-    }}
-    
-    handleChange = (e) => this.setState({
-		groupName: e.target.value
-    })
-    
-    _handleKeyDown = (e) => {
-        if (e.key === 'Enter') {
-            this.addGroup1();
-        };
+  const _handleClick = () => {
+    //console.log(AppAPI.getAPI().getUsers())
+    addGroup();
+  };
+  const _handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+    addGroup();
     };
-    _handleClick = () => {
-        this.addGroup1();
-    };
-    
-    addGroup = () => {
-        console.log(this.state.groupName);
-        console.log(this.state.group)
-
-        //close Window
-    };
-    
-    addGroup1 = () => {
-        var grp = new GroupBO(this.state.groupName, 29);
-
-        AppAPI.getAPI().createGroup(grp)
-    };
-        /*.getID().then(groupBO => {
-            this.setState({
-                groups: [...this.state.groups, groupBO],
-                loadingInProgress:false,
-                addingGroupError: null
-            })
-        })
-        .catch(e =>
-            this.setState({
-                groups: [],
-                loadingInProgress:false,
-                addingGroupError: e
-            })
-        )
-        )}*/
-    
-    render() {
-        return (
-            
-            <React.Fragment>
-                <div style={{color: "black"}}>Neue Gruppe erstellen</div>
-                <TextField 
-                onKeyDown={this._handleKeyDown} 
-                value={this.state.groupName}
-				onChange={this.handleChange}
-                id="outlined-basic" label="Gruppenname" variant="outlined" />
-                <Button onClick={this._handleClick} variant="contained" color="primary">Gruppe erstellen
-                </Button>
-            </React.Fragment>
-        )
-    }
-
+  };
+  
+  const addGroup = () => {
+    // current UserID muss abgefragt werden, geht erst wenn firebase läuft
+    // id bisher deklarerte Variable
+    var grp = new GroupBO(groupName, userID);
+    AppAPI.getAPI().createGroup(grp);
+    //valdieren, dass Gruppe erstellt wurde, Fenster schließen
+  };
+    return (
+    <div>
+      <Button 
+        style={{maxWidth: '120px', maxHeight: '120px', minWidth: '120px', minHeight: '120px',}}
+        variant="outlined" 
+        color="primary"
+        startIcon={<AddIcon />} 
+        onClick={handleClickOpen}>Add Group
+        </Button>
+      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">Neue Gruppe erstellen</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            onKeyDown={_handleKeyDown}
+            onChange={handleChange}
+            margin="dense"
+            id="outlined-basic"
+            variant="outlined"
+            label="Gruppenname"
+            type="email"
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            schließen
+          </Button>
+          <Button onClick={_handleClick} color="primary">
+            hinzufügen
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
 }
-export default(GroupAddDialog)
 
