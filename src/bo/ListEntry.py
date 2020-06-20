@@ -19,13 +19,11 @@ class ListEntry(BusinessObject):
         self._standardarticle = False
 
     def __str__(self):
-        return "Article: {}, amount: {} {}, purchasing user: {}, retailer: " \
-               "{}, checked: {}".format(self._article,
-                                        self._amount,
-                                        self._unit,
-                                        self._purchasing_user,
-                                        self._retailer,
-                                        self._checked)
+        s = "Article: {}, amount: {} {}, purchasing user: {}, retailer: {}, " \
+            "checked: {}".format(self._article, self._amount, self._unit,
+                                 self._purchasing_user, self._retailer,
+                                 self._checked)
+        return s
 
     def get_article(self):
         return self._article
