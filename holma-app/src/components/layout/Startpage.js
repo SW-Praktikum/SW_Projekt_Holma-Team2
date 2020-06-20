@@ -7,8 +7,6 @@ import GroupAdd from '@material-ui/icons/GroupAdd';
 import Assessment from '@material-ui/icons/Assessment';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Settings from '@material-ui/icons/Settings';
-import theme from '../Theme';
-
 
 const useStyles = makeStyles({
   root: {

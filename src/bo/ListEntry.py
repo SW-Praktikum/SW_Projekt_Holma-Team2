@@ -98,6 +98,26 @@ class ListEntry(BusinessObject):
         list_entry.set_standardarticle(dictionary["isStandardarticle"])
         return list_entry
 
+    @staticmethod
+    def from_tuples(tuples=list()):
+        result = []
+        for (listentry_id, name, creation_date, purchasing_user, amount, article, unit, retailer, standardarticle, checked, checked_ts, shoppinglist,   last_update) in tuples:
+            listentry = ListEntry()
+            listentry.set_id(listentry_id)
+            listentry.set_name(name)
+            listentry.set_creation_date(creation_date)
+            listentry.set_purchasing_user(user_id)
+            listentry.set_amount(amount)
+            listentry.set_article(article_id)
+            listentry.set_unit(unit)
+            listentry.set_retailer(retailer_id)
+            listentry.set_standardarticle(standardarticle)
+            listentry.set_checked(checked)
+            listentry.set_checked_ts(checked_ts)
+            listentry.set_shopping_list(shoppinglist_id)
+            listentry.set_last_updated(last_update)
+            result.append(shoppinglist)
+        return result
     """
     def delete(self):
         self._shopping_list.delete_shopping_list_entry(self)
