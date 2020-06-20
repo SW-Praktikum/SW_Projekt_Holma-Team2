@@ -1,20 +1,13 @@
 import React from 'react';
 import './App.css';
-<<<<<<< HEAD
-import Navigation from './components/Layout/Navigation';
-=======
 import GroupAddDialog from './components/dialogs/GroupAddDialog';
->>>>>>> master
+import Startpage from './components/layout/Startpage';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-<<<<<<< HEAD
-      <Navigation />
-=======
-        <GroupAddDialog />
->>>>>>> master
+        <Startpage />
       </header>
     </div>
   );
