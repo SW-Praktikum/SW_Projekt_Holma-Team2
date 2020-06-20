@@ -250,7 +250,7 @@ class GroupRelatedUserOperations(Resource):
         else:
             return "Group not found", 500
 
-@listingapp.route('/articles')
+"""@listingapp.route('/articles')
 @listingapp.response(500,'Falls es zu einem Server-seitigem Fehler kommt.')
 class ArticleListOperations(Resource):
     @listingapp.marshal_list_with(article)
@@ -324,7 +324,7 @@ class GroupRelatedArticleOperations(Resource):
             result = adm.create_group(proposal.get_name(), group_id)
             return result
         else:
-            return "Group unkown or payload not valid", 500
+            return "Group unkown or payload not valid", 500"""
 
 if __name__ == '__main__':
     app.run(debug=True)
