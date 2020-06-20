@@ -28,15 +28,6 @@ export default function IconLabelTabs() {
 
   return (
     <div>
-      <div>
-        <Typography variant='h3' component='h1' align='center'>
-          Header
-        </Typography>
-        <Typography variant='h4' component='h1' align='center'>
-          Navigation
-        </Typography>
-        
-        </div>
     <Paper square className={classes.root}>
       <div>
       <Tabs
