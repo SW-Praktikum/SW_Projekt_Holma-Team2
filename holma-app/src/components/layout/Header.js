@@ -31,7 +31,7 @@ class Header extends React.Component {
           <Typography variant="h6" color="inherit">
               Holma
             </Typography>
-            <IconButton edge="false" className={classes.menuButton} onClick={this.logging} color="inherit" aria-label="menu">
+            <IconButton edge="false" className={classes.menuButton} color="inherit" aria-label="menu">
               <ShoppingBasket />
             </IconButton>
             <IconButton edge="false" className={classes.menuButton} color="inherit" label="Login">
