@@ -1,8 +1,8 @@
 import React from 'react';
 import './App.css';
-import ListWithBoxes from "./components/GroupListEntry"
 import GroupAddDialog from './components/dialogs/GroupAddDialog';
 import AddListDialog from './components/dialogs/AddListDialog';
+import ListWithBoxes from './components/GroupListEntry';
 
 function App() {
   //ListWithBoxes
@@ -11,6 +11,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
+        <ListWithBoxes />
         <GroupAddDialog />
       </header>
     </div>
