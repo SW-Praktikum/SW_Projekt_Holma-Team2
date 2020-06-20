@@ -1,11 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import { Container, ThemeProvider, CssBaseline } from '@material-ui/core';
-import Theme from './Theme';
+import theme from './components/theme';
 import firebase from "firebase/app";
 import "firebase/auth";
 import Header from './components/layout/Header';
-import SignIn from './components/pages/SignIn.js';
+import SignIn from './components/pages/SignIn';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import About from './components/pages/About';
@@ -56,7 +56,7 @@ class App extends React.Component {
           authLoading: false
         });
       });
-    }else {
+    } else {
       document.cookie = 'token=;path=/';
 
       this.setState({
@@ -81,18 +81,18 @@ class App extends React.Component {
   }
 
   render(){
-    const {
-      currentUser, appError, authError, authLoading} =this.state;
+    const {currentUser, appError, authError, authLoading} = this.state;
+
     return (
-      <ThemeProvider theme={Theme}>
+      <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Router basename={ProcessingInstruction.env.PUBLIC_URL}>
+        <Router basename={process.env.PUBLIC_URL}>
           <Container maxWidth='md'>
             <Header user={currentUser} />
             {
               currentUser ?
                 <>
-                  <Redirect from='/' to='user' /> {/*hier habe ich user statt customer verwendet*/}
+                  <Redirect from='/' to='user' /> 
                   <Route exact path='/user'>
                   </Route>
                   <Route path='/group'>
@@ -115,7 +115,7 @@ class App extends React.Component {
             </Container>
         </Router>
         </ThemeProvider>
-  );
+    );
   }
 }
 export default App;
