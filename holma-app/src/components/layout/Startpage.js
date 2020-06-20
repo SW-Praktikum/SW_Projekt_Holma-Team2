@@ -13,7 +13,7 @@ import Settings from '@material-ui/icons/Settings';
 const useStyles = makeStyles({
   root: {
     flexGrow: 1,
-    maxWidth: 1000,
+    
   },
 });
 
