@@ -16,9 +16,6 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import CardActionArea from '@material-ui/core/CardActionArea';
 
 
-
-
-
 const useStyles = makeStyles({
     root: {
       minWidth: 275,
