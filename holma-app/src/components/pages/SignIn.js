@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Button } from '@material-ui/core';
 
 class SignIn extends Component{
     
@@ -10,7 +11,7 @@ class SignIn extends Component{
 
     // Das passiert, falls das user-Objekt null ist
     render() {
-        const {classes } = this.props;
+        //const {classes } = this.props;
 
         return(
             <div>
