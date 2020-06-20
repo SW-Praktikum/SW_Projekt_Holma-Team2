@@ -7,24 +7,20 @@ import GroupAdd from '@material-ui/icons/GroupAdd';
 import Assessment from '@material-ui/icons/Assessment';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Settings from '@material-ui/icons/Settings';
-//import theme from '../Theme';
-
+//import theme from '../theme';
 
 const useStyles = makeStyles({
   root: {
     flexGrow: 1,
-    
+    maxWidth: 1000,
   },
 });
-
 export default function IconLabelTabs() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
 
   return (
     <div>
@@ -41,7 +37,6 @@ export default function IconLabelTabs() {
         <Tab icon={<Group />} label="Gruppen" value="1"/>
         <Tab icon={<List />} label="Listen" value="2"/>        
       </Tabs>
-
       <Tabs
         value={value}
         onChange={handleChange}
@@ -54,7 +49,6 @@ export default function IconLabelTabs() {
         <Tab icon={<Assessment />} label="Statistik" value="4" />
         
       </Tabs>
-
       <Tabs
         value={value}
         onChange={handleChange}

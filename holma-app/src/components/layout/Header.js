@@ -6,9 +6,14 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import ShoppingBasket from '@material-ui/icons/ShoppingBasket';
 import PersonPin from '@material-ui/icons/PersonPin';
-
  
-const useStyles = makeStyles((theme) => ({
+class Header extends React.Component {
+  constructor(props) {
+    super(props)
+    console.log(props)
+  }
+  
+  makeStyles = (theme) => ({
     root: {
       flexGrow: 1,
       width: '100%'
@@ -16,12 +21,9 @@ const useStyles = makeStyles((theme) => ({
     menuButton: {
       marginRight: theme.spacing(100, 'auto'),
     },
-  }));
-  
-
-  export default function DenseAppBar() {
-    const classes = useStyles();
-  
+  })
+  render() {
+    const classes = this.makeStyles
     return (
       <div className={classes.root}>
         <AppBar position="static">
@@ -29,15 +31,16 @@ const useStyles = makeStyles((theme) => ({
           <Typography variant="h6" color="inherit">
               Holma
             </Typography>
-            <IconButton edge="false" className={classes.menuButton} color="inherit" aria-label="menu">
+            <IconButton edge="false" className={classes.menuButton} onClick={this.logging} color="inherit" aria-label="menu">
               <ShoppingBasket />
             </IconButton>
             <IconButton edge="false" className={classes.menuButton} color="inherit" label="Login">
               <PersonPin />
             </IconButton>
-
           </Toolbar>
         </AppBar>
       </div>
     );
   }
+}
+export default Header
