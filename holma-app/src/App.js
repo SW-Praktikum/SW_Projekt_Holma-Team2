@@ -2,19 +2,20 @@ import React from 'react';
 import './App.css';
 //import GroupAddDialog from './components/dialogs/GroupAddDialog';
 import Startpage from './components/layout/Startpage';
-import Header from './components/header';
+import Header from './components/Header';
 import Navigation from './components/navigation';
+
 
 function App() {
   return (
     <div className="App">
-
-       <Header />
-
-      <Navigation />
-
-      <Startpage />
-
+      <header className="App-header">
+        <div>
+          <Header />
+        </div>
+          <Navigation />
+          <Startpage />
+      </header>
     </div>
   );
 }

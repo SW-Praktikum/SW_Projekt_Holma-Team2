@@ -92,12 +92,12 @@ export default function PersistentDrawerRight() {
           [classes.appBarShift]: open
         })}
       >
-
+        <Toolbar>
           <Typography variant="h6" noWrap className={classes.title}>
          
           </Typography>
           <IconButton
-            //color="inherit"
+            color="inherit"
             aria-label="open drawer"
             edge="end"
             onClick={handleDrawerOpen}
@@ -105,7 +105,7 @@ export default function PersistentDrawerRight() {
           >
             <MenuIcon />
           </IconButton>
-
+        </Toolbar>
       </AppBar>
       <main>
       </main>
