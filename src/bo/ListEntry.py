@@ -37,11 +37,17 @@ class ListEntry(BusinessObject):
     def get_retailer(self):
         return self._retailer
 
+    def get_standardarticle(self):
+        return self._standardarticle
+
     def get_purchasing_user(self):
         return self._purchasing_user
 
     def get_shopping_list(self):
         return self._shopping_list
+
+    def get_checked
+        return self._checked
 
     def get_checked_ts(self):
         return self._checked_ts
@@ -101,22 +107,22 @@ class ListEntry(BusinessObject):
     @staticmethod
     def from_tuples(tuples=list()):
         result = []
-        for (listentry_id, name, creation_date, purchasing_user, amount, article, unit, retailer, standardarticle, checked, checked_ts, shoppinglist,   last_update) in tuples:
+        for (listentry_id, name, creation_date, purchasing_user, amount, article, unit, retailer, standardarticle, checked, checked_ts, shopping_list,   last_update) in tuples:
             listentry = ListEntry()
             listentry.set_id(listentry_id)
             listentry.set_name(name)
             listentry.set_creation_date(creation_date)
-            listentry.set_purchasing_user(user_id)
+            listentry.set_purchasing_user(purchasing_user)
             listentry.set_amount(amount)
-            listentry.set_article(article_id)
+            listentry.set_article(article)
             listentry.set_unit(unit)
-            listentry.set_retailer(retailer_id)
+            listentry.set_retailer(retailer)
             listentry.set_standardarticle(standardarticle)
             listentry.set_checked(checked)
             listentry.set_checked_ts(checked_ts)
-            listentry.set_shopping_list(shoppinglist_id)
+            listentry.set_shopping_list(shopping_list)
             listentry.set_last_updated(last_update)
-            result.append(shoppinglist)
+            result.append(listentry)
         return result
     """
     def delete(self):
