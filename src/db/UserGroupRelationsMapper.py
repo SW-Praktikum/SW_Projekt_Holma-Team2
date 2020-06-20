@@ -7,6 +7,15 @@ class UserGroupRelationsMapper(Mapper):
     def __init__(self):
         super().__init__()
 
+    def insert(self, object):
+        pass
+
+    def update(self, object):
+        pass
+
+    def delete(self, object):
+        pass
+
     def find_all(self):
         pass
 

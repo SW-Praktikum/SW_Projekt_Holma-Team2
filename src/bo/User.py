@@ -50,7 +50,7 @@ class User(BusinessObject):
         user.set_creation_date(datetime.fromisoformat(dictionary["creationDate"]))
         user.set_last_updated(datetime.fromisoformat(dictionary["lastUpdated"]))
         user.set_email(dictionary["email"])
-        user.set_google_id(dictionary["google_id"])
+        user.set_google_id(dictionary["googleId"])
         return user
 
     @staticmethod
