@@ -2,6 +2,8 @@ import React from 'react';
 import './App.css';
 import ListWithBoxes from "./components/GroupListEntry"
 import GroupAddDialog from './components/dialogs/GroupAddDialog';
+import AddListDialog from './components/dialogs/AddListDialog';
+
 function App() {
   //ListWithBoxes
   //<ListWithBoxes /> 
