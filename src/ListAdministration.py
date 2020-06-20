@@ -155,7 +155,8 @@ class Administration():
     def get_list_entry_by_id(self, list_entry_id):
         pass
 
-    def create_list_entry(self, article_id, amount, unit, retailer_id, purchasing_user_id, shopping_list_id):
+    def create_list_entry(self, article_id, amount, unit, retailer_id,
+                          purchasing_user_id, shopping_list_id):
 
         pass
 

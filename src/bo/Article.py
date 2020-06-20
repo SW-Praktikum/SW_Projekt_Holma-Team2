@@ -7,7 +7,8 @@ class Article(BusinessObject):
         self._group = None # nur als id (Fremdschlüssel)
 
     def __str__(self):
-        return "Article: {}, part of group: {}".format(self.get_name(), self.get_group())
+        return "Article: {}, part of group: {}".format(self.get_name(),
+                                                       self.get_group())
 
     def get_group(self):
         return self._group
