@@ -65,7 +65,7 @@ class GroupMapper(Mapper):
 
     def insert(self, group):
         cursor = self._connection.cursor()
-        command = "INSERT INTO holma.group (group_id, name, creation_date, " \
+        command = "INSERT INTO githolma.group (group_id, name, creation_date, " \
                   "owner, last_updated) VALUES (%s, %s, %s, %s, %s)"
         data = (group.get_id(),
                 group.get_name(),
