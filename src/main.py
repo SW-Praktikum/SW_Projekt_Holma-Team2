@@ -16,7 +16,7 @@ api = Api(app, version='1.0', title='HOLMA API',
           description='Eine rudimentäre Demo-API für Listenerstellung.')
 
 """Namespaces"""
-listingapp = api.namespace('app', description="Funktionen der App")
+holmaApp = api.namespace('holmaApp', description="Funktionen der App")
 
 bo = api.model('BusinessObject', {
     'name': fields.String(attribute='_name', description='Name eines Objekts'),
@@ -74,18 +74,18 @@ article = api.inherit('Article', bo, {
 retailer = api.inherit('Retailer', bo)
 
 
-@listingapp.route('/users')
-@listingapp.response(500, 'Falls es zu einem Server -seitigen Fehler kommt')
+@holmaApp.route('/users')
+@holmaApp.response(500, 'Falls es zu einem Server -seitigen Fehler kommt')
 class UserListOperations(Resource):
-    @listingapp.marshal_list_with(user)
+    @holmaApp.marshal_list_with(user)
     # @secured
     def get(self):
         adm = Administration()
         user_list = adm.get_all_users()
         return user_list
 
-    @listingapp.marshal_with(user, code=200)
-    @listingapp.expect(user)  # Wir erwarten ein USer-Objekt von Client-Seite.
+    @holmaApp.marshal_with(user, code=200)
+    @holmaApp.expect(user)  # Wir erwarten ein USer-Objekt von Client-Seite.
     # @secured
     def post(self):
         adm = Administration()
@@ -98,11 +98,11 @@ class UserListOperations(Resource):
             return '', 500
 
 
-@listingapp.route('/users/<int:user_id>')
-@listingapp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@listingapp.param('user_id', 'Die ID des User-Objekts')
+@holmaApp.route('/users/<int:user_id>')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@holmaApp.param('user_id', 'Die ID des User-Objekts')
 class UserOperations(Resource):
-    @listingapp.marshal_with(user)
+    @holmaApp.marshal_with(user)
     # @secured
     def get(self, user_id):
 
@@ -121,8 +121,8 @@ class UserOperations(Resource):
         else:
             return '', 500
 
-    @listingapp.marshal_with(user)
-    @listingapp.expect(user, validate=True)
+    @holmaApp.marshal_with(user)
+    @holmaApp.expect(user, validate=True)
     # @secured
     def put(self, user_id):
         adm = Administration()
@@ -136,11 +136,11 @@ class UserOperations(Resource):
             return '', 500
 
 
-@listingapp.route('/users/by-google-id/<string:google_id>')
-@listingapp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@listingapp.param('google_id', 'Die ID des User-Objekts')
+@holmaApp.route('/users/by-google-id/<string:google_id>')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@holmaApp.param('google_id', 'Die ID des User-Objekts')
 class UserByGoogleIdOperation(Resource):
-    @listingapp.marshal_with(user)
+    @holmaApp.marshal_with(user)
     # @secured
     def get(self, google_id):
 
@@ -149,11 +149,11 @@ class UserByGoogleIdOperation(Resource):
         return usr
 
 
-@listingapp.route('/users/by-name/<string:name>')
-@listingapp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@listingapp.param('name', 'Der Name des Users')
+@holmaApp.route('/users/by-name/<string:name>')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@holmaApp.param('name', 'Der Name des Users')
 class UserByNameOperations(Resource):
-    @listingapp.marshal_with(user)
+    @holmaApp.marshal_with(user)
     # @secured
     def get(self, name):
         adm = Administration()
@@ -161,10 +161,10 @@ class UserByNameOperations(Resource):
         return us
 
 
-@listingapp.route('/groups')
-@listingapp.response(500, 'Falls es zu einem Server-seitigem Fehler kommt.')
+@holmaApp.route('/groups')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigem Fehler kommt.')
 class GroupListOperations(Resource):
-    @listingapp.marshal_list_with(group)
+    @holmaApp.marshal_list_with(group)
     # @secured
     def get(self):
         adm = Administration()
@@ -172,11 +172,11 @@ class GroupListOperations(Resource):
         return group_list
 
 
-@listingapp.route('/groups/<int:group_id>')
-@listingapp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@listingapp.param('group_id', 'Die ID des Group-Objekts')
+@holmaApp.route('/groups/<int:group_id>')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@holmaApp.param('group_id', 'Die ID des Group-Objekts')
 class GroupOperations(Resource):
-    @listingapp.marshal_with(group)
+    @holmaApp.marshal_with(group)
     # @secured
     def get(self, group_id):
 
@@ -195,8 +195,8 @@ class GroupOperations(Resource):
         else:
             return '', 500
 
-    @listingapp.marshal_with(group)
-    @listingapp.expect(group, validate=True)
+    @holmaApp.marshal_with(group)
+    @holmaApp.expect(group, validate=True)
     # @secured
     def put(self, group_id):
         adm = Administration()
@@ -210,11 +210,11 @@ class GroupOperations(Resource):
             return '', 500
 
 
-@listingapp.route('/users/<int:user_id>/groups')
-@listingapp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@listingapp.param('user_id', 'Die ID des user-Objekts')
+@holmaApp.route('/users/<int:user_id>/groups')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@holmaApp.param('user_id', 'Die ID des user-Objekts')
 class UserRelatedGroupOperations(Resource):
-    @listingapp.marshal_with(group)
+    @holmaApp.marshal_with(group)
     # @secured
     def get(self, user_id):
 
@@ -228,7 +228,7 @@ class UserRelatedGroupOperations(Resource):
         else:
             return "User not found", 500
 
-    @listingapp.marshal_with(group, code=201)
+    @holmaApp.marshal_with(group, code=201)
     # @secured
     def post(self, user_id):
         adm = Administration()
@@ -244,11 +244,11 @@ class UserRelatedGroupOperations(Resource):
 
 # Neu
 
-@listingapp.route('/group/<int:group_id>/users')
-@listingapp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@listingapp.param('group_id', 'Die ID des Group-Objekts')
+@holmaApp.route('/group/<int:group_id>/users')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@holmaApp.param('group_id', 'Die ID des Group-Objekts')
 class GroupRelatedUserOperations(Resource):
-    @listingapp.marshal_with(user)
+    @holmaApp.marshal_with(user)
     # @secured
     def get(self, group_id):
         # Diese Classe habe ich mir dazu wiedermal überlegt
@@ -262,21 +262,21 @@ class GroupRelatedUserOperations(Resource):
         else:
             return "Group not found", 500
 
-"""@listingapp.route('/articles')
-@listingapp.response(500,'Falls es zu einem Server-seitigem Fehler kommt.')
+"""@holmaApp.route('/articles')
+@holmaApp.response(500,'Falls es zu einem Server-seitigem Fehler kommt.')
 class ArticleListOperations(Resource):
-    @listingapp.marshal_list_with(article)
+    @holmaApp.marshal_list_with(article)
     # @secured
     def get(self):
         adm = StatisticAdministration()
         art = adm.get_all_articles()
         return art
 
-@listingapp.route('/articles/<int:id>')
-@listingapp.response(500,'Falls es zu einem Server-seitigen Fehler kommt.')
-@listingapp('id', 'Die ID des article-Objekts')
+@holmaApp.route('/articles/<int:id>')
+@holmaApp.response(500,'Falls es zu einem Server-seitigen Fehler kommt.')
+@holmaApp('id', 'Die ID des article-Objekts')
 class ArticleOperations(Resource):
-    @listingapp.marshal_with(article)
+    @holmaApp.marshal_with(article)
     # @secured
     def get(self, article_id):
 
@@ -292,8 +292,8 @@ class ArticleOperations(Resource):
         adm.delete_article(art)
         return '', 200
 
-    @listingapp.marshal_with(article)
-    @listingapp.expect(article, validate=True)
+    @holmaApp.marshal_with(article)
+    @holmaApp.expect(article, validate=True)
     # @secured
     def post(self, article_id):
         adm = Administration()
@@ -306,11 +306,11 @@ class ArticleOperations(Resource):
         else:
             return '', 500
 
-@listingapp.route('/groups/<int:id>/articles')
-@listingapp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@listingapp.param('id', 'Die ID des person-Objekts')
+@holmaApp.route('/groups/<int:id>/articles')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@holmaApp.param('id', 'Die ID des person-Objekts')
 class GroupRelatedArticleOperations(Resource):
-    @listingapp.marshal_with(article)
+    @holmaApp.marshal_with(article)
     # @secured
     def get(self, group_id):
 
@@ -324,7 +324,7 @@ class GroupRelatedArticleOperations(Resource):
         else:
             return "No articles found", 500
 
-    @listingapp.marshal_with(article, code=201)
+    @holmaApp.marshal_with(article, code=201)
     # @secured
     def post(self, group_id):
         adm = Administration()
