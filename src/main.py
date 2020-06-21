@@ -6,6 +6,8 @@ from ListAdministration import Administration
 from ListAdministration import StatisticAdministration
 from bo.Group import Group
 from bo.User import User
+from bo.Article import Article
+from bo.ShoppingList import ShoppingList
 
 app = Flask(__name__)
 
@@ -209,10 +211,21 @@ class GroupOperations(Resource):
         else:
             return '', 500
 
+@holmaApp.route('/groups/by-name/<string:name>')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@holmaApp.param('name', 'Der Name der Gruppe')
+class GroupsByNameOperations(Resource):
+    @holmaApp.marshal_with(group)
+    # @secured
+    def get(self, name):
+        adm = Administration()
+        us = adm.get_groups_by_name(name)
+        return us
+
 
 @holmaApp.route('/users/<int:user_id>/groups')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@holmaApp.param('user_id', 'Die ID des user-Objekts')
+@holmaApp.param('user_id', 'Die ID des User-Objekts')
 class UserRelatedGroupOperations(Resource):
     @holmaApp.marshal_with(group)
     # @secured
@@ -262,6 +275,38 @@ class GroupRelatedUserOperations(Resource):
         else:
             return "Group not found", 500
 
+
+@holmaApp.route('/group/<int:group_id>/user/<int:user_id>')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@holmaApp.param('group_id', 'Die ID des Group-Objekts')
+@holmaApp.param('user_id', 'Die ID des User-Objekts')
+class GroupUserRelationOperations(Resource):
+    @holmaApp.marshal_with(user)
+    # @secured
+    def post(self, group_id, user_id):
+        adm = Administration()
+        grp = adm.get_group_by_id(group_id)
+        us = adm.get_user_by_id(user_id)
+
+        if grp is not None and us is not None:
+            result = adm.add_member_to_group(group_id, user_id)
+            return result
+        else:
+            return "Group or User not found", 500
+
+    def delete(self, group_id, user_id):
+        adm = Administration()
+        grp = adm.get_group_by_id(group_id)
+        us = adm.get_user_by_id(user_id)
+
+        if grp is not None and us is not None:
+            result = adm.remove_member_from_group(group_id, user_id)
+            return result
+        else:
+            return "Group or User not found", 500
+
+
+
 """@holmaApp.route('/articles')
 @holmaApp.response(500,'Falls es zu einem Server-seitigem Fehler kommt.')
 class ArticleListOperations(Resource):
@@ -271,6 +316,7 @@ class ArticleListOperations(Resource):
         adm = StatisticAdministration()
         art = adm.get_all_articles()
         return art
+
 
 @holmaApp.route('/articles/<int:id>')
 @holmaApp.response(500,'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -306,6 +352,19 @@ class ArticleOperations(Resource):
         else:
             return '', 500
 
+
+@holmaApp.route('/articles/by-name/<string:name>')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@holmaApp.param('name', 'Der Name des Articles')
+class ArticlesByNameOperations(Resource):
+    @holmaApp.marshal_list_with(article)
+    # @secured
+    def get(self, name):
+        adm = Administration()
+        us = adm.get_article_by_name(name)
+        return us
+
+
 @holmaApp.route('/groups/<int:id>/articles')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('id', 'Die ID des person-Objekts')
@@ -336,7 +395,63 @@ class GroupRelatedArticleOperations(Resource):
             result = adm.create_group(proposal.get_name(), group_id)
             return result
         else:
-            return "Group unkown or payload not valid", 500"""
+            return "Group unkown or payload not valid", 500
+
+
+@holmaApp.route('/groups/<int:group_id>/shoppinglists')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@holmaApp.param('group_id', 'Die ID des group-Objekts')
+class GroupRelatedShoppingListOperations(Resource):
+    @holmaApp.marshal_with(shoppingList)
+    #@ secured
+    def get(self, group_id):
+        adm = Administration()
+        sl = adm.get_group_by_id(group_id)
+        if sl is not None:
+            shoppinglists_list = adm.get_shopping_lists_by_group_id(sl)
+            return shoppinglists_list
+        else:
+            return "Group not found", 500
+
+    @holmaApp.marshal_with(shoppingList, code=201)
+    #@ secured
+    def post(self, group_id):
+        adm = Administration()
+        sl = adm.get_group_by_id(group_id)
+        proposal = ShoppingList.from_dict(api.payload)
+
+        if sl is not None and proposal is not None:
+            result = adm.create_shopping_list(proposal.get_name(), group_id)
+            return result
+        else:
+            return "Group unkown or payload not valid", 500
+
+
+@holmaApp.route('/shoppinglists/<int:shoppinglist_id>')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@holmaApp.param('shoppinglist_id', 'Die ID des Shopping-List-Objekts')
+class ShoppingListOperations(Resource):
+    @holmaApp.marshal_with(group)
+    # @secured
+    def get(self, group_id):
+
+        adm = Administration()
+        grp = adm.get_group_by_id(group_id)
+        return grp
+
+    # @secured
+    def delete(self, group_id):
+
+        adm = Administration()
+        grp = adm.get_group_by_id(group_id)
+        if grp is not None:
+            adm.delete_group(grp)
+            return '', 200
+        else:
+            return '', 500"""
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
