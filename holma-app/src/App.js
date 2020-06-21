@@ -30,11 +30,11 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      currentUser: null,
+      googleUserData: null,
       appError: null,
       authError: null,
       authLoading: false,
-      userBO: null
+      user: null
     };
   }
 
@@ -52,13 +52,13 @@ class App extends React.Component {
         document.cookie = `token=${token};path=/`;
 
         this.setState({
-          currentUser: user,
+          googleUserData: user,
           authError:null,
           authLoading: false
         })
         
         
-        this.checkIfUserInDatabase(this.state.currentUser.displayName, this.state.currentUser.email, this.state.currentUser.uid)
+        this.checkIfUserInDatabase(this.state.googleUserData.displayName, this.state.googleUserData.email, this.state.googleUserData.uid)
 
         ;
       }).catch(err =>{
@@ -71,7 +71,7 @@ class App extends React.Component {
       document.cookie = 'token=;path=/';
 
       this.setState({
-        currentUser: null,
+        googleUserData: null,
         authLoading: false
       });
     }
@@ -100,8 +100,9 @@ class App extends React.Component {
         console.log("User", name, "already in database!")
       }
       this.setState({
-        userBO: user
+        user: user
       })
+      console.log("User in state:", user)
     })
 
 }
@@ -113,15 +114,15 @@ class App extends React.Component {
   }
 
   render(){
-    const {currentUser, appError, authError, authLoading} = this.state;
+    const {user, googleUserData, appError, authError, authLoading} = this.state;
       return (
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Router basename={process.env.PUBLIC_URL}>
           <Container maxWidth='md'>
-            <Header user={currentUser} />
+            <Header user={user} />
             {
-              currentUser ?
+              user ?
                 <>
                   <Redirect from='/' to='user' /> 
                   <Route exact path='/user'>
@@ -143,8 +144,8 @@ class App extends React.Component {
             />
             <ContextErrorMessage error={appError}
             contextErrorMsg={'Es lief wohl etwas innerhalb des Programms schief. Bitte lade die Seite nochmals, danke!'} />
-            <ListWithBoxes user={currentUser}/>
-            <GroupAddDialog user={currentUser}/>
+            <ListWithBoxes user={user}/>
+            <GroupAddDialog user={user}/>
             </Container>
             
         </Router>
