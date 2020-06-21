@@ -235,7 +235,6 @@ class UserRelatedGroupOperations(Resource):
         us = adm.get_user_by_id(user_id)
 
         if us is not None:
-            # Jetzt erst lesen wir die Konten des Customer aus.
             group_list = adm.get_groups_by_user_id(user_id)
             return group_list
         else:
@@ -264,7 +263,6 @@ class GroupRelatedUserOperations(Resource):
     @holmaApp.marshal_with(user)
     # @secured
     def get(self, group_id):
-        # Diese Classe habe ich mir dazu wiedermal überlegt
         # objekt nicht benötigt, nur group ID
         adm = Administration()
         grp = adm.get_group_by_id(group_id)
