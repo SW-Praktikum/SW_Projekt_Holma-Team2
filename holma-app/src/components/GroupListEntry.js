@@ -58,12 +58,8 @@ class ListWithBoxes extends Component{
         }
     }
 
-    componentDidMount() {
-        this.loadGroups();
-    }
-
     loadGroups = () => {
-        AppAPI.getAPI().getGroupsByUserId("29").then(groups =>
+        AppAPI.getAPI().getGroupsByUserId(this.props.user.getId()).then(groups =>
         this.setState({
             groups: groups,
             loadingInProgress: true, // loading indicator 
@@ -79,18 +75,29 @@ class ListWithBoxes extends Component{
     }
 
     render() {
+        const {user} = this.props;
         return (            
         <div className="root" style={{flexGrow: 1,}}>
-          <Grid container spacing ={1}>
+          
+          {user ?
+            <>
+            {this.loadGroups()}
+            <Grid container spacing ={1}>
             {this.state.groups.map((group) => 
               <Grid item xs={4}>
                 <Paper className="paper" style ={{ textAlign:'center',}} >
                   <GroupEntry key={group.getId()} group={group}/>
                 </Paper>
-
               </Grid>
             )}
           </Grid>
+            <div>LOGGED IN: {user.getName()} </div>  
+            </>
+            :
+            <>
+            <div>NO USER LOGGED IN</div>
+            </>
+          }
         </div>
         );
     }

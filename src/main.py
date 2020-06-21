@@ -90,7 +90,6 @@ class UserListOperations(Resource):
     def post(self):
         adm = Administration()
         proposal = User.from_dict(api.payload)
-        print(proposal)
         if proposal is not None:
             usr = adm.create_user(proposal.get_name(), proposal.get_email(),
                                   proposal.get_google_id())
@@ -135,6 +134,19 @@ class UserOperations(Resource):
             return '', 200
         else:
             return '', 500
+
+
+@listingapp.route('/users/by-google-id/<string:google_id>')
+@listingapp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@listingapp.param('google_id', 'Die ID des User-Objekts')
+class UserByGoogleIdOperation(Resource):
+    @listingapp.marshal_with(user)
+    # @secured
+    def get(self, google_id):
+
+        adm = Administration()
+        usr = adm.get_user_by_google_id(google_id)
+        return usr
 
 
 @listingapp.route('/users/by-name/<string:name>')

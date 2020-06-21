@@ -23,6 +23,10 @@ class Administration():
         with UserMapper() as mapper:
             return mapper.find_by_id(user_id)
 
+    def get_user_by_google_id(self, google_id):
+        with UserMapper() as mapper:
+            return mapper.find_by_google_id(google_id)
+
     def get_groups_by_user_id(self, user_id):
         with UserGroupRelationsMapper() as mapper:
             return mapper.find_groups_by_user_id(user_id)

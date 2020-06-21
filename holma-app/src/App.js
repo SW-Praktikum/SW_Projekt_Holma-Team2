@@ -5,13 +5,21 @@ import theme from './components/Theme';
 import firebase from "firebase/app";
 import "firebase/auth";
 import Header from './components/layout/Header';
+import Navigation from './components/navigation2'
 import SignIn from './components/pages/SignIn';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import About from './components/pages/About';
 import GroupAddDialog from './components/dialogs/GroupAddDialog';
+<<<<<<< HEAD
 import GroupListEntry from './components/GroupListEntry';
 //import Startpage from './components/layout/Startpage';
+=======
+import ListWithBoxes from './components/GroupListEntry';
+import AppAPI from './api/AppAPI'
+import UserBO from './api/UserBO';
+
+>>>>>>> master
 
 class App extends React.Component {
   #firebaseConfig = {
@@ -28,10 +36,11 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      currentUser: null,
+      googleUserData: null,
       appError: null,
       authError: null,
-      authLoading: false
+      authLoading: false,
+      user: null
     };
   }
 
@@ -49,10 +58,15 @@ class App extends React.Component {
         document.cookie = `token=${token};path=/`;
 
         this.setState({
-          currentUser: user,
+          googleUserData: user,
           authError:null,
           authLoading: false
-        });
+        })
+        
+        
+        this.checkIfUserInDatabase(this.state.googleUserData.displayName, this.state.googleUserData.email, this.state.googleUserData.uid)
+
+        ;
       }).catch(err =>{
         this.setState({
           authError: err,
@@ -63,7 +77,7 @@ class App extends React.Component {
       document.cookie = 'token=;path=/';
 
       this.setState({
-        currentUser: null,
+        googleUserData: null,
         authLoading: false
       });
     }
@@ -75,7 +89,29 @@ class App extends React.Component {
     });
     const provider = new firebase.auth.GoogleAuthProvider();
     firebase.auth().signInWithRedirect(provider);
+
   }
+
+  checkIfUserInDatabase(name, email, googleId) {
+    console.log("Checking if", name, "is stored in database with google id", googleId)
+    //var proposal = UserBO(name, email, googleId)
+    var api = AppAPI.getAPI()
+    api.getUserByGoogleId(googleId).then((user) => {
+      if (!user.getGoogleId()) {
+        console.log("Creating new user for", name)
+        var proposal = new UserBO(name, email, googleId)
+        var user = api.createUser(proposal)
+      }
+      else {
+        console.log("User", name, "already in database!")
+      }
+      this.setState({
+        user: user
+      })
+      console.log("User in state:", user)
+    })
+
+}
 
   componentDidMount() {
     firebase.initializeApp(this.#firebaseConfig);
@@ -84,16 +120,16 @@ class App extends React.Component {
   }
 
   render(){
-    const {currentUser, appError, authError, authLoading} = this.state;
-
-    return (
+    const {user, googleUserData, appError, authError, authLoading} = this.state;
+      return (
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Router basename={process.env.PUBLIC_URL}>
           <Container maxWidth='md'>
-            <Header user={currentUser} />
+            <Header user={user} />
+            <Navigation />
             {
-              currentUser ?
+              user ?
                 <>
                   <Redirect from='/' to='user' /> 
                   <Route exact path='/user'>
@@ -115,8 +151,13 @@ class App extends React.Component {
             />
             <ContextErrorMessage error={appError}
             contextErrorMsg={'Es lief wohl etwas innerhalb des Programms schief. Bitte lade die Seite nochmals, danke!'} />
+<<<<<<< HEAD
             <GroupListEntry />
             <GroupAddDialog />
+=======
+            <ListWithBoxes user={user}/>
+            <GroupAddDialog user={user}/>
+>>>>>>> master
             </Container>
             
         </Router>
