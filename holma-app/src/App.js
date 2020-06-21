@@ -5,6 +5,7 @@ import theme from './components/Theme';
 import firebase from "firebase/app";
 import "firebase/auth";
 import Header from './components/layout/Header';
+import Navigation from './components/navigation2'
 import SignIn from './components/pages/SignIn';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
@@ -91,6 +92,7 @@ class App extends React.Component {
         <Router basename={process.env.PUBLIC_URL}>
           <Container maxWidth='md'>
             <Header user={currentUser} />
+            <Navigation/>
             {
               currentUser ?
                 <>
@@ -108,6 +110,7 @@ class App extends React.Component {
                   />
                 </>            
             }
+            
             <LoadingProgress show={authLoading} />
             <ContextErrorMessage error={authError}
             contextErrorMsg={'Es lief wohl etwas schief während deiner Anmeldung.'} onReload={this.handleSignIn}

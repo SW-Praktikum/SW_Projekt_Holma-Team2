@@ -53,15 +53,19 @@ class ListEntryMapper(Mapper):
 
     def find_by_purchasing_user(self, user_id):
 
-    def find_checked_list_entries(self, ):
+    def find_checked_list_entries(self, checked=true):
         pass
 
-    def find_standardarticle(self, ):
+    def find_standardarticle(self, standardarticle=true):
+        """Standardarticle und Group Verbindungstabelle - ListEntrie Id und Group Id,
+        der ListEntrie soll kopiert werden und unter neuer Id abgelegt werden."""
         pass
 
     def insert_standardarticle(self, standardarticle):
 
     def delete_standardarticle(self, standardarticle):
+
+        """Standardarticle Funktionen in eigenen Mapper."""
 
     def insert(self, listentry):
         cursor = self._connection.cursor()
