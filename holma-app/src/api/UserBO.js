@@ -2,10 +2,10 @@ import BusinessObject from './BusinessObject';
 
 export default class UserBO extends BusinessObject {
 
-    constructor(name, email) {
+    constructor(name, email, googleId) {
         super(name);
         this.email = email;
-        this.googleId = "";
+        this.googleId = googleId;
    }
 
     getEmail() {

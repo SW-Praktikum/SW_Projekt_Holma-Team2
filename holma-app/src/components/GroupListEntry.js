@@ -79,6 +79,7 @@ class ListWithBoxes extends Component{
     }
 
     render() {
+        const {user} = this.props;
         return (            
         <div className="root" style={{flexGrow: 1,}}>
           <Grid container spacing ={1}>
@@ -87,10 +88,18 @@ class ListWithBoxes extends Component{
                 <Paper className="paper" style ={{ textAlign:'center',}} >
                   <GroupEntry key={group.getId()} group={group}/>
                 </Paper>
-
               </Grid>
             )}
           </Grid>
+          {user ?
+            <>
+            <div>LOGGED IN: {user.displayName} </div>  
+            </>
+            :
+            <>
+            <div>NO USER LOGGED IN</div>
+            </>
+          }
         </div>
         );
     }
