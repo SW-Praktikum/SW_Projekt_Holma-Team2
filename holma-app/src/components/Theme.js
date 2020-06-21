@@ -11,7 +11,7 @@ const theme = createMuiTheme({
       primary: {
         contrastText: white,
         dark: colors.indigo[900],
-        main: colors.indigo[500],
+        main: colors.red[800],
         light: colors.indigo[100]
       },
       secondary: {
