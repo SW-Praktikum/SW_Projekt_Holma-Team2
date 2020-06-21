@@ -7,13 +7,12 @@ import IconButton from '@material-ui/core/IconButton';
 import ShoppingBasket from '@material-ui/icons/ShoppingBasket';
 import PersonPin from '@material-ui/icons/PersonPin';
 import { red } from '@material-ui/core/colors';
+import DropDown from '../dialogs/Dropdown'
  
-
 
 class Header extends React.Component {
   constructor(props) {
     super(props)
-    console.log(props)
   }
 
   render() {
@@ -23,7 +22,6 @@ class Header extends React.Component {
         <AppBar position="static">
           <Toolbar >
           <Typography variant="h6" color="inherit">
-              Holma 
             </Typography>
             <IconButton edge="false" className={classes.menuButton} color="inherit" aria-label="menu">
               <ShoppingBasket />
@@ -31,6 +29,7 @@ class Header extends React.Component {
             <IconButton edge="false" className={classes.menuButton} color="inherit" label="Login">
               <PersonPin />
             </IconButton>
+            <DropDown user={user} />
           </Toolbar>
         </AppBar>
       </div>
@@ -38,7 +37,7 @@ class Header extends React.Component {
   }
 }
 
-  
+
 const styles = (theme) => ({
   root: {
     flexGrow: 1,
@@ -50,5 +49,6 @@ const styles = (theme) => ({
     backgroundColor: red
   },
 })
+
 
 export default withStyles(styles)(Header);

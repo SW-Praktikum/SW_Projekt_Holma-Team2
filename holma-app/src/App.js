@@ -11,6 +11,9 @@ import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import About from './components/pages/About';
 import GroupAddDialog from './components/dialogs/GroupAddDialog';
 import ListWithBoxes from './components/GroupListEntry';
+import AppAPI from './api/AppAPI'
+import UserBO from './api/UserBO';
+
 
 class App extends React.Component {
   #firebaseConfig = {
@@ -30,7 +33,8 @@ class App extends React.Component {
       currentUser: null,
       appError: null,
       authError: null,
-      authLoading: false
+      authLoading: false,
+      userBO: null
     };
   }
 
@@ -51,7 +55,12 @@ class App extends React.Component {
           currentUser: user,
           authError:null,
           authLoading: false
-        });
+        })
+        
+        
+        this.checkIfUserInDatabase(this.state.currentUser.displayName, this.state.currentUser.email, this.state.currentUser.uid)
+
+        ;
       }).catch(err =>{
         this.setState({
           authError: err,
@@ -74,7 +83,28 @@ class App extends React.Component {
     });
     const provider = new firebase.auth.GoogleAuthProvider();
     firebase.auth().signInWithRedirect(provider);
+
   }
+
+  checkIfUserInDatabase(name, email, googleId) {
+    console.log("Checking if", name, "is stored in database with google id", googleId)
+    //var proposal = UserBO(name, email, googleId)
+    var api = AppAPI.getAPI()
+    api.getUserByGoogleId(googleId).then((user) => {
+      if (!user.getGoogleId()) {
+        console.log("Creating new user for", name)
+        var proposal = new UserBO(name, email, googleId)
+        var user = api.createUser(proposal)
+      }
+      else {
+        console.log("User", name, "already in database!")
+      }
+      this.setState({
+        userBO: user
+      })
+    })
+
+}
 
   componentDidMount() {
     firebase.initializeApp(this.#firebaseConfig);
@@ -84,8 +114,7 @@ class App extends React.Component {
 
   render(){
     const {currentUser, appError, authError, authLoading} = this.state;
-
-    return (
+      return (
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Router basename={process.env.PUBLIC_URL}>
@@ -114,8 +143,8 @@ class App extends React.Component {
             />
             <ContextErrorMessage error={appError}
             contextErrorMsg={'Es lief wohl etwas innerhalb des Programms schief. Bitte lade die Seite nochmals, danke!'} />
-            <ListWithBoxes />
-            <GroupAddDialog />
+            <ListWithBoxes user={currentUser}/>
+            <GroupAddDialog user={currentUser}/>
             </Container>
             
         </Router>

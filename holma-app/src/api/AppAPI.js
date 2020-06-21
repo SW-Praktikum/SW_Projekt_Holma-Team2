@@ -15,6 +15,7 @@ export default class AppAPI {
     #updateUserURL = (userId) => `${this.#appServerBaseURL}/users/${userId}`;
     #deleteUserURL = (userId) => `${this.#appServerBaseURL}/users/${userId}`;
     #getUserByIdURL = (userId) => `${this.#appServerBaseURL}/users/${userId}`;
+    #getUserByGoogleIdURL = (googleId) => `${this.#appServerBaseURL}/users/by-google-id/${googleId}`;
     #getUsersByNameURL = (name) => `${this.#appServerBaseURL}/by-name/${name}`;
 
     #getGroupsByUserIdURL = (userId) => `${this.#appServerBaseURL}/users/${userId}/groups`;
@@ -108,6 +109,15 @@ export default class AppAPI {
 
     getUserById(userId) {
         return this.#fetchAdv(this.#getUserByIdURL(userId)).then((responseJSON) => {
+            let responseUser = UserBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseUser)
+            })
+        })
+    }
+
+    getUserByGoogleId(googleId) {
+        return this.#fetchAdv(this.#getUserByGoogleIdURL(googleId)).then((responseJSON) => {
             let responseUser = UserBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
                 resolve(responseUser)
