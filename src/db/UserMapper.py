@@ -67,8 +67,9 @@ class UserMapper(Mapper):
 
     def find_by_google_id(self, google_id):
         cursor = self._connection.cursor()
-        command = "SELECT * FROM user WHERE google_id={}".format(google_id)
-        cursor.execute(command)
+        command = "SELECT * FROM user WHERE google_id=%s"
+        data = (google_id,)
+        cursor.execute(command, data)
         tuples = cursor.fetchall()
 
         result = User.from_tuples(tuples)

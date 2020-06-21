@@ -6,24 +6,19 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
-import Collapse from '@material-ui/core/Collapse';
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
 import { red } from '@material-ui/core/colors';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import CardActionArea from '@material-ui/core/CardActionArea';
-
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles({
     root: {
       minWidth: 275,
     },
-    bullet: {
-      display: 'inline-block',
-      margin: '0 2px',
-      transform: 'scale(0.8)',
+    paper:{//neu
+      textAlign: 'center',
     },
     title: {
       fontSize: 14,
@@ -79,13 +74,36 @@ class ListWithBoxes extends Component{
               loadingError: e
             })
         );
+        console.log(this.state.groups)
+
     }
 
     render() {
-        return (<div>
-            {this.state.groups.map((group) => <GroupEntry key={group.getId()} group={group}/>)}   
+        const {user} = this.props;
+        return (            
+        <div className="root" style={{flexGrow: 1,}}>
+          <Grid container spacing ={1}>
+            {this.state.groups.map((group) => 
+              <Grid item xs={4}>
+                <Paper className="paper" style ={{ textAlign:'center',}} >
+                  <GroupEntry key={group.getId()} group={group}/>
+                </Paper>
+              </Grid>
+            )}
+          </Grid>
+          {user ?
+            <>
+            <div>LOGGED IN: {user.displayName} </div>  
+            </>
+            :
+            <>
+            <div>NO USER LOGGED IN</div>
+            </>
+          }
         </div>
-        )
+        );
     }
 }
 export default ListWithBoxes;
+
+
