@@ -54,6 +54,7 @@ class GroupAddDialog extends Component {
     }
 
     render() {
+        const {user} = this.props
         return (
             <div>
               <Button 
