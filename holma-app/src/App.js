@@ -14,6 +14,7 @@ import GroupAddDialog from './components/dialogs/GroupAddDialog';
 import ListWithBoxes from './components/GroupListEntry';
 import AppAPI from './api/AppAPI'
 import UserBO from './api/UserBO';
+//import Startpage from './components/layout/Startpage'
 
 
 class App extends React.Component {
