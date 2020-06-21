@@ -11,6 +11,7 @@ import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import About from './components/pages/About';
 import GroupAddDialog from './components/dialogs/GroupAddDialog';
 import GroupListEntry from './components/GroupListEntry';
+import Startpage from './components/layout/Startpage';
 
 class App extends React.Component {
   #firebaseConfig = {
@@ -114,6 +115,7 @@ class App extends React.Component {
             />
             <ContextErrorMessage error={appError}
             contextErrorMsg={'Es lief wohl etwas innerhalb des Programms schief. Bitte lade die Seite nochmals, danke!'} />
+            <Startpage />
             <GroupListEntry />
             <GroupAddDialog />
             </Container>
