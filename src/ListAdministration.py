@@ -84,14 +84,13 @@ class Administration():
     def get_standardarticles_by_group_id(self, group_id):
         pass
 
-    def add_member_to_group(self, group, user):
+    def add_member_to_group(self, group_id, user_id):
         with UserGroupRelationsMapper() as mapper:
-            mapper.add_user_to_group(group, user)
-        pass
+            mapper.add_user_to_group(group_id, user_id)
 
-    def remove_member_from_group(self, group, user):
+    def remove_member_from_group(self, group_id, user_id):
         with UserGroupRelationsMapper() as mapper:
-            mapper.remove_user_from_group(group, user)
+            mapper.remove_user_from_group(group_id, user_id)
 
     def add_standardarticle_to_group(self, group, list_entry):
         pass
