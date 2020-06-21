@@ -11,15 +11,10 @@ import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import About from './components/pages/About';
 import GroupAddDialog from './components/dialogs/GroupAddDialog';
-<<<<<<< HEAD
-import GroupListEntry from './components/GroupListEntry';
-//import Startpage from './components/layout/Startpage';
-=======
 import ListWithBoxes from './components/GroupListEntry';
 import AppAPI from './api/AppAPI'
 import UserBO from './api/UserBO';
 
->>>>>>> master
 
 class App extends React.Component {
   #firebaseConfig = {
@@ -151,13 +146,8 @@ class App extends React.Component {
             />
             <ContextErrorMessage error={appError}
             contextErrorMsg={'Es lief wohl etwas innerhalb des Programms schief. Bitte lade die Seite nochmals, danke!'} />
-<<<<<<< HEAD
-            <GroupListEntry />
-            <GroupAddDialog />
-=======
             <ListWithBoxes user={user}/>
             <GroupAddDialog user={user}/>
->>>>>>> master
             </Container>
             
         </Router>
