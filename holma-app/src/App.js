@@ -122,14 +122,18 @@ class App extends React.Component {
         <Router basename={process.env.PUBLIC_URL}>
           <Container maxWidth='md'>
             <Header user={user} />
-            <Navigation />
+            
             {
               user ?
                 <>
-                  <Redirect from='/' to='user' /> 
-                  <Route exact path='/user'>
+                  <Redirect to='/group' />
+                  <Route exact path='/group'>
+                  <Navigation />
+                    <ListWithBoxes user={user}/>
+                    <GroupAddDialog user={user}/> 
                   </Route>
-                  <Route path='/group'>
+                  <Route path='/user'>
+                  <Navigation />
                   </Route>
                   <Route path='/about' component={About} />
                 </>
@@ -146,8 +150,7 @@ class App extends React.Component {
             />
             <ContextErrorMessage error={appError}
             contextErrorMsg={'Es lief wohl etwas innerhalb des Programms schief. Bitte lade die Seite nochmals, danke!'} />
-            <ListWithBoxes user={user}/>
-            <GroupAddDialog user={user}/>
+            
             </Container>
             
         </Router>

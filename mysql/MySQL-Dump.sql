@@ -14,6 +14,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
 -- Table structure for table `article`
@@ -26,11 +27,11 @@ CREATE TABLE `article` (
   `article_id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL DEFAULT ' ',
   `creation_date` datetime NOT NULL,
-  `group` int DEFAULT NULL,
+  `group_id` int DEFAULT NULL,
   `last_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`article_id`),
-  KEY `id_idx` (`group`),
-  CONSTRAINT `article_ibfk_1` FOREIGN KEY (`group`) REFERENCES `group` (`group_id`)
+  KEY `id_idx` (`group_id`),
+  CONSTRAINT `group` FOREIGN KEY (`group_id`) REFERENCES `group` (`group_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -262,4 +263,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-06-21 18:38:49
+-- Dump completed on 2020-06-21 19:59:03

@@ -69,8 +69,8 @@ export default function ScrollableTabsButtonForce() {
           textColor="primary"
           aria-label="scrollable force tabs example"
         >
-          <Tab label="Startseite" icon={<ShoppingCartIcon />} {...a11yProps(0)} href="http://tinyurl.com/2g9mqh"/>
-          <Tab label="Gruppen" icon={<GroupIcon />} {...a11yProps(1)} href="http://tinyurl.com/2g9mqh"/>
+          <Tab label="Startseite" icon={<ShoppingCartIcon />} {...a11yProps(0)} href=""/>
+          <Tab label="Gruppen" icon={<GroupIcon />} {...a11yProps(1)} href="http://localhost:61941/user"/>
           <Tab label="Persönliche Listen" icon={<FormatListBulletedIcon />} {...a11yProps(2)} />
           <Tab label="Statistik" icon={<AssessmentIcon />} {...a11yProps(3)} />
           <Tab label="User" icon={<ShoppingBasket />} {...a11yProps(4)} />
