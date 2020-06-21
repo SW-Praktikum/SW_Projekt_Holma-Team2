@@ -12,7 +12,6 @@ import About from './components/pages/About';
 import GroupAddDialog from './components/dialogs/GroupAddDialog';
 import GroupListEntry from './components/GroupListEntry';
 import Startpage from './components/layout/Startpage';
-import CreateMuiTheme from './components/Theme'
 
 class App extends React.Component {
   #firebaseConfig = {
