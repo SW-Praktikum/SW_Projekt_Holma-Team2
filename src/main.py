@@ -3,6 +3,7 @@ from flask_cors import CORS
 from flask_restx import Api, Resource, fields
 
 from ListAdministration import Administration
+from ListAdministration import StatisticAdministration
 from bo.Group import Group
 from bo.User import User
 
@@ -19,24 +20,29 @@ listingapp = api.namespace('app', description="Funktionen der App")
 
 bo = api.model('BusinessObject', {
     'name': fields.String(attribute='_name', description='Name eines Objekts'),
-    'id': fields.Integer(attribute='_id', description='Der Unique Identifier eines Business Object'),
-    'creation_date': fields.Date(attribute='_creation_date',
-                                 description='Erstellungsdatum des BOs, wird durch Unix Time Stamp ermittlet'),
-    'last_changed': fields.Date(attribute='_last_changed',
-                                description='Änderungsdatum des BOs, wird durch Unix Time Stamp ermittlet')
+    'id': fields.Integer(attribute='_id',
+                         description='Der Unique Identifier eines Business Object'),
+    'creationDate': fields.Date(attribute='_creation_date',
+                                description='Erstellungsdatum des BOs, wird durch Unix Time Stamp ermittlet'),
+    'lastUpdated': fields.Date(attribute='_last_updated',
+                               description='Änderungsdatum des BOs, wird durch Unix Time Stamp ermittlet')
 })
 
 user = api.inherit('User', bo, {
-    'email': fields.String(attribute='_email', description='E-Mail-Adresse eines Benutzers'),
-    'google_id': fields.String(attribute='_google_id', description='google id eines Benutzers'),
+    'email': fields.String(attribute='_email',
+                           description='E-Mail-Adresse eines Benutzers'),
+    'googleId': fields.String(attribute='_google_id',
+                              description='google id eines Benutzers'),
 })
 
 group = api.inherit('Group', bo, {
-    'owner': fields.Integer(attribute='_owner', description='Unique Id des Gruppeninhabers'),
+    'owner': fields.Integer(attribute='_owner',
+                            description='Unique Id des Gruppeninhabers'),
 })
 
 shoppingList = api.inherit('ShoppingList', bo, {
-    'group': fields.Integer(attribute='_group', description='ID der Gruppe zu der diese Liste gehört'),
+    'group': fields.Integer(attribute='_group',
+                            description='ID der Gruppe zu der diese Liste gehört'),
 })
 
 listEntry = api.inherit('ListEntry', bo, {
@@ -46,22 +52,23 @@ listEntry = api.inherit('ListEntry', bo, {
                            description='Menge des Entries '),
     'unit': fields.String(attribute='_unit',
                           description='Einheit des Entries '),
-    'purchasing_user': fields.String(attribute='_purchasing_user',
-                                     description='Wer das Artikle kaufen muss '),
-    'shopping_list': fields.Integer(attribute='_Shopping_list',
-                                    description='zu welcher Liste diese Entry gehört?'),
+    'purchasingUser': fields.String(attribute='_purchasing_user',
+                                    description='Wer das Artikle kaufen muss '),
+    'shoppingList': fields.Integer(attribute='_Shopping_list',
+                                   description='zu welcher Liste diese Entry gehört?'),
     'retailer': fields.String(attribute='_retailer',
                               description='Bei wem das Artikle gekauft  '),
     'checked': fields.Boolean(attribute='_checked',
                               description='wurde es bereits gekauft'),
-    'checked_ts': fields.DateTime(attribute='_checked_ts',
-                                  description='wann wurde es gekauft'),
+    'checkedTs': fields.DateTime(attribute='_checked_ts',
+                                 description='wann wurde es gekauft'),
     'standardarticle': fields.Boolean(attribute='_standardarticle',
-                                      description='ist es ein Standardartikle '),
+                                      description='ist es ein Standardartikle')
 })
 
 article = api.inherit('Article', bo, {
-    'group': fields.Integer(attribute='_group', description='zu welcher Groupe dieses Artikle gehört?'),
+    'group': fields.Integer(attribute='_group',
+                            description='zu welcher Groupe dieses Artikle gehört?'),
 })
 
 retailer = api.inherit('Retailer', bo)
@@ -83,9 +90,10 @@ class UserListOperations(Resource):
     def post(self):
         adm = Administration()
         proposal = User.from_dict(api.payload)
-
+        print(proposal)
         if proposal is not None:
-            usr = adm.create_user(proposal.get_name(), proposal.get_email(), proposal.get_google_id())
+            usr = adm.create_user(proposal.get_name(), proposal.get_email(),
+                                  proposal.get_google_id())
             return usr, 200
         else:
             return '', 500
@@ -93,7 +101,7 @@ class UserListOperations(Resource):
 
 @listingapp.route('/users/<int:user_id>')
 @listingapp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@listingapp.param('id', 'Die ID des User-Objekts')
+@listingapp.param('user_id', 'Die ID des User-Objekts')
 class UserOperations(Resource):
     @listingapp.marshal_with(user)
     # @secured
@@ -107,20 +115,23 @@ class UserOperations(Resource):
     def delete(self, user_id):
 
         adm = Administration()
-        us = adm.get_user_by_id(user_id)
-        adm.delete_user(us)
-        return '', 200
+        usr = adm.get_user_by_id(user_id)
+        if usr is not None:
+            adm.delete_user(usr)
+            return '', 200
+        else:
+            return '', 500
 
     @listingapp.marshal_with(user)
     @listingapp.expect(user, validate=True)
     # @secured
     def put(self, user_id):
         adm = Administration()
-        u = User.from_dict(api.payload)
+        usr = User.from_dict(api.payload)
 
-        if u is not None:
-            u.set_id(user_id)
-            adm.save_user(u)
+        if usr is not None:
+            usr.set_id(user_id)
+            adm.save_user(usr)
             return '', 200
         else:
             return '', 500
@@ -151,7 +162,7 @@ class GroupListOperations(Resource):
 
 @listingapp.route('/groups/<int:group_id>')
 @listingapp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@listingapp.param('id', 'Die ID des Group-Objekts')
+@listingapp.param('group_id', 'Die ID des Group-Objekts')
 class GroupOperations(Resource):
     @listingapp.marshal_with(group)
     # @secured
@@ -166,19 +177,22 @@ class GroupOperations(Resource):
 
         adm = Administration()
         grp = adm.get_group_by_id(group_id)
-        adm.delete_group(grp)
-        return '', 200
+        if grp is not None:
+            adm.delete_group(grp)
+            return '', 200
+        else:
+            return '', 500
 
     @listingapp.marshal_with(group)
     @listingapp.expect(group, validate=True)
     # @secured
     def put(self, group_id):
         adm = Administration()
-        u = Group.from_dict(api.payload)
+        grp = Group.from_dict(api.payload)
 
-        if u is not None:
-            u.set_id(group_id)
-            adm.save_group(u)
+        if grp is not None:
+            grp.set_id(group_id)
+            adm.save_group(grp)
             return '', 200
         else:
             return '', 500
@@ -186,7 +200,7 @@ class GroupOperations(Resource):
 
 @listingapp.route('/users/<int:user_id>/groups')
 @listingapp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@listingapp.param('id', 'Die ID des user-Objekts')
+@listingapp.param('user_id', 'Die ID des user-Objekts')
 class UserRelatedGroupOperations(Resource):
     @listingapp.marshal_with(group)
     # @secured
@@ -197,7 +211,7 @@ class UserRelatedGroupOperations(Resource):
 
         if us is not None:
             # Jetzt erst lesen wir die Konten des Customer aus.
-            group_list = adm.get_groups_by_user_id(us)
+            group_list = adm.get_groups_by_user_id(user_id)
             return group_list
         else:
             return "User not found", 500
@@ -218,12 +232,11 @@ class UserRelatedGroupOperations(Resource):
 
 # Neu
 
-
 @listingapp.route('/group/<int:group_id>/users')
 @listingapp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@listingapp.param('id', 'Die ID des Group-Objekts')
+@listingapp.param('group_id', 'Die ID des Group-Objekts')
 class GroupRelatedUserOperations(Resource):
-    @listingapp.marshal_with(group)
+    @listingapp.marshal_with(user)
     # @secured
     def get(self, group_id):
         # Diese Classe habe ich mir dazu wiedermal überlegt
@@ -237,6 +250,81 @@ class GroupRelatedUserOperations(Resource):
         else:
             return "Group not found", 500
 
+"""@listingapp.route('/articles')
+@listingapp.response(500,'Falls es zu einem Server-seitigem Fehler kommt.')
+class ArticleListOperations(Resource):
+    @listingapp.marshal_list_with(article)
+    # @secured
+    def get(self):
+        adm = StatisticAdministration()
+        art = adm.get_all_articles()
+        return art
+
+@listingapp.route('/articles/<int:id>')
+@listingapp.response(500,'Falls es zu einem Server-seitigen Fehler kommt.')
+@listingapp('id', 'Die ID des article-Objekts')
+class ArticleOperations(Resource):
+    @listingapp.marshal_with(article)
+    # @secured
+    def get(self, article_id):
+
+        adm = Administration()
+        art = adm.get_article_by_id(id)
+        return art
+
+    # @secured
+    def delete(self, article_id):
+
+        adm = Administration()
+        art = adm.get_article_by_id(article_id)
+        adm.delete_article(art)
+        return '', 200
+
+    @listingapp.marshal_with(article)
+    @listingapp.expect(article, validate=True)
+    # @secured
+    def post(self, article_id):
+        adm = Administration()
+        art = Group.from_dict(api.payload)
+
+        if art is not None:
+            art.set_id(article_id)
+            adm.save_group(art)
+            return '', 200
+        else:
+            return '', 500
+
+@listingapp.route('/groups/<int:id>/articles')
+@listingapp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@listingapp.param('id', 'Die ID des person-Objekts')
+class GroupRelatedArticleOperations(Resource):
+    @listingapp.marshal_with(article)
+    # @secured
+    def get(self, group_id):
+
+        adm = Administration()
+        grp = adm.get_group_by_id(id)
+
+        if grp is not None:
+            # Jetzt erst lesen wir die Konten des Customer aus.
+            articles_list = adm.get_articles_by_group_id(grp)
+            return articles_list
+        else:
+            return "No articles found", 500
+
+    @listingapp.marshal_with(article, code=201)
+    # @secured
+    def post(self, group_id):
+        adm = Administration()
+        art = adm.get_group_by_id(group_id)
+
+        proposal = Article.from_dict(api.payload)
+
+        if art is not None and proposal is not None:
+            result = adm.create_group(proposal.get_name(), group_id)
+            return result
+        else:
+            return "Group unkown or payload not valid", 500"""
 
 if __name__ == '__main__':
     app.run(debug=True)
