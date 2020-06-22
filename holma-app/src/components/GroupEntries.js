@@ -32,12 +32,26 @@ const useStyles = makeStyles({
       },
   });
 
+const randomImages = [
+  "https://www.bahn-tickets.com/wp-content/uploads/2016/07/Gruppenreise_Personen-1000x683px.jpg",
+  "https://www.br.de/telekolleg/faecher/psychologie/gruppe-kreis-maenner100~_v-img__16__9__xl_-d31c35f8186ebeb80b0cd843a7c267a0e0c81647.jpg?version=c8dde",
+  "https://www.verenathiem.com/wp-content/uploads/2016/01/Blog_pic_650_380_machtdergruppe.png",
+  "https://teamworks-gmbh.de/wp-content/uploads/2015/02/gruppedummFotolia_72297488_XS_copyright.jpg",
+  "https://s3-eu-central-1.amazonaws.com/vodafone-featured/wp-content/uploads/2019/01/18104102/erstelleeinesnapchatgruppemitdeinenfreunden-640x360.jpg",
+  "https://www.schule-bw.de/faecher-und-schularten/gesellschaftswissenschaftliche-und-philosophische-faecher/gemeinschaftskunde/materialien-und-medien/soziologie/zusammenleben-soziale-gruppen/gruppe.jpg",
+  "https://www.schulbilder.org/bild-in-der-gruppe-sprechen-dl14849.jpg",
+  "https://www.inforadio.de/content/dam/rbb/inf/Headerbilder_Sendestrecken/HeaderbilderNeu/sport.jpg.jpg/size=512x288.jpg",
+  "https://blog.pasch-net.de/klick/uploads/Sport5.PNG",
+  "https://www.muenchen.de/media/shutterstock-2016/freizeit-2/sport-im-park-hp.jpg",
+  "https://cdn.businessinsider.de/wp-content/uploads/2020/03/Joggen-Fru%CC%88hling-600x400.jpg"
+
+]
 class GroupEntry extends Component {
     render() {
         return ( 
         <Card className="root" style={{minWidth: 275, marginBottom:10, marginTop:10}}>
             <CardActionArea>
-            <CardMedia className="media" style={{height: 10, paddingTop: '56.25%',}} image="https://cdn.icon-icons.com/icons2/902/PNG/512/group_icon-icons.com_69369.png" title="Groupname"/>
+            <CardMedia className="media" style={{height: 10, paddingTop: '56.25%',}} image={randomImages[Math.floor(Math.random() * randomImages.length)]} title="Groupname"/>
             <CardContent>
                 <Typography className="title" style={{fontSize: 14}} color="textPrimary">{this.props.group.getName()}</Typography>
             </CardContent>
