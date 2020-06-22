@@ -46,6 +46,20 @@ class ArticleMapper(Mapper):
 
         return result
 
+    def find_by_group(self, group_id):
+        cursor = self._connection.cursor()
+        command = "SELECT * FROM holma.article WHERE group_id={}".format(group_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        result = Article.from_tuples(tuples)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
+
     def insert(self, article):
         cursor = self._connection.cursor()
         command = "INSERT INTO holma.article (article_id, name, creation_date, group, last_updated) VALUES ({},{},{},{},{})"
@@ -89,7 +103,9 @@ class ArticleMapper(Mapper):
 
 if __name__ == "__main__":
     with ArticleMapper() as mapper:
-        result = mapper.find_all()
+        result = mapper.find_by_group(1)
         for article in result:
             print(article)
+
+
 
