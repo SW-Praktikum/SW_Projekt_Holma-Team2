@@ -12,6 +12,7 @@ import { red } from '@material-ui/core/colors';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+import ListWithBoxes from './ListWithBoxes'
 
 const useStyles = makeStyles({
     root: {
@@ -48,14 +49,13 @@ class GroupEntry extends Component {
     )
 }}
 
-class ListWithBoxes extends Component{
+class GroupEntries extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            groups: [],
+            elements: [],
             loadingInProgress: false,
             loadingError: null,
-            user: this.props.user
         }
     }
 
@@ -67,45 +67,36 @@ class ListWithBoxes extends Component{
     }
   
     loadGroups = () => {
-        AppAPI.getAPI().getGroupsByUserId(this.props.user.getId()).then(groups =>
-        this.setState({
-            groups: groups,
-            loadingInProgress: true, // loading indicator 
-            loadingError: null
-          })).catch(e =>
-            this.setState({ // Reset state with error from catch 
-              loadingInProgress: false,
-              loadingError: e
+        AppAPI.getAPI().getGroupsByUserId(this.props.user.getId()).then(groups => {
+          console.log(groups)
+          var elements = groups.map((group) => 
+          <Grid key={group.getId()} item xs={4}>
+            <Paper className="paper" style ={{ textAlign:'center',}} >
+              <GroupEntry key={group.getId()} group={group}/>
+            </Paper>
+          </Grid>
+          )
+          console.log(elements)
+          this.setState({
+              elements: elements,
+              loadingInProgress: true, // loading indicator 
+              loadingError: null
             })
-        );
-    }
+          }).catch(e =>
+              this.setState({ // Reset state with error from catch 
+                loadingInProgress: false,
+                loadingError: e
+          })
+        );  
+      }
 
     render() {
-        const {user} = this.state;
+        const {elements} = this.state;
         return (            
-        <div className="root" style={{flexGrow: 1,}}>
-          {user ?
-            <>
-            <Grid container spacing ={1}>
-            {this.state.groups.map((group) => 
-              <Grid key={group.getId()} item xs={4}>
-                <Paper className="paper" style ={{ textAlign:'center',}} >
-                  <GroupEntry key={group.getId()} group={group}/>
-                </Paper>
-              </Grid>
-            )}
-          </Grid>
-            <div>LOGGED IN: {user.getName()} </div>  
-            </>
-            :
-            <>
-            <div>NO USER LOGGED IN</div>
-            </>
-          }
-        </div>
+          <ListWithBoxes elements={elements}/>
         );
     }
 }
-export default ListWithBoxes;
+export default GroupEntries;
 
 
