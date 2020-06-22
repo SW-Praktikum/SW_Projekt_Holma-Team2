@@ -27,6 +27,8 @@ import ListIcon from "@material-ui/icons/List";
 import Divider from "@material-ui/core/Divider";
 import List from "@material-ui/core/List";
 
+//Navigation für Mobile
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
