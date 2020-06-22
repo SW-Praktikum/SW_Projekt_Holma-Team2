@@ -124,7 +124,7 @@ class App extends React.Component {
           <Container maxWidth='md'>
             <Header user={user} />
             <Navigation />
-            <GroupList/>
+            
             {
               user ?
                 <>
