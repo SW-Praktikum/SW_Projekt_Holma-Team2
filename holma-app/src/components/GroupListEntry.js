@@ -54,10 +54,18 @@ class ListWithBoxes extends Component{
         this.state = {
             groups: [],
             loadingInProgress: false,
-            loadingError: null
+            loadingError: null,
+            user: this.props.user
         }
     }
 
+    componentDidMount() {
+      // load only if the owner object is given
+      if (this.props.user) {
+        this.loadGroups();
+      }
+    }
+  
     loadGroups = () => {
         AppAPI.getAPI().getGroupsByUserId(this.props.user.getId()).then(groups =>
         this.setState({
@@ -70,21 +78,17 @@ class ListWithBoxes extends Component{
               loadingError: e
             })
         );
-        console.log(this.state.groups)
-
     }
 
     render() {
-        const {user} = this.props;
+        const {user} = this.state;
         return (            
         <div className="root" style={{flexGrow: 1,}}>
-          
           {user ?
             <>
-            {this.loadGroups()}
             <Grid container spacing ={1}>
             {this.state.groups.map((group) => 
-              <Grid item xs={4}>
+              <Grid key={group.getId()} item xs={4}>
                 <Paper className="paper" style ={{ textAlign:'center',}} >
                   <GroupEntry key={group.getId()} group={group}/>
                 </Paper>
