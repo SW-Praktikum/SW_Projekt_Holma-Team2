@@ -14,7 +14,8 @@ import GroupAddDialog from './components/dialogs/GroupAddDialog';
 import ListWithBoxes from './components/GroupListEntry';
 import AppAPI from './api/AppAPI'
 import UserBO from './api/UserBO';
-
+import GroupList from './components/GroupList'
+import Startpage from './components/layout/Startpage'
 
 class App extends React.Component {
   #firebaseConfig = {
@@ -123,15 +124,16 @@ class App extends React.Component {
           <Container maxWidth='md'>
             <Header user={user} />
             <Navigation />
+            <GroupList/>
             {
               user ?
                 <>
-                  <Redirect from='/' to='user' /> 
-                  <Route exact path='/user'>
-                  <ListWithBoxes user={user}/>
-            <GroupAddDialog user={user}/>
+                  <Redirect from='/' to='group' /> 
+                  <Route exact path='/group'>
+                  <GroupList/>
                   </Route>
-                  <Route path='/group'>
+                  <Redirect from='/' to='user' />
+                  <Route exact path='/user'>
                   </Route>
                   <Route path='/about' component={About} />
                 </>

@@ -14,8 +14,6 @@ import ThumbUp from "@material-ui/icons/ThumbUp";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 
-//Navigation für Desktop
-
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -71,8 +69,8 @@ export default function ScrollableTabsButtonForce() {
           textColor="primary"
           aria-label="scrollable force tabs example"
         >
-          <Tab label="Startseite" icon={<ShoppingCartIcon />} {...a11yProps(0)} href=""/>
-          <Tab label="Gruppen" icon={<GroupIcon />} {...a11yProps(1)} href="http://localhost:3000/user"/>
+          <Tab label="Startseite" icon={<ShoppingCartIcon />} {...a11yProps(0)} href="http://tinyurl.com/2g9mqh"/>
+          <Tab label="Gruppen" icon={<GroupIcon />} {...a11yProps(1)} href="http://tinyurl.com/2g9mqh"/>
           <Tab label="Persönliche Listen" icon={<FormatListBulletedIcon />} {...a11yProps(2)} />
           <Tab label="Statistik" icon={<AssessmentIcon />} {...a11yProps(3)} />
           <Tab label="User" icon={<ShoppingBasket />} {...a11yProps(4)} />

@@ -5,7 +5,7 @@ export default class AppAPI {
 
     static #api = null;
 
-    #appServerBaseURL = 'http://localhost:5000/app';
+    #appServerBaseURL = 'http://localhost:3000/app';
 
 
 
@@ -43,12 +43,15 @@ export default class AppAPI {
     // default 'GET' wird überschrieben mit jeweiliger Methode
     #fetchAdv = (url, init) => fetch(url, init)
         .then(response => {
+            console.log(response)
             if (!response.ok){
                 console.log(`${response.status} ${response.statusText}`);
                 throw Error(`${response.status} ${response.statusText}`)
+                
             }
             return response.json();
         });
+        
 
     getUsers() {
         return this.#fetchAdv(this.#getUsersURL()).then((responseJSON) => {
