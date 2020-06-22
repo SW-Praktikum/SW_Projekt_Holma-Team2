@@ -14,7 +14,6 @@ import GroupAddDialog from './components/dialogs/GroupAddDialog';
 import ListWithBoxes from './components/GroupListEntry';
 import AppAPI from './api/AppAPI'
 import UserBO from './api/UserBO';
-import GroupList from './components/GroupList';
 
 
 class App extends React.Component {
@@ -123,17 +122,16 @@ class App extends React.Component {
         <Router basename={process.env.PUBLIC_URL}>
           <Container maxWidth='md'>
             <Header user={user} />
-            
+            <Navigation />
             {
               user ?
                 <>
-                  <Redirect to='/group' />
-                  <Route exact path='/group'>
-                  <Navigation />
-                    <GroupList />
+                  <Redirect from='/' to='user' /> 
+                  <Route exact path='/user'>
+                  <ListWithBoxes user={user}/>
+            <GroupAddDialog user={user}/>
                   </Route>
-                  <Route path='/user'>
-                  <Navigation />
+                  <Route path='/group'>
                   </Route>
                   <Route path='/about' component={About} />
                 </>
@@ -150,7 +148,7 @@ class App extends React.Component {
             />
             <ContextErrorMessage error={appError}
             contextErrorMsg={'Es lief wohl etwas innerhalb des Programms schief. Bitte lade die Seite nochmals, danke!'} />
-            
+
             </Container>
             
         </Router>
