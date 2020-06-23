@@ -14,7 +14,7 @@ import GroupAddDialog from './components/dialogs/GroupAddDialog';
 import ListWithBoxes from './components/GroupListEntry';
 import AppAPI from './api/AppAPI'
 import UserBO from './api/UserBO';
-//import Startpage from './components/layout/Startpage'
+import GroupList from './components/GroupList';
 
 
 class App extends React.Component {
@@ -130,8 +130,7 @@ class App extends React.Component {
                   <Redirect to='/group' />
                   <Route exact path='/group'>
                   <Navigation />
-                    <ListWithBoxes user={user}/>
-                    <GroupAddDialog user={user}/> 
+                    <GroupList />
                   </Route>
                   <Route path='/user'>
                   <Navigation />

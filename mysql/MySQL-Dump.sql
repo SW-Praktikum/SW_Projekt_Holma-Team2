@@ -14,7 +14,6 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
 -- Table structure for table `article`
@@ -31,7 +30,7 @@ CREATE TABLE `article` (
   `last_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`article_id`),
   KEY `id_idx` (`group_id`),
-  CONSTRAINT `group` FOREIGN KEY (`group_id`) REFERENCES `group` (`group_id`)
+  CONSTRAINT `article_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `group` (`group_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -59,7 +58,7 @@ CREATE TABLE `group` (
   `owner` int NOT NULL DEFAULT '0',
   `last_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`group_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,7 +67,7 @@ CREATE TABLE `group` (
 
 LOCK TABLES `group` WRITE;
 /*!40000 ALTER TABLE `group` DISABLE KEYS */;
-INSERT INTO `group` VALUES (1,'Strick-Club','2029-05-20 20:00:00',29,'2029-05-20 20:00:00'),(2,'Studium','2029-05-20 20:00:00',30,'2029-05-20 20:00:00'),(3,'Familie-Mustermann','2029-05-20 20:00:00',31,'2029-05-20 20:00:00'),(4,'TestGruppe','2020-06-21 11:26:26',29,'2020-06-21 11:26:26'),(5,'TestGruppe','2020-06-21 11:26:27',29,'2020-06-21 11:26:27'),(6,'Gruppe','2020-06-21 11:27:38',29,'2020-06-21 11:27:38'),(7,'Oma','2020-06-21 11:36:34',29,'2020-06-21 11:36:34'),(8,'Oma','2020-06-21 11:36:37',29,'2020-06-21 11:36:37'),(9,'Formel1','2020-06-21 11:42:15',29,'2020-06-21 11:42:15');
+INSERT INTO `group` VALUES (1,'Strick-Club','2029-05-20 20:00:00',29,'2029-05-20 20:00:00'),(2,'Studium','2029-05-20 20:00:00',30,'2029-05-20 20:00:00'),(3,'Familie-Mustermann','2029-05-20 20:00:00',31,'2029-05-20 20:00:00'),(4,'TestGruppe','2020-06-21 11:26:26',29,'2020-06-21 11:26:26'),(5,'TestGruppe','2020-06-21 11:26:27',29,'2020-06-21 11:26:27'),(6,'Gruppe','2020-06-21 11:27:38',29,'2020-06-21 11:27:38'),(7,'Oma','2020-06-21 11:36:34',29,'2020-06-21 11:36:34'),(8,'Oma','2020-06-21 11:36:37',29,'2020-06-21 11:36:37'),(9,'Formel1','2020-06-21 11:42:15',29,'2020-06-21 11:42:15'),(10,'Hi','2020-06-21 20:15:52',23,'2020-06-21 20:15:52'),(11,'Hi','2020-06-22 14:10:34',23,'2020-06-22 14:10:34');
 /*!40000 ALTER TABLE `group` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -92,6 +91,7 @@ CREATE TABLE `listentry` (
   `checked` tinyint NOT NULL DEFAULT '0',
   `shopping_list` int NOT NULL,
   `last_updated` datetime DEFAULT NULL,
+  `checked_ts` datetime DEFAULT NULL,
   PRIMARY KEY (`listentry_id`),
   KEY `purchasing_user` (`purchasing_user`),
   KEY `retailer` (`retailer`),
@@ -110,7 +110,7 @@ CREATE TABLE `listentry` (
 
 LOCK TABLES `listentry` WRITE;
 /*!40000 ALTER TABLE `listentry` DISABLE KEYS */;
-INSERT INTO `listentry` VALUES (1,'Tomaten','2021-06-20 20:00:00',28,5,1,'kg',1,0,0,1,'2021-06-20 20:00:00'),(2,'Apfel','2021-06-20 20:00:00',29,2,2,'St.',1,0,0,1,'2021-06-20 20:00:00'),(3,'Gurke','2021-06-20 20:00:00',30,1,3,'St.',1,0,0,1,'2021-06-20 20:00:00');
+INSERT INTO `listentry` VALUES (1,'Tomaten','2021-06-20 20:00:00',28,5,1,'kg',1,0,0,1,'2021-06-20 20:00:00','2021-06-20 20:00:00'),(2,'Apfel','2021-06-20 20:00:00',29,2,2,'St.',1,0,0,1,'2021-06-20 20:00:00',NULL),(3,'Gurke','2021-06-20 20:00:00',30,1,3,'St.',1,0,0,1,'2021-06-20 20:00:00','2021-06-20 20:00:00');
 /*!40000 ALTER TABLE `listentry` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -177,11 +177,11 @@ CREATE TABLE `shoppinglist` (
   `shoppinglist_id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL DEFAULT ' ',
   `creation_date` datetime NOT NULL,
-  `group` int DEFAULT NULL,
+  `group_id` int DEFAULT NULL,
   `last_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`shoppinglist_id`),
-  KEY `id_idx` (`group`),
-  CONSTRAINT `shoppinglist_ibfk_1` FOREIGN KEY (`group`) REFERENCES `group` (`group_id`)
+  KEY `id_idx` (`group_id`),
+  CONSTRAINT `shoppinglist_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `group` (`group_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -210,7 +210,7 @@ CREATE TABLE `user` (
   `google_id` varchar(128) NOT NULL DEFAULT ' ',
   `last_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -219,7 +219,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (28,'Dennis','2029-05-20 20:00:00','dennis@beispiel.de','1','2029-05-20 20:00:00'),(29,'Jonas','2029-05-20 20:00:00','jonas@beispiel.de','2','2029-05-20 20:00:00'),(30,'Christian','2029-05-20 20:00:00','christian@beispiel.de','3','2029-05-20 20:00:00'),(31,'Yassine','2029-05-20 20:00:00','yassine@beispiel.de','4','2029-05-20 20:00:00'),(32,'Dominik','2029-05-20 20:00:00','dominik@beispiel.de','5','2029-05-20 20:00:00'),(33,'Tim','2029-05-20 20:00:00','tim@beispiel.de','6','2029-05-20 20:00:00'),(34,'Dennis Laßahn','2020-06-21 13:38:14','dennislassahn@outlook.de','NsucPOKIIhVuNQ3Gb0KbnAootv12','2020-06-21 13:38:14');
+INSERT INTO `user` VALUES (28,'Dennis','2029-05-20 20:00:00','dennis@beispiel.de','1','2029-05-20 20:00:00'),(29,'Jonas','2029-05-20 20:00:00','jonas@beispiel.de','2','2029-05-20 20:00:00'),(30,'Christian','2029-05-20 20:00:00','christian@beispiel.de','3','2029-05-20 20:00:00'),(31,'Yassine','2029-05-20 20:00:00','yassine@beispiel.de','4','2029-05-20 20:00:00'),(32,'Dominik','2029-05-20 20:00:00','dominik@beispiel.de','5','2029-05-20 20:00:00'),(33,'Tim','2029-05-20 20:00:00','tim@beispiel.de','6','2029-05-20 20:00:00'),(34,'Dennis Laßahn','2020-06-21 13:38:14','dennislassahn@outlook.de','NsucPOKIIhVuNQ3Gb0KbnAootv12','2020-06-21 13:38:14'),(35,'Da','2020-06-21 20:15:52','Dsa','123ad','2020-06-21 20:15:52'),(36,'Da','2020-06-22 14:10:34','Dsa','123ad','2020-06-22 14:10:34');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -249,10 +249,6 @@ LOCK TABLES `user_group_relations` WRITE;
 INSERT INTO `user_group_relations` VALUES (1,29),(2,29),(3,29),(4,29),(8,29),(9,29),(3,30);
 /*!40000 ALTER TABLE `user_group_relations` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Dumping routines for database 'holma'
---
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -263,4 +259,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-06-21 19:59:03
+-- Dump completed on 2020-06-22 15:35:04

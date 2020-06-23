@@ -50,20 +50,71 @@ class ListEntryMapper(Mapper):
         return result
 
     def find_by_retailer(self, retailer_id):
+        cursor = self._connection.cursor()
+        command = "SELECT * FROM holma.listentry " \
+                  "WHERE retailer={}".format(retailer_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        result = ListEntry.from_tuples(tuples)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
 
     def find_by_purchasing_user(self, user_id):
+        cursor = self._connection.cursor()
+        command = "SELECT * FROM holma.listentry " \
+                  "WHERE purchasing_user={}".format(user_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
 
-    def find_checked_list_entries(self, checked=true):
-        pass
+        result = ListEntry.from_tuples(tuples)
 
-    def find_standardarticle(self, standardarticle=true):
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
+    def find_checked_list_entries(self):
+        cursor = self._connection.cursor()
+        command = "SELECT * FROM holma.listentry " \
+                  "WHERE checked=1"
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        result = ListEntry.from_tuples(tuples)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
+    def find_list_entries_by_article(self, article_id):
+        cursor = self._connection.cursor()
+        command = "SELECT * FROM holma.listentry " \
+                  "WHERE article={}".format(article_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        result = ListEntry.from_tuples(tuples)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
+    def find_standardarticle(self, standardarticle):
         """Standardarticle und Group Verbindungstabelle - ListEntrie Id und Group Id,
         der ListEntrie soll kopiert werden und unter neuer Id abgelegt werden."""
         pass
 
     def insert_standardarticle(self, standardarticle):
+        pass
 
     def delete_standardarticle(self, standardarticle):
+        pass
 
         """Standardarticle Funktionen in eigenen Mapper."""
 
@@ -125,3 +176,8 @@ class ListEntryMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
+if __name__ == "__main__":
+    with ListEntryMapper() as mapper:
+        result = mapper.find_list_entries_by_article(1)
+        for entries in result:
+            print(entries)

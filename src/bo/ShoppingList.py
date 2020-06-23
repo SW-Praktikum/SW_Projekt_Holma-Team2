@@ -32,7 +32,7 @@ class ShoppingList(BusinessObject):
     @staticmethod
     def from_tuples(tuples=list()):
         result = []
-        for (shoppinglist_id, name, creation_date, last_update) in tuples:
+        for (shoppinglist_id, name, group_id, creation_date, last_update) in tuples:
             shoppinglist = ShoppingList()
             shoppinglist.set_id(shoppinglist_id)
             shoppinglist.set_name(name)

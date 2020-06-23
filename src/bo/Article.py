@@ -27,10 +27,11 @@ class Article(BusinessObject):
     @staticmethod
     def from_tuples(tuples=list()):
         result = []
-        for (article_id, name, creation_date, last_updated) in tuples:
+        for (article_id, name, group, creation_date, last_updated) in tuples:
             article = Article()
             article.set_id(article_id)
             article.set_name(name)
+            article.set_group(group)
             article.set_creation_date(creation_date)
             article.set_last_updated(last_updated)
             result.append(article)

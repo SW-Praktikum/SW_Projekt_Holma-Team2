@@ -48,8 +48,18 @@ class ShoppingListMapper(Mapper):
 
         return result
 
-    def find_by_group(self, group):
-        pass
+    def find_by_group(self, group_id):
+        cursor = self._connection.cursor()
+        command = "SELECT * FROM shoppinglist WHERE group_id={}".format(group_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        result = ShoppingList.from_tuples(tuples)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
 
     def insert(self, shoppinglist):
         cursor = self._connection.cursor()
@@ -103,6 +113,6 @@ if __name__ == "__main__":
             print(shoppinglist)
 
         print("All lists with name ''")
-        result = mapper.find_by_name("")
+        result = mapper.find_by_group(1)
         for shoppinglist in result:
             print(shoppinglist)
