@@ -14,8 +14,8 @@ import GroupAddDialog from './components/dialogs/GroupAddDialog';
 import GroupEntries from './components/GroupEntries';
 import AppAPI from './api/AppAPI'
 import UserBO from './api/UserBO';
-import GroupList from './components/GroupList';
-
+import GroupList from './components/GroupList'
+import Startpage from './components/layout/Startpage'
 
 class App extends React.Component {
   #firebaseConfig = {
@@ -123,11 +123,12 @@ class App extends React.Component {
         <Router basename={process.env.PUBLIC_URL}>
           <Container maxWidth='md'>
             <Header user={user} />
-            
+            <Navigation />
+            <GroupList/>
             {
               user ?
                 <>
-                  <Redirect to='/group' />
+                  <Redirect from='/' to='group' /> 
                   <Route exact path='/group'>
                   <Navigation />
                     <GroupEntries user={user}/>
@@ -135,8 +136,8 @@ class App extends React.Component {
             <div style={{fontStyle: "italic"}}><br/><b>User:</b> {user.getName()} | <b>ID:</b> {user.getId()} | <b>Google ID:</b> {user.getGoogleId()} | <b>Member since:</b> {user.getCreationDate()}</div>
 
                   </Route>
-                  <Route path='/user'>
-                  <Navigation />
+                  <Redirect from='/' to='user' />
+                  <Route exact path='/user'>
                   </Route>
                   <Route path='/about' component={About} />
                 </>
@@ -153,7 +154,7 @@ class App extends React.Component {
             />
             <ContextErrorMessage error={appError}
             contextErrorMsg={'Es lief wohl etwas innerhalb des Programms schief. Bitte lade die Seite nochmals, danke!'} />
-            
+
             </Container>
             
         </Router>

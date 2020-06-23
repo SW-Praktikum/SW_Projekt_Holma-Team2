@@ -5,7 +5,7 @@ export default class AppAPI {
 
     static #api = null;
 
-    #appServerBaseURL = 'http://localhost:5000/app';
+    #appServerBaseURL = 'http://localhost:3000/app';
 
 
 
@@ -48,9 +48,11 @@ export default class AppAPI {
             if (!response.ok){
                 console.log(`${response.status} ${response.statusText}`);
                 throw Error(`${response.status} ${response.statusText}`)
+                
             }
             return response.json();
         });
+        
 
     getUsers() {
         return this.#fetchAdv(this.#getUsersURL()).then((responseJSON) => {
@@ -255,4 +257,3 @@ export default class AppAPI {
         })
     }
 }
-
