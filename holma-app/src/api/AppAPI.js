@@ -5,7 +5,7 @@ export default class AppAPI {
 
     static #api = null;
 
-    #appServerBaseURL = 'http://localhost:5000/app';
+    #appServerBaseURL = 'http://localhost:5000/holmaApp';
 
 
 
@@ -118,7 +118,12 @@ export default class AppAPI {
     }
 
     getUserByGoogleId(googleId) {
-        return this.#fetchAdv(this.#getUserByGoogleIdURL(googleId)).then((responseJSON) => {
+        return this.#fetchAdv(this.#getUserByGoogleIdURL(googleId, {
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            }
+        })).then((responseJSON) => {
+            console.log(responseJSON)
             let responseUser = UserBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
                 resolve(responseUser)
