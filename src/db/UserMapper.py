@@ -98,6 +98,7 @@ class UserMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
+        user.set_id(cursor.lastrowid)
         return user
 
     def update(self, user):

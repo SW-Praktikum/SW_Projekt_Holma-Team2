@@ -73,10 +73,10 @@ class GroupMapper(Mapper):
                 group.get_owner(),
                 group.get_last_updated())
         cursor.execute(command, data)
-
         self._connection.commit()
         cursor.close()
 
+        group.set_id(cursor.lastrowid)
         return group
 
     def update(self, group):

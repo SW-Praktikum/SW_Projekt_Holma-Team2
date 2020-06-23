@@ -89,17 +89,16 @@ class App extends React.Component {
   }
 
   checkIfUserInDatabase(name, email, googleId) {
-    console.log("Checking if", name, "is stored in database with google id", googleId)
-    //var proposal = UserBO(name, email, googleId)
+    console.log("Checking if '" + name + "' is stored in database with google id '" + googleId + "'")
     var api = AppAPI.getAPI()
     api.getUserByGoogleId(googleId).then((user) => {
       if (!user.getGoogleId()) {
-        console.log("Creating new user for", name)
+        console.log("Creating new user for '" + name + "'") 
         var proposal = new UserBO(name, email, googleId)
         var user = api.createUser(proposal)
       }
       else {
-        console.log("User", name, "already in database!")
+        console.log("User '" + name + "' already in database!")
       }
       this.setState({
         user: user

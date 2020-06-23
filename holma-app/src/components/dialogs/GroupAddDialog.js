@@ -45,20 +45,15 @@ class GroupAddDialog extends Component {
     };
     
     addGroup() { 
-
-        const {user} = this.props
-        // current UserID muss abgefragt werden, geht erst wenn firebase läuft
-        // id bisher deklarerte Variable
-        var grp = new GroupBO(this.state.groupName, user.getId());
-        AppAPI.getAPI().createGroup(grp);
-        AppAPI.getAPI().addUsersToGroup(37, 1);  
-        this.handleClose()
-        //valdieren, dass Gruppe erstellt wurde, Fenster schließen
+      const {user} = this.props
+      var grp = new GroupBO(this.state.groupName, user.getId());
+      AppAPI.getAPI().createGroup(grp).then(group => {
+        AppAPI.getAPI().addUserToGroup(group.getId(), user.getId());  
+      })
+      this.handleClose()
     }
 
     render() {
-
-        const {user} = this.props
         return (
             <div>
               <Button 

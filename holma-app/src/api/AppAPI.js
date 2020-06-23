@@ -20,7 +20,7 @@ export default class AppAPI {
 
     #getGroupsByUserIdURL = (userId) => `${this.#appServerBaseURL}/users/${userId}/groups`;
     #createGroupURL = (userId) => `${this.#appServerBaseURL}/users/${userId}/groups`;
-    #addUsersToGroupURL = (groupId, userId) => `${this.#appServerBaseURL}/group/${groupId}/user/${userId}`;
+    #addUserToGroupURL = (groupId, userId) => `${this.#appServerBaseURL}/group/${groupId}/user/${userId}`;
     #deleteUsersFromGroupURL =(groupId, userId) => `${this.#appServerBaseURL}/group/${groupId}/user/${userId}`;
 
     // Group Related
@@ -48,7 +48,7 @@ export default class AppAPI {
             console.log("Fetching", url)
             if (!response.ok){
                 console.log(`${response.status} ${response.statusText}`);
-                throw Error(`${response.status} ${response.statusText}`)
+                //throw Error(`${response.status} ${response.statusText}`)
             }
             return response.json();
         });
@@ -141,12 +141,11 @@ export default class AppAPI {
         })
     }
 
-    addUsersToGroup(group, user) {
-        return this.#fetchAdv(this.#addUsersToGroupURL(group, user), {
+    addUserToGroup(groupId, userId) {
+        return this.#fetchAdv(this.#addUserToGroupURL(groupId, userId), {
             method: 'POST',
             headers: {
-                'Accept': 'application/json, text/plain',
-                'Content-type': 'application/json',
+                'Accept': 'application/json, text/plain'
             },
         }).then((responseJSON) => {
             let responseGroup = GroupBO.fromJSON(responseJSON)[0];
