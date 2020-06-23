@@ -1,6 +1,5 @@
 import GroupBO from './GroupBO';
 import UserBO from './UserBO';
-import ShoppingListBO from './ShoppingListBO';
 
 export default class AppAPI {
 
