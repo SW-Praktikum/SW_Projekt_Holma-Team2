@@ -40,7 +40,7 @@ class GroupAddDialog extends Component {
 
     _handleKeyDown = (e) => {
         if (e.key === 'Enter') {
-            this.addGroup();
+          //this.addGroup();
         };
     };
     
@@ -51,6 +51,8 @@ class GroupAddDialog extends Component {
         // id bisher deklarerte Variable
         var grp = new GroupBO(this.state.groupName, user.getId());
         AppAPI.getAPI().createGroup(grp);
+        AppAPI.getAPI().addUsersToGroup(37, 1);  
+        this.handleClose()
         //valdieren, dass Gruppe erstellt wurde, Fenster schließen
     }
 
