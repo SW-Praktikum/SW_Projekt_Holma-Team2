@@ -287,7 +287,7 @@ class GroupUserRelationOperations(Resource):
         us = adm.get_user_by_id(user_id)
 
         if grp is not None and us is not None:
-            result = adm.add_member_to_group(group_id, user_id)
+            result = adm.add_member_to_group(grp, us)
             return result
         else:
             return "Group or User not found", 500
@@ -298,7 +298,7 @@ class GroupUserRelationOperations(Resource):
         us = adm.get_user_by_id(user_id)
 
         if grp is not None and us is not None:
-            result = adm.remove_member_from_group(group_id, user_id)
+            result = adm.remove_member_from_group(grp, us)
             return result
         else:
             return "Group or User not found", 500
