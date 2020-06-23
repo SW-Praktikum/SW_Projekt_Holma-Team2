@@ -15,7 +15,9 @@ import GroupEntries from './components/GroupEntries';
 import AppAPI from './api/AppAPI'
 import UserBO from './api/UserBO';
 import GroupList from './components/GroupList'
-import Startpage from './components/layout/Startpage'
+import Startpage from './components/layout/Startpage';
+import GroupEdit from './components/GroupEditor';
+
 
 class App extends React.Component {
   #firebaseConfig = {
@@ -124,26 +126,16 @@ class App extends React.Component {
           <Container maxWidth='md'>
             <Header user={user} />
             <Navigation  />
-            <GroupList />
-            
+            <GroupEdit user={user}/>
             {
               user ?
                 <>
                   <Redirect from='/' to='group' /> 
                   <Route exact path='/group'>
-<<<<<<< HEAD
-
-                  <GroupList/>
-=======
->>>>>>> master
-                  <Navigation />
+                    <GroupEdit user={user} />
                     <GroupEntries user={user}/>
                     <GroupAddDialog user={user}/> 
-            <div style={{fontStyle: "italic"}}><br/><b>User:</b> {user.getName()} | <b>ID:</b> {user.getId()} | <b>Google ID:</b> {user.getGoogleId()} | <b>Member since:</b> {user.getCreationDate()}</div>
-<<<<<<< HEAD
-=======
-
->>>>>>> master
+                      <div style={{fontStyle: "italic"}}><br/><b>User:</b> {user.getName()} | <b>ID:</b> {user.getId()} | <b>Google ID:</b> {user.getGoogleId()} | <b>Member since:</b> {user.getCreationDate()}</div>
                   </Route>
                   <Redirect from='/' to='user' />
                   <Route exact path='/user'>
