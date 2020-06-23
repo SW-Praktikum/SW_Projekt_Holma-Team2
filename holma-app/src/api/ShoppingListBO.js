@@ -4,12 +4,12 @@ export default class ShoppingListBO extends BusinessObject {
 
     constructor(name) {
         super(name);
-        /* this.group_id = group_id */
+        this.group_id = group_id 
    }
 
-  /*   getGroupId() {
+getGroupId() {
     return this.group_id
-} */
+} 
 
 static fromJSON(shoppinglists) {
     let result = [];
