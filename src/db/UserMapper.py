@@ -37,7 +37,8 @@ class UserMapper(Mapper):
 
     def find_by_name(self, name):
         cursor = self._connection.cursor()
-        command = "SELECT * FROM user WHERE name LIKE '{}' ORDER BY name".format(name)
+        command = "SELECT * FROM user WHERE name LIKE '{}' ORDER BY " \
+                  "name".format(name)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -50,7 +51,8 @@ class UserMapper(Mapper):
 
     def find_by_email(self, email):
         cursor = self._connection.cursor()
-        command = "SELECT * FROM user WHERE email LIKE '{}' ORDER BY email".format(email)
+        command = "SELECT * FROM user WHERE email LIKE '{}' ORDER BY " \
+                  "email".format(email)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -65,8 +67,9 @@ class UserMapper(Mapper):
 
     def find_by_google_id(self, google_id):
         cursor = self._connection.cursor()
-        command = "SELECT * FROM user WHERE google_user_id={}".format(google_id)
-        cursor.execute(command)
+        command = "SELECT * FROM user WHERE google_id=%s"
+        data = (google_id,)
+        cursor.execute(command, data)
         tuples = cursor.fetchall()
 
         result = User.from_tuples(tuples)
@@ -79,16 +82,18 @@ class UserMapper(Mapper):
         return result[0]
 
     def insert(self, user):
-
         cursor = self._connection.cursor()
-        command = "INSERT INTO user (user_id, name, creation_date, email, google_id, last_updated) VALUES ({},{},{},{},{})".format(
-            user.get_id(),
-            user.get_name(),
-            user.get_creation_date(),
-            user.get_email(),
-            user.get_google_id(),
-            user.get_last_updated())
-        cursor.execute(command)
+
+        command = "INSERT INTO user (user_id, name, creation_date, email, " \
+                  "google_id, last_updated) VALUES (%s, %s, %s, %s, %s, %s)"
+        data = (user.get_id(),
+                user.get_name(),
+                user.get_creation_date(),
+                user.get_email(),
+                user.get_google_id(),
+                user.get_last_updated())
+
+        cursor.execute(command, data)
 
         self._connection.commit()
         cursor.close()
@@ -98,11 +103,14 @@ class UserMapper(Mapper):
     def update(self, user):
 
         cursor = self._connection.cursor()
-        command = "UPDATE user SET name={}, email={}, last_updated={}  WHERE user_id={}".format(user.get_name(),
-                                                                                                user.get_email(),
-                                                                                                user.get_last_updated(),
-                                                                                                user.get_id())
-        cursor.execute(command)
+        command = "UPDATE user SET name=%s, email=%s, last_updated=%s " \
+                  "WHERE user_id=%s"
+        data = (user.get_name(),
+                user.get_email(),
+                user.get_last_updated(),
+                user.get_id())
+
+        cursor.execute(command, data)
 
         self._connection.commit()
         cursor.close()

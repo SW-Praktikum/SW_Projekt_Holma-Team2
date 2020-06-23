@@ -3,8 +3,10 @@ from bo.BusinessObject import BusinessObject
 
 class ListEntry(BusinessObject):
     def __init__(self):
-        """Ein Listeneintrag ist ein Eintrag in der Einkaufsliste, der sämtliche Informationen zum Artikel und der
-        Zuordnung enthält. Ein Listeneintrag kann auch ein "Standardartikel" sein."""
+        """Ein Listeneintrag ist ein Eintrag in der Einkaufsliste, der
+        sämtliche Informationen zum Artikel und der Zuordnung enthält.
+        Ein Listeneintrag kann auch ein "Standardartikel" sein."""
+
         super().__init__()
         self._article = None  # nur als id (Fremdschlüssel)
         self._amount = 1.0
@@ -17,13 +19,11 @@ class ListEntry(BusinessObject):
         self._standardarticle = False
 
     def __str__(self):
-        return "Article: {}, amount: {} {}, purchasing user: {}, retailer: {}, checked: {}".format(
-            self._article,
-            self._amount,
-            self._unit,
-            self._purchasing_user,
-            self._retailer,
-            self._checked)
+        s = "Article: {}, amount: {} {}, purchasing user: {}, retailer: {}, " \
+            "checked: {}".format(self._article, self._amount, self._unit,
+                                 self._purchasing_user, self._retailer,
+                                 self._checked)
+        return s
 
     def get_article(self):
         return self._article
@@ -37,11 +37,17 @@ class ListEntry(BusinessObject):
     def get_retailer(self):
         return self._retailer
 
+    def get_standardarticle(self):
+        return self._standardarticle
+
     def get_purchasing_user(self):
         return self._purchasing_user
 
     def get_shopping_list(self):
         return self._shopping_list
+
+    def get_checked(self):
+        return self._checked
 
     def get_checked_ts(self):
         return self._checked_ts
@@ -98,6 +104,26 @@ class ListEntry(BusinessObject):
         list_entry.set_standardarticle(dictionary["isStandardarticle"])
         return list_entry
 
+    @staticmethod
+    def from_tuples(tuples=list()):
+        result = []
+        for (listentry_id, name, creation_date, purchasing_user, amount, article, unit, retailer, standardarticle, checked, checked_ts, shopping_list,  last_update) in tuples:
+            listentry = ListEntry()
+            listentry.set_id(listentry_id)
+            listentry.set_name(name)
+            listentry.set_creation_date(creation_date)
+            listentry.set_purchasing_user(purchasing_user)
+            listentry.set_amount(amount)
+            listentry.set_article(article)
+            listentry.set_unit(unit)
+            listentry.set_retailer(retailer)
+            listentry.set_standardarticle(standardarticle)
+            listentry.set_checked(checked)
+            listentry.set_checked_ts(checked_ts)
+            listentry.set_shopping_list(shopping_list)
+            listentry.set_last_updated(last_update)
+            result.append(listentry)
+        return result
     """
     def delete(self):
         self._shopping_list.delete_shopping_list_entry(self)

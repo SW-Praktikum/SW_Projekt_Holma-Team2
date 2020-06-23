@@ -5,7 +5,7 @@ export default class AppAPI {
 
     static #api = null;
 
-    #appServerBaseURL = '/app';
+    #appServerBaseURL = 'http://localhost:5000/app';
 
 
 
@@ -15,11 +15,13 @@ export default class AppAPI {
     #updateUserURL = (userId) => `${this.#appServerBaseURL}/users/${userId}`;
     #deleteUserURL = (userId) => `${this.#appServerBaseURL}/users/${userId}`;
     #getUserByIdURL = (userId) => `${this.#appServerBaseURL}/users/${userId}`;
+    #getUserByGoogleIdURL = (googleId) => `${this.#appServerBaseURL}/users/by-google-id/${googleId}`;
     #getUsersByNameURL = (name) => `${this.#appServerBaseURL}/by-name/${name}`;
 
     #getGroupsByUserIdURL = (userId) => `${this.#appServerBaseURL}/users/${userId}/groups`;
     #createGroupURL = (userId) => `${this.#appServerBaseURL}/users/${userId}/groups`;
-
+    #addUsersToGroupURL = (userId,groupId) => `${this.#appServerBaseURL}/users/${userId}/groups/${groupId}`;
+    #deleteUsersFromGroupURL = (userId,groupId) => `${this.#appServerBaseURL}/users/${userId}/groups/${groupId}`;
 
     // Group Related
     #getGroupsURL = () => `${this.#appServerBaseURL}/groups`;
@@ -42,6 +44,7 @@ export default class AppAPI {
     // default 'GET' wird überschrieben mit jeweiliger Methode
     #fetchAdv = (url, init) => fetch(url, init)
         .then(response => {
+            console.log("Fetching", url)
             if (!response.ok){
                 console.log(`${response.status} ${response.statusText}`);
                 throw Error(`${response.status} ${response.statusText}`)
@@ -115,6 +118,19 @@ export default class AppAPI {
         })
     }
 
+    getUserByGoogleId(googleId) {
+        return this.#fetchAdv(this.#getUserByGoogleIdURL(googleId, {
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            }
+        })).then((responseJSON) => {
+            let responseUser = UserBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseUser)
+            })
+        })
+    }
+
     getUsersByName(name) {
         return this.#fetchAdv(this.#getUsersByNameURL(name)).then((responseJSON) => {
             let responseUsers = UserBO.fromJSON(responseJSON);
@@ -124,6 +140,36 @@ export default class AppAPI {
         })
     }
 
+    addUsersToGroup(user, group) {
+        return this.#fetchAdv(this.#addUsersToGroupURL(user, group), {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+        }).then((responseJSON) => {
+            let responseUser = GroupBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseUser)
+            })
+        })
+    }
+
+    deleteUsersFromGroup(user, group) {
+        return this.#fetchAdv(this.#deleteUsersFromGroupURL(user, group), {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+        }).then((responseJSON) => {
+            let responseUser = GroupBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseUser)
+            })
+        })
+    }
+    
     getGroupsByUserId(userId) {
         return this.#fetchAdv(this.#getGroupsByUserIdURL(userId)).then((responseJSON) => {
             let responseGroups = GroupBO.fromJSON(responseJSON);
@@ -134,6 +180,7 @@ export default class AppAPI {
     }
 
     createGroup(group) {
+        console.log("Creating group:", group)
         return this.#fetchAdv(this.#createGroupURL(group.getOwner()), {
             method: 'POST',
             headers: {
