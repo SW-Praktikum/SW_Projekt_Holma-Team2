@@ -5,7 +5,7 @@ export default class AppAPI {
 
     static #api = null;
 
-    #appServerBaseURL = 'http://localhost:5000/holmaApp';
+    #appServerBaseURL = 'http://localhost:5000/app';
 
 
 
