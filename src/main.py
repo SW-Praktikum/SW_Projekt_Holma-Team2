@@ -18,7 +18,7 @@ api = Api(app, version='1.0', title='HOLMA API',
           description='Eine rudimentäre Demo-API für Listenerstellung.')
 
 """Namespaces"""
-holmaApp = api.namespace('holmaApp', description="Funktionen der App")
+holmaApp = api.namespace('app', description="Funktionen der App")
 
 bo = api.model('BusinessObject', {
     'name': fields.String(attribute='_name', description='Name eines Objekts'),
