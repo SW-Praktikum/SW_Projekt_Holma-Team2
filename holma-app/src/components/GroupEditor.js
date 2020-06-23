@@ -47,7 +47,7 @@ class GroupInformation extends Component {
         <Card className="root" style={{minWidth: 275, marginBottom:10, marginTop:10}}>
             <CardActionArea >
             <CardContent>
-                <Typography className="title" style={{fontSize: 14}} color="textPrimary">{this.props.group.getName()}</Typography>
+                <Typography className="title" style={{fontSize: 14}} color="textPrimary">Gruppenname</Typography>
             </CardContent>
             </CardActionArea>     
             <CardActions>
@@ -158,6 +158,6 @@ class GroupEdit extends Component{
         );
     }
 }
-export default GroupEdit;
+export default GroupInformation;
 
 
