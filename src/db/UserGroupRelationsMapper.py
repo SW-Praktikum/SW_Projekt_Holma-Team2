@@ -64,7 +64,7 @@ class UserGroupRelationsMapper(Mapper):
     def add_user_to_group(self, group, user):
         cursor = self._connection.cursor()
         command = "INSERT INTO holma.user_group_relations (group_id, " \
-                  "user_id) VALUES ({}, {})"
+                  "user_id) VALUES (%s, %s)"
         data = (group.get_id(),
                 user.get_id())
         cursor.execute(command, data)
