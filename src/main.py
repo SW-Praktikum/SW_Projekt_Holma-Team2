@@ -280,6 +280,7 @@ class GroupRelatedUserOperations(Resource):
 @holmaApp.param('user_id', 'Die ID des User-Objekts')
 class GroupUserRelationOperations(Resource):
     @holmaApp.marshal_with(user)
+    @holmaApp.marshal_with(group)
     # @secured
     def post(self, group_id, user_id):
         adm = Administration()
