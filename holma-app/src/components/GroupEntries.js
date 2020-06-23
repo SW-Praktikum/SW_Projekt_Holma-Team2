@@ -81,8 +81,10 @@ class GroupEntries extends Component{
     }
   
     loadGroups = () => {
-        AppAPI.getAPI().getGroupsByUserId(this.props.user.getId()).then(groups => {
-          console.log(groups)
+      const {user} = this.props
+        AppAPI.getAPI().getGroupsByUserId(user.getId()).then(groups => {
+          console.log("Loaded groups from database for user", user.getName())
+          console.log("Groups:", groups)
           var elements = groups.map((group) => 
           <Grid key={group.getId()} item xs={4}>
             <Paper className="paper" style ={{ textAlign:'center',}} >
@@ -90,7 +92,7 @@ class GroupEntries extends Component{
             </Paper>
           </Grid>
           )
-          console.log(elements)
+
           this.setState({
               elements: elements,
               loadingInProgress: true, // loading indicator 

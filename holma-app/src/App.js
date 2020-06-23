@@ -131,12 +131,19 @@ class App extends React.Component {
                 <>
                   <Redirect from='/' to='group' /> 
                   <Route exact path='/group'>
+<<<<<<< HEAD
 
                   <GroupList/>
+=======
+>>>>>>> master
                   <Navigation />
                     <GroupEntries user={user}/>
                     <GroupAddDialog user={user}/> 
             <div style={{fontStyle: "italic"}}><br/><b>User:</b> {user.getName()} | <b>ID:</b> {user.getId()} | <b>Google ID:</b> {user.getGoogleId()} | <b>Member since:</b> {user.getCreationDate()}</div>
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
                   </Route>
                   <Redirect from='/' to='user' />
                   <Route exact path='/user'>

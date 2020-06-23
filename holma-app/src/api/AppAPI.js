@@ -120,7 +120,11 @@ export default class AppAPI {
     }
 
     getUserByGoogleId(googleId) {
-        return this.#fetchAdv(this.#getUserByGoogleIdURL(googleId)).then((responseJSON) => {
+        return this.#fetchAdv(this.#getUserByGoogleIdURL(googleId, {
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            }
+        })).then((responseJSON) => {
             let responseUser = UserBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
                 resolve(responseUser)
@@ -147,7 +151,7 @@ export default class AppAPI {
     }
 
     createGroup(group) {
-        console.log(group)
+        console.log("Creating group:", group)
         return this.#fetchAdv(this.#createGroupURL(group.getOwner()), {
             method: 'POST',
             headers: {
