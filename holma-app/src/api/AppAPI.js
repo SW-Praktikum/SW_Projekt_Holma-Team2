@@ -20,7 +20,8 @@ export default class AppAPI {
 
     #getGroupsByUserIdURL = (userId) => `${this.#appServerBaseURL}/users/${userId}/groups`;
     #createGroupURL = (userId) => `${this.#appServerBaseURL}/users/${userId}/groups`;
-
+    #addUserstoGroupURL = (userId,groupId) => `${this.#appServerBaseURL}/users/${userId}/groups/${groupId}`;
+    #deleteUsersfromGroupURL = (userId,groupId) => `${this.#appServerBaseURL}/users/${userId}/groups/${groupId}`;
 
     // Group Related
     #getGroupsURL = () => `${this.#appServerBaseURL}/groups`;
@@ -134,6 +135,36 @@ export default class AppAPI {
         })
     }
 
+    addUsersToGroup(user, group) {
+        return this.#fetchAdv(this.#addUserstoGroupURL(user.getId(), group.getId()), {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+        }).then((responseJSON) => {
+            let responseUser = GroupBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseUser)
+            })
+        })
+    }
+
+    deleteUsersfromGroup(user, group) {
+        return this.#fetchAdv(this.#deleteUserURL(user.getId(), group.getId()), {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+        }).then((responseJSON) => {
+            let responseUser = GroupBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseUser)
+            })
+        })
+    }
+    
     getGroupsByUserId(userId) {
         return this.#fetchAdv(this.#getGroupsByUserIdURL(userId)).then((responseJSON) => {
             let responseGroups = GroupBO.fromJSON(responseJSON);
