@@ -123,7 +123,8 @@ class App extends React.Component {
         <Router basename={process.env.PUBLIC_URL}>
           <Container maxWidth='md'>
             <Header user={user} />
-            <Navigation />
+            <Navigation  />
+            <GroupList />
             
             {
               user ?
