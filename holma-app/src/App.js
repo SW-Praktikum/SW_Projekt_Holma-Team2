@@ -11,9 +11,10 @@ import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import About from './components/pages/About';
 import GroupAddDialog from './components/dialogs/GroupAddDialog';
-import ListWithBoxes from './components/GroupListEntry';
+import GroupEntries from './components/GroupEntries';
 import AppAPI from './api/AppAPI'
 import UserBO from './api/UserBO';
+import GroupList from './components/GroupList';
 
 
 class App extends React.Component {
@@ -122,14 +123,20 @@ class App extends React.Component {
         <Router basename={process.env.PUBLIC_URL}>
           <Container maxWidth='md'>
             <Header user={user} />
-            <Navigation />
+            
             {
               user ?
                 <>
-                  <Redirect from='/' to='user' /> 
-                  <Route exact path='/user'>
+                  <Redirect to='/group' />
+                  <Route exact path='/group'>
+                  <Navigation />
+                    <GroupEntries user={user}/>
+                    <GroupAddDialog user={user}/> 
+            <div style={{fontStyle: "italic"}}><br/><b>User:</b> {user.getName()} | <b>ID:</b> {user.getId()} | <b>Google ID:</b> {user.getGoogleId()} | <b>Member since:</b> {user.getCreationDate()}</div>
+
                   </Route>
-                  <Route path='/group'>
+                  <Route path='/user'>
+                  <Navigation />
                   </Route>
                   <Route path='/about' component={About} />
                 </>
@@ -146,8 +153,7 @@ class App extends React.Component {
             />
             <ContextErrorMessage error={appError}
             contextErrorMsg={'Es lief wohl etwas innerhalb des Programms schief. Bitte lade die Seite nochmals, danke!'} />
-            <ListWithBoxes user={user}/>
-            <GroupAddDialog user={user}/>
+            
             </Container>
             
         </Router>

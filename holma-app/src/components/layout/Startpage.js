@@ -7,14 +7,19 @@ import GroupAdd from '@material-ui/icons/GroupAdd';
 import Assessment from '@material-ui/icons/Assessment';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Settings from '@material-ui/icons/Settings';
+import Grid from '@material-ui/core/Grid';
+
+
+
 //import theme from '../theme';
 
-const useStyles = makeStyles({
+/*const useStyles = makeStyles({
   root: {
     flexGrow: 1,
     maxWidth: 1000,
   },
 });
+
 export default function IconLabelTabs() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
@@ -22,13 +27,34 @@ export default function IconLabelTabs() {
     setValue(newValue);
   };
 
-  return (
+  */
+
+
+
+class Startpage extends React.Component {
+  constructor(props) {
+    super(props)
+    console.log(props)
+  }
+  
+  makeStyles = (theme) => ({
+    root: {
+      flexGrow: 1,
+      width: '100%'
+    },
+    menuButton: {
+      marginRight: theme.spacing(100, 'auto'),
+    },
+  })
+
+  render() {
+    const classes = this.makeStyles
+    return (
     <div>
     <Paper square className={classes.root}>
       <div>
       <Tabs
-        value={value}
-        onChange={handleChange}
+
         variant="fullWidth"
         indicatorColor="secondary"
         textColor="black"
@@ -38,8 +64,7 @@ export default function IconLabelTabs() {
         <Tab icon={<List />} label="Listen" value="2"/>        
       </Tabs>
       <Tabs
-        value={value}
-        onChange={handleChange}
+
         variant="fullWidth"
         indicatorColor="secondary"
         textColor="black"
@@ -50,8 +75,7 @@ export default function IconLabelTabs() {
         
       </Tabs>
       <Tabs
-        value={value}
-        onChange={handleChange}
+
         variant="fullWidth"
         indicatorColor="secondary"
         textColor="red"
@@ -66,3 +90,5 @@ export default function IconLabelTabs() {
     </div>
   );
 }
+}
+export default Startpage
