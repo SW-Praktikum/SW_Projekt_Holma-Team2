@@ -4,6 +4,7 @@ from bo.Group import Group
 from bo.ListEntry import ListEntry
 from bo.ShoppingList import ShoppingList
 from bo.User import User
+from bo.Article import Article
 from db.ArticleMapper import ArticleMapper
 from db.GroupMapper import GroupMapper
 from db.ListEntryMapper import ListEntryMapper
