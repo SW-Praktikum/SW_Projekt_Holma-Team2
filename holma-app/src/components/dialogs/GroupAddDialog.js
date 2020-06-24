@@ -35,7 +35,7 @@ class GroupAddDialog extends Component {
     }
 
     _handleClick = () => {
-        this.addGroup();
+      this.addGroup();
     };
 
     _handleKeyDown = (e) => {
@@ -45,49 +45,51 @@ class GroupAddDialog extends Component {
     };
     
     addGroup() { 
-      const {user} = this.props
+      const {user} = this.props;
       var grp = new GroupBO(this.state.groupName, user.getId());
       AppAPI.getAPI().createGroup(grp).then(group => {
-        AppAPI.getAPI().addUserToGroup(group.getId(), user.getId());  
+        AppAPI.getAPI().addUserToGroup(group.getId(), user.getId()).then( () => {
+          this.props.loadGroups();
+        })  
       })
-      this.handleClose()
+      this.handleClose();
     }
 
     render() {
         return (
-            <div>
-              <Button 
-                style={{maxWidth: '120px', maxHeight: '120px', minWidth: '120px', minHeight: '120px',}}
-                variant="outlined" 
-                color="primary"
-                startIcon={<AddIcon />} 
-                onClick={this.handleClickOpen}>Add Group
+          <div>
+            <Button 
+              style={{maxWidth: '120px', maxHeight: '120px', minWidth: '120px', minHeight: '120px',}}
+              variant="outlined" 
+              color="primary"
+              startIcon={<AddIcon />} 
+              onClick={this.handleClickOpen}>Add Group
+              </Button>
+            <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
+              <DialogTitle id="form-dialog-title">Neue Gruppe erstellen</DialogTitle>
+              <DialogContent>
+                <TextField
+                  autoFocus
+                  onKeyDown={this._handleKeyDown}
+                  onChange={this.handleChange}
+                  margin="dense"
+                  id="outlined-basic"
+                  variant="outlined"
+                  label="Gruppenname"
+                  type="email"
+                  fullWidth
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={this.handleClose} color="primary">
+                  schließen
                 </Button>
-              <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Neue Gruppe erstellen</DialogTitle>
-                <DialogContent>
-                  <TextField
-                    autoFocus
-                    onKeyDown={this._handleKeyDown}
-                    onChange={this.handleChange}
-                    margin="dense"
-                    id="outlined-basic"
-                    variant="outlined"
-                    label="Gruppenname"
-                    type="email"
-                    fullWidth
-                  />
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={this.handleClose} color="primary">
-                    schließen
-                  </Button>
-                  <Button onClick={this._handleClick} color="primary">
-                    hinzufügen
-                  </Button>
-                </DialogActions>
-              </Dialog>
-            </div>
+                <Button onClick={this._handleClick} color="primary">
+                  hinzufügen
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </div>
           );
     }
 }
