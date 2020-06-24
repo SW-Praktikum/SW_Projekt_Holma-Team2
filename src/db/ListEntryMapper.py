@@ -105,6 +105,21 @@ class ListEntryMapper(Mapper):
 
         return result
 
+    def find_list_entries_by_shopping_list(self, shoppinglist_id):
+        cursor = self._connection.cursor()
+        command = "SELECT * FROM holma.listentry " \
+                  "WHERE shopping_list={}".format(shoppinglist_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        result = ListEntry.from_tuples(tuples)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
+
     def find_standardarticle(self, standardarticle):
         """Standardarticle und Group Verbindungstabelle - ListEntrie Id und Group Id,
         der ListEntrie soll kopiert werden und unter neuer Id abgelegt werden."""
@@ -140,6 +155,7 @@ class ListEntryMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
+        listentry.set_id(cursor.lastrowid)
         return listentry
 
     def update(self, listentry):

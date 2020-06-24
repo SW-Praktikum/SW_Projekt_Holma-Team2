@@ -149,10 +149,13 @@ class Administration():
         with ArticleMapper() as mapper:
             mapper.find_by_name(name)
 
-    """Sollte das selbe sein wie add article to group"""
-    """def create_article(self, name, group_id):
+    def create_article(self, name, group_id):
+        article = Article()
+        article.set_id(0),
+        article.set_name(name),
+        article.set_group(group_id)
         with ArticleMapper() as mapper:
-           return mapper.insert(article)"""
+            mapper.insert(article)
 
     def delete_article(self, article):
         with ArticleMapper as mapper:
@@ -207,10 +210,9 @@ class Administration():
         with ShoppingListMapper as mapper:
             mapper.find_by_name(name)
 
-    """Für was?"""
-    """def get_list_entries_by_shopping_list_id(self, shopping_list_id):
+    def get_list_entries_by_shopping_list_id(self, shoppinglist_id):
         with ListEntryMapper as mapper:
-            mapper.find"""
+            mapper.find_list_entries_by_shopping_list(shoppinglist_id)
 
     """Für was die Schleife?"""
     def get_list_entries_checked_by_shopping_list_id(self, shopping_list_id):
@@ -221,12 +223,6 @@ class Administration():
             if list_entry.is_checked():
                 list_entries_checked.append(list_entry)
         return list_entries_checked
-
-    """def add_list_entry_to_shopping_list(self, shopping_list, list_entry):
-        pass"""
-
-    """def delete_list_entry_from_shopping_list(self, shopping_list, list_entry):
-        pass"""
 
     def create_shopping_list(self, name, group_id):
         shopping_list = ShoppingList()
