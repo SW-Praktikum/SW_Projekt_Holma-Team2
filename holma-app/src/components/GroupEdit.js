@@ -55,7 +55,6 @@ class GroupInformation extends Component {
           <Card className="root" style={{minWidth: 275,     marginBottom:10, marginTop:10}}>
             <CardActionArea >
             <CardContent>
-                <Typography className="title" style={{fontSize: 14}} color="textPrimary">Groupname:</Typography>
                 <Typography className="title" style={{fontSize: 14}} color="textPrimary">Groupmember</Typography>
             </CardContent>
             </CardActionArea>    
@@ -65,7 +64,6 @@ class GroupInformation extends Component {
           <Card className="root" style={{minWidth: 275,     marginBottom:10, marginTop:10}}>
             <CardActionArea >
             <CardContent>
-                <Typography className="title" style={{fontSize: 14}} color="textPrimary">Groupname:</Typography>
                 <Typography className="title" style={{fontSize: 14}} color="textPrimary">Groupmember</Typography>
             </CardContent>
             </CardActionArea>    
