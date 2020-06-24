@@ -57,7 +57,7 @@ class Groupmember extends Component {
         // GroupID muss abgefragt werden
         // id bisher deklarerte Variable
         var member = new BusinessObject(this.state.UserName);
-        AppAPI.getAPI().addUsersToGroup(member, member);
+        AppAPI.getAPI().addUsersToGroup(member, "member");
         //valdieren, dass User hinzugefügt wurde, Fenster schließen
     }
 

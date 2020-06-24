@@ -59,7 +59,7 @@ class MemberAddDialog extends Component {
         return (
           <div>
             <Button 
-              style={{maxWidth: '40px', maxHeight: '30px', minWidth: '40px', minHeight: '30px',}}
+              style={{maxWidth: '160px', maxHeight: '140px', minWidth: '80px', minHeight: '70px',}}
               variant="outlined" 
               color="primary"
               startIcon={<AddIcon />} 
