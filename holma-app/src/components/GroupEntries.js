@@ -13,6 +13,8 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import ListWithBoxes from './ListWithBoxes'
+import GroupAddDialog from './dialogs/GroupAddDialog';
+
 
 const useStyles = makeStyles({
     root: {
@@ -40,9 +42,7 @@ const randomImages = [
   "https://s3-eu-central-1.amazonaws.com/vodafone-featured/wp-content/uploads/2019/01/18104102/erstelleeinesnapchatgruppemitdeinenfreunden-640x360.jpg",
   "https://www.schule-bw.de/faecher-und-schularten/gesellschaftswissenschaftliche-und-philosophische-faecher/gemeinschaftskunde/materialien-und-medien/soziologie/zusammenleben-soziale-gruppen/gruppe.jpg",
   "https://www.schulbilder.org/bild-in-der-gruppe-sprechen-dl14849.jpg",
-  "https://www.inforadio.de/content/dam/rbb/inf/Headerbilder_Sendestrecken/HeaderbilderNeu/sport.jpg.jpg/size=512x288.jpg",
   "https://blog.pasch-net.de/klick/uploads/Sport5.PNG",
-  "https://www.muenchen.de/media/shutterstock-2016/freizeit-2/sport-im-park-hp.jpg",
   "https://cdn.businessinsider.de/wp-content/uploads/2020/03/Joggen-Fru%CC%88hling-600x400.jpg"
 
 ]
@@ -109,7 +109,10 @@ class GroupEntries extends Component{
     render() {
         const {elements} = this.state;
         return (            
-          <ListWithBoxes elements={elements}/>
+          <div>
+            <ListWithBoxes elements={elements}/>
+            <GroupAddDialog user={this.props.user} loadGroups={this.loadGroups}/> 
+          </div>
         );
     }
 }

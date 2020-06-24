@@ -10,7 +10,6 @@ import SignIn from './components/pages/SignIn';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import About from './components/pages/About';
-import GroupAddDialog from './components/dialogs/GroupAddDialog';
 import GroupEntries from './components/GroupEntries';
 import AppAPI from './api/AppAPI'
 import UserBO from './api/UserBO';
@@ -59,10 +58,7 @@ class App extends React.Component {
           authLoading: false
         })
         
-        
-        this.checkIfUserInDatabase(this.state.googleUserData.displayName, this.state.googleUserData.email, this.state.googleUserData.uid)
-
-        ;
+        this.checkIfUserInDatabase(user.displayName, user.email, user.uid);
       }).catch(err =>{
         this.setState({
           authError: err,
@@ -85,7 +81,6 @@ class App extends React.Component {
     });
     const provider = new firebase.auth.GoogleAuthProvider();
     firebase.auth().signInWithRedirect(provider);
-
   }
 
   checkIfUserInDatabase(name, email, googleId) {
@@ -130,8 +125,7 @@ class App extends React.Component {
                   <Route exact path='/group'>
                   <Navigation />
                     <GroupEntries user={user}/>
-                    <GroupAddDialog user={user}/> 
-            <div style={{fontStyle: "italic"}}><br/><b>User:</b> {user.getName()} | <b>ID:</b> {user.getId()} | <b>Google ID:</b> {user.getGoogleId()} | <b>Member since:</b> {user.getCreationDate()}</div>
+                    <div style={{fontStyle: "italic"}}><br/><b>User:</b> {user.getName()} | <b>ID:</b> {user.getId()} | <b>Google ID:</b> {user.getGoogleId()} | <b>Member since:</b> {user.getCreationDate()}</div>
 
                   </Route>
                   <Route path='/user'>
