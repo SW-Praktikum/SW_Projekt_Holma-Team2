@@ -2,20 +2,17 @@ import React, { Component } from 'react';
 import AppAPI from '../api/AppAPI';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { red } from '@material-ui/core/colors';
 import CardActionArea from '@material-ui/core/CardActionArea';
-//import Groupmember from './GroupEditDialog';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Fab from '@material-ui/core/Fab';
 import EditIcon from '@material-ui/icons/Edit';
 import MemberAddDialog from '../components/dialogs/MemberAddDialog';
+import ListWithBoxes from './ListWithBoxes'
+import GroupAddDialog from './dialogs/GroupAddDialog';
+import Paper from '@material-ui/core/Paper';
 
 
 class GroupInformation extends Component {
@@ -50,28 +47,76 @@ class GroupInformation extends Component {
         </Grid>
       </Grid>
       <Box m={4} />
-      <Typography variant="h6" gutterBottom>Groupmember</Typography>
-      <Grid item xs={8} sm={4}>
-          <Card className="root" style={{minWidth: 275,     marginBottom:10, marginTop:10}}>
-            <CardActionArea >
-            <CardContent>
-                <Typography className="title" style={{fontSize: 14}} color="textPrimary">Groupmember</Typography>
-            </CardContent>
-            </CardActionArea>    
-          </Card> 
-      </Grid>
-      <Grid item xs={8} sm={4}>
-          <Card className="root" style={{minWidth: 275,     marginBottom:10, marginTop:10}}>
-            <CardActionArea >
-            <CardContent>
-                <Typography className="title" style={{fontSize: 14}} color="textPrimary">Groupmember</Typography>
-            </CardContent>
-            </CardActionArea>    
-          </Card> 
-      </Grid>
-        <MemberAddDialog/>
+    <MemberAddDialog/>
       </div>
   );
 }}
 
-export default GroupInformation;
+class MemberCards extends Component{
+  render(){
+    return(
+      <Grid item xs={8} sm={4}>
+          <Card className="root" style={{minWidth: 275, marginBottom:10, marginTop:10}}>
+            <CardActionArea >
+            <CardContent>
+                <Typography className="title" style={{fontSize: 14}} color="textPrimary">{this.props.member.getName()}</Typography>
+            </CardContent>
+            </CardActionArea>    
+          </Card> 
+      </Grid>
+    );
+  }
+}
+
+class MemberDetails extends Component{
+  constructor(props){
+    super(props);
+    this.state ={
+        elements:[],
+        loadingInProgress: false,
+        loadingError: null,
+    }
+  }
+  componentDidMount(){
+    if(this.props.member){
+      this.loadMembers();
+    }
+  }
+
+  loadMembers = () => {
+    const {member} = this.props
+      AppAPI.getAPI().getUsers().then(members =>{
+        console.log("Loaded members:" + members)
+        var elements = members.map((member) =>
+        <Grid key={member.getId()} item xs={4}>
+            <Paper className="paper" style ={{ textAlign:'center',}} >
+              <MemberCards key={member.getId()} member={member}/>
+            </Paper>
+          </Grid>
+      )
+
+      this.setState({
+        elements: elements,
+        loadingInProgress: true,
+        loadingError: null
+      })
+    }).catch(e =>
+      this.setState({
+        loadingInProgress: false,
+        loadingError: e
+      })
+      );
+}
+
+    render(){
+      const {elements} = this.state;
+      return(
+        <div>
+            <ListWithBoxes elements={elements}/>
+            <MemberAddDialog member={this.props.member} loadMembers={this.loadMembers}/> 
+          </div>
+      );
+    }
+}
+
+export default MemberDetails;
