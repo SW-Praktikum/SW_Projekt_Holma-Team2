@@ -47,7 +47,8 @@ class GroupInformation extends Component {
         </Grid>
       </Grid>
       <Box m={4} />
-    <MemberAddDialog/>
+      <Typography variant="h6" gutterBottom>Groupmembers:</Typography>
+      <MemberDetails/>
       </div>
   );
 }}
@@ -119,4 +120,4 @@ class MemberDetails extends Component{
     }
 }
 
-export default MemberDetails;
+export default GroupInformation;
