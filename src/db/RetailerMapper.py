@@ -59,6 +59,7 @@ class RetailerMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
+        retailer.set_id(cursor.lastrowid)
         return retailer
 
     def update(self, retailer):

@@ -9,7 +9,7 @@ import AppAPI from '../../api/AppAPI';
 import GroupBO from '../../api/GroupBO';
 import AddIcon from '@material-ui/icons/Add';
 
-class GroupAddDialog extends Component {
+class MemberAddDialog extends Component {
     constructor (props) {
         super(props)
         this.state = {
@@ -59,14 +59,14 @@ class GroupAddDialog extends Component {
         return (
           <div>
             <Button 
-              style={{maxWidth: '120px', maxHeight: '120px', minWidth: '120px', minHeight: '120px',}}
+              style={{maxWidth: '40px', maxHeight: '30px', minWidth: '40px', minHeight: '30px',}}
               variant="outlined" 
               color="primary"
               startIcon={<AddIcon />} 
-              onClick={this.handleClickOpen}>Add Group
+              onClick={this.handleClickOpen}>Add Member
               </Button>
             <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
-              <DialogTitle id="form-dialog-title">Neue Gruppe erstellen</DialogTitle>
+              <DialogTitle id="form-dialog-title">Add new Member</DialogTitle>
               <DialogContent>
                 <TextField
                   autoFocus
@@ -94,4 +94,4 @@ class GroupAddDialog extends Component {
     }
 }
 
-export default GroupAddDialog
+export default MemberAddDialog;

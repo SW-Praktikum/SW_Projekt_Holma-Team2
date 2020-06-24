@@ -73,6 +73,7 @@ class ArticleMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
+        article.set_id(cursor.lastrowid)
         return article
 
     def update(self, article):

@@ -76,6 +76,7 @@ class ShoppingListMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
+        shoppinglist.set_id(cursor.lastrowid)
         return shoppinlist
 
     def update(self, shoppinglist):
