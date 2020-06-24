@@ -306,7 +306,7 @@ class GroupUserRelationOperations(Resource):
             return "Group or User not found", 500
 
 
-@holmaApp.route('/articles')
+"""@holmaApp.route('/articles')
 @holmaApp.response(500,'Falls es zu einem Server-seitigem Fehler kommt.')
 class ArticleListOperations(Resource):
     @holmaApp.marshal_list_with(article)
@@ -448,7 +448,7 @@ class ShoppingListOperations(Resource):
             return '', 200
         else:
             return '', 500
-
+"""
 
 if __name__ == '__main__':
     app.run(debug=True)
