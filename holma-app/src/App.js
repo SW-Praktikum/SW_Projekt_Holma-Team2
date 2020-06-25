@@ -14,6 +14,9 @@ import GroupEntries from './components/GroupEntries';
 import AppAPI from './api/AppAPI'
 import UserBO from './api/UserBO';
 import GroupList from './components/GroupList';
+import GroupInformation from './components/GroupEdit';
+import Groupmember from './components/GroupEditDialog';
+import MemberAddDialog from './components/dialogs/MemberAddDialog';
 
 
 class App extends React.Component {
