@@ -1,5 +1,6 @@
 import GroupBO from './GroupBO';
 import UserBO from './UserBO';
+import ArticleBO from './ArticleBO'
 
 export default class AppAPI {
 
@@ -273,7 +274,7 @@ export default class AppAPI {
         })
     };
 
-    getArticleById(ArticleId) {
+    getArticleById(articleId) {
         return this.#fetchAdv(this.#getArticleByIdURL(articleId)).then((responseJSON) => {
             let responseArticle = ArticleBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
