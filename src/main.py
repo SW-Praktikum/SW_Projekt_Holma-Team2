@@ -317,9 +317,9 @@ class ArticleListOperations(Resource):
         return art
 
 
-@holmaApp.route('/articles/<int:id>')
+@holmaApp.route('/articles/<int:article_id>')
 @holmaApp.response(500,'Falls es zu einem Server-seitigen Fehler kommt.')
-@holmaApp('id', 'Die ID des article-Objekts')
+@holmaApp.param('article_id', 'Die ID des article-Objekts')
 class ArticleOperations(Resource):
     @holmaApp.marshal_with(article)
     # @secured
