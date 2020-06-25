@@ -2,17 +2,17 @@ import BusinessObject from './BusinessObject';
 
 export default class ArticleBO extends BusinessObject {
 
-    constructor(name, group_id) {
+    constructor(name, groupId) {
         super(name);
-        this.group_id = group_id
+        this.groupId = groupId
     };
 
     getGroupId() {
-    return this.group_id
+    return this.groupId
     }
 
-    set_group(group_id){
-        this.group_id = group_id
+    set_group(groupId){
+        this.groupId = groupId
     }
 
 static fromJSON(articles) {
@@ -23,6 +23,7 @@ static fromJSON(articles) {
             Object.setPrototypeOf(art, ArticleBO.prototype)
             result.push(art)
         })
+
     } else {
 
         let art = articles
