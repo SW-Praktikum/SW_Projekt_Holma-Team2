@@ -43,12 +43,12 @@ group = api.inherit('Group', bo, {
 })
 
 shoppingList = api.inherit('ShoppingList', bo, {
-    'group': fields.Integer(attribute='_group',
+    'group_id': fields.Integer(attribute='_group_id',
                             description='ID der Gruppe zu der diese Liste gehört'),
 })
 
 listEntry = api.inherit('ListEntry', bo, {
-    'article': fields.Integer(attribute='_article',
+    'article_id': fields.Integer(attribute='_article_id',
                               description='zu welchem Artikle gehört dieses Entry? '),
     'amount': fields.Float(attribute='_amount',
                            description='Menge des Entries '),
@@ -69,7 +69,7 @@ listEntry = api.inherit('ListEntry', bo, {
 })
 
 article = api.inherit('Article', bo, {
-    'group': fields.Integer(attribute='_group',
+    'group_id': fields.Integer(attribute='_group_id',
                             description='zu welcher Groupe dieses Artikle gehört?'),
 })
 
