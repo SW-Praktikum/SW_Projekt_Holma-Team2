@@ -144,11 +144,11 @@ class Administration():
 
     def get_article_by_id(self, article_id):
         with ArticleMapper() as mapper:
-            mapper.find_by_id(article_id)
+            return mapper.find_by_id(article_id)
 
     def get_article_by_name(self, name):
         with ArticleMapper() as mapper:
-            mapper.find_by_name(name)
+            return mapper.find_by_name(name)
 
     def create_article(self, name, group_id):
         article = Article()
@@ -156,7 +156,7 @@ class Administration():
         article.set_name(name),
         article.set_group(group_id)
         with ArticleMapper() as mapper:
-            mapper.insert(article)
+            return mapper.insert(article)
 
     def delete_article(self, article):
         with ArticleMapper as mapper:
@@ -170,11 +170,11 @@ class Administration():
 
     def get_all_list_entries(self):
         with ListEntryMapper() as mapper:
-            mapper.find_all()
+            return mapper.find_all()
 
     def get_list_entry_by_id(self, list_entry_id):
         with ListEntryMapper() as mapper:
-            mapper.find_by_id(list_entry_id)
+            return mapper.find_by_id(list_entry_id)
 
     def create_list_entry(self, name, article_id, amount, unit, retailer_id,
                           user_id, shopping_list_id):
@@ -205,15 +205,15 @@ class Administration():
 
     def get_shopping_list_by_id(self, shopping_list_id):
         with ShoppingListMapper as mapper:
-            mapper.find_by_id(shopping_list_id)
+            return mapper.find_by_id(shopping_list_id)
 
     def get_shopping_list_by_name(self, name):
         with ShoppingListMapper as mapper:
-            mapper.find_by_name(name)
+            return mapper.find_by_name(name)
 
     def get_list_entries_by_shopping_list_id(self, shoppinglist_id):
         with ListEntryMapper as mapper:
-            mapper.find_list_entries_by_shopping_list(shoppinglist_id)
+            return mapper.find_list_entries_by_shopping_list(shoppinglist_id)
 
     """Für was die Schleife?"""
     def get_list_entries_checked_by_shopping_list_id(self, shopping_list_id):
@@ -231,7 +231,7 @@ class Administration():
         shopping_list.set_name(name)
         shopping_list.set_group(group_id)
         with ShoppingListMapper as mapper:
-            mapper.insert(shopping_list)
+            return mapper.insert(shopping_list)
 
     def delete_shopping_list(self, shopping_list):
         with ShoppingListMapper as mapper:
@@ -245,15 +245,17 @@ class Administration():
 
     def get_all_retailers(self):
         with RetailerMapper as mapper:
-            mapper.find_all()
+            return mapper.find_all()
 
     def get_retailer_by_id(self, retailer_id):
         with RetailerMapper as mapper:
-            mapper.find_by_id(retailer_id)
+            return mapper.find_by_id(retailer_id)
 
     def get_retailers_by_name(self, name):
         with RetailerMapper as mapper:
-            mapper.find_by_name(name)
+            return mapper.find_by_name(name)
+
+
 
     """Statistik Client"""
 
@@ -263,19 +265,19 @@ class StatisticAdministration(object):
 
     def get_all_articles(self):
         with ArticleMapper as mapper:
-            mapper.find_all()
+            return mapper.find_all()
 
     def get_all_list_entries(self):
         with ListEntryMapper as mapper:
-            mapper.find_all()
+            return mapper.find_all()
 
     def get_list_entries_by_retailer_id(self, retailer_id):
         with ListEntryMapper as mapper:
-            mapper.find_by_retailer(retailer_id)
+            return mapper.find_by_retailer(retailer_id)
 
     def get_list_entries_in_time_period(self, start_date, end_date):
         pass
 
     def get_list_entries_by_article_id(self, article_id):
         with ListEntryMapper as mapper:
-            mapper.find_list_entries_by_article(article_id)
+            return mapper.find_list_entries_by_article(article_id)
