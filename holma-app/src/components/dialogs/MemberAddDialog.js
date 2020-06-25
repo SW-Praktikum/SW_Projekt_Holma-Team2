@@ -7,6 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import AppAPI from '../../api/AppAPI';
 import AddIcon from '@material-ui/icons/Add';
+import MemberDetails from '../../components/GroupEdit';
 
 class MemberAddDialog extends Component {
     constructor (props) {
@@ -47,8 +48,13 @@ class MemberAddDialog extends Component {
     };
     
     addMember() { 
-      AppAPI.getAPI().addUserToGroup(this.state.groupId, this.state.memberId);
-        }
+      const {member} = this.props;
+      AppAPI.getAPI().addUserToGroup(this.state.groupId, this.state.memberId).then(membr => {this.setState({memberId: membr.getID()}).then( () => {
+        this.props.loadMembers();
+      })
+    })
+    this.handleClose();
+  }
 
     render() {
         return (
