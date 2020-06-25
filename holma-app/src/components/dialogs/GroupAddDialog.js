@@ -14,7 +14,8 @@ class GroupAddDialog extends Component {
         super(props)
         this.state = {
             groupName: "",
-            open: false
+            open: false,
+            groupId:"",
         }        
     }
 
@@ -48,8 +49,10 @@ class GroupAddDialog extends Component {
       const {user} = this.props;
       var grp = new GroupBO(this.state.groupName, user.getId());
       AppAPI.getAPI().createGroup(grp).then(group => {
+        this.setState({groupId: group.getId()})
         AppAPI.getAPI().addUserToGroup(group.getId(), user.getId()).then( () => {
           this.props.loadGroups();
+          
         })  
       })
       this.handleClose();

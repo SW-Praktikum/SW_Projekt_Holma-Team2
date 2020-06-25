@@ -27,11 +27,12 @@ class GroupInformation extends Component {
       <Grid container spaching={3}>
         <Grid item xs={8} sm={2}>
           <Typography variant="h6" gutterBottom>Groupname</Typography>
-        </Grid>
-        <Grid item xs={8} sm={2}>
-        <Fab size="small" color="secondary" aria-label="edit">
+          <Fab size="small" color="secondary" aria-label="edit">
                 <EditIcon />
           </ Fab>
+        </Grid>
+        <Grid item xs={8} sm={2}>
+        
         </Grid>
         <Grid item xs={8} sm={4}>
           <Typography variant="h6" gutterBottom>owner: name</Typography>
@@ -79,15 +80,14 @@ class MemberDetails extends Component{
     }
   }
   componentDidMount(){
-    if(this.props.member){
+    if(this.props.group){
       this.loadMembers();
     }
   }
 
   loadMembers = () => {
-    const {member} = this.props
-      AppAPI.getAPI().getUsers().then(members =>{
-        console.log("Loaded members:" + members)
+      this.state.elements = AppAPI.getAPI().getUsers()
+      var members = this.state.elements
         var elements = members.map((member) =>
         <Grid key={member.getId()} item xs={4}>
             <Paper className="paper" style ={{ textAlign:'center',}} >
@@ -100,8 +100,7 @@ class MemberDetails extends Component{
         elements: elements,
         loadingInProgress: true,
         loadingError: null
-      })
-    }).catch(e =>
+      }).catch(e =>
       this.setState({
         loadingInProgress: false,
         loadingError: e

@@ -126,7 +126,7 @@ class App extends React.Component {
                 <>
                   <Redirect to='/group' />
                   <Route exact path='/group'>
-                  <Navigation />
+                    <Navigation />
                     <GroupEntries user={user}/>
                     <div style={{fontStyle: "italic"}}><br/><b>User:</b> {user.getName()} | <b>ID:</b> {user.getId()} | <b>Google ID:</b> {user.getGoogleId()} | <b>Member since:</b> {user.getCreationDate()}</div>
 
