@@ -1,6 +1,10 @@
 import GroupBO from './GroupBO';
 import UserBO from './UserBO';
+<<<<<<< HEAD
 import ShoppingListBO from './ShoppingListBO';
+=======
+import ArticleBO from './ArticleBO'
+>>>>>>> 274f996a14d4e04374657875c984a7f246bd683d
 
 export default class AppAPI {
 
@@ -27,10 +31,24 @@ export default class AppAPI {
     // Group Related
     #getGroupsURL = () => `${this.#appServerBaseURL}/groups`;
     #getGroupByIdURL = (groupId) => `${this.#appServerBaseURL}/groups/${groupId}`;
+    //#getGroupsByNameURL = (name) => `${this.#appServerBaseURL}/by-name/${name}`;
     #updateGroupURL = (groupId) => `${this.#appServerBaseURL}/groups/${groupId}`;
     #deleteGroupURL = (groupId) => `${this.#appServerBaseURL}/groups/${groupId}`;
 
     #getUsersByGroupIdURL = (groupId) =>`${this.#appServerBaseURL}/groups/${groupId}/users`;
+<<<<<<< HEAD
+=======
+  
+    // Article Related
+    #getArticlesURL = () => `${this.#appServerBaseURL}/articles`;
+    //#createArticleURL
+    //#updateArticleURL
+    //#deleteArticleURL
+    #getArticleByIdURL = (articleId) => `${this.#appServerBaseURL}/articles/${articleId}`;
+    //#getArticleByNameURL
+
+
+>>>>>>> 274f996a14d4e04374657875c984a7f246bd683d
 
     // Shoppinglist related
     #getShoppingListsByGroupIdURL = (groupId) => `${this.#appServerBaseURL}/groups/${groupId}`;
@@ -81,7 +99,7 @@ export default class AppAPI {
                 resolve(responseUser)
             })
         })
-    }
+    };
 
     updateUser(user) {
         return this.#fetchAdv(this.#updateUserURL(user.getId()), {
@@ -97,7 +115,7 @@ export default class AppAPI {
                 resolve(responseUser)
             })
         })
-    }
+    };
 
     deleteUser(user) {
         return this.#fetchAdv(this.#deleteUserURL(user.getId()), {
@@ -113,7 +131,7 @@ export default class AppAPI {
                 resolve(responseUser)
             })
         })
-    }
+    };
 
     getUserById(userId) {
         return this.#fetchAdv(this.#getUserByIdURL(userId)).then((responseJSON) => {
@@ -122,7 +140,7 @@ export default class AppAPI {
                 resolve(responseUser)
             })
         })
-    }
+    };
 
     getUserByGoogleId(googleId) {
         return this.#fetchAdv(this.#getUserByGoogleIdURL(googleId, {
@@ -135,7 +153,7 @@ export default class AppAPI {
                 resolve(responseUser)
             })
         })
-    }
+    };
 
     getUsersByName(name) {
         return this.#fetchAdv(this.#getUsersByNameURL(name)).then((responseJSON) => {
@@ -144,7 +162,7 @@ export default class AppAPI {
                 resolve(responseUsers)
             })
         })
-    }
+    };
 
     addUserToGroup(groupId, userId) {
         return this.#fetchAdv(this.#addUserToGroupURL(groupId, userId), {
@@ -158,7 +176,7 @@ export default class AppAPI {
                 resolve(responseGroup)
             })
         })
-    }
+    };
 
     deleteUsersFromGroup(group, user) {
         return this.#fetchAdv(this.#deleteUsersFromGroupURL(group, user), {
@@ -173,7 +191,7 @@ export default class AppAPI {
                 resolve(responseGroup)
             })
         })
-    }
+    };
     
     getGroupsByUserId(userId) {
         return this.#fetchAdv(this.#getGroupsByUserIdURL(userId)).then((responseJSON) => {
@@ -182,7 +200,7 @@ export default class AppAPI {
                 resolve(responseGroups)
             })
         })
-    }
+    };
 
     createGroup(group) {
         console.log("Creating group:", group)
@@ -199,7 +217,7 @@ export default class AppAPI {
                 resolve(responseGroup)
             })
         })
-    }
+    };
 
     getGroups() {
         return this.#fetchAdv(this.#getGroupsURL()).then((responseJSON) => {
@@ -217,7 +235,7 @@ export default class AppAPI {
                 resolve(responseGroups)
             })
         })
-    }
+    };
 
     updateGroup(group) {
         return this.#fetchAdv(this.#updateGroupURL(group.getId()), {
@@ -233,7 +251,7 @@ export default class AppAPI {
                 resolve(responseGroup)
             })
         })
-    }
+    };
 
     deleteGroup(group) {
         return this.#fetchAdv(this.#deleteGroupURL(group.getId()), {
@@ -249,7 +267,7 @@ export default class AppAPI {
                 resolve(responseGroup)
             })
         })
-    }
+    };
 
     getUsersByGroupId(groupId) {
         return this.#fetchAdv(this.#getUsersByGroupIdURL(groupId)).then((responseJSON) => {
@@ -258,6 +276,7 @@ export default class AppAPI {
                 resolve(responseUsers)
             })
         })
+<<<<<<< HEAD
     }
 
     getShoppingListsByGroupId(groupId) {
@@ -326,5 +345,26 @@ export default class AppAPI {
             })
         })
     }
+=======
+    };
+
+    getArticles() {
+        return this.#fetchAdv(this.#getArticlesURL()).then((responseJSON) => {
+            let responseArticles = ArticleBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+                resolve(responseArticles)
+            })
+        })
+    };
+
+    getArticleById(articleId) {
+        return this.#fetchAdv(this.#getArticleByIdURL(articleId)).then((responseJSON) => {
+            let responseArticle = ArticleBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseArticle)
+            })
+        })
+    };
+>>>>>>> 274f996a14d4e04374657875c984a7f246bd683d
 }
 

@@ -5,15 +5,23 @@ export default class ArticleBO extends BusinessObject {
     constructor(name, groupId) {
         super(name);
         this.groupId = groupId
+<<<<<<< HEAD
    }
 
     getGroupId() {
     return this.groupId
 }
+=======
+    };
 
-    set_group(group_id){
-        this.group_id = group_id
-        }
+    getGroupId() {
+    return this.groupId
+    }
+>>>>>>> 274f996a14d4e04374657875c984a7f246bd683d
+
+    set_group(groupId){
+        this.groupId = groupId
+    }
 
 static fromJSON(articles) {
     let result = [];
@@ -23,13 +31,14 @@ static fromJSON(articles) {
             Object.setPrototypeOf(art, ArticleBO.prototype)
             result.push(art)
         })
+
     } else {
-        
+
         let art = articles
         Object.setPrototypeOf(art, ArticleBO.prototype)
         result.push(art)
     }
 
     return result;
-}
+    }
 }
