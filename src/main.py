@@ -69,7 +69,7 @@ listEntry = api.inherit('ListEntry', bo, {
 })
 
 article = api.inherit('Article', bo, {
-    'group': fields.Integer(attribute='_group',
+    'group_id': fields.Integer(attribute='_group_id',
                             description='zu welcher Groupe dieses Artikle gehört?'),
 })
 
@@ -255,8 +255,6 @@ class UserRelatedGroupOperations(Resource):
             return "User unkown or payload not valid", 500
 
 
-# Neu
-
 @holmaApp.route('/group/<int:group_id>/users')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('group_id', 'Die ID des Group-Objekts')
@@ -305,8 +303,9 @@ class GroupUserRelationOperations(Resource):
         else:
             return "Group or User not found", 500
 
+# Neu
 
-"""@holmaApp.route('/articles')
+@holmaApp.route('/articles')
 @holmaApp.response(500,'Falls es zu einem Server-seitigem Fehler kommt.')
 class ArticleListOperations(Resource):
     @holmaApp.marshal_list_with(article)
@@ -317,9 +316,9 @@ class ArticleListOperations(Resource):
         return art
 
 
-@holmaApp.route('/articles/<int:id>')
+@holmaApp.route('/article/<int:article_id>')
 @holmaApp.response(500,'Falls es zu einem Server-seitigen Fehler kommt.')
-@holmaApp('id', 'Die ID des article-Objekts')
+@holmaApp.param('article_id', 'Die ID des article-Objekts')
 class ArticleOperations(Resource):
     @holmaApp.marshal_with(article)
     # @secured
@@ -352,7 +351,7 @@ class ArticleOperations(Resource):
             return '', 500
 
 
-@holmaApp.route('/articles/by-name/<string:name>')
+@holmaApp.route('/article/by-name/<string:name>')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('name', 'Der Name des Articles')
 class ArticlesByNameOperations(Resource):
@@ -364,7 +363,7 @@ class ArticlesByNameOperations(Resource):
         return us
 
 
-@holmaApp.route('/groups/<int:id>/articles')
+@holmaApp.route('/groups/<int:article_id>/articles')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('id', 'Die ID des person-Objekts')
 class GroupRelatedArticleOperations(Resource):
@@ -448,7 +447,6 @@ class ShoppingListOperations(Resource):
             return '', 200
         else:
             return '', 500
-"""
 
 if __name__ == '__main__':
     app.run(debug=True)
