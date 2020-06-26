@@ -36,8 +36,6 @@ export default class AppAPI {
     #deleteGroupURL = (groupId) => `${this.#appServerBaseURL}/groups/${groupId}`;
 
     #getUsersByGroupIdURL = (groupId) =>`${this.#appServerBaseURL}/groups/${groupId}/users`;
-<<<<<<< HEAD
-=======
   
     // Article Related
     #getArticlesURL = () => `${this.#appServerBaseURL}/articles`;
@@ -48,7 +46,6 @@ export default class AppAPI {
     //#getArticleByNameURL
 
 
->>>>>>> 274f996a14d4e04374657875c984a7f246bd683d
 
     // Shoppinglist related
     #getShoppingListsByGroupIdURL = (groupId) => `${this.#appServerBaseURL}/groups/${groupId}`;
@@ -276,7 +273,6 @@ export default class AppAPI {
                 resolve(responseUsers)
             })
         })
-<<<<<<< HEAD
     }
 
     getShoppingListsByGroupId(groupId) {
@@ -345,8 +341,7 @@ export default class AppAPI {
             })
         })
     }
-=======
-    };
+
 
     getArticles() {
         return this.#fetchAdv(this.#getArticlesURL()).then((responseJSON) => {
@@ -357,14 +352,13 @@ export default class AppAPI {
         })
     };
 
-    getArticleById(articleId) {
+    /* getArticleById(articleId) {
         return this.#fetchAdv(this.#getArticleByIdURL(articleId)).then((responseJSON) => {
             let responseArticle = ArticleBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
                 resolve(responseArticle)
             })
         })
-    };
->>>>>>> 274f996a14d4e04374657875c984a7f246bd683d
+    }; */
 }
 
