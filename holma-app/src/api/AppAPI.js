@@ -1,5 +1,6 @@
 import GroupBO from './GroupBO';
 import UserBO from './UserBO';
+import ShoppingListBO from './ShoppingListBO';
 
 export default class AppAPI {
 
@@ -30,9 +31,13 @@ export default class AppAPI {
     #deleteGroupURL = (groupId) => `${this.#appServerBaseURL}/groups/${groupId}`;
 
     #getUsersByGroupIdURL = (groupId) =>`${this.#appServerBaseURL}/groups/${groupId}/users`;
-  
 
-
+    // Shoppinglist related
+    #getShoppingListsByGroupIdURL = (groupId) => `${this.#appServerBaseURL}/groups/${groupId}`;
+    #createShoppingListURL = (groupId) => `${this.#appServerBaseURL}/groups/${groupId}`;
+    #getShoppingListByIdURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglists/${shoppingListId}`;
+    #updateShoppingListURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglists/${shoppingListId}`;
+    #deleteShoppingListURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglists/${shoppingListId}`;
     static getAPI() {
         if (this.#api == null) {
             this.#api = new AppAPI();
@@ -251,6 +256,73 @@ export default class AppAPI {
             let responseUsers = UserBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
                 resolve(responseUsers)
+            })
+        })
+    }
+
+    getShoppingListsByGroupId(groupId) {
+        return this.#fetchAdv(this.#getShoppingListsByGroupIdURL(groupId)).then((responseJSON) => {
+            let responseShoppingLists = ShoppingListBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+                resolve(responseShoppingLists)
+            })
+        })
+    }
+
+    getShoppingListById(shoppingListId) {
+        return this.#fetchAdv(this.#getShoppingListByIdURL(shoppingListId)).then((responseJSON) => {
+            let responseShoppingLists = ShoppingListBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+                resolve(responseShoppingLists)
+            })
+        })
+    }
+
+    createShoppingList(shoppinglists) {
+        console.log("Creating shoppingList:", shoppinglists)
+        return this.#fetchAdv(this.#createShoppingListURL(shoppinglists.getGroupId()), {
+        method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(shoppinglists)
+        }).then((responseJSON) => {
+            let responseShoppingLists = ShoppingListBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseShoppingLists)
+            })
+        })
+    }
+
+    updateShoppingList(shoppinglists) {
+        return this.#fetchAdv(this.#updateShoppingListURL(shoppinglists.getId()), {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(shoppinglists)
+        }).then((responseJSON) => {
+            let responseShoppingLists = ShoppingListBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseShoppingLists)
+            })
+        })
+    }
+
+    deleteShoppingList(shoppinglists) {
+        return this.#fetchAdv(this.#deleteShoppingListURL(shoppinglists.getId()), {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(shoppinglists)
+        }).then((responseJSON) => {
+            let responseShoppingLists = ShoppingListBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseShoppingLists)
             })
         })
     }
