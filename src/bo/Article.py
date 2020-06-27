@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from bo.BusinessObject import BusinessObject
 
 class Article(BusinessObject):
@@ -34,7 +36,11 @@ class Article(BusinessObject):
         article = Article()
         article.set_id(dictionary["id"])
         article.set_name(dictionary["name"])
-        article.set_group(dictionary["group"])
+        article.set_creation_date(datetime.strptime(dictionary["creationDate"],
+                                                 "%Y-%m-%dT%H:%M:%S.%fZ"))
+        article.set_creation_date(datetime.strptime(dictionary["lastUpdated"],
+                                                 "%Y-%m-%dT%H:%M:%S.%fZ"))
+        article.set_group(dictionary["groupId"])
         return article
 
     @staticmethod
