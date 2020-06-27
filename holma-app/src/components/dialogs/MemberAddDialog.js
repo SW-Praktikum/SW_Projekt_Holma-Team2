@@ -8,18 +8,65 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import AppAPI from '../../api/AppAPI';
 import GroupBO from '../../api/GroupBO';
 import AddIcon from '@material-ui/icons/Add';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import Avatar from '@material-ui/core/Avatar';
+import IconButton from '@material-ui/core/IconButton';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import FolderIcon from '@material-ui/icons/Folder';
+import DeleteIcon from '@material-ui/icons/Delete';
+
+
+class MemberEntry extends Component {
+  render () {
+    return (
+      <div>
+        <Grid item xs={12} md={6}>
+          <Typography variant="h6">
+          </Typography>
+          <div>
+            <List>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <FolderIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary="Jonas Götz"
+                  />
+                  <ListItemSecondaryAction>
+                    <IconButton edge="end" aria-label="delete">
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>,
+            </List>
+          </div>
+        </Grid>
+      </div>
+    )
+  }}
 
 class MemberAddDialog extends Component {
     constructor (props) {
         super(props)
         this.state = {
             groupName: "",
-            open: false
+            open: false,
+            memberId: "",
+            groupId: 12,
+            members: []
         }        
     }
 
     handleChange = (e) => {
-        this.state.groupName = e.target.value
+        this.state.memberId = e.target.value
     }
     
     handleClickOpen = () => {
@@ -37,23 +84,21 @@ class MemberAddDialog extends Component {
     _handleClick = () => {
       this.addGroup();
     };
-
-    _handleKeyDown = (e) => {
-        if (e.key === 'Enter') {
-          //this.addGroup();
-        };
-    };
     
-    addGroup() { 
-      const {user} = this.props;
-      var grp = new GroupBO(this.state.groupName, user.getId());
-      AppAPI.getAPI().createGroup(grp).then(group => {
-        AppAPI.getAPI().addUserToGroup(group.getId(), user.getId()).then( () => {
-          this.props.loadGroups();
-        })  
-      })
-      this.handleClose();
+    addMember() {  //die fast gleiche Funktion funktioniert in Group add Dialog, hier aber nicht
+      console.log("Hier neuer Meber")
+      console.log(this.state.memberId)
+      console.log(this.state.groupId)
+      AppAPI.getAPI().addUserToGroup(this.state.groupId, this.state.memberId)
+        console.log("done")
+        //this.props.loadMembers();
+      //this.handleClose()
     }
+    
+    
+
+    
+
 
     render() {
         return (
@@ -63,10 +108,10 @@ class MemberAddDialog extends Component {
               variant="outlined" 
               color="primary"
               startIcon={<AddIcon />} 
-              onClick={this.handleClickOpen}>Add Member
+              onClick={this.handleClickOpen}>Mitglied hinzufügen
               </Button>
             <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
-              <DialogTitle id="form-dialog-title">Add new Member</DialogTitle>
+              <DialogTitle id="form-dialog-title">Neues Gruppenmitglied</DialogTitle>
               <DialogContent>
                 <TextField
                   autoFocus
@@ -75,11 +120,12 @@ class MemberAddDialog extends Component {
                   margin="dense"
                   id="outlined-basic"
                   variant="outlined"
-                  label="Gruppenname"
+                  label="Midlieds ID"
                   type="email"
                   fullWidth
                 />
               </DialogContent>
+              <MemberEntry />
               <DialogActions>
                 <Button onClick={this.handleClose} color="primary">
                   schließen

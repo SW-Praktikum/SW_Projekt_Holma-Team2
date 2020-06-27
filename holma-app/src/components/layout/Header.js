@@ -5,31 +5,46 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import ShoppingBasket from '@material-ui/icons/ShoppingBasket';
-import PersonPin from '@material-ui/icons/PersonPin';
 import { red } from '@material-ui/core/colors';
-import DropDown from '../dialogs/Dropdown'
+import DropDown from '../dialogs/Dropdown';
+import Tabs from '@material-ui/core/Tabs';
  
 
 class Header extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
+    this.state = {
+      tabindex: 0
+    };
   }
+  
+  handleTabChange = (e, newIndex) => {
+    // console.log(newValue)
+    this.setState({
+      tabindex: newIndex
+    })
+  };
 
   render() {
     const { user, classes } = this.props;
     return (
       <div className={classes.root}>
         <AppBar position="static">
+        <DropDown user={user} />
           <Toolbar >
           <Typography variant="h6" color="inherit">
+            holma
             </Typography>
             <IconButton edge="false" className={classes.menuButton} color="inherit" aria-label="menu">
               <ShoppingBasket />
             </IconButton>
-            <IconButton edge="false" className={classes.menuButton} color="inherit" label="Login">
-              <PersonPin />
-            </IconButton>
-            <DropDown user={user} />
+            
+            {
+            user ?
+              <Tabs indicatorColor='primary' textColor='primary' centered value={this.state.tabindex} onChange={this.handleTabChange} >
+              </Tabs>
+              : null
+            }
           </Toolbar>
         </AppBar>
       </div>

@@ -13,8 +13,9 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import ListWithBoxes from './ListWithBoxes'
+import ListEntry from './ListEntry'
 import GroupAddDialog from './dialogs/GroupAddDialog';
-
+import MemberAddDialog from './dialogs/MemberAddDialog';
 
 const useStyles = makeStyles({
     root: {
@@ -77,10 +78,12 @@ class GroupEntries extends Component{
       // load only if the owner object is given
       if (this.props.user) {
         this.loadGroups();
+        
       }
     }
   
     loadGroups = () => {
+      console.log("Hier", this.props.groupId)
       const {user} = this.props
         AppAPI.getAPI().getGroupsByUserId(user.getId()).then(groups => {
           console.log("Loaded groups from database for user '" + user.getName() + "'")
@@ -111,7 +114,9 @@ class GroupEntries extends Component{
         return (            
           <div>
             <ListWithBoxes elements={elements}/>
-            <GroupAddDialog user={this.props.user} loadGroups={this.loadGroups}/> 
+            <GroupAddDialog groupId={this.props.groupId} user={this.props.user} loadGroups={this.loadGroups}/> 
+            <MemberAddDialog />
+            <ListEntry />
           </div>
         );
     }
