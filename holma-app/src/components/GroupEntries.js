@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import AppAPI from '../api/AppAPI';
 import { makeStyles } from '@material-ui/core/styles';
+import { Link } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -57,7 +58,7 @@ class GroupEntry extends Component {
             </CardContent>
             </CardActionArea>     
             <CardActions>
-                <Button size="small">Anzeigen</Button>
+                <Button size="small"><Link to="/About" >Anzeigen</Link></Button>
             </CardActions>
          </Card>
     )
