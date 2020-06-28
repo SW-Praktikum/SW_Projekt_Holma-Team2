@@ -5,19 +5,11 @@ export default class ArticleBO extends BusinessObject {
     constructor(name, groupId) {
         super(name);
         this.groupId = groupId
-<<<<<<< HEAD
-   }
-
-    getGroupId() {
-    return this.groupId
-}
-=======
     };
 
     getGroupId() {
     return this.groupId
     }
->>>>>>> 274f996a14d4e04374657875c984a7f246bd683d
 
     set_group(groupId){
         this.groupId = groupId

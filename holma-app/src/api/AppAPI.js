@@ -1,10 +1,7 @@
 import GroupBO from './GroupBO';
 import UserBO from './UserBO';
-<<<<<<< HEAD
 import ShoppingListBO from './ShoppingListBO';
-=======
 import ArticleBO from './ArticleBO'
->>>>>>> 274f996a14d4e04374657875c984a7f246bd683d
 
 export default class AppAPI {
 
