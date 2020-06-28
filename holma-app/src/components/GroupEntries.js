@@ -58,7 +58,9 @@ class GroupEntry extends Component {
             </CardContent>
             </CardActionArea>     
             <CardActions>
-                <Button size="small"><Link to="/About" >Anzeigen</Link></Button>
+                <Link to="/About">
+                  <Button size="small">Anzeigen</Button>
+                </Link>
             </CardActions>
          </Card>
     )
