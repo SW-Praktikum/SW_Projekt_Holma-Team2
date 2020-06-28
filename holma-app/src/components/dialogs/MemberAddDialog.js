@@ -82,10 +82,14 @@ class MemberAddDialog extends Component {
     }
 
     _handleClick = () => {
-      this.addGroup();
+      this.addMember();
     };
     
-    addMember() {  //die fast gleiche Funktion funktioniert in Group add Dialog, hier aber nicht
+    addMember() {
+      //es muss gecheckt werden bei input ob der user existiert und ob er schon in der Gruppe ist,
+      //it input form validation
+      console.log(AppAPI.getAPI().getUsersByGroupId(12))
+      //console.log(AppAPI.getAPI().getGroupById(12))
       console.log("Hier neuer Meber")
       console.log(this.state.memberId)
       console.log(this.state.groupId)

@@ -15,6 +15,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import StarIcon from '@material-ui/icons/Star';
 import DeleteIcon from '@material-ui/icons/Delete';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
+import { colors } from '@material-ui/core';
 
 //transaction list im Bankbeispiel dazu anschauen
 
@@ -38,7 +39,7 @@ class ListEntry extends Component {
                 this.setState({open: false})
         }
 
-        setStandard = () => {
+        setStandard = () => { //not working yet
             if(this.state.standard === false)
                 this.setState({standard: true})
                 //add as Standard article
@@ -89,12 +90,82 @@ class ListEntry extends Component {
               label: 'l',
             },
           ];
-          const user = "Herbert";
-          const retailer = "Edeka"
+          const retailer = [
+              {
+                  value: 'Edeka',
+              },
+              {
+                value: 'Rewe',
+              },
+              {
+                value: 'Netto',
+                },            
+                {
+                value: 'Penny',
+                },
+                {
+                value: 'Lidl',
+                },
+                {
+                value: 'Kaufland',
+                },
+                {
+                value: 'Aldi',
+                },
+                {
+                value: 'Real',
+                },
+                {
+                value: 'Metro',
+                },
+                {
+                value: 'dm',
+                },
+                {
+                value: 'Rossmann',
+                },
+                {
+                value: 'Norma',
+                },
+                {
+                value: 'Müller',
+                },
+                {
+                value: 'Tegut',
+                },
+                {
+                value: 'Alnatura',
+                },
+                {
+                value: 'Denn\'s',
+                },
+                {
+                value: 'Wochenmarkt',
+                },
+                {
+                value: 'Bauernladen',
+                },
+                {
+                value: 'Metzger',
+                },
+                {
+                value: 'Bäcker',
+                },
+                {
+                value: 'Sonstige',
+                },
+                {
+                    value: 'Naturgut'
+
+              }
+          ]
+          const user = [{value : "Herbert"}]
           const lastUpdated ="22-06-20-14:45"
         return (
             <React.Fragment>
-                <TableRow>
+            <TableContainer >
+                <Table >
+                <TableRow bgcolor={colors.lime[200]}>
                 <TableCell padding="checkbox">
                     <Checkbox
                         checked={this.state.checked}
@@ -153,15 +224,29 @@ class ListEntry extends Component {
                         {this.state.open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                     </IconButton>
                 </TableCell>
-                </TableRow>
+                </TableRow >
+                </Table>
                 <Collapse in={this.state.open}>
-                    <TableRow>
+                    <Table>
+                    <TableRow bgcolor={colors.lime[100]}>
                     <TableCell align='left'>
-                        <b>Einkäufer: </b>{user}
+                        <Autocomplete
+                            id="combo-box-demo"
+                            options={user}
+                            getOptionLabel={(option) => option.value}
+                            style={{ width: 140 }}
+                            renderInput={(params) => <TextField {...params} label="Einkäufer" variant="standard" />}
+                        />
                     </TableCell>
                     
                     <TableCell align='left'>
-                        <b>Einzelhändler: </b>{retailer}
+                        <Autocomplete
+                            id="combo-box-demo"
+                            options={retailer}
+                            getOptionLabel={(option) => option.value}
+                            style={{ width: 140 }}
+                            renderInput={(params) => <TextField {...params} label="Einzelhändler" variant="standard" />}
+                        />
                     </TableCell>
 
                     <TableCell align='left'>
@@ -169,7 +254,10 @@ class ListEntry extends Component {
                     </TableCell>
 
                     </TableRow>
+                    </Table>
                 </Collapse>
+                
+            </TableContainer>
             </React.Fragment>
   );
 }}

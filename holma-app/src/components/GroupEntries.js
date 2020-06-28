@@ -117,6 +117,7 @@ class GroupEntries extends Component{
             <GroupAddDialog groupId={this.props.groupId} user={this.props.user} loadGroups={this.loadGroups}/> 
             <MemberAddDialog />
             <ListEntry />
+            <ListEntry />
           </div>
         );
     }
