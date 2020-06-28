@@ -6,20 +6,22 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import AppAPI from '../../api/AppAPI';
-import GroupBO from '../../api/GroupBO';
 import AddIcon from '@material-ui/icons/Add';
 
 class MemberAddDialog extends Component {
     constructor (props) {
         super(props)
         this.state = {
-            groupName: "",
+            memberName: "",
+            memberId: "",
+            groupId: 7,
             open: false
         }        
     }
 
+
     handleChange = (e) => {
-        this.state.groupName = e.target.value
+        this.state.memberId = e.target.value
     }
     
     handleClickOpen = () => {
@@ -35,25 +37,18 @@ class MemberAddDialog extends Component {
     }
 
     _handleClick = () => {
-      this.addGroup();
+      this.addMember();
     };
 
     _handleKeyDown = (e) => {
         if (e.key === 'Enter') {
-          //this.addGroup();
+          this.addMember();
         };
     };
     
-    addGroup() { 
-      const {user} = this.props;
-      var grp = new GroupBO(this.state.groupName, user.getId());
-      AppAPI.getAPI().createGroup(grp).then(group => {
-        AppAPI.getAPI().addUserToGroup(group.getId(), user.getId()).then( () => {
-          this.props.loadGroups();
-        })  
-      })
-      this.handleClose();
-    }
+    addMember() { 
+      AppAPI.getAPI().addUserToGroup(this.state.groupId, this.state.memberId);
+        }
 
     render() {
         return (
@@ -63,10 +58,10 @@ class MemberAddDialog extends Component {
               variant="outlined" 
               color="primary"
               startIcon={<AddIcon />} 
-              onClick={this.handleClickOpen}>Add Member
+              onClick={this.handleClickOpen}>Mitglied hinzufügen
               </Button>
             <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
-              <DialogTitle id="form-dialog-title">Add new Member</DialogTitle>
+              <DialogTitle id="form-dialog-title">Neues Mitglied hinzufügen</DialogTitle>
               <DialogContent>
                 <TextField
                   autoFocus
@@ -75,7 +70,7 @@ class MemberAddDialog extends Component {
                   margin="dense"
                   id="outlined-basic"
                   variant="outlined"
-                  label="Gruppenname"
+                  label="User ID"
                   type="email"
                   fullWidth
                 />

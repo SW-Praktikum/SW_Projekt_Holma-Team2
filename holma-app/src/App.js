@@ -122,7 +122,7 @@ class App extends React.Component {
           <Router basename={process.env.PUBLIC_URL}>
             <Container maxWidth='md'>
               <Header user={user} />
-              
+
               {
                 user ?
                   <>
@@ -130,7 +130,7 @@ class App extends React.Component {
                     <Navigation />
                     <Route path='/groups'>
                       <GroupEntries user={user}/>
-                    </Route> 
+                    </Route>
                     <Route path='/about'>
                       <About/>
                     </Route>
@@ -138,14 +138,14 @@ class App extends React.Component {
                       <User/>
                     </Route>
                     <Route path=''>
-                    </Route>               
+                    </Route>
                     <div style={{fontStyle: "italic"}}><br/><b>User:</b> {user.getName()} | <b>ID:</b> {user.getId()} | <b>Google ID:</b> {user.getGoogleId()} | <b>Member since:</b> {user.getCreationDate()}</div>
                   </>
                   :
                   <>
                     <Redirect to='/SignIn' />
                     <SignIn onSignIn={this.handleSignIn}/>
-                  </>            
+                  </>
               }
 
               <LoadingProgress show={authLoading} />
