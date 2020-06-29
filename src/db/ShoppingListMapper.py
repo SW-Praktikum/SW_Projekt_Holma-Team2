@@ -22,7 +22,8 @@ class ShoppingListMapper(Mapper):
 
     def find_by_id(self, user_id):
         cursor = self._connection.cursor()
-        command = "SELECT * FROM shoppinglist WHERE shoppinglist_id={}".format(user_id)
+        command = "SELECT * FROM shoppinglist " \
+                  "WHERE shoppinglist_id={}".format(user_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -37,7 +38,8 @@ class ShoppingListMapper(Mapper):
 
     def find_by_name(self, name):
         cursor = self._connection.cursor()
-        command = "SELECT * FROM shoppinglist WHERE name LIKE '{}' ORDER BY name".format(name)
+        command = "SELECT * FROM shoppinglist WHERE name LIKE '{}' " \
+                  "ORDER BY name".format(name)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -50,7 +52,8 @@ class ShoppingListMapper(Mapper):
 
     def find_by_group(self, group_id):
         cursor = self._connection.cursor()
-        command = "SELECT * FROM shoppinglist WHERE group_id={}".format(group_id)
+        command = "SELECT * FROM shoppinglist " \
+                  "WHERE group_id={}".format(group_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -64,7 +67,9 @@ class ShoppingListMapper(Mapper):
     def insert(self, shoppinglist):
         cursor = self._connection.cursor()
 
-        command = "INSERT INTO shoppinglist (shoppinglist_id, name, group, creation_date, last_updated) VALUES (%s, %s, %s, %s, %s)"
+        command = "INSERT INTO shoppinglist (shoppinglist_id, name, " \
+                  "group_id, creation_date, last_updated) " \
+                  "VALUES (%s, %s, %s, %s, %s)"
         data = (shoppinglist.get_id(),
                 shoppinglist.get_name(),
                 shoppinglist.get_group(),
@@ -77,12 +82,12 @@ class ShoppingListMapper(Mapper):
         cursor.close()
 
         shoppinglist.set_id(cursor.lastrowid)
-        return shoppinlist
+        return shoppinglist
 
     def update(self, shoppinglist):
-
         cursor = self._connection.cursor()
-        command = "UPDATE shoppinglist SET name=%s, group=%s, last_updated=%s  WHERE shoppinglist_id=%s"
+        command = "UPDATE shoppinglist SET name=%s, group_id=%s, " \
+                  "last_updated=%s WHERE shoppinglist_id=%s"
         data = (shoppinglist.get_name(),
                 shoppinglist.get_group(),
                 shoppinglist.get_last_updated(),
@@ -96,10 +101,20 @@ class ShoppingListMapper(Mapper):
         return shoppinglist
 
     def delete(self, shoppinglist):
-
         cursor = self._connection.cursor()
 
-        command = "DELETE FROM shoppinglist WHERE shoppinglist_id={}".format(shoppinglist.get_id())
+        command = "DELETE FROM shoppinglist " \
+                  "WHERE shoppinglist_id={}".format(shoppinglist.get_id())
+        cursor.execute(command)
+
+        self._connection.commit()
+        cursor.close()
+
+    def delete_by_group(self, group):
+        cursor = self._connection.cursor()
+
+        command = "DELETE FROM shoppinglist " \
+                  "WHERE group_id={}".format(group.get_id())
         cursor.execute(command)
 
         self._connection.commit()

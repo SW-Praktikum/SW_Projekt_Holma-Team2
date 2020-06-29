@@ -1,3 +1,4 @@
+from datetime import datetime
 from bo.BusinessObject import BusinessObject
 
 
@@ -45,11 +46,11 @@ class ShoppingList(BusinessObject):
     @staticmethod
     def from_tuples(tuples=list()):
         result = []
-        for (shoppinglist_id, name, group_id, creation_date, last_update) in tuples:
+        for (shoppinglist_id, name, creation_date, group, last_update) in tuples:
             shoppinglist = ShoppingList()
             shoppinglist.set_id(shoppinglist_id)
             shoppinglist.set_name(name)
-            shoppinglist.set_group(group_id)
+            shoppinglist.set_group(group)
             shoppinglist.set_creation_date(creation_date)
             shoppinglist.set_last_updated(last_update)
             result.append(shoppinglist)

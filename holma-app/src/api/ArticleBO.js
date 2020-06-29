@@ -11,26 +11,26 @@ export default class ArticleBO extends BusinessObject {
     return this.groupId
     }
 
-    set_group(groupId){
+    setGroupId(groupId){
         this.groupId = groupId
     }
 
-static fromJSON(articles) {
-    let result = [];
+    static fromJSON(articles) {
+        let result = [];
 
-    if (Array.isArray(articles)) {
-        articles.forEach((art) => {
+        if (Array.isArray(articles)) {
+            articles.forEach((art) => {
+                Object.setPrototypeOf(art, ArticleBO.prototype)
+                result.push(art)
+            })
+
+        } else {
+
+            let art = articles
             Object.setPrototypeOf(art, ArticleBO.prototype)
             result.push(art)
-        })
+        }
 
-    } else {
-
-        let art = articles
-        Object.setPrototypeOf(art, ArticleBO.prototype)
-        result.push(art)
-    }
-
-    return result;
-    }
+        return result;
+        }
 }

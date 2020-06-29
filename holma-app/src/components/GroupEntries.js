@@ -48,8 +48,8 @@ const randomImages = [
   "https://www.schulbilder.org/bild-in-der-gruppe-sprechen-dl14849.jpg",
   "https://blog.pasch-net.de/klick/uploads/Sport5.PNG",
   "https://cdn.businessinsider.de/wp-content/uploads/2020/03/Joggen-Fru%CC%88hling-600x400.jpg"
-
 ]
+
 class GroupEntry extends Component {
     render() {
         return ( 
