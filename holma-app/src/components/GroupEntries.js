@@ -16,6 +16,7 @@ import ListWithBoxes from './ListWithBoxes'
 import ListEntry from './ListEntry'
 import GroupAddDialog from './dialogs/GroupAddDialog';
 import MemberAddDialog from './dialogs/MemberAddDialog';
+import GroupBO from '../api/GroupBO';
 
 const useStyles = makeStyles({
     root: {
@@ -67,10 +68,16 @@ class GroupEntry extends Component {
 class GroupEntries extends Component{
     constructor(props) {
         super(props);
+        this.addGroup = this.addGroup.bind(this)
+        this.addMember = this.addMember.bind(this)
         this.state = {
             elements: [],
             loadingInProgress: false,
             loadingError: null,
+            groupId: "",
+            open: false,
+            groupName: "",
+            memberId: "",
         }
     }
 
@@ -81,7 +88,54 @@ class GroupEntries extends Component{
         
       }
     }
-  
+
+    handleChange = (e) => {
+      this.setState({groupName: e.target.value})
+    }
+
+    handleClose = () => {
+      this.setState({
+          open: false
+      })
+    }
+
+    handleClickOpen = () => {
+      this.setState({
+          open: true
+      })    
+    }
+
+    addGroup = () => { 
+      const {user} = this.props;
+      var grp = new GroupBO(this.state.groupName, user.getId());
+      AppAPI.getAPI().createGroup(grp).then(group => {
+        this.setState({groupId: group.getId()})
+        console.log(this.state.groupId)
+        AppAPI.getAPI().addUserToGroup(group.getId(), user.getId()).then( () => {
+          this.loadGroups();
+        })  
+      })
+      this.handleClose();
+    }
+
+    addMember() {
+      //es muss gecheckt werden bei input ob der user existiert und ob er schon in der Gruppe ist,
+      //it input form validation
+      console.log(AppAPI.getAPI().getUsersByGroupId(12))
+      //console.log(AppAPI.getAPI().getGroupById(12))
+      console.log("Hier neuer Meber")
+      console.log(this.state.memberId)
+      console.log(this.state.groupId)
+      AppAPI.getAPI().addUserToGroup(this.groupId, this.state.memberId)
+        console.log("done")
+        //this.props.loadMembers();
+      //this.handleClose()
+    }
+    
+    handleChangeMember = (e) => {
+      this.setState({memberId: e.target.value})
+    }
+
     loadGroups = () => {
       console.log("Hier", this.props.groupId)
       const {user} = this.props
@@ -111,17 +165,30 @@ class GroupEntries extends Component{
 
     render() {
         const {elements} = this.state;
-        return (            
+        return (
           <div>
             <ListWithBoxes elements={elements}/>
-            <GroupAddDialog groupId={this.props.groupId} user={this.props.user} loadGroups={this.loadGroups}/> 
-            <MemberAddDialog />
-            <ListEntry />
+            <GroupAddDialog 
+            addGroup={this.addGroup} 
+            open={this.state.open}
+            groupName={this.state.groupName} 
+            handleChange={this.handleChange} 
+            handleClickOpen={this.handleClickOpen} 
+            handleClose={this.handleClose} 
+            user={this.props.user} 
+            loadGroups={this.loadGroups}/> 
+            <MemberAddDialog 
+            groupId={this.state.groupId} 
+            memberId={this.state.mamberId}
+            handleChange={this.handleChangeMember}
+            addMember={this.addMember}/>
+            <ListEntry  />
             <ListEntry />
           </div>
         );
     }
 }
+
 export default GroupEntries;
 
 

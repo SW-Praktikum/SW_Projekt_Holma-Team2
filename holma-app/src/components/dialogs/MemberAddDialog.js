@@ -59,15 +59,11 @@ class MemberAddDialog extends Component {
         this.state = {
             groupName: "",
             open: false,
-            memberId: "",
-            groupId: 12,
             members: []
         }        
     }
 
-    handleChange = (e) => {
-        this.state.memberId = e.target.value
-    }
+    
     
     handleClickOpen = () => {
         this.setState({
@@ -82,22 +78,10 @@ class MemberAddDialog extends Component {
     }
 
     _handleClick = () => {
-      this.addMember();
+      this.props.addMember();
     };
     
-    addMember() {
-      //es muss gecheckt werden bei input ob der user existiert und ob er schon in der Gruppe ist,
-      //it input form validation
-      console.log(AppAPI.getAPI().getUsersByGroupId(12))
-      //console.log(AppAPI.getAPI().getGroupById(12))
-      console.log("Hier neuer Meber")
-      console.log(this.state.memberId)
-      console.log(this.state.groupId)
-      AppAPI.getAPI().addUserToGroup(this.state.groupId, this.state.memberId)
-        console.log("done")
-        //this.props.loadMembers();
-      //this.handleClose()
-    }
+    
     
     
 
@@ -119,8 +103,7 @@ class MemberAddDialog extends Component {
               <DialogContent>
                 <TextField
                   autoFocus
-                  onKeyDown={this._handleKeyDown}
-                  onChange={this.handleChange}
+                  onChange={this.props.handleChange}
                   margin="dense"
                   id="outlined-basic"
                   variant="outlined"
