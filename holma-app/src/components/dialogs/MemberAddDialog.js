@@ -61,20 +61,9 @@ class MemberAddDialog extends Component {
         }        
     }
 
-    
-    
-
-
     _handleClick = () => {
       this.props.addMember();
     };
-    
-    
-    
-    
-
-    
-
 
     render() {
         return (
@@ -94,7 +83,7 @@ class MemberAddDialog extends Component {
                   fullWidth
                 />
               </DialogContent>
-              <MemberEntry />
+              <MemberEntry>Hier der imput</MemberEntry>
               <DialogActions>
                 <Button onClick={this.props.handleCloseMember} color="primary">
                   fertig

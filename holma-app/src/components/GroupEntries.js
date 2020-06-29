@@ -153,6 +153,7 @@ class GroupEntries extends Component{
         console.log("Loaded users from database for group '" + this.state.groupId + "'")
         console.log("Loaded users:", users)
         //rendern der Members soll sich tim anschauen
+        //<MemberEntry/> hier den Enry erzeugen, der in MemberAdd gerenderd wird
       })
     }
 
