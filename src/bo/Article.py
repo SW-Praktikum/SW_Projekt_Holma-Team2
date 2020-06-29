@@ -18,16 +18,15 @@ class Article(BusinessObject):
     def set_group(self, group_id):
         self._group = group_id
 
-    @staticmethod
-    def to_dict(obj):
+    def to_dict(self):
         result = {
-            "id": obj.get_id(),
-            "name": obj.get_name(),
-            "creationDate": datetime.strftime(obj.get_creation_date(),
+            "id": self.get_id(),
+            "name": self.get_name(),
+            "creationDate": datetime.strftime(self.get_creation_date(),
                                               "%Y-%m-%dT%H:%M:%S.%fZ"),
-            "lastUpdated": datetime.strftime(obj.get_last_updated(),
+            "lastUpdated": datetime.strftime(self.get_last_updated(),
                                              "%Y-%m-%dT%H:%M:%S.%fZ"),
-            "groupId": obj.get_group()
+            "groupId": self.get_group()
         }
         return result
 
@@ -38,7 +37,7 @@ class Article(BusinessObject):
         article.set_name(dictionary["name"])
         article.set_creation_date(datetime.strptime(dictionary["creationDate"],
                                                  "%Y-%m-%dT%H:%M:%S.%fZ"))
-        article.set_creation_date(datetime.strptime(dictionary["lastUpdated"],
+        article.set_last_updated(datetime.strptime(dictionary["lastUpdated"],
                                                  "%Y-%m-%dT%H:%M:%S.%fZ"))
         article.set_group(dictionary["groupId"])
         return article
@@ -46,7 +45,7 @@ class Article(BusinessObject):
     @staticmethod
     def from_tuples(tuples=list()):
         result = []
-        for (article_id, name, group, creation_date, last_updated) in tuples:
+        for (article_id, name, creation_date, group, last_updated) in tuples:
             article = Article()
             article.set_id(article_id)
             article.set_name(name)

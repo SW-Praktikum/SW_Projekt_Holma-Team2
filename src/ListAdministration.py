@@ -1,10 +1,10 @@
 from datetime import datetime
 
+from bo.Article import Article
 from bo.Group import Group
 from bo.ListEntry import ListEntry
 from bo.ShoppingList import ShoppingList
 from bo.User import User
-from bo.Article import Article
 from db.ArticleMapper import ArticleMapper
 from db.GroupMapper import GroupMapper
 from db.ListEntryMapper import ListEntryMapper
@@ -138,8 +138,6 @@ class Administration():
     def remove_shopping_list_from_group(self, group, shopping_list):
         pass"""
 
-
-
     """Artikel"""
 
     def get_article_by_id(self, article_id):
@@ -190,8 +188,6 @@ class Administration():
         with ListEntryMapper() as mapper:
             mapper.insert(listentry)
 
-
-
     def delete_list_entry(self, list_entry):
         with ListEntryMapper() as mapper:
             mapper.delete(list_entry)
@@ -214,7 +210,6 @@ class Administration():
         with ListEntryMapper() as mapper:
             return mapper.find_list_entries_by_shopping_list(shoppinglist_id)
 
-    """Für was die Schleife?"""
     def get_list_entries_checked_by_shopping_list_id(self, shopping_list_id):
         list_entries_checked = []
         list_entries = self.get_list_entries_by_shopping_list_id(
@@ -255,6 +250,7 @@ class Administration():
             return mapper.find_by_name(name)
 
     """Statistik Client"""
+
 
 class StatisticAdministration(object):
     def __init__(self):
