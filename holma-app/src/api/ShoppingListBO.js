@@ -2,13 +2,13 @@ import BusinessObject from './BusinessObject';
 
 export default class ShoppingListBO extends BusinessObject {
 
-    constructor(name) {
+    constructor(name, groupId) {
         super(name);
-        this.group_id = group_id  
+        this.groupId = groupId  
    }
 
 getGroupId() {
-    return this.group_id
+    return this.groupId
 } 
 
 static fromJSON(shoppinglists) {

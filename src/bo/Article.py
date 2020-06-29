@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from bo.BusinessObject import BusinessObject
 
 class Article(BusinessObject):
@@ -17,11 +19,28 @@ class Article(BusinessObject):
         self._group = group_id
 
     @staticmethod
+    def to_dict(obj):
+        result = {
+            "id": obj.get_id(),
+            "name": obj.get_name(),
+            "creationDate": datetime.strftime(obj.get_creation_date(),
+                                              "%Y-%m-%dT%H:%M:%S.%fZ"),
+            "lastUpdated": datetime.strftime(obj.get_last_updated(),
+                                             "%Y-%m-%dT%H:%M:%S.%fZ"),
+            "groupId": obj.get_group()
+        }
+        return result
+
+    @staticmethod
     def from_dict(dictionary=dict()):
         article = Article()
         article.set_id(dictionary["id"])
         article.set_name(dictionary["name"])
-        article.set_group(dictionary["group"])
+        article.set_creation_date(datetime.strptime(dictionary["creationDate"],
+                                                 "%Y-%m-%dT%H:%M:%S.%fZ"))
+        article.set_creation_date(datetime.strptime(dictionary["lastUpdated"],
+                                                 "%Y-%m-%dT%H:%M:%S.%fZ"))
+        article.set_group(dictionary["groupId"])
         return article
 
     @staticmethod
