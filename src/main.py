@@ -240,19 +240,6 @@ class UserRelatedGroupOperations(Resource):
         else:
             return "User not found", 500
 
-    @holmaApp.marshal_with(group, code=201)
-    # @secured
-    def post(self, user_id):
-        adm = Administration()
-        us = adm.get_user_by_id(user_id)
-        proposal = Group.from_dict(api.payload)
-
-        if us is not None and proposal is not None:
-            result = adm.create_group(proposal.get_name(), user_id)
-            return result
-        else:
-            return "User unkown or payload not valid", 500
-
 
 @holmaApp.route('/group/<int:group_id>/users')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -308,7 +295,6 @@ class GroupUserRelationOperations(Resource):
 @holmaApp.route('/articles')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigem Fehler kommt.')
 class ArticleListOperations(Resource):
-    print(article)
 
     @holmaApp.marshal_list_with(article)
     # @secured

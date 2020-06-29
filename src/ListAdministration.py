@@ -119,6 +119,12 @@ class Administration():
         with UserGroupRelationsMapper() as mapper:
             mapper.delete_group_relations(group)
 
+        with ShoppingListMapper() as mapper:
+            mapper.delete_by_group(group)
+
+        with ArticleMapper() as mapper:
+            mapper.delete_by_group(group)
+
         with GroupMapper() as mapper:
             mapper.delete(group)
 
@@ -157,8 +163,13 @@ class Administration():
             mapper.insert(article)
 
     def delete_article(self, article):
+        with ListEntryMapper() as mapper:
+            mapper.delete_by_article(article)
+
         with ArticleMapper() as mapper:
             mapper.delete(article)
+
+
 
     def save_article(self, article):
         with ArticleMapper() as mapper:
@@ -228,8 +239,13 @@ class Administration():
             mapper.insert(shopping_list)
 
     def delete_shopping_list(self, shopping_list):
+        with ListEntryMapper() as mapper:
+            mapper.delete_by_shopping_list(shopping_list)
+
         with ShoppingListMapper() as mapper:
             mapper.delete(shopping_list)
+
+
 
     def save_shopping_list(self, shopping_list):
         with ShoppingListMapper() as mapper:

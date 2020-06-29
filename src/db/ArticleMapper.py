@@ -104,6 +104,15 @@ class ArticleMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
+    def delete_by_group(self, group):
+        cursor = self._connection.cursor()
+
+        command = "DELETE FROM holma.article " \
+                  "WHERE group_id={}".format(group.get_id())
+        cursor.execute(command)
+
+        self._connection.commit()
+        cursor.close()
 
 if __name__ == "__main__":
     with ArticleMapper() as mapper:

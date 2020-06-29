@@ -82,7 +82,7 @@ class ShoppingListMapper(Mapper):
         cursor.close()
 
         shoppinglist.set_id(cursor.lastrowid)
-        return shoppinlist
+        return shoppinglist
 
     def update(self, shoppinglist):
         cursor = self._connection.cursor()
@@ -105,6 +105,16 @@ class ShoppingListMapper(Mapper):
 
         command = "DELETE FROM shoppinglist " \
                   "WHERE shoppinglist_id={}".format(shoppinglist.get_id())
+        cursor.execute(command)
+
+        self._connection.commit()
+        cursor.close()
+
+    def delete_by_group(self, group):
+        cursor = self._connection.cursor()
+
+        command = "DELETE FROM shoppinglist " \
+                  "WHERE group_id={}".format(group.get_id())
         cursor.execute(command)
 
         self._connection.commit()
