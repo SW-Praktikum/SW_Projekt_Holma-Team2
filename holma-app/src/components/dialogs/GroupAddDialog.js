@@ -21,11 +21,6 @@ class GroupAddDialog extends Component {
       this.props.addGroup();
     };
 
-    _handleKeyDown = (e) => {
-        if (e.key === 'Enter') {
-          //this.addGroup();
-        };
-    };
     
     
 
@@ -56,10 +51,10 @@ class GroupAddDialog extends Component {
               </DialogContent>
               <DialogActions>
                 <Button onClick={this.props.handleClose} color="primary">
-                  schließen
+                  abbrechen
                 </Button>
                 <Button onClick={this._handleClick} color="primary">
-                  hinzufügen
+                  weiter
                 </Button>
               </DialogActions>
             </Dialog>

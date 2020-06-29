@@ -79,6 +79,7 @@ class GroupEntries extends Component{
             loadingError: null,
             groupId: "",
             open: false,
+            openMember: false,
             groupName: "",
             memberId: "",
         }
@@ -108,6 +109,18 @@ class GroupEntries extends Component{
       })    
     }
 
+    handleClickOpenMember = () => {
+      this.setState({
+          openMember: true
+      })    
+    }
+
+    handleCloseMember = () => {
+      this.setState({
+          openMember: false
+      })
+    }
+
     addGroup = () => { 
       const {user} = this.props;
       var grp = new GroupBO(this.state.groupName, user.getId());
@@ -119,20 +132,16 @@ class GroupEntries extends Component{
         })  
       })
       this.handleClose();
+      this.handleClickOpenMember();//open new dialog
     }
 
     addMember() {
       //es muss gecheckt werden bei input ob der user existiert und ob er schon in der Gruppe ist,
-      //it input form validation
-      console.log(AppAPI.getAPI().getUsersByGroupId(12))
-      //console.log(AppAPI.getAPI().getGroupById(12))
-      console.log("Hier neuer Meber")
-      console.log(this.state.memberId)
-      console.log(this.state.groupId)
-      AppAPI.getAPI().addUserToGroup(this.groupId, this.state.memberId)
-        console.log("done")
+      AppAPI.getAPI().addUserToGroup(this.state.groupId, this.state.memberId)
+      this.setState({memberId: ""})
+        //input field löschen
         //this.props.loadMembers();
-      //this.handleClose()
+        //Member müssen geladen und gerendert werden
     }
     
     handleChangeMember = (e) => {
@@ -182,9 +191,12 @@ class GroupEntries extends Component{
             loadGroups={this.loadGroups}/> 
             <MemberAddDialog 
             groupId={this.state.groupId} 
-            memberId={this.state.mamberId}
+            memberId={this.state.memberId}
             handleChange={this.handleChangeMember}
-            addMember={this.addMember}/>
+            addMember={this.addMember}
+            handleClickOpenMember={this.handleClickOpenMember}
+            handleCloseMember={this.handleCloseMember}
+            openMember={this.state.openMember}/>
             <ListEntry  />
             <ListEntry />
           </div>

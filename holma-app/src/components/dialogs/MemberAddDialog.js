@@ -57,24 +57,13 @@ class MemberAddDialog extends Component {
         super(props)
         this.state = {
             groupName: "",
-            open: false,
             members: []
         }        
     }
 
     
     
-    handleClickOpen = () => {
-        this.setState({
-            open: true
-        })    
-    }
 
-    handleClose = () => {
-        this.setState({
-            open: false
-        })
-    }
 
     _handleClick = () => {
       this.props.addMember();
@@ -90,14 +79,7 @@ class MemberAddDialog extends Component {
     render() {
         return (
           <div>
-            <Button 
-              style={{maxWidth: '160px', maxHeight: '140px', minWidth: '80px', minHeight: '70px',}}
-              variant="outlined" 
-              color="primary"
-              startIcon={<AddIcon />} 
-              onClick={this.handleClickOpen}>Mitglied hinzufügen
-              </Button>
-            <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
+            <Dialog open={this.props.openMember} onClose={this.props.handleCloseMember} aria-labelledby="form-dialog-title">
               <DialogTitle id="form-dialog-title">Neues Gruppenmitglied</DialogTitle>
               <DialogContent>
                 <TextField
@@ -108,13 +90,14 @@ class MemberAddDialog extends Component {
                   variant="outlined"
                   label="Midlieds ID"
                   type="email"
+                  value={this.props.memberId}
                   fullWidth
                 />
               </DialogContent>
               <MemberEntry />
               <DialogActions>
-                <Button onClick={this.handleClose} color="primary">
-                  schließen
+                <Button onClick={this.props.handleCloseMember} color="primary">
+                  fertig
                 </Button>
                 <Button onClick={this._handleClick} color="primary">
                   hinzufügen
