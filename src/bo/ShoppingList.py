@@ -22,6 +22,19 @@ class ShoppingList(BusinessObject):
         self._group = group_id
 
     @staticmethod
+    def to_dict(obj):
+        result = {
+            "id": obj.get_id(),
+            "name": obj.get_name(),
+            "creationDate": datetime.strftime(obj.get_creation_date(),
+                                              "%Y-%m-%dT%H:%M:%S.%fZ"),
+            "lastUpdated": datetime.strftime(obj.get_last_updated(),
+                                             "%Y-%m-%dT%H:%M:%S.%fZ"),
+            "groupId": obj.get_group()
+        }
+        return result
+
+    @staticmethod
     def from_dict(dictionary=dict()):
         shoppinglist = ShoppingList()
         shoppinglist.set_id(dictionary["id"])

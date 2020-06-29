@@ -1,5 +1,7 @@
 import GroupBO from './GroupBO';
 import UserBO from './UserBO';
+import ShoppingListBO from './ShoppingListBO';
+import ArticleBO from './ArticleBO'
 
 export default class AppAPI {
 
@@ -26,13 +28,28 @@ export default class AppAPI {
     // Group Related
     #getGroupsURL = () => `${this.#appServerBaseURL}/groups`;
     #getGroupByIdURL = (groupId) => `${this.#appServerBaseURL}/groups/${groupId}`;
+    //#getGroupsByNameURL = (name) => `${this.#appServerBaseURL}/by-name/${name}`;
     #updateGroupURL = (groupId) => `${this.#appServerBaseURL}/groups/${groupId}`;
     #deleteGroupURL = (groupId) => `${this.#appServerBaseURL}/groups/${groupId}`;
 
     #getUsersByGroupIdURL = (groupId) =>`${this.#appServerBaseURL}/groups/${groupId}/users`;
   
+    // Article Related
+    #getArticlesURL = () => `${this.#appServerBaseURL}/articles`;
+    //#createArticleURL
+    //#updateArticleURL
+    //#deleteArticleURL
+    #getArticleByIdURL = (articleId) => `${this.#appServerBaseURL}/articles/${articleId}`;
+    //#getArticleByNameURL
 
 
+
+    // Shoppinglist related
+    #getShoppingListsByGroupIdURL = (groupId) => `${this.#appServerBaseURL}/groups/${groupId}`;
+    #createShoppingListURL = (groupId) => `${this.#appServerBaseURL}/groups/${groupId}`;
+    #getShoppingListByIdURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglists/${shoppingListId}`;
+    #updateShoppingListURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglists/${shoppingListId}`;
+    #deleteShoppingListURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglists/${shoppingListId}`;
     static getAPI() {
         if (this.#api == null) {
             this.#api = new AppAPI();
@@ -76,7 +93,7 @@ export default class AppAPI {
                 resolve(responseUser)
             })
         })
-    }
+    };
 
     updateUser(user) {
         return this.#fetchAdv(this.#updateUserURL(user.getId()), {
@@ -92,7 +109,7 @@ export default class AppAPI {
                 resolve(responseUser)
             })
         })
-    }
+    };
 
     deleteUser(user) {
         return this.#fetchAdv(this.#deleteUserURL(user.getId()), {
@@ -108,7 +125,7 @@ export default class AppAPI {
                 resolve(responseUser)
             })
         })
-    }
+    };
 
     getUserById(userId) {
         return this.#fetchAdv(this.#getUserByIdURL(userId)).then((responseJSON) => {
@@ -117,7 +134,7 @@ export default class AppAPI {
                 resolve(responseUser)
             })
         })
-    }
+    };
 
     getUserByGoogleId(googleId) {
         return this.#fetchAdv(this.#getUserByGoogleIdURL(googleId, {
@@ -130,7 +147,7 @@ export default class AppAPI {
                 resolve(responseUser)
             })
         })
-    }
+    };
 
     getUsersByName(name) {
         return this.#fetchAdv(this.#getUsersByNameURL(name)).then((responseJSON) => {
@@ -139,7 +156,7 @@ export default class AppAPI {
                 resolve(responseUsers)
             })
         })
-    }
+    };
 
     addUserToGroup(groupId, userId) {
         return this.#fetchAdv(this.#addUserToGroupURL(groupId, userId), {
@@ -153,7 +170,7 @@ export default class AppAPI {
                 resolve(responseGroup)
             })
         })
-    }
+    };
 
     deleteUsersFromGroup(group, user) {
         return this.#fetchAdv(this.#deleteUsersFromGroupURL(group, user), {
@@ -168,7 +185,7 @@ export default class AppAPI {
                 resolve(responseGroup)
             })
         })
-    }
+    };
     
     getGroupsByUserId(userId) {
         return this.#fetchAdv(this.#getGroupsByUserIdURL(userId)).then((responseJSON) => {
@@ -177,7 +194,7 @@ export default class AppAPI {
                 resolve(responseGroups)
             })
         })
-    }
+    };
 
     createGroup(group) {
         console.log("Creating group:", group)
@@ -194,7 +211,7 @@ export default class AppAPI {
                 resolve(responseGroup)
             })
         })
-    }
+    };
 
     getGroups() {
         return this.#fetchAdv(this.#getGroupsURL()).then((responseJSON) => {
@@ -212,7 +229,7 @@ export default class AppAPI {
                 resolve(responseGroups)
             })
         })
-    }
+    };
 
     updateGroup(group) {
         return this.#fetchAdv(this.#updateGroupURL(group.getId()), {
@@ -228,7 +245,7 @@ export default class AppAPI {
                 resolve(responseGroup)
             })
         })
-    }
+    };
 
     deleteGroup(group) {
         return this.#fetchAdv(this.#deleteGroupURL(group.getId()), {
@@ -244,7 +261,7 @@ export default class AppAPI {
                 resolve(responseGroup)
             })
         })
-    }
+    };
 
     getUsersByGroupId(groupId) {
         return this.#fetchAdv(this.#getUsersByGroupIdURL(groupId)).then((responseJSON) => {
@@ -254,5 +271,91 @@ export default class AppAPI {
             })
         })
     }
+
+    getShoppingListsByGroupId(groupId) {
+        return this.#fetchAdv(this.#getShoppingListsByGroupIdURL(groupId)).then((responseJSON) => {
+            let responseShoppingLists = ShoppingListBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+                resolve(responseShoppingLists)
+            })
+        })
+    }
+
+    getShoppingListById(shoppingListId) {
+        return this.#fetchAdv(this.#getShoppingListByIdURL(shoppingListId)).then((responseJSON) => {
+            let responseShoppingLists = ShoppingListBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+                resolve(responseShoppingLists)
+            })
+        })
+    }
+
+    createShoppingList(shoppinglists) {
+        console.log("Creating shoppingList:", shoppinglists)
+        return this.#fetchAdv(this.#createShoppingListURL(shoppinglists.getGroupId()), {
+        method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(shoppinglists)
+        }).then((responseJSON) => {
+            let responseShoppingLists = ShoppingListBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseShoppingLists)
+            })
+        })
+    }
+
+    updateShoppingList(shoppinglists) {
+        return this.#fetchAdv(this.#updateShoppingListURL(shoppinglists.getId()), {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(shoppinglists)
+        }).then((responseJSON) => {
+            let responseShoppingLists = ShoppingListBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseShoppingLists)
+            })
+        })
+    }
+
+    deleteShoppingList(shoppinglists) {
+        return this.#fetchAdv(this.#deleteShoppingListURL(shoppinglists.getId()), {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(shoppinglists)
+        }).then((responseJSON) => {
+            let responseShoppingLists = ShoppingListBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseShoppingLists)
+            })
+        })
+    }
+
+
+    getArticles() {
+        return this.#fetchAdv(this.#getArticlesURL()).then((responseJSON) => {
+            let responseArticles = ArticleBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+                resolve(responseArticles)
+            })
+        })
+    };
+
+    /* getArticleById(articleId) {
+        return this.#fetchAdv(this.#getArticleByIdURL(articleId)).then((responseJSON) => {
+            let responseArticle = ArticleBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseArticle)
+            })
+        })
+    }; */
 }
 
