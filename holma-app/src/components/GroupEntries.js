@@ -19,6 +19,7 @@ import GroupAddDialog from './dialogs/GroupAddDialog';
 import MemberAddDialog from './dialogs/MemberAddDialog';
 import GroupBO from '../api/GroupBO';
 import UserBO from '../api/UserBO';
+import { ListItem } from '@material-ui/core';
 
 const useStyles = makeStyles({
     root: {
@@ -138,24 +139,24 @@ class GroupEntries extends Component{
 
     addMember() {
       //es muss gecheckt werden bei input ob der user existiert und ob er schon in der Gruppe ist,
+      // checken ob user id vorhanden und ob user schon in group
+
       AppAPI.getAPI().addUserToGroup(this.state.groupId, this.state.memberId)
       this.setState({memberId: ""})
-      this.loadMembers()
+      //this.loadMembers() not working yet needs to be built properly
         //Member müssen geladen und gerendert werden
     }
     
     handleChangeMember = (e) => {
       this.setState({memberId: e.target.value})
     }
-    loadMembers = () => {
+    loadMembers = () => { // getUsersByGroupId not working yet
       console.log("Hier sollen die Member der Gruppe " + this.state.groupId + " geladen werden")
       AppAPI.getAPI().getUsersByGroupId(this.state.groupId).then(users => {
         console.log("Loaded users from database for group '" + this.state.groupId + "'")
         console.log("Loaded users:", users)
-        //rendern der Members soll sich tim anschauen
-        //<MemberEntry/> hier den Enry erzeugen, der in MemberAdd gerenderd wird
       })
-    }
+  }
 
     loadGroups = () => {
       console.log("Hier", this.state.groupId)
@@ -186,6 +187,7 @@ class GroupEntries extends Component{
 
     render() {
         const {elements} = this.state;
+
         return (
           <div>
             <ListWithBoxes elements={elements}/>
@@ -198,7 +200,7 @@ class GroupEntries extends Component{
             handleClose={this.handleClose} 
             user={this.props.user} 
             loadGroups={this.loadGroups}/> 
-            <MemberAddDialog 
+            <MemberAddDialog
             groupId={this.state.groupId} 
             memberId={this.state.memberId}
             handleChange={this.handleChangeMember}

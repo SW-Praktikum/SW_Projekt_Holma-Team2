@@ -37,7 +37,7 @@ class MemberEntry extends Component {
                     </Avatar>
                   </ListItemAvatar>
                   <ListItemText
-                    primary="Jonas Götz"
+                    primary="Example Member"
                   />
                   <ListItemSecondaryAction>
                     <IconButton edge="end" aria-label="delete">
@@ -66,7 +66,7 @@ class MemberAddDialog extends Component {
     };
 
     render() {
-        return (
+      return (
           <div>
             <Dialog open={this.props.openMember} onClose={this.props.handleCloseMember} aria-labelledby="form-dialog-title">
               <DialogTitle id="form-dialog-title">Neues Gruppenmitglied</DialogTitle>
@@ -83,7 +83,11 @@ class MemberAddDialog extends Component {
                   fullWidth
                 />
               </DialogContent>
-              <MemberEntry>Hier der imput</MemberEntry>
+
+                <List>
+                 <MemberEntry/>
+                </List>
+
               <DialogActions>
                 <Button onClick={this.props.handleCloseMember} color="primary">
                   fertig
