@@ -18,6 +18,7 @@ import ListEntry from './ListEntry'
 import GroupAddDialog from './dialogs/GroupAddDialog';
 import MemberAddDialog from './dialogs/MemberAddDialog';
 import GroupBO from '../api/GroupBO';
+import UserBO from '../api/UserBO';
 
 const useStyles = makeStyles({
     root: {
@@ -139,17 +140,24 @@ class GroupEntries extends Component{
       //es muss gecheckt werden bei input ob der user existiert und ob er schon in der Gruppe ist,
       AppAPI.getAPI().addUserToGroup(this.state.groupId, this.state.memberId)
       this.setState({memberId: ""})
-        //input field löschen
-        //this.props.loadMembers();
+      this.loadMembers()
         //Member müssen geladen und gerendert werden
     }
     
     handleChangeMember = (e) => {
       this.setState({memberId: e.target.value})
     }
+    loadMembers = () => {
+      console.log("Hier sollen die Member der Gruppe " + this.state.groupId + " geladen werden")
+      AppAPI.getAPI().getUsersByGroupId(this.state.groupId).then(users => {
+        console.log("Loaded users from database for group '" + this.state.groupId + "'")
+        console.log("Loaded users:", users)
+        //rendern der Members soll sich tim anschauen
+      })
+    }
 
     loadGroups = () => {
-      console.log("Hier", this.props.groupId)
+      console.log("Hier", this.state.groupId)
       const {user} = this.props
         AppAPI.getAPI().getGroupsByUserId(user.getId()).then(groups => {
           console.log("Loaded groups from database for user '" + user.getName() + "'")
