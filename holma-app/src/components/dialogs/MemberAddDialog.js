@@ -14,7 +14,7 @@ class MemberAddDialog extends Component {
         super(props)
         this.state = {
             memberName: "",
-            memberId: "",
+            memberId: 28,
             groupId: 7,
             open: false
         }        
@@ -47,12 +47,10 @@ class MemberAddDialog extends Component {
         };
     };
     
-    addMember() { 
-      const {member} = this.props;
-      AppAPI.getAPI().addUserToGroup(this.state.groupId, this.state.memberId).then(membr => {this.setState({memberId: membr.getID()}).then( () => {
+    addMember(){ 
+      AppAPI.getAPI().addUserToGroup(this.state.groupId, this.state.memberId).then(() => {
         this.props.loadMembers();
       })
-    })
     this.handleClose();
   }
 
