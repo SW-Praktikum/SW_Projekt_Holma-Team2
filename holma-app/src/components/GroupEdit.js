@@ -63,7 +63,7 @@ class MemberCards extends Component{
           <Card className="root" style={{minWidth: 275, marginBottom:10, marginTop:10}}>
             <CardActionArea >
             <CardContent>
-                <Typography className="title" style={{fontSize: 14}} color="textPrimary">{this.props.member.getName()}</Typography>
+                <Typography className="title" style={{fontSize: 14}} color="textPrimary">{this.state.members}</Typography>
             </CardContent>
             </CardActionArea>
             <CardActions>
@@ -91,20 +91,17 @@ class MemberDetails extends Component{
   }
 
   loadMembers = () => {
-    const {member} = this.props;
-      this.state.members = AppAPI.getAPI().getUsers();
+      this.state.members = AppAPI.getAPI().getUsersByGroupId(this.props.groupId);
       console.log(this.state.members);
-        var elements = this.state.members.map((member) =>
-        console.log(member),
+        this.state.members.map((member) =>
         <Grid key={member.getId()} item xs={4}>
             <Paper className="paper" style ={{ textAlign:'center',}} >
-              <MemberCards key={member.getId()} member={member}/>
+              <MemberCards key={this.props.groupId} member={member}/>
             </Paper>
           </Grid>
-      )
+      );
 
       this.setState({
-        elements: elements,
         loadingInProgress: true,
         loadingError: null
       }).catch(e =>

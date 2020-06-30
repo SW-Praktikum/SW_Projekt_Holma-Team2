@@ -69,7 +69,7 @@ listEntry = api.inherit('ListEntry', bo, {
 })
 
 article = api.inherit('Article', bo, {
-    'group_id': fields.Integer(attribute='_group_id',
+    'groupId': fields.Integer(attribute='_group_id',
                             description='zu welcher Groupe dieses Artikle gehört?'),
 })
 

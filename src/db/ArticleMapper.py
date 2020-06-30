@@ -104,7 +104,7 @@ class ArticleMapper(Mapper):
 
 if __name__ == "__main__":
     with ArticleMapper() as mapper:
-        result = mapper.find_by_group(1)
+        result = mapper.find_all()
         for article in result:
             print(article)
 
