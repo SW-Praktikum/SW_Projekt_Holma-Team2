@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import AppAPI from '../api/AppAPI';
 import { makeStyles } from '@material-ui/core/styles';
+import { Link } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -44,8 +45,8 @@ const randomImages = [
   "https://www.schulbilder.org/bild-in-der-gruppe-sprechen-dl14849.jpg",
   "https://blog.pasch-net.de/klick/uploads/Sport5.PNG",
   "https://cdn.businessinsider.de/wp-content/uploads/2020/03/Joggen-Fru%CC%88hling-600x400.jpg"
-
 ]
+
 class GroupEntry extends Component {
     render() {
         return ( 
@@ -57,7 +58,9 @@ class GroupEntry extends Component {
             </CardContent>
             </CardActionArea>     
             <CardActions>
-                <Button size="small">Anzeigen</Button>
+                <Link to="/About">
+                  <Button size="small">Anzeigen</Button>
+                </Link>
             </CardActions>
          </Card>
     )
