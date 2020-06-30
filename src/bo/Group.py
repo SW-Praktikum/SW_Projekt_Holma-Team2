@@ -47,7 +47,7 @@ class Group(BusinessObject):
         group.set_name(dictionary["name"])
         group.set_creation_date(datetime.strptime(dictionary["creationDate"],
                                                   "%Y-%m-%dT%H:%M:%S.%fZ"))
-        group.set_creation_date(datetime.strptime(dictionary["lastUpdated"],
+        group.set_last_updated(datetime.strptime(dictionary["lastUpdated"],
                                                   "%Y-%m-%dT%H:%M:%S.%fZ"))
         group.set_owner(dictionary["owner"])
         return group

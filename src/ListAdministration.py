@@ -1,10 +1,10 @@
 from datetime import datetime
 
+from bo.Article import Article
 from bo.Group import Group
 from bo.ListEntry import ListEntry
 from bo.ShoppingList import ShoppingList
 from bo.User import User
-from bo.Article import Article
 from db.ArticleMapper import ArticleMapper
 from db.GroupMapper import GroupMapper
 from db.ListEntryMapper import ListEntryMapper
@@ -119,6 +119,12 @@ class Administration():
         with UserGroupRelationsMapper() as mapper:
             mapper.delete_group_relations(group)
 
+        with ShoppingListMapper() as mapper:
+            mapper.delete_by_group(group)
+
+        with ArticleMapper() as mapper:
+            mapper.delete_by_group(group)
+
         with GroupMapper() as mapper:
             mapper.delete(group)
 
@@ -137,8 +143,6 @@ class Administration():
 
     def remove_shopping_list_from_group(self, group, shopping_list):
         pass"""
-
-
 
     """Artikel"""
 
@@ -159,8 +163,13 @@ class Administration():
             mapper.insert(article)
 
     def delete_article(self, article):
+        with ListEntryMapper() as mapper:
+            mapper.delete_by_article(article)
+
         with ArticleMapper() as mapper:
             mapper.delete(article)
+
+
 
     def save_article(self, article):
         with ArticleMapper() as mapper:
@@ -190,8 +199,6 @@ class Administration():
         with ListEntryMapper() as mapper:
             mapper.insert(listentry)
 
-
-
     def delete_list_entry(self, list_entry):
         with ListEntryMapper() as mapper:
             mapper.delete(list_entry)
@@ -214,7 +221,6 @@ class Administration():
         with ListEntryMapper() as mapper:
             return mapper.find_list_entries_by_shopping_list(shoppinglist_id)
 
-    """Für was die Schleife?"""
     def get_list_entries_checked_by_shopping_list_id(self, shopping_list_id):
         list_entries_checked = []
         list_entries = self.get_list_entries_by_shopping_list_id(
@@ -233,8 +239,13 @@ class Administration():
             mapper.insert(shopping_list)
 
     def delete_shopping_list(self, shopping_list):
+        with ListEntryMapper() as mapper:
+            mapper.delete_by_shopping_list(shopping_list)
+
         with ShoppingListMapper() as mapper:
             mapper.delete(shopping_list)
+
+
 
     def save_shopping_list(self, shopping_list):
         with ShoppingListMapper() as mapper:
@@ -255,6 +266,7 @@ class Administration():
             return mapper.find_by_name(name)
 
     """Statistik Client"""
+
 
 class StatisticAdministration(object):
     def __init__(self):

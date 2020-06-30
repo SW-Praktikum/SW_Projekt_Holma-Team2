@@ -52,7 +52,7 @@ class User(BusinessObject):
         user.set_name(dictionary["name"])
         user.set_creation_date(datetime.strptime(dictionary["creationDate"],
                                                  "%Y-%m-%dT%H:%M:%S.%fZ"))
-        user.set_creation_date(datetime.strptime(dictionary["lastUpdated"],
+        user.set_last_updated(datetime.strptime(dictionary["lastUpdated"],
                                                  "%Y-%m-%dT%H:%M:%S.%fZ"))
         user.set_email(dictionary["email"])
         user.set_google_id(dictionary["googleId"])
