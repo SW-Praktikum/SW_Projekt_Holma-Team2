@@ -5,6 +5,9 @@ import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import GroupIcon from '@material-ui/icons/Group';
+import IconButton from '@material-ui/core/IconButton';
+import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
+import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
 import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import AssessmentIcon from '@material-ui/icons/Assessment';
@@ -13,6 +16,7 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ThumbUp from "@material-ui/icons/ThumbUp";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
+import { Link as RouterLink } from 'react-router-dom';
 
 //Navigation für Desktop
 
@@ -52,6 +56,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function ScrollableTabsButtonForce() {
+  
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -66,36 +71,36 @@ export default function ScrollableTabsButtonForce() {
           value={value}
           onChange={handleChange}
           variant="scrollable"
-          scrollButtons="on"
+          scrollButtons="off"
           indicatorColor="primary"
           textColor="primary"
           aria-label="scrollable force tabs example"
+          font-size="48px"
         >
-          <Tab label="Startseite" icon={<ShoppingCartIcon />} {...a11yProps(0)} href=""/>
-          <Tab label="Gruppen" icon={<GroupIcon />} {...a11yProps(1)} href="http://localhost:61941/user"/>
-          <Tab label="Persönliche Listen" icon={<FormatListBulletedIcon />} {...a11yProps(2)} />
-          <Tab label="Statistik" icon={<AssessmentIcon />} {...a11yProps(3)} />
-          <Tab label="User" icon={<ShoppingBasket />} {...a11yProps(4)} />
-          <Tab label="About" icon={<AccountCircleIcon />} {...a11yProps(5)} />
+          <IconButton label="Back">
+          <ArrowBackIosRoundedIcon onclick="this.context.router.history.goBack"/>
+          </IconButton>
+          <Tab label="" icon={<HomeRoundedIcon />} {...a11yProps(0)} />
+          <Tab label="Gruppen" icon={<GroupIcon />} {...a11yProps(1)} component={RouterLink} to={`/groups`}/>
+          <Tab label="Statistik" icon={<AssessmentIcon />} {...a11yProps(3)} component={RouterLink} to={`/about`}/>
+          <Tab label="User" icon={<AccountCircleIcon />} {...a11yProps(4)} component={RouterLink} to={`/user`}/>
         </Tabs>
       </AppBar>
+      
       <TabPanel value={value} index={0}>
-        Startseite
+        Back
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Gruppen
+        Home
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Persönliche Listen
+        Gruppen
       </TabPanel>
       <TabPanel value={value} index={3}>
         Statistik
       </TabPanel>
       <TabPanel value={value} index={4}>
         User
-      </TabPanel>
-      <TabPanel value={value} index={5}>
-        About
       </TabPanel>
     </div>
   );

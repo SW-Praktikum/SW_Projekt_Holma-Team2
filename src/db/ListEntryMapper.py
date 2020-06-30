@@ -192,6 +192,27 @@ class ListEntryMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
+    def delete_by_shopping_list(self, shoppinglist):
+        cursor = self._connection.cursor()
+        command = "DELETE FROM holma.listentry " \
+                  "WHERE shopping_list={}".format(shoppinglist.get_id())
+        cursor.execute(command)
+
+        self._connection.commit()
+        cursor.close()
+
+    def delete_by_article(self, article):
+        cursor = self._connection.cursor()
+
+        command = "DELETE FROM holma.listentry " \
+                  "WHERE article={}".format(article.get_id())
+        cursor.execute(command)
+
+        self._connection.commit()
+        cursor.close()
+
+
+
 if __name__ == "__main__":
     with ListEntryMapper() as mapper:
         result = mapper.find_list_entries_by_article(1)
