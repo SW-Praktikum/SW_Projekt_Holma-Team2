@@ -128,9 +128,6 @@ class App extends React.Component {
                   <>
                     <Redirect to='/groups'/>
                     <Navigation />
-<<<<<<< HEAD
-                    <GroupInformation user={user}/>
-=======
                     <Route path='/groups'>
                       <GroupEntries user={user}/>
                     </Route>
@@ -142,7 +139,6 @@ class App extends React.Component {
                     </Route>
                     <Route path=''>
                     </Route>
->>>>>>> master
                     <div style={{fontStyle: "italic"}}><br/><b>User:</b> {user.getName()} | <b>ID:</b> {user.getId()} | <b>Google ID:</b> {user.getGoogleId()} | <b>Member since:</b> {user.getCreationDate()}</div>
                   </>
                   :
