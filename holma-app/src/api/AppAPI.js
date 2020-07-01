@@ -14,23 +14,23 @@ export default class AppAPI {
     // User Related
     #getUsersURL = () => `${this.#appServerBaseURL}/users`;
     #createUserURL = () => `${this.#appServerBaseURL}/users`;
-    #updateUserURL = (userId) => `${this.#appServerBaseURL}/users/${userId}`;
-    #deleteUserURL = (userId) => `${this.#appServerBaseURL}/users/${userId}`;
-    #getUserByIdURL = (userId) => `${this.#appServerBaseURL}/users/${userId}`;
-    #getUserByGoogleIdURL = (googleId) => `${this.#appServerBaseURL}/users/by-google-id/${googleId}`;
+    #updateUserURL = (userId) => `${this.#appServerBaseURL}/user/${userId}`;
+    #deleteUserURL = (userId) => `${this.#appServerBaseURL}/user/${userId}`;
+    #getUserByIdURL = (userId) => `${this.#appServerBaseURL}/user/${userId}`;
+    #getUserByGoogleIdURL = (googleId) => `${this.#appServerBaseURL}/user/by-google-id/${googleId}`;
     #getUsersByNameURL = (name) => `${this.#appServerBaseURL}/by-name/${name}`;
 
-    #getGroupsByUserIdURL = (userId) => `${this.#appServerBaseURL}/users/${userId}/groups`;
-    #createGroupURL = (userId) => `${this.#appServerBaseURL}/users/${userId}/groups`;
+    #getGroupsByUserIdURL = (userId) => `${this.#appServerBaseURL}/user/${userId}/groups`;
+    #createGroupURL = (userId) => `${this.#appServerBaseURL}/user/${userId}/groups`;
     #addUserToGroupURL = (groupId, userId) => `${this.#appServerBaseURL}/group/${groupId}/user/${userId}`;
     #deleteUsersFromGroupURL =(groupId, userId) => `${this.#appServerBaseURL}/group/${groupId}/user/${userId}`;
 
     // Group Related
     #getGroupsURL = () => `${this.#appServerBaseURL}/groups`;
-    #getGroupByIdURL = (groupId) => `${this.#appServerBaseURL}/groups/${groupId}`;
+    #getGroupByIdURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}`;
     //#getGroupsByNameURL = (name) => `${this.#appServerBaseURL}/by-name/${name}`;
-    #updateGroupURL = (groupId) => `${this.#appServerBaseURL}/groups/${groupId}`;
-    #deleteGroupURL = (groupId) => `${this.#appServerBaseURL}/groups/${groupId}`;
+    #updateGroupURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}`;
+    #deleteGroupURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}`;
 
     #getUsersByGroupIdURL = (groupId) =>`${this.#appServerBaseURL}/group/${groupId}/users`;
   
@@ -175,11 +175,6 @@ export default class AppAPI {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
-        }).then((responseJSON) => {
-            let responseGroup = GroupBO.fromJSON(responseJSON)[0];
-            return new Promise(function (resolve) {
-                resolve(responseGroup)
-            })
         })
     };
     

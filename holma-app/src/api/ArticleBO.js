@@ -6,7 +6,7 @@ export default class ArticleBO extends BusinessObject {
         super(name);
         this.groupId = groupId
     };
-
+ 
     getGroupId() {
     return this.groupId
     }
