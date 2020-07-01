@@ -19,7 +19,16 @@ import GroupAddDialog from './dialogs/GroupAddDialog';
 import MemberAddDialog from './dialogs/MemberAddDialog';
 import GroupBO from '../api/GroupBO';
 import UserBO from '../api/UserBO';
-import { ListItem } from '@material-ui/core';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import Avatar from '@material-ui/core/Avatar';
+import IconButton from '@material-ui/core/IconButton';
+import FolderIcon from '@material-ui/icons/Folder';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const useStyles = makeStyles({
     root: {
@@ -76,7 +85,8 @@ class GroupEntries extends Component{
         this.addGroup = this.addGroup.bind(this)
         this.addMember = this.addMember.bind(this)
         this.state = {
-            elements: [],
+            groupElements: [],
+            memberElements: [],
             loadingInProgress: false,
             loadingError: null,
             groupId: "",
@@ -150,31 +160,35 @@ class GroupEntries extends Component{
     handleChangeMember = (e) => {
       this.setState({memberId: e.target.value})
     }
+
     loadMembers = () => { // getUsersByGroupId not working yet
       console.log("Hier sollen die Member der Gruppe " + this.state.groupId + " geladen werden")
       AppAPI.getAPI().getUsersByGroupId(this.state.groupId).then(users => {
         console.log("Loaded users from database for group '" + this.state.groupId + "'")
         console.log("Loaded users:", users)
-      })
-    }
-
-    loadGroups = () => {
-      console.log("Hier", this.state.groupId)
-      const {user} = this.props
-        AppAPI.getAPI().getGroupsByUserId(user.getId()).then(groups => {
-          console.log("Loaded groups from database for user '" + user.getName() + "'")
-          console.log("Loaded groups:", groups)
-          var elements = groups.map((group) => 
+        var memberElements = users.map((user) => 
           //wie kann die einzelne Gruppe im nächsten Schritt angesprochen werden?
-          <Grid key={group.getId()} item xs={4}>
-            <Paper className="paper" style ={{ textAlign:'center',}} >
-              <GroupEntry key={group.getId()} group={group}/>
-            </Paper>
-          </Grid>
+          
+              <ListItem>
+                <ListItemAvatar>
+                  <Avatar>
+                    <FolderIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  primary={user.getName()}
+                />
+                <ListItemSecondaryAction>
+                  <IconButton edge="end" aria-label="delete">
+                    <DeleteIcon />
+                  </IconButton>
+                </ListItemSecondaryAction>
+              </ListItem>
+          
           )
 
           this.setState({
-              elements: elements,
+              memberElements: memberElements,
               loadingInProgress: true, // loading indicator 
               loadingError: null
             })
@@ -186,12 +200,41 @@ class GroupEntries extends Component{
         );  
       }
 
+    loadGroups = () => {
+      console.log("Hier", this.state.groupId)
+      const {user} = this.props
+        AppAPI.getAPI().getGroupsByUserId(user.getId()).then(groups => {
+          console.log("Loaded groups from database for user '" + user.getName() + "'")
+          console.log("Loaded groups:", groups)
+          var groupElements = groups.map((group) => 
+          //wie kann die einzelne Gruppe im nächsten Schritt angesprochen werden?
+          <Grid key={group.getId()} item xs={4}>
+            <Paper className="paper" style ={{ textAlign:'center',}} >
+              <GroupEntry key={group.getId()} group={group}/>
+            </Paper>
+          </Grid>
+          )
+
+          this.setState({
+              GgroupElements: groupElements,
+              loadingInProgress: true, // loading indicator 
+              loadingError: null
+            })
+          }).catch(e =>
+              this.setState({ // Reset state with error from catch 
+                loadingInProgress: false,
+                loadingError: e
+          })
+        );  
+      }
+    
+
     render() {
-        const {elements} = this.state;
+        const {groupElements, memberElements} = this.state;
 
         return (
           <div>
-            <ListWithBoxes elements={elements}/>
+            <ListWithBoxes groupElements={groupElements}/>
             <GroupAddDialog 
             addGroup={this.addGroup} 
             open={this.state.open}
@@ -202,6 +245,7 @@ class GroupEntries extends Component{
             user={this.props.user} 
             loadGroups={this.loadGroups}/> 
             <MemberAddDialog
+            memberElements={memberElements}
             groupId={this.state.groupId} 
             memberId={this.state.memberId}
             handleChange={this.handleChangeMember}
