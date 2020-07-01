@@ -24,9 +24,11 @@ class Retailer(BusinessObject):
         result = []
         for (retailer_id, name, creation_date, last_update) in tuples:
             retailer = Retailer()
-            retailer.set_id(group_id)
+            retailer.set_id(retailer_id)
             retailer.set_name(name)
             retailer.set_creation_date(creation_date)
             retailer.set_last_updated(last_update)
             result.append(retailer)
-        return result
+        if len(result) > 1:
+            return result
+        return result[0]

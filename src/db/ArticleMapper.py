@@ -19,7 +19,7 @@ class ArticleMapper(Mapper):
 
         return result
 
-    def find_by_id(self, id):
+    def find_by_id(self, article_id):
         cursor = self._connection.cursor()
         command = "SELECT * FROM holma.article WHERE article_id={}".format(id)
         cursor.execute(command)
@@ -29,7 +29,6 @@ class ArticleMapper(Mapper):
 
         self._connection.commit()
         cursor.close()
-
         return result
 
     def find_by_name(self, name):
