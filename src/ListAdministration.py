@@ -266,6 +266,10 @@ class StatisticAdministration(object):
     def __init__(self):
         pass
 
+    def get_all_shoppinlists(self):
+        with ShoppingListMapper() as mapper:
+            return mapper.find_all()
+
     def get_all_articles(self):
         with ArticleMapper() as mapper:
             return mapper.find_all()

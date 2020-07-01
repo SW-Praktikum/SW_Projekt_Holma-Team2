@@ -440,6 +440,29 @@ class ShoppingListOperations(Resource):
             return '', 500
 
 
+@holmaApp.route('/shoppinglists')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigem Fehler kommt.')
+class ShoppingListListOperations(Resource):
+    @holmaApp.marshal_list_with(shoppingList)
+    # @secured
+    def get(self):
+        adm = StatisticAdministration()
+        sl_list = adm.get_all_shoppinlists()
+        return sl_list
+
+
+@holmaApp.route('/shoppinglists/by-name/<string:name>')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@holmaApp.param('name', 'Der Name der Shoppinglist')
+class ShoppingListsByNameOperations(Resource):
+    @holmaApp.marshal_list_with(shoppingList)
+    # @secured
+    def get(self, name):
+        adm = Administration()
+        le = adm.get_shopping_list_by_name(name)
+        return le
+
+
 @holmaApp.route('/shoppinglist/<int:shopping_list_id>/listentries')
 @holmaApp.response(500, 'Falls es zu einem Server -seitigen Fehler kommt')
 class ShoppingListRelatedListEntryListOperations(Resource):
