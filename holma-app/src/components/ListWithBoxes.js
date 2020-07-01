@@ -23,13 +23,13 @@ class ListWithBoxes extends Component{
     }  
 
     render() {
-        const {elements} = this.props;
+        const {groupElements} = this.props;
         return (            
         <div className="root" style={{flexGrow: 1,}}>
-          {elements ?
+          {groupElements ?
             <>
             <Grid container spacing ={1}>
-                {elements}
+                {groupElements}
             </Grid>
             </>
             :
