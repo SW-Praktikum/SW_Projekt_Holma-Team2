@@ -2,11 +2,7 @@ import BusinessObject from './BusinessObject';
 
 export default class ArticleBO extends BusinessObject {
 
-<<<<<<< HEAD
-    constructor(name, group_id) {
-=======
     constructor(name, groupId) {
->>>>>>> master
         super(name);
         this.groupId = groupId
     };
