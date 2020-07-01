@@ -127,14 +127,13 @@ class App extends React.Component {
           <Router basename={process.env.PUBLIC_URL}>
             <Container maxWidth='md'>
               <Header user={user} />
-              <MemberAddDialog/>
               {
                 user ?
                   <>
                     <Redirect to='/groups'/>
                     <Navigation />
                     <Route path='/groups'>
-                      <MemberDetails user={user}/>
+                      <GroupEntries user={user}/>
                     </Route>
                     <Route path='/about'>
                       <About/>
