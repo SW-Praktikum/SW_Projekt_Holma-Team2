@@ -8,6 +8,7 @@ from bo.Article import Article
 from bo.Group import Group
 from bo.ShoppingList import ShoppingList
 from bo.User import User
+from bo.ListEntry import ListEntry
 
 app = Flask(__name__)
 
@@ -43,13 +44,15 @@ group = api.inherit('Group', bo, {
 })
 
 shoppingList = api.inherit('ShoppingList', bo, {
+    'group_id': fields.Integer(attribute='_group_id',
+                               description='ID der Gruppe zu der diese Liste gehört'),
     'groupId': fields.Integer(attribute='_group_id',
                               description='ID der Gruppe zu der diese Liste gehört')
 })
 
 listEntry = api.inherit('ListEntry', bo, {
-    'article': fields.Integer(attribute='_article',
-                              description='zu welchem Artikle gehört dieses Entry? '),
+    'article_id': fields.Integer(attribute='_article_id',
+                                 description='zu welchem Artikle gehört dieses Entry? '),
     'amount': fields.Float(attribute='_amount',
                            description='Menge des Entries '),
     'unit': fields.String(attribute='_unit',
@@ -69,8 +72,11 @@ listEntry = api.inherit('ListEntry', bo, {
 })
 
 article = api.inherit('Article', bo, {
+    'group_id': fields.Integer(attribute='_group_id',
+                               description='zu welcher Groupe dieses Artikle gehört?'),
     'groupId': fields.Integer(attribute='_group',
                               description='zu welcher Groupe dieses Artikle gehört?')
+
 })
 
 retailer = api.inherit('Retailer', bo)
@@ -253,6 +259,7 @@ class UserRelatedGroupOperations(Resource):
         else:
             return "User unkown or payload not valid", 500
 
+
 @holmaApp.route('/group/<int:group_id>/users')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('group_id', 'Die ID des Group-Objekts')
@@ -316,7 +323,7 @@ class ArticleListOperations(Resource):
         return art_list
 
 
-@holmaApp.route('/article/<int:article_id>')
+@holmaApp.route('/articles/<int:article_id>')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('article_id', 'Die ID des article-Objekts')
 class ArticleOperations(Resource):
@@ -413,7 +420,7 @@ class GroupRelatedShoppingListOperations(Resource):
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('shoppinglist_id', 'Die ID des Shopping-List-Objekts')
 class ShoppingListOperations(Resource):
-    @holmaApp.marshal_with(group)
+    @holmaApp.marshal_with(shoppingList)
     # @secured
     def get(self, shopping_list_id):
 
@@ -427,7 +434,118 @@ class ShoppingListOperations(Resource):
         adm = Administration()
         sl = adm.get_shopping_list_by_id(shopping_list_id)
         if sl is not None:
-            adm.delete_group(sl)
+            adm.delete_shopping_list(sl)
+            return '', 200
+        else:
+            return '', 500
+
+
+@holmaApp.route('/shoppinglists')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigem Fehler kommt.')
+class ShoppingListListOperations(Resource):
+    @holmaApp.marshal_list_with(shoppingList)
+    # @secured
+    def get(self):
+        adm = StatisticAdministration()
+        sl_list = adm.get_all_shoppinlists()
+        return sl_list
+
+
+@holmaApp.route('/shoppinglists/by-name/<string:name>')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@holmaApp.param('name', 'Der Name der Shoppinglist')
+class ShoppingListsByNameOperations(Resource):
+    @holmaApp.marshal_list_with(shoppingList)
+    # @secured
+    def get(self, name):
+        adm = Administration()
+        le = adm.get_shopping_list_by_name(name)
+        return le
+
+
+@holmaApp.route('/shoppinglist/<int:shopping_list_id>/listentries')
+@holmaApp.response(500, 'Falls es zu einem Server -seitigen Fehler kommt')
+class ShoppingListRelatedListEntryListOperations(Resource):
+    @holmaApp.marshal_list_with(listEntry)
+    # @secured
+    def get(self, shopping_list_id):
+        adm = Administration()
+        le = adm.get_shopping_list_by_id(shopping_list_id)
+        if le is not None:
+            listentry_list = adm.get_list_entries_by_shopping_list_id(le)
+            return listentry_list
+        else:
+            return "ShoppingList not found", 500
+
+    @holmaApp.marshal_with(listEntry, code=200)
+    @holmaApp.expect(
+        listEntry)  # Wir erwarten ein User-Objekt von Client-Seite.
+    # @secured
+    def post(self, shopping_list_id):
+        adm = Administration()
+        sl = adm.get_shopping_list_by_id(shopping_list_id)
+        proposal = ListEntry.from_dict(api.payload)
+        if sl is not None and proposal is not None:
+            result = adm.create_list_entry(proposal.get_name(),
+                                           proposal.get_article(),
+                                           proposal.get_amount(),
+                                           proposal.get_unit(),
+                                           proposal.get_retailer(),
+                                           proposal.get_standardarticle(),
+                                           proposal.get_purchasing_user(),
+                                           shopping_list_id,
+                                           proposal.get_checked(),
+                                           proposal.get_checked_ts()
+                                           )
+            return result, 200
+        else:
+            return 'ShoppingList unknown or payload not valid', 500
+
+
+@holmaApp.route('/listentries')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigem Fehler kommt.')
+class ListEntryListOperations(Resource):
+    @holmaApp.marshal_list_with(listEntry)
+    # @secured
+    def get(self):
+        adm = StatisticAdministration()
+        le_list = adm.get_all_list_entries()
+        return le_list
+
+
+@holmaApp.route('/listentrie/<int:list_entry_id>')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@holmaApp.param('list_entry_id', 'Die ID des ListEntry-Objekts')
+class ListEntryOperations(Resource):
+    @holmaApp.marshal_with(listEntry)
+    # @secured
+    def get(self, list_entry_id):
+
+        adm = Administration()
+        le = adm.get_list_entry_by_id(list_entry_id)
+        return le
+
+    # @secured
+    def delete(self, list_entry_id):
+
+        adm = Administration()
+        le = adm.get_list_entry_by_id(list_entry_id)
+        if le is not None:
+            adm.delete_list_entry(le)
+            return 'deleted', 200
+        else:
+            return 'ListEntry not found', 500
+
+    @holmaApp.marshal_with(listEntry)
+    @holmaApp.expect(listEntry, validate=True)
+    # @secured
+    def put(self, list_entry_id):
+        adm = Administration()
+        le = ListEntry.from_dict(api.payload)
+
+        if le is not None:
+            le.set_id(list_entry_id)
+            adm.save_list_entry(le)
             return '', 200
         else:
             return '', 500

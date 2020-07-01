@@ -175,11 +175,6 @@ export default class AppAPI {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
-        }).then((responseJSON) => {
-            let responseGroup = GroupBO.fromJSON(responseJSON)[0];
-            return new Promise(function (resolve) {
-                resolve(responseGroup)
-            })
         })
     };
     

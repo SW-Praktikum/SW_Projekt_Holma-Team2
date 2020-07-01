@@ -31,6 +31,7 @@ import IconButton from '@material-ui/core/IconButton';
 import FolderIcon from '@material-ui/icons/Folder';
 import DeleteIcon from '@material-ui/icons/Delete';
 import GroupList from './GroupList';
+import FaceIcon from '@material-ui/icons/Face';
 
 const useStyles = makeStyles({
     root: {
@@ -172,36 +173,42 @@ class GroupEntries extends Component{
     addMember() {
       //es muss gecheckt werden bei input ob der user existiert und ob er schon in der Gruppe ist,
       // checken ob user id vorhanden und ob user schon in group
-
       AppAPI.getAPI().addUserToGroup(this.state.groupId, this.state.memberId)
       this.setState({memberId: ""})
-      this.loadMembers() //not working yet needs to be built properly
-        //Member müssen geladen und gerendert werden
+      this.loadMembers()
     }
     
     handleChangeMember = (e) => {
       this.setState({memberId: e.target.value})
+      this.loadMembers()
+    }
+
+    deleteUser = (userId) => {
+      AppAPI.getAPI().deleteUsersFromGroup(this.state.groupId, userId).then(() => {
+        this.loadMembers()
+      })
+      
+      //this.setState({memberElements})
     }
 
     loadMembers = () => { // getUsersByGroupId not working yet
       console.log("Hier sollen die Member der Gruppe " + this.state.groupId + " geladen werden")
       AppAPI.getAPI().getUsersByGroupId(this.state.groupId).then(users => {
-        console.log("Loaded users from database for group '" + this.state.groupId + "'")
-        console.log("Loaded users:", users)
+        //console.log("Loaded users from database for group '" + this.state.groupId + "'")
+        //console.log("Loaded users:", users)
         var memberElements = users.map((user) => 
-          //wie kann die einzelne Gruppe im nächsten Schritt angesprochen werden?
-          
-              <ListItem>
+              <ListItem key={user.getId()} item xs={4}>
                 <ListItemAvatar>
                   <Avatar>
-                    <FolderIcon />
+                    <FaceIcon />
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText
                   primary={user.getName()}
+                  secondary={"ID: " + user.getId()}
                 />
-                <ListItemSecondaryAction>
-                  <IconButton edge="end" aria-label="delete">
+                <ListItemSecondaryAction onClick={() => this.deleteUser(user.getId())}>
+                  <IconButton >
                     <DeleteIcon />
                   </IconButton>
                 </ListItemSecondaryAction>
@@ -223,11 +230,10 @@ class GroupEntries extends Component{
       }
 
     loadGroups = () => {
-      console.log("Hier", this.state.groupId)
       const {user} = this.props
         AppAPI.getAPI().getGroupsByUserId(user.getId()).then(groups => {
-          console.log("Loaded groups from database for user '" + user.getName() + "'")
-          console.log("Loaded groups:", groups)
+          //console.log("Loaded groups from database for user '" + user.getName() + "'")
+          //console.log("Loaded groups:", groups)
           var groupElements = groups.map((group) => 
           //wie kann die einzelne Gruppe im nächsten Schritt angesprochen werden?
           <Grid key={group.getId()} item xs={4}>
@@ -270,7 +276,7 @@ class GroupEntries extends Component{
             memberElements={memberElements}
             groupId={this.state.groupId} 
             memberId={this.state.memberId}
-            handleChange={this.handleChangeMember}
+            handleChangeMember={this.handleChangeMember}
             addMember={this.addMember}
             handleClickOpenMember={this.handleClickOpenMember}
             handleCloseMember={this.handleCloseMember}
