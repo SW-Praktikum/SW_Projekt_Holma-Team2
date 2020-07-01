@@ -156,7 +156,7 @@ class GroupEntries extends Component{
         console.log("Loaded users from database for group '" + this.state.groupId + "'")
         console.log("Loaded users:", users)
       })
-  }
+    }
 
     loadGroups = () => {
       console.log("Hier", this.state.groupId)
@@ -165,6 +165,7 @@ class GroupEntries extends Component{
           console.log("Loaded groups from database for user '" + user.getName() + "'")
           console.log("Loaded groups:", groups)
           var elements = groups.map((group) => 
+          //wie kann die einzelne Gruppe im nächsten Schritt angesprochen werden?
           <Grid key={group.getId()} item xs={4}>
             <Paper className="paper" style ={{ textAlign:'center',}} >
               <GroupEntry key={group.getId()} group={group}/>

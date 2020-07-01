@@ -15,14 +15,9 @@ class GroupAddDialog extends Component {
         }        
     }
     
-    
-    
     _handleClick = () => {
       this.props.addGroup();
     };
-
-    
-    
 
     render() {
         return (
