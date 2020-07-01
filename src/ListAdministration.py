@@ -48,7 +48,7 @@ class Administration():
         user.set_email(email)
         user.set_google_id(google_id)
         with UserMapper() as mapper:
-            mapper.insert(user)
+            return mapper.insert(user)
 
     def delete_user(self, user):
         with UserGroupRelationsMapper() as mapper:

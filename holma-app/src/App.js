@@ -95,14 +95,18 @@ class App extends React.Component {
       if (!user.getGoogleId()) {
         console.log("Creating new user for '" + name + "'") 
         var proposal = new UserBO(name, email, googleId)
-        var user = api.createUser(proposal)
+        api.createUser(proposal).then((newUser) => {
+          this.setState({
+            user: newUser
+          })
+        })
       }
       else {
         console.log("User '" + name + "' already in database!")
+        this.setState({
+          user: user
+        })
       }
-      this.setState({
-        user: user
-      })
       console.log("User in state:", user)
     })
 
@@ -135,7 +139,7 @@ class App extends React.Component {
                       <About/>
                     </Route>
                     <Route path='/user'>
-                      <User/>
+                      <User user={user}/>
                     </Route>
                     <Route path=''>
                     </Route>

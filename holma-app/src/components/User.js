@@ -29,7 +29,7 @@ class UserProfil extends Component {
 
   render() {
 
-      const { classes } = this.props;
+      const { classes, user } = this.props;
       
       return (
           
@@ -42,17 +42,17 @@ class UserProfil extends Component {
             <Box m={5} />
             <Grid container spaching={3}>
               <Grid item xs={8} sm={2}>
-                <Typography variant="h6" gutterBottom>Username</Typography>
+                <Typography variant="h6" gutterBottom>{user.getName()}</Typography>
               </Grid>
               <Grid item xs={8} sm={2}/>
               <Grid item xs={8} sm={4}>
-                <Typography variant="h6" gutterBottom>User-Id: id</Typography>
+                <Typography variant="h6" gutterBottom>User-Id: {user.getId()}</Typography>
               </Grid>
             </Grid>
             <Box m={4} />
               <Grid container spacing={3}>
                   <Grid item xs={8} sm={4}>
-                      <Typography variant="h6" gutterBottom>Member since: date</Typography>
+                      <Typography variant="h6" gutterBottom>Member since: {user.getCreationDate()}</Typography>
                   </Grid>
               </Grid>
             <Box m={4} />
