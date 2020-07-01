@@ -427,7 +427,7 @@ class ShoppingListOperations(Resource):
         adm = Administration()
         sl = adm.get_shopping_list_by_id(shopping_list_id)
         if sl is not None:
-            adm.delete_group(sl)
+            adm.delete_shopping_list(sl)
             return '', 200
         else:
             return '', 500
