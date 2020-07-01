@@ -42,11 +42,11 @@ class MemberAddDialog extends Component {
               <DialogContent>
                 <TextField
                   autoFocus
-                  onChange={this.props.handleChange}
+                  onChange={this.props.handleChangeMember}
                   margin="dense"
                   id="outlined-basic"
                   variant="outlined"
-                  label="Midlieds ID"
+                  label="Mitglieds ID"
                   type="email"
                   value={this.props.memberId}
                   fullWidth
