@@ -208,7 +208,6 @@ class GroupEntries extends Component{
       }
 
     loadGroups = () => {
-      console.log("Hier", this.state.groupId)
       const {user} = this.props
         AppAPI.getAPI().getGroupsByUserId(user.getId()).then(groups => {
           //console.log("Loaded groups from database for user '" + user.getName() + "'")
