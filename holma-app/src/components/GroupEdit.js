@@ -85,35 +85,38 @@ class MemberDetails extends Component{
     }
   }
   componentDidMount(){
-    if(this.props.member){
+    if(this.props.groupId){
       this.loadMembers();
     }
   }
 
   loadMembers = () => {
-      this.state.members = AppAPI.getAPI().getUsersByGroupId(this.props.groupId);
-      console.log(this.state.members);
-        this.state.members.map((member) =>
-        <Grid key={member.getId()} item xs={4}>
-            <Paper className="paper" style ={{ textAlign:'center',}} >
-              <MemberCards key={this.props.groupId} member={member}/>
-            </Paper>
-          </Grid>
-      );
+      AppAPI.getAPI().getUsersByGroupId(this.props.groupId).then((members) => {
+        var memberElements = members.map((member) => 
+          <Grid key={member.getId()} item xs={4}>
+              <Paper className="paper" style ={{ textAlign:'center',}} >
+                <MemberCards key={this.props.groupId} member={member}/>
+              </Paper>
+            </Grid>
+        );
 
       this.setState({
+        members: memberElements,
         loadingInProgress: true,
         loadingError: null
-      }).catch(e =>
+      })
+    }).catch(e =>
       this.setState({
         loadingInProgress: false,
         loadingError: e
       })
-      );
-}
+    );
+  }
 
     render(){
       const {elements} = this.state;
+      console.log("!!!")
+      console.log(elements)
       return(
         <div>
             <ListWithBoxes elements={elements}/>
@@ -123,4 +126,4 @@ class MemberDetails extends Component{
     }
 }
 
-export default {GroupInformation, MemberDetails};
+export default MemberDetails;

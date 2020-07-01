@@ -34,14 +34,13 @@ const useRowStyles = makeStyles({
   },
 });
 
-function createData(shoppinglist, member, owner, status, edit) {
+function createData(shoppinglist, member, status, edit) {
   return {
     shoppinglist,
     member,
-    owner,
     status,
     edit,
-    history: [
+    history: [//kann erst mit Logik hinterlegt werden, wenn die ListEntrys stehen
       { date: '2020-01-05', memberId: '30', article: "Apfel" },
       { date: '2020-20-05', memberId: '29', article: "Birne" },
     ],
@@ -61,11 +60,8 @@ function Row(props) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell component="th" scope="row">
-          {row.shoppinglist}
-        </TableCell>
+        <TableCell component="th" scope="row">{row.shoppinglist}</TableCell>
         <TableCell align="right">{row.member}</TableCell>
-        <TableCell align="right">{row.owner}</TableCell>
         <TableCell align="right">{row.status}</TableCell>
         <TableCell align="right">{row.edit}</TableCell>
       </TableRow>
@@ -106,9 +102,9 @@ function Row(props) {
 
 Row.propTypes = {
   row: PropTypes.shape({
-    calories: PropTypes.number.isRequired,
-    carbs: PropTypes.number.isRequired,
-    fat: PropTypes.number.isRequired,
+    shoppinglist: PropTypes.string.isRequired,
+    member: PropTypes.number.isRequired,
+    status: PropTypes.string.isRequired,
     history: PropTypes.arrayOf(
       PropTypes.shape({
         amount: PropTypes.number.isRequired,
@@ -123,9 +119,9 @@ Row.propTypes = {
 };
 
 const rows = [
-  createData('Fahrradfreunde', 8, "Emre", "7/12", <EditButton/>),
-  createData('Vortrinken', 2, "Willi", "12/12", <EditButton/>),
-  createData('Familie-Maier', 6, "Hans", "2/3", <EditButton/>),
+  createData('Fahrradfreunde', 8, "7/12", <EditButton/>),
+  createData('Vortrinken', 2, "12/12", <EditButton/>),
+  createData('Familie-Maier', 6, "2/3", <EditButton/>),
 ];
 
 function EditButton(){
@@ -145,7 +141,6 @@ function CollapsibleTable() {
             <TableCell />
             <TableCell><b>Shoppinglist</b></TableCell>
             <TableCell align="right"><b>Member</b></TableCell>
-            <TableCell align="right"><b>Owner</b></TableCell>
             <TableCell align="right"><b>Status</b></TableCell>
             <TableCell align="right"><b>Edit</b></TableCell>
           </TableRow>
@@ -185,11 +180,6 @@ function AddShoppinglist() {
   );}
   
 
-
-
-
-
-
 /*{this.props.group.getName()}*/
 /* Hierbei wird man an die Component "GroupEdit" weitergeleitet*/
 class Grouplink extends Component{
@@ -222,15 +212,15 @@ class GroupList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            group: [],
+            groupID: this.props.groupID,
             loadingInProgress: false,
             loadingError: null
         }}
     
     loadGroup = () => {
-        AppAPI.getAPI().getGroupById(this.props.group.getId()).then(res =>
+        AppAPI.getAPI().getGroupById(this.state.groupID).then(res =>
             this.setState({
-                group:res,
+                groupID:res,
                 loadingInProgress: false,
                 loadingError: null
             })).catch(e =>
