@@ -6,7 +6,6 @@ import User from '../api/UserBO';
 import ListWithBoxes from './ListWithBoxes';
 import firebase from 'firebase/app'
 
-
 class UserProfil extends Component {
 
   // a refernce to the avatar button
@@ -35,9 +34,9 @@ class UserProfil extends Component {
           
         <Paper elevation={0} className={classes.root}>
           <div className={classes.content}>
-            <Box m={5} />
+            <Box m={2} />
                 <Typography  variant="h4" gutterBottom>
-                Userdetails
+                Userdetails:
                 </Typography>
             <Box m={5} />
             <Grid container spaching={3}>
@@ -56,8 +55,10 @@ class UserProfil extends Component {
                   </Grid>
               </Grid>
             <Box m={4} />
-            <Grid item>
-                    <Button color='primary' onClick={this.handleSignOutButtonClicked}>Logout</Button>
+            <Grid container spaching={2}>
+              <Button color='primary' onClick={this.handleSignOutButtonClicked}>Logout</Button>
+              <Grid item xs={8} sm={9}/>
+              <Button color='secondary'>Delete User</Button>
             </Grid>
           </div>
         </Paper>
@@ -74,6 +75,9 @@ const styles = theme => ({
   },
   content: {
     margin: theme.spacing(1),
+  },
+  button: {
+    color: theme.palette.delete.main,
   }
 });
 

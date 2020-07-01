@@ -1,50 +1,35 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import ShoppingBasket from '@material-ui/icons/ShoppingBasket';
+import { AppBar, Toolbar, Typography, IconButton, Grid } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
+import ShoppingBasket from '@material-ui/icons/ShoppingBasket';
+import PersonPin from '@material-ui/icons/PersonPin';
 import DropDown from '../dialogs/Dropdown';
-import Tabs from '@material-ui/core/Tabs';
- 
+import { Link as RouterLink } from 'react-router-dom';
 
 class Header extends React.Component {
   constructor(props) {
-    super(props);
-    this.state = {
-      tabindex: 0
-    };
+    super(props)
   }
-  
-  handleTabChange = (e, newIndex) => {
-    // console.log(newValue)
-    this.setState({
-      tabindex: newIndex
-    })
-  };
 
   render() {
     const { user, classes } = this.props;
     return (
       <div className={classes.root}>
         <AppBar position="static">
-        <DropDown user={user} />
           <Toolbar >
           <Typography variant="h6" color="inherit">
-            holma
             </Typography>
-            <IconButton edge="false" className={classes.menuButton} color="inherit" aria-label="menu">
-              <ShoppingBasket />
+            <IconButton edge="false" className={classes.menuButton} color="inherit" aria-label="menu" component={RouterLink} to={`/groups`}>
+              <ShoppingBasket />  
+              <div>&nbsp;Holma</div>
             </IconButton>
-            
-            {
-            user ?
-              <Tabs indicatorColor='primary' textColor='primary' centered value={this.state.tabindex} onChange={this.handleTabChange} >
-              </Tabs>
-              : null
-            }
+            <Grid justify="space-between" container spacing={24}></Grid>
+            <div user={user} style={{fontStyle: "italic"}}>
+              <b>User:&nbsp;DominikK.</b>
+              <br/>
+              <b>ID:&nbsp;1023</b> 
+            </div>
           </Toolbar>
         </AppBar>
       </div>
