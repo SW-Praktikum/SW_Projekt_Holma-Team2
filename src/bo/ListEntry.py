@@ -123,6 +123,8 @@ class ListEntry(BusinessObject):
             listentry.set_shopping_list(shopping_list)
             listentry.set_last_updated(last_update)
             result.append(listentry)
+        if len(result) == 1:
+            return result[0]
         return result
     """
     def delete(self):

@@ -19,6 +19,7 @@ import User from './components/User';
 import GroupInformation from './components/GroupEdit';
 import Groupmember from './components/GroupEditDialog';
 import MemberAddDialog from './components/dialogs/MemberAddDialog';
+import MemberDetails from './components/GroupEdit';
 
 
 class App extends React.Component {
@@ -126,7 +127,6 @@ class App extends React.Component {
           <Router basename={process.env.PUBLIC_URL}>
             <Container maxWidth='md'>
               <Header user={user} />
-
               {
                 user ?
                   <>

@@ -32,9 +32,7 @@ class GroupMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
-        if len(result) == 0:
-            return None
-        return result[0]
+        return result
 
     def find_by_name(self, name):
         cursor = self._connection.cursor()

@@ -20,38 +20,6 @@ import Typography from '@material-ui/core/Typography';
 import FolderIcon from '@material-ui/icons/Folder';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-
-class MemberEntry extends Component {
-  render () {
-    return (
-      <div>
-        <Grid item xs={12} md={6}>
-          <Typography variant="h6">
-          </Typography>
-          <div>
-            <List>
-                <ListItem>
-                  <ListItemAvatar>
-                    <Avatar>
-                      <FolderIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary="Example Member"
-                  />
-                  <ListItemSecondaryAction>
-                    <IconButton edge="end" aria-label="delete">
-                      <DeleteIcon />
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>,
-            </List>
-          </div>
-        </Grid>
-      </div>
-    )
-  }}
-
 class MemberAddDialog extends Component {
     constructor (props) {
         super(props)
@@ -66,6 +34,7 @@ class MemberAddDialog extends Component {
     };
 
     render() {
+      const {memberElements} = this.props;
       return (
           <div>
             <Dialog open={this.props.openMember} onClose={this.props.handleCloseMember} aria-labelledby="form-dialog-title">
@@ -73,11 +42,11 @@ class MemberAddDialog extends Component {
               <DialogContent>
                 <TextField
                   autoFocus
-                  onChange={this.props.handleChange}
+                  onChange={this.props.handleChangeMember}
                   margin="dense"
                   id="outlined-basic"
                   variant="outlined"
-                  label="Midlieds ID"
+                  label="Mitglieds ID"
                   type="email"
                   value={this.props.memberId}
                   fullWidth
@@ -85,7 +54,7 @@ class MemberAddDialog extends Component {
               </DialogContent>
 
                 <List>
-                 <MemberEntry/>
+                  {memberElements}
                 </List>
 
               <DialogActions>

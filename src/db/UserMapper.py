@@ -31,9 +31,7 @@ class UserMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
-        if len(result) == 0:
-            return None
-        return result[0]
+        return result
 
     def find_by_name(self, name):
         cursor = self._connection.cursor()
@@ -61,9 +59,7 @@ class UserMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
-        if len(result) == 0:
-            return None
-        return result[0]
+        return result
 
     def find_by_google_id(self, google_id):
         cursor = self._connection.cursor()
@@ -77,9 +73,7 @@ class UserMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
-        if len(result) == 0:
-            return None
-        return result[0]
+        return result
 
     def insert(self, user):
         cursor = self._connection.cursor()

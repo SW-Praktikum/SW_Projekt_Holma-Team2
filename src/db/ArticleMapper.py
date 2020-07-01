@@ -19,9 +19,10 @@ class ArticleMapper(Mapper):
 
         return result
 
-    def find_by_id(self, id):
+    def find_by_id(self, article_id):
         cursor = self._connection.cursor()
-        command = "SELECT * FROM holma.article WHERE article_id={}".format(id)
+        command = "SELECT * FROM holma.article " \
+                  "WHERE article_id={}".format(article_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -29,7 +30,6 @@ class ArticleMapper(Mapper):
 
         self._connection.commit()
         cursor.close()
-
         return result
 
     def find_by_name(self, name):
@@ -116,6 +116,6 @@ class ArticleMapper(Mapper):
 
 if __name__ == "__main__":
     with ArticleMapper() as mapper:
-        result = mapper.find_by_group(1)
+        result = mapper.find_all()
         for article in result:
             print(article)

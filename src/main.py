@@ -420,7 +420,7 @@ class GroupRelatedShoppingListOperations(Resource):
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('shoppinglist_id', 'Die ID des Shopping-List-Objekts')
 class ShoppingListOperations(Resource):
-    @holmaApp.marshal_with(group)
+    @holmaApp.marshal_with(shoppingList)
     # @secured
     def get(self, shopping_list_id):
 
@@ -434,7 +434,7 @@ class ShoppingListOperations(Resource):
         adm = Administration()
         sl = adm.get_shopping_list_by_id(shopping_list_id)
         if sl is not None:
-            adm.delete_group(sl)
+            adm.delete_shopping_list(sl)
             return '', 200
         else:
             return '', 500

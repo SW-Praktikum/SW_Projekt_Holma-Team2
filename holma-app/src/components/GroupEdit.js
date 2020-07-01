@@ -13,6 +13,8 @@ import MemberAddDialog from '../components/dialogs/MemberAddDialog';
 import ListWithBoxes from './ListWithBoxes'
 import GroupAddDialog from './dialogs/GroupAddDialog';
 import Paper from '@material-ui/core/Paper';
+import CardActions from '@material-ui/core/CardActions';
+import Button from '@material-ui/core/Button';
 
 
 class GroupInformation extends Component {
@@ -61,9 +63,12 @@ class MemberCards extends Component{
           <Card className="root" style={{minWidth: 275, marginBottom:10, marginTop:10}}>
             <CardActionArea >
             <CardContent>
-                <Typography className="title" style={{fontSize: 14}} color="textPrimary">{this.props.member.getName()}</Typography>
+                <Typography className="title" style={{fontSize: 14}} color="textPrimary">{this.state.members}</Typography>
             </CardContent>
-            </CardActionArea>    
+            </CardActionArea>
+            <CardActions>
+                <Button size="small">Anzeigen</Button>
+            </CardActions>
           </Card> 
       </Grid>
     );
@@ -74,30 +79,29 @@ class MemberDetails extends Component{
   constructor(props){
     super(props);
     this.state ={
-        elements:[],
+        members:[],
         loadingInProgress: false,
         loadingError: null,
     }
   }
   componentDidMount(){
-    if(this.props.group){
+    if(this.props.member){
       this.loadMembers();
     }
   }
 
   loadMembers = () => {
-      this.state.elements = AppAPI.getAPI().getUsers()
-      var members = this.state.elements
-        var elements = members.map((member) =>
+      this.state.members = AppAPI.getAPI().getUsersByGroupId(this.props.groupId);
+      console.log(this.state.members);
+        this.state.members.map((member) =>
         <Grid key={member.getId()} item xs={4}>
             <Paper className="paper" style ={{ textAlign:'center',}} >
-              <MemberCards key={member.getId()} member={member}/>
+              <MemberCards key={this.props.groupId} member={member}/>
             </Paper>
           </Grid>
-      )
+      );
 
       this.setState({
-        elements: elements,
         loadingInProgress: true,
         loadingError: null
       }).catch(e =>
@@ -113,10 +117,10 @@ class MemberDetails extends Component{
       return(
         <div>
             <ListWithBoxes elements={elements}/>
-            <MemberAddDialog member={this.props.member} loadMembers={this.loadMembers}/> 
+            <MemberAddDialog member={this.props.members} loadMembers={this.loadMembers}/> 
           </div>
       );
     }
 }
 
-export default GroupInformation;
+export default {GroupInformation, MemberDetails};
