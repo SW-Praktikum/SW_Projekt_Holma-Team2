@@ -21,7 +21,8 @@ class ArticleMapper(Mapper):
 
     def find_by_id(self, article_id):
         cursor = self._connection.cursor()
-        command = "SELECT * FROM holma.article WHERE article_id={}".format(id)
+        command = "SELECT * FROM holma.article " \
+                  "WHERE article_id={}".format(article_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
