@@ -172,7 +172,7 @@ function AddShoppinglist() {
               </form>
             </TableCell>
             <TableCell><form noValidate autoComplete="off">
-          <TextField id="standard-basic" label="name" />
+          <TextField id="standard-basic" label="standardarticle_id" />
         </form>
         </TableCell>
           </TableRow>
