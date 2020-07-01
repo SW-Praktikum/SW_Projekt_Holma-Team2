@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import AppAPI from '../api/AppAPI';
 import { makeStyles } from '@material-ui/core/styles';
+import { Link } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -13,6 +14,12 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import ListWithBoxes from './ListWithBoxes'
+import ListEntry from './ListEntry'
+import GroupAddDialog from './dialogs/GroupAddDialog';
+import MemberAddDialog from './dialogs/MemberAddDialog';
+import GroupBO from '../api/GroupBO';
+import UserBO from '../api/UserBO';
+import { ListItem } from '@material-ui/core';
 
 const useStyles = makeStyles({
     root: {
@@ -40,12 +47,10 @@ const randomImages = [
   "https://s3-eu-central-1.amazonaws.com/vodafone-featured/wp-content/uploads/2019/01/18104102/erstelleeinesnapchatgruppemitdeinenfreunden-640x360.jpg",
   "https://www.schule-bw.de/faecher-und-schularten/gesellschaftswissenschaftliche-und-philosophische-faecher/gemeinschaftskunde/materialien-und-medien/soziologie/zusammenleben-soziale-gruppen/gruppe.jpg",
   "https://www.schulbilder.org/bild-in-der-gruppe-sprechen-dl14849.jpg",
-  "https://www.inforadio.de/content/dam/rbb/inf/Headerbilder_Sendestrecken/HeaderbilderNeu/sport.jpg.jpg/size=512x288.jpg",
   "https://blog.pasch-net.de/klick/uploads/Sport5.PNG",
-  "https://www.muenchen.de/media/shutterstock-2016/freizeit-2/sport-im-park-hp.jpg",
   "https://cdn.businessinsider.de/wp-content/uploads/2020/03/Joggen-Fru%CC%88hling-600x400.jpg"
-
 ]
+
 class GroupEntry extends Component {
     render() {
         return ( 
@@ -57,7 +62,9 @@ class GroupEntry extends Component {
             </CardContent>
             </CardActionArea>     
             <CardActions>
-                <Button size="small">Anzeigen</Button>
+                <Link to="/About">
+                  <Button size="small">Anzeigen</Button>
+                </Link>
             </CardActions>
          </Card>
     )
@@ -66,10 +73,17 @@ class GroupEntry extends Component {
 class GroupEntries extends Component{
     constructor(props) {
         super(props);
+        this.addGroup = this.addGroup.bind(this)
+        this.addMember = this.addMember.bind(this)
         this.state = {
             elements: [],
             loadingInProgress: false,
             loadingError: null,
+            groupId: "",
+            open: false,
+            openMember: false,
+            groupName: "",
+            memberId: "",
         }
     }
 
@@ -77,15 +91,81 @@ class GroupEntries extends Component{
       // load only if the owner object is given
       if (this.props.user) {
         this.loadGroups();
+        
       }
     }
-  
+
+    handleChange = (e) => {
+      this.setState({groupName: e.target.value})
+    }
+
+    handleClose = () => {
+      this.setState({
+          open: false
+      })
+    }
+
+    handleClickOpen = () => {
+      this.setState({
+          open: true
+      })    
+    }
+
+    handleClickOpenMember = () => {
+      this.setState({
+          openMember: true
+      })    
+    }
+
+    handleCloseMember = () => {
+      this.setState({
+          openMember: false
+      })
+    }
+
+    addGroup = () => { 
+      const {user} = this.props;
+      var grp = new GroupBO(this.state.groupName, user.getId());
+      AppAPI.getAPI().createGroup(grp).then(group => {
+        this.setState({groupId: group.getId()})
+        console.log(this.state.groupId)
+        AppAPI.getAPI().addUserToGroup(group.getId(), user.getId()).then( () => {
+          this.loadGroups();
+        })  
+      })
+      this.handleClose();
+      this.handleClickOpenMember();//open new dialog
+    }
+
+    addMember() {
+      //es muss gecheckt werden bei input ob der user existiert und ob er schon in der Gruppe ist,
+      // checken ob user id vorhanden und ob user schon in group
+
+      AppAPI.getAPI().addUserToGroup(this.state.groupId, this.state.memberId)
+      this.setState({memberId: ""})
+      this.loadMembers() //not working yet needs to be built properly
+        //Member müssen geladen und gerendert werden
+    }
+    
+    handleChangeMember = (e) => {
+      this.setState({memberId: e.target.value})
+    }
+    loadMembers = () => { // getUsersByGroupId not working yet
+      console.log("Hier sollen die Member der Gruppe " + this.state.groupId + " geladen werden")
+      AppAPI.getAPI().getUsersByGroupId(this.state.groupId).then(users => {
+        console.log("Loaded users from database for group '" + this.state.groupId + "'")
+        console.log("Loaded users:", users)
+      })
+    }
+
     loadGroups = () => {
+      console.log("Hier", this.state.groupId)
       const {user} = this.props
         AppAPI.getAPI().getGroupsByUserId(user.getId()).then(groups => {
           console.log("Loaded groups from database for user '" + user.getName() + "'")
           console.log("Loaded groups:", groups)
           var elements = groups.map((group) => 
+          //wie kann die einzelne Gruppe im nächsten Schritt angesprochen werden?
           <Grid key={group.getId()} item xs={4}>
             <Paper className="paper" style ={{ textAlign:'center',}} >
               <GroupEntry key={group.getId()} group={group}/>
@@ -108,11 +188,34 @@ class GroupEntries extends Component{
 
     render() {
         const {elements} = this.state;
-        return (            
-          <ListWithBoxes elements={elements}/>
+
+        return (
+          <div>
+            <ListWithBoxes elements={elements}/>
+            <GroupAddDialog 
+            addGroup={this.addGroup} 
+            open={this.state.open}
+            groupName={this.state.groupName} 
+            handleChange={this.handleChange} 
+            handleClickOpen={this.handleClickOpen} 
+            handleClose={this.handleClose} 
+            user={this.props.user} 
+            loadGroups={this.loadGroups}/> 
+            <MemberAddDialog
+            groupId={this.state.groupId} 
+            memberId={this.state.memberId}
+            handleChange={this.handleChangeMember}
+            addMember={this.addMember}
+            handleClickOpenMember={this.handleClickOpenMember}
+            handleCloseMember={this.handleCloseMember}
+            openMember={this.state.openMember}/>
+            <ListEntry  />
+            <ListEntry />
+          </div>
         );
     }
 }
+
 export default GroupEntries;
 
 

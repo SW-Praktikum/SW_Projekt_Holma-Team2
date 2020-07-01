@@ -2,34 +2,39 @@ import BusinessObject from './BusinessObject';
 
 export default class ArticleBO extends BusinessObject {
 
+<<<<<<< HEAD
     constructor(name, group_id) {
+=======
+    constructor(name, groupId) {
+>>>>>>> master
         super(name);
-        this.group_id = group_id
-   }
+        this.groupId = groupId
+    };
 
     getGroupId() {
-    return this.group_id
-}
-
-    set_group(group_id){
-        this.group_id = group_id
-        }
-
-static fromJSON(articles) {
-    let result = [];
-
-    if (Array.isArray(articles)) {
-        articles.forEach((art) => {
-            Object.setPrototypeOf(art, ArticleBO.prototype)
-            result.push(art)
-        })
-    } else {
-        
-        let art = articles
-        Object.setPrototypeOf(art, ArticleBO.prototype)
-        result.push(art)
+    return this.groupId
     }
 
-    return result;
-}
+    setGroupId(groupId){
+        this.groupId = groupId
+    }
+
+    static fromJSON(articles) {
+        let result = [];
+
+        if (Array.isArray(articles)) {
+            articles.forEach((art) => {
+                Object.setPrototypeOf(art, ArticleBO.prototype)
+                result.push(art)
+            })
+
+        } else {
+
+            let art = articles
+            Object.setPrototypeOf(art, ArticleBO.prototype)
+            result.push(art)
+        }
+
+        return result;
+        }
 }
