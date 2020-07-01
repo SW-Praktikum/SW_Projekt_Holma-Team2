@@ -136,7 +136,7 @@ class ListEntryMapper(Mapper):
     def insert(self, listentry):
         cursor = self._connection.cursor()
         command = "INSERT INTO holma.listentry (listentry_id, name, creation_date, " \
-                  "purchasing_user, amount, article, unit, retailer, standardarticle, checked, checked_ts, shopping_list, last_updated) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                  "purchasing_user, amount, article, unit, retailer, standardarticle, checked, shopping_list, last_updated, checked_ts) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         data = (listentry.get_id(),
                 listentry.get_name(),
                 listentry.get_creation_date(),
@@ -162,8 +162,9 @@ class ListEntryMapper(Mapper):
         cursor = self._connection.cursor()
         command = "UPDATE holma.listentry SET name=%s, purchasing_user=%s, " \
                   "amount=%s, article=%s, unit=%s, retailer=%s. " \
-                  "standardarticle=%s, checked=%s, checked_ts=%s" \
-                  "shopping_list=%s, last_updated=%s WHERE listentry_id=%s"
+                  "standardarticle=%s, checked=%s," \
+                  "shopping_list=%s, last_updated=%s, checked_ts=%s " \
+                  "WHERE listentry_id=%s"
         data = (listentry.get_name(),
                 listentry.get_purchasing_user(),
                 listentry.get_amount(),

@@ -19,6 +19,7 @@ import User from './components/User';
 import GroupInformation from './components/GroupEdit';
 import Groupmember from './components/GroupEditDialog';
 import MemberAddDialog from './components/dialogs/MemberAddDialog';
+import MemberDetails from './components/GroupEdit';
 
 
 class App extends React.Component {
@@ -95,14 +96,19 @@ class App extends React.Component {
       if (!user.getGoogleId()) {
         console.log("Creating new user for '" + name + "'") 
         var proposal = new UserBO(name, email, googleId)
-        var user = api.createUser(proposal)
+        api.createUser(proposal).then((newUser) => {
+          this.setState({
+            user: newUser
+          })
+        })
       }
       else {
         console.log("User '" + name + "' already in database!")
+        console.log(user)
+        this.setState({
+          user: user
+        })
       }
-      this.setState({
-        user: user
-      })
       console.log("User in state:", user)
     })
 
@@ -122,20 +128,26 @@ class App extends React.Component {
           <Router basename={process.env.PUBLIC_URL}>
             <Container maxWidth='md'>
               <Header user={user} />
+<<<<<<< HEAD
                 <GroupEntries user={user}/>
+=======
+>>>>>>> 60cdfba43898fdda5cf982a5659516f203e2f690
               {
                 user ?
                   <>
                     <Redirect to='/groups'/>
                     <Navigation />
                     <Route path='/groups'>
-                      <GroupEntries user={user}/>
+                      <MemberDetails groupId={15}/>
                     </Route>
                     <Route path='/about'>
                       <About/>
                     </Route>
+                    <Route path='/grouplist'>
+                      <GroupList />
+                    </Route>
                     <Route path='/user'>
-                      <User/>
+                      <User user={user}/>
                     </Route>
                     <Route path=''>
                     </Route>
