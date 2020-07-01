@@ -60,7 +60,7 @@ class Administration():
     def save_user(self, user):
         user.set_last_updated(datetime.now())
         with UserMapper() as mapper:
-            mapper.update(user)
+            return mapper.update(user)
 
     """Gruppe"""
 
@@ -131,7 +131,7 @@ class Administration():
     def save_group(self, group):
         group.set_last_updated(datetime.now())
         with GroupMapper() as mapper:
-            mapper.update(group)
+            return mapper.update(group)
 
     """eventuell reichen die delete-methoden der objekte selbst
 
@@ -160,7 +160,7 @@ class Administration():
         article.set_name(name),
         article.set_group(group_id)
         with ArticleMapper() as mapper:
-            mapper.insert(article)
+            return mapper.insert(article)
 
     def delete_article(self, article):
         with ListEntryMapper() as mapper:
@@ -169,11 +169,9 @@ class Administration():
         with ArticleMapper() as mapper:
             mapper.delete(article)
 
-
-
     def save_article(self, article):
         with ArticleMapper() as mapper:
-            mapper.update(article)
+            return mapper.update(article)
 
     """Listentry"""
 
@@ -185,19 +183,18 @@ class Administration():
         with ListEntryMapper() as mapper:
             return mapper.find_by_id(list_entry_id)
 
-    def create_list_entry(self, name, article_id, amount, unit, retailer_id,
-                          user_id, shopping_list_id):
-        listentry = ListEntry()
-        listentry.set_id(0),
-        listentry.set_name(name),
-        listentry.set_purchasing_user(user_id),
-        listentry.set_amount(amount),
-        listentry.set_article(article_id),
-        listentry.set_unit(unit),
-        listentry.set_retailer(retailer_id),
-        listentry.set_shopping_list(shopping_list_id)
+    def create_list_entry(self, article_id, amount, unit, retailer_id,
+                          purchasing_user_id, shopping_list_id):
+        list_entry = ListEntry()
+        list_entry.set_id(0),
+        list_entry.set_purchasing_user(purchasing_user_id),
+        list_entry.set_amount(amount),
+        list_entry.set_article(article_id),
+        list_entry.set_unit(unit),
+        list_entry.set_retailer(retailer_id),
+        list_entry.set_shopping_list(shopping_list_id)
         with ListEntryMapper() as mapper:
-            mapper.insert(listentry)
+            return mapper.insert(list_entry)
 
     def delete_list_entry(self, list_entry):
         with ListEntryMapper() as mapper:
@@ -205,7 +202,7 @@ class Administration():
 
     def save_list_entry(self, list_entry):
         with ListEntryMapper() as mapper:
-            mapper.update(list_entry)
+            return mapper.update(list_entry)
 
     """Einkaufsliste"""
 
@@ -217,18 +214,15 @@ class Administration():
         with ShoppingListMapper() as mapper:
             return mapper.find_by_name(name)
 
-    def get_list_entries_by_shopping_list_id(self, shoppinglist_id):
+    def get_list_entries_by_shopping_list_id(self, shopping_list_id):
         with ListEntryMapper() as mapper:
-            return mapper.find_list_entries_by_shopping_list(shoppinglist_id)
+            return mapper.find_list_entries_by_shopping_list_id(
+                shopping_list_id)
 
     def get_list_entries_checked_by_shopping_list_id(self, shopping_list_id):
-        list_entries_checked = []
-        list_entries = self.get_list_entries_by_shopping_list_id(
-            shopping_list_id)
-        for list_entry in list_entries:
-            if list_entry.is_checked():
-                list_entries_checked.append(list_entry)
-        return list_entries_checked
+        with ListEntryMapper() as mapper:
+            return mapper.find_list_entries_checked_by_shopping_list_id(
+                shopping_list_id)
 
     def create_shopping_list(self, name, group_id):
         shopping_list = ShoppingList()
@@ -236,7 +230,7 @@ class Administration():
         shopping_list.set_name(name)
         shopping_list.set_group(group_id)
         with ShoppingListMapper() as mapper:
-            mapper.insert(shopping_list)
+            return mapper.insert(shopping_list)
 
     def delete_shopping_list(self, shopping_list):
         with ListEntryMapper() as mapper:
@@ -245,11 +239,9 @@ class Administration():
         with ShoppingListMapper() as mapper:
             mapper.delete(shopping_list)
 
-
-
     def save_shopping_list(self, shopping_list):
         with ShoppingListMapper() as mapper:
-            mapper.update(shopping_list)
+            return mapper.update(shopping_list)
 
     """Retailer"""
 
