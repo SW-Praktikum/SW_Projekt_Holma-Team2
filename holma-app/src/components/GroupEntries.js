@@ -14,8 +14,21 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import ListWithBoxes from './ListWithBoxes'
+import ListEntry from './ListEntry'
 import GroupAddDialog from './dialogs/GroupAddDialog';
-
+import MemberAddDialog from './dialogs/MemberAddDialog';
+import GroupBO from '../api/GroupBO';
+import UserBO from '../api/UserBO';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import Avatar from '@material-ui/core/Avatar';
+import IconButton from '@material-ui/core/IconButton';
+import FolderIcon from '@material-ui/icons/Folder';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const useStyles = makeStyles({
     root: {
@@ -69,10 +82,18 @@ class GroupEntry extends Component {
 class GroupEntries extends Component{
     constructor(props) {
         super(props);
+        this.addGroup = this.addGroup.bind(this)
+        this.addMember = this.addMember.bind(this)
         this.state = {
-            elements: [],
+            groupElements: [],
+            memberElements: [],
             loadingInProgress: false,
             loadingError: null,
+            groupId: "",
+            open: false,
+            openMember: false,
+            groupName: "",
+            memberId: "",
         }
     }
 
@@ -80,24 +101,94 @@ class GroupEntries extends Component{
       // load only if the owner object is given
       if (this.props.user) {
         this.loadGroups();
+        
       }
     }
-  
-    loadGroups = () => {
-      const {user} = this.props
-        AppAPI.getAPI().getGroupsByUserId(user.getId()).then(groups => {
-          console.log("Loaded groups from database for user '" + user.getName() + "'")
-          console.log("Loaded groups:", groups)
-          var elements = groups.map((group) => 
-          <Grid key={group.getId()} item xs={4}>
-            <Paper className="paper" style ={{ textAlign:'center',}} >
-              <GroupEntry key={group.getId()} group={group}/>
-            </Paper>
-          </Grid>
+
+    handleChange = (e) => {
+      this.setState({groupName: e.target.value})
+    }
+
+    handleClose = () => {
+      this.setState({
+          open: false
+      })
+    }
+
+    handleClickOpen = () => {
+      this.setState({
+          open: true
+      })    
+    }
+
+    handleClickOpenMember = () => {
+      this.setState({
+          openMember: true
+      })    
+    }
+
+    handleCloseMember = () => {
+      this.setState({
+          openMember: false
+      })
+    }
+
+    addGroup = () => { 
+      const {user} = this.props;
+      var grp = new GroupBO(this.state.groupName, user.getId());
+      AppAPI.getAPI().createGroup(grp).then(group => {
+        this.setState({groupId: group.getId()})
+        console.log(this.state.groupId)
+        AppAPI.getAPI().addUserToGroup(group.getId(), user.getId()).then( () => {
+          this.loadGroups();
+        })  
+      })
+      this.handleClose();
+      this.handleClickOpenMember();//open new dialog
+    }
+
+    addMember() {
+      //es muss gecheckt werden bei input ob der user existiert und ob er schon in der Gruppe ist,
+      // checken ob user id vorhanden und ob user schon in group
+
+      AppAPI.getAPI().addUserToGroup(this.state.groupId, this.state.memberId)
+      this.setState({memberId: ""})
+      this.loadMembers() //not working yet needs to be built properly
+        //Member müssen geladen und gerendert werden
+    }
+    
+    handleChangeMember = (e) => {
+      this.setState({memberId: e.target.value})
+    }
+
+    loadMembers = () => { // getUsersByGroupId not working yet
+      console.log("Hier sollen die Member der Gruppe " + this.state.groupId + " geladen werden")
+      AppAPI.getAPI().getUsersByGroupId(this.state.groupId).then(users => {
+        console.log("Loaded users from database for group '" + this.state.groupId + "'")
+        console.log("Loaded users:", users)
+        var memberElements = users.map((user) => 
+          //wie kann die einzelne Gruppe im nächsten Schritt angesprochen werden?
+          
+              <ListItem>
+                <ListItemAvatar>
+                  <Avatar>
+                    <FolderIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  primary={user.getName()}
+                />
+                <ListItemSecondaryAction>
+                  <IconButton edge="end" aria-label="delete">
+                    <DeleteIcon />
+                  </IconButton>
+                </ListItemSecondaryAction>
+              </ListItem>
+          
           )
 
           this.setState({
-              elements: elements,
+              memberElements: memberElements,
               loadingInProgress: true, // loading indicator 
               loadingError: null
             })
@@ -109,16 +200,66 @@ class GroupEntries extends Component{
         );  
       }
 
+    loadGroups = () => {
+      console.log("Hier", this.state.groupId)
+      const {user} = this.props
+        AppAPI.getAPI().getGroupsByUserId(user.getId()).then(groups => {
+          console.log("Loaded groups from database for user '" + user.getName() + "'")
+          console.log("Loaded groups:", groups)
+          var groupElements = groups.map((group) => 
+          //wie kann die einzelne Gruppe im nächsten Schritt angesprochen werden?
+          <Grid key={group.getId()} item xs={4}>
+            <Paper className="paper" style ={{ textAlign:'center',}} >
+              <GroupEntry key={group.getId()} group={group}/>
+            </Paper>
+          </Grid>
+          )
+
+          this.setState({
+              GgroupElements: groupElements,
+              loadingInProgress: true, // loading indicator 
+              loadingError: null
+            })
+          }).catch(e =>
+              this.setState({ // Reset state with error from catch 
+                loadingInProgress: false,
+                loadingError: e
+          })
+        );  
+      }
+    
+
     render() {
-        const {elements} = this.state;
-        return (            
+        const {groupElements, memberElements} = this.state;
+
+        return (
           <div>
-            <ListWithBoxes elements={elements}/>
-            <GroupAddDialog user={this.props.user} loadGroups={this.loadGroups}/> 
+            <ListWithBoxes groupElements={groupElements}/>
+            <GroupAddDialog 
+            addGroup={this.addGroup} 
+            open={this.state.open}
+            groupName={this.state.groupName} 
+            handleChange={this.handleChange} 
+            handleClickOpen={this.handleClickOpen} 
+            handleClose={this.handleClose} 
+            user={this.props.user} 
+            loadGroups={this.loadGroups}/> 
+            <MemberAddDialog
+            memberElements={memberElements}
+            groupId={this.state.groupId} 
+            memberId={this.state.memberId}
+            handleChange={this.handleChangeMember}
+            addMember={this.addMember}
+            handleClickOpenMember={this.handleClickOpenMember}
+            handleCloseMember={this.handleCloseMember}
+            openMember={this.state.openMember}/>
+            <ListEntry  />
+            <ListEntry />
           </div>
         );
     }
 }
+
 export default GroupEntries;
 
 

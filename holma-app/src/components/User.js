@@ -6,7 +6,6 @@ import User from '../api/UserBO';
 import ListWithBoxes from './ListWithBoxes';
 import firebase from 'firebase/app'
 
-
 class UserProfil extends Component {
 
   // a refernce to the avatar button
@@ -29,35 +28,37 @@ class UserProfil extends Component {
 
   render() {
 
-      const { classes } = this.props;
+      const { classes, user } = this.props;
       
       return (
           
         <Paper elevation={0} className={classes.root}>
           <div className={classes.content}>
-            <Box m={5} />
+            <Box m={2} />
                 <Typography  variant="h4" gutterBottom>
-                Userdetails
+                Userdetails:
                 </Typography>
             <Box m={5} />
             <Grid container spaching={3}>
               <Grid item xs={8} sm={2}>
-                <Typography variant="h6" gutterBottom>Username</Typography>
+                <Typography variant="h6" gutterBottom>{user.getName()}</Typography>
               </Grid>
               <Grid item xs={8} sm={2}/>
               <Grid item xs={8} sm={4}>
-                <Typography variant="h6" gutterBottom>User-Id: id</Typography>
+                <Typography variant="h6" gutterBottom>User-Id: {user.getId()}</Typography>
               </Grid>
             </Grid>
             <Box m={4} />
               <Grid container spacing={3}>
                   <Grid item xs={8} sm={4}>
-                      <Typography variant="h6" gutterBottom>Member since: date</Typography>
+                      <Typography variant="h6" gutterBottom>Member since: {user.getCreationDate()}</Typography>
                   </Grid>
               </Grid>
             <Box m={4} />
-            <Grid item>
-                    <Button color='primary' onClick={this.handleSignOutButtonClicked}>Logout</Button>
+            <Grid container spaching={2}>
+              <Button color='primary' onClick={this.handleSignOutButtonClicked}>Logout</Button>
+              <Grid item xs={8} sm={9}/>
+              <Button color='secondary'>Delete User</Button>
             </Grid>
           </div>
         </Paper>
@@ -74,6 +75,9 @@ const styles = theme => ({
   },
   content: {
     margin: theme.spacing(1),
+  },
+  button: {
+    color: theme.palette.delete.main,
   }
 });
 
