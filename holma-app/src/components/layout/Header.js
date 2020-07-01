@@ -25,11 +25,18 @@ class Header extends React.Component {
               <div>&nbsp;Holma</div>
             </IconButton>
             <Grid justify="space-between" container spacing={24}></Grid>
-            <div user={user} style={{fontStyle: "italic"}}>
-              <b>User:&nbsp;DominikK.</b>
-              <br/>
-              <b>ID:&nbsp;1023</b> 
-            </div>
+            {
+                user ?
+                <>
+                    <div user={user} style={{fontStyle: "italic"}}>
+                      <b>User:&nbsp;{user.getName()} </b>
+                      <b>ID:&nbsp;{user.getId()}</b> 
+                    </div>
+                </>
+                :
+                <>
+                </>
+            }
           </Toolbar>
         </AppBar>
       </div>
