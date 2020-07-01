@@ -28,7 +28,7 @@ export default class AppAPI {
     // Group Related
     #getGroupsURL = () => `${this.#appServerBaseURL}/groups`;
     #getGroupByIdURL = (groupId) => `${this.#appServerBaseURL}/groups/${groupId}`;
-    //#getGroupsByNameURL = (name) => `${this.#appServerBaseURL}/by-name/${name}`;
+    #getGroupsByNameURL = (name) => `${this.#appServerBaseURL}/by-name/${name}`;
     #updateGroupURL = (groupId) => `${this.#appServerBaseURL}/groups/${groupId}`;
     #deleteGroupURL = (groupId) => `${this.#appServerBaseURL}/groups/${groupId}`;
 
@@ -36,11 +36,11 @@ export default class AppAPI {
   
     // Article Related
     #getArticlesURL = () => `${this.#appServerBaseURL}/articles`;
-    //#createArticleURL
-    //#updateArticleURL
-    //#deleteArticleURL
+    #createArticleURL = (groupId) => `${this.#appServerBaseURL}/groups/${groupId}/articles`;
+    #updateArticleURL = (articleId) =>  `${this.#appServerBaseURL}/articles/${articleId}`;
+    #deleteArticleURL = (articleId) => `${this.#appServerBaseURL}/articles/${articleId}` ;
     #getArticleByIdURL = (articleId) => `${this.#appServerBaseURL}/articles/${articleId}`;
-    //#getArticleByNameURL
+    #getArticleByNameURL = (name) => `${this.#appServerBaseURL}/by-name/${name}`;
 
 
 
@@ -222,6 +222,15 @@ export default class AppAPI {
         })
     };
 
+    getGroupsByName(name) {
+        return this.#fetchAdv(this.#getGroupsByNameURL(name)).then((responseJSON) => {
+            let responseGroups = GroupBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+                resolve(responseGroups)
+            })
+        })
+    };
+
     updateGroup(group) {
         return this.#fetchAdv(this.#updateGroupURL(group.getId()), {
             method: 'PUT',
@@ -340,13 +349,72 @@ export default class AppAPI {
         })
     };
 
-    /* getArticleById(articleId) {
+    createArticle(article) {
+        console.log("Creating Article:", article)
+        return this.#fetchAdv(this.#createArticleURL(article.getGroupId()), {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(article)
+        }).then((responseJSON) => {
+            let responseArticle = ArticleBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseArticle)
+            })
+        })
+    };
+
+    getArticlesByName(name) {
+        return this.#fetchAdv(this.#getArticleByNameURL(name)).then((responseJSON) => {
+            let responseArticles = ArticleBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+                resolve(responseArticles)
+            })
+        })
+    };
+
+    updateArticle(article) {
+        return this.#fetchAdv(this.#updateArticleURL(article.getId()), {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(article)
+        }).then((responseJSON) => {
+            let responseArticle = ArticleBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseArticle)
+            })
+        })
+    };
+
+    deleteArticle(article) {
+        return this.#fetchAdv(this.#deleteArticleURL(article.getId()), {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(article)
+        }).then((responseJSON) => {
+            let responseArticle = ArticleBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseArticle)
+            })
+        })
+    };
+
+
+    getArticleById(articleId) {
         return this.#fetchAdv(this.#getArticleByIdURL(articleId)).then((responseJSON) => {
             let responseArticle = ArticleBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
                 resolve(responseArticle)
             })
         })
-    }; */
+    };
 }
 
