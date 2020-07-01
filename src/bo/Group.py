@@ -63,6 +63,6 @@ class Group(BusinessObject):
             group.set_last_updated(last_update)
             group.set_owner(owner)
             result.append(group)
-        if len(result) > 1:
-            return result
-        return result[0]
+        if len(result) == 1:
+            return result[0]
+        return result
