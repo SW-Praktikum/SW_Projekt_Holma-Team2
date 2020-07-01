@@ -44,24 +44,23 @@ group = api.inherit('Group', bo, {
 })
 
 shoppingList = api.inherit('ShoppingList', bo, {
-    'group_id': fields.Integer(attribute='_group_id',
-                               description='ID der Gruppe zu der diese Liste gehört'),
+
     'groupId': fields.Integer(attribute='_group_id',
                               description='ID der Gruppe zu der diese Liste gehört')
 })
 
 listEntry = api.inherit('ListEntry', bo, {
-    'article_id': fields.Integer(attribute='_article_id',
+    'article': fields.Integer(attribute='_article',
                                  description='zu welchem Artikle gehört dieses Entry? '),
     'amount': fields.Float(attribute='_amount',
                            description='Menge des Entries '),
     'unit': fields.String(attribute='_unit',
                           description='Einheit des Entries '),
-    'purchasingUser': fields.String(attribute='_purchasing_user',
+    'purchasingUser': fields.Integer(attribute='_purchasing_user',
                                     description='Wer das Artikle kaufen muss '),
     'shoppingList': fields.Integer(attribute='_Shopping_list',
                                    description='zu welcher Liste diese Entry gehört?'),
-    'retailer': fields.String(attribute='_retailer',
+    'retailer': fields.Integer(attribute='_retailer',
                               description='Bei wem das Artikle gekauft  '),
     'checked': fields.Boolean(attribute='_checked',
                               description='wurde es bereits gekauft'),
@@ -486,16 +485,12 @@ class ShoppingListRelatedListEntryListOperations(Resource):
         sl = adm.get_shopping_list_by_id(shopping_list_id)
         proposal = ListEntry.from_dict(api.payload)
         if sl is not None and proposal is not None:
-            result = adm.create_list_entry(proposal.get_name(),
-                                           proposal.get_article(),
+            result = adm.create_list_entry(proposal.get_purchasing_user(),
                                            proposal.get_amount(),
+                                           proposal.get_article(),
                                            proposal.get_unit(),
                                            proposal.get_retailer(),
-                                           proposal.get_standardarticle(),
-                                           proposal.get_purchasing_user(),
-                                           shopping_list_id,
-                                           proposal.get_checked(),
-                                           proposal.get_checked_ts()
+                                           proposal.get_shopping_list()
                                            )
             return result, 200
         else:

@@ -90,10 +90,10 @@ class ListEntryMapper(Mapper):
 
         return result
 
-    def find_list_entries_by_shopping_list_id(self, shopping_list_id):
+    def find_list_entries_by_shopping_list_id(self, shoppinglist):
         cursor = self._connection.cursor()
         command = "SELECT * FROM holma.list_entry " \
-                  "WHERE shopping_list={}".format(shopping_list_id)
+                  "WHERE shopping_list={}".format(shoppinglist.get_id())
         cursor.execute(command)
         tuples = cursor.fetchall()
 
