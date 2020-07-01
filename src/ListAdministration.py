@@ -210,7 +210,6 @@ class Administration():
     """Einkaufsliste"""
 
     def get_shopping_list_by_id(self, shopping_list_id):
-<<<<<<< HEAD
         with ShoppingListMapper as mapper:
             return mapper.find_by_id(shopping_list_id)
 
@@ -220,17 +219,6 @@ class Administration():
 
     def get_list_entries_by_shopping_list_id(self, shoppinglist_id):
         with ListEntryMapper as mapper:
-=======
-        with ShoppingListMapper() as mapper:
-            return mapper.find_by_id(shopping_list_id)
-
-    def get_shopping_list_by_name(self, name):
-        with ShoppingListMapper() as mapper:
-            return mapper.find_by_name(name)
-
-    def get_list_entries_by_shopping_list_id(self, shoppinglist_id):
-        with ListEntryMapper() as mapper:
->>>>>>> master
             return mapper.find_list_entries_by_shopping_list(shoppinglist_id)
 
     def get_list_entries_checked_by_shopping_list_id(self, shopping_list_id):
@@ -247,13 +235,8 @@ class Administration():
         shopping_list.set_id(1)
         shopping_list.set_name(name)
         shopping_list.set_group(group_id)
-<<<<<<< HEAD
-        with ShoppingListMapper as mapper:
-            return mapper.insert(shopping_list)
-=======
         with ShoppingListMapper() as mapper:
             mapper.insert(shopping_list)
->>>>>>> master
 
     def delete_shopping_list(self, shopping_list):
         with ListEntryMapper() as mapper:
@@ -271,7 +254,6 @@ class Administration():
     """Retailer"""
 
     def get_all_retailers(self):
-<<<<<<< HEAD
         with RetailerMapper as mapper:
             return mapper.find_all()
 
@@ -284,18 +266,6 @@ class Administration():
             return mapper.find_by_name(name)
 
 
-=======
-        with RetailerMapper() as mapper:
-            return mapper.find_all()
-
-    def get_retailer_by_id(self, retailer_id):
-        with RetailerMapper() as mapper:
-            return mapper.find_by_id(retailer_id)
-
-    def get_retailers_by_name(self, name):
-        with RetailerMapper() as mapper:
-            return mapper.find_by_name(name)
->>>>>>> master
 
     """Statistik Client"""
 
@@ -305,17 +275,6 @@ class StatisticAdministration(object):
         pass
 
     def get_all_articles(self):
-<<<<<<< HEAD
-        with ArticleMapper as mapper:
-            return mapper.find_all()
-
-    def get_all_list_entries(self):
-        with ListEntryMapper as mapper:
-            return mapper.find_all()
-
-    def get_list_entries_by_retailer_id(self, retailer_id):
-        with ListEntryMapper as mapper:
-=======
         with ArticleMapper() as mapper:
             return mapper.find_all()
 
@@ -325,16 +284,11 @@ class StatisticAdministration(object):
 
     def get_list_entries_by_retailer_id(self, retailer_id):
         with ListEntryMapper() as mapper:
->>>>>>> master
             return mapper.find_by_retailer(retailer_id)
 
     def get_list_entries_in_time_period(self, start_date, end_date):
         pass
 
     def get_list_entries_by_article_id(self, article_id):
-<<<<<<< HEAD
-        with ListEntryMapper as mapper:
-=======
         with ListEntryMapper() as mapper:
->>>>>>> master
             return mapper.find_list_entries_by_article(article_id)

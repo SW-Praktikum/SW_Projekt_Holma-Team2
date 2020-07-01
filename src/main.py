@@ -43,13 +43,10 @@ group = api.inherit('Group', bo, {
 })
 
 shoppingList = api.inherit('ShoppingList', bo, {
-<<<<<<< HEAD
     'group_id': fields.Integer(attribute='_group_id',
                             description='ID der Gruppe zu der diese Liste gehört'),
-=======
     'groupId': fields.Integer(attribute='_group_id',
                               description='ID der Gruppe zu der diese Liste gehört')
->>>>>>> master
 })
 
 listEntry = api.inherit('ListEntry', bo, {
@@ -74,13 +71,11 @@ listEntry = api.inherit('ListEntry', bo, {
 })
 
 article = api.inherit('Article', bo, {
-<<<<<<< HEAD
     'group_id': fields.Integer(attribute='_group_id',
                             description='zu welcher Groupe dieses Artikle gehört?'),
-=======
     'groupId': fields.Integer(attribute='_group',
                               description='zu welcher Groupe dieses Artikle gehört?')
->>>>>>> master
+
 })
 
 retailer = api.inherit('Retailer', bo)
@@ -326,13 +321,8 @@ class ArticleListOperations(Resource):
         return art_list
 
 
-<<<<<<< HEAD
 @holmaApp.route('/articles/<int:article_id>')
 @holmaApp.response(500,'Falls es zu einem Server-seitigen Fehler kommt.')
-=======
-@holmaApp.route('/article/<int:article_id>')
-@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
->>>>>>> master
 @holmaApp.param('article_id', 'Die ID des article-Objekts')
 class ArticleOperations(Resource):
     @holmaApp.marshal_list_with(article)
