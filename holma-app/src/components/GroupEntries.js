@@ -143,7 +143,7 @@ class GroupEntries extends Component{
 
       AppAPI.getAPI().addUserToGroup(this.state.groupId, this.state.memberId)
       this.setState({memberId: ""})
-      //this.loadMembers() not working yet needs to be built properly
+      this.loadMembers() //not working yet needs to be built properly
         //Member müssen geladen und gerendert werden
     }
     
