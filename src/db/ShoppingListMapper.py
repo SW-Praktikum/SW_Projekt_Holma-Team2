@@ -48,10 +48,10 @@ class ShoppingListMapper(Mapper):
 
         return result
 
-    def find_by_group(self, group_id):
+    def find_by_group(self, group):
         cursor = self._connection.cursor()
         command = "SELECT * FROM shopping_list " \
-                  "WHERE group_id={}".format(group_id)
+                  "WHERE group_id={}".format(group.get_id())
         cursor.execute(command)
         tuples = cursor.fetchall()
 
