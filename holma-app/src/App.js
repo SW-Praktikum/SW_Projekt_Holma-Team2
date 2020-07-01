@@ -128,10 +128,6 @@ class App extends React.Component {
           <Router basename={process.env.PUBLIC_URL}>
             <Container maxWidth='md'>
               <Header user={user} />
-<<<<<<< HEAD
-                <GroupEntries user={user}/>
-=======
->>>>>>> 60cdfba43898fdda5cf982a5659516f203e2f690
               {
                 user ?
                   <>

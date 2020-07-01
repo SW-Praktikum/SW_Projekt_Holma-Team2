@@ -114,12 +114,13 @@ class MemberDetails extends Component{
   }
 
     render(){
-      const {elements} = this.state;
+      const {elements} = this.state.members;
       console.log("!!!")
       console.log(elements)
       return(
         <div>
-            <ListWithBoxes elements={elements}/>
+            <GroupInformation/>
+            <ListWithBoxes groupElements={elements}/>
             <MemberAddDialog member={this.props.members} loadMembers={this.loadMembers}/> 
           </div>
       );
