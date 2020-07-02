@@ -212,15 +212,15 @@ class GroupList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            groupID: this.props.groupID,
+            groupId: props.groupId,
             loadingInProgress: false,
             loadingError: null
         }}
     
     loadGroup = () => {
-        AppAPI.getAPI().getGroupById(this.state.groupID).then(res =>
+        AppAPI.getAPI().getGroupById(this.state.groupId).then(res =>
             this.setState({
-                groupID:res,
+                groupId:res,
                 loadingInProgress: false,
                 loadingError: null
             })).catch(e =>

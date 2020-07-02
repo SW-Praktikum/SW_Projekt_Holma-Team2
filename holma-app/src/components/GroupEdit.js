@@ -15,6 +15,7 @@ import GroupAddDialog from './dialogs/GroupAddDialog';
 import Paper from '@material-ui/core/Paper';
 import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
+import GroupEntries from './GroupEntries';
 
 
 class GroupInformation extends Component {
@@ -79,7 +80,7 @@ class MemberDetails extends Component{
   constructor(props){
     super(props);
     this.state ={
-        members:[],
+        members:['Dennis','Veli','Tobse'],
         loadingInProgress: false,
         loadingError: null,
     }
@@ -91,7 +92,7 @@ class MemberDetails extends Component{
   }
 
   loadMembers = () => {
-      AppAPI.getAPI().getUsersByGroupId(this.props.groupId).then((members) => {
+      AppAPI.getAPI().getUsersByGroupId(this.props).then((members) => {
         var memberElements = members.map((member) => 
           <Grid key={member.getId()} item xs={4}>
               <Paper className="paper" style ={{ textAlign:'center',}} >
@@ -114,14 +115,15 @@ class MemberDetails extends Component{
   }
 
     render(){
-      const {elements} = this.state.members;
+      const elements = this.state.members;
+      this.loadMembers = this.loadMembers.bind(this)
       console.log("!!!")
       console.log(elements)
       return(
         <div>
-            <GroupInformation/>
+            
             <ListWithBoxes groupElements={elements}/>
-            <MemberAddDialog member={this.props.members} loadMembers={this.loadMembers}/> 
+            <MemberAddDialog member={this.state.members} loadMembers={this.loadMembers}/> 
           </div>
       );
     }

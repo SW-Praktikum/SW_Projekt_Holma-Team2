@@ -74,8 +74,8 @@ class GroupEntry extends Component {
             </CardContent>
             </CardActionArea>     
             <CardActions>
-                <Link to="/grouplist">
-                  <Button onClick={() => {this.props.setPath(path)}} size="small">Anzeigen</Button>
+                <Link to="/groupedit">
+                  <Button  size="small">Anzeigen</Button>
                 </Link>
             </CardActions>
          </Card>
