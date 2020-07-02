@@ -29,6 +29,4 @@ class Retailer(BusinessObject):
             retailer.set_creation_date(creation_date)
             retailer.set_last_updated(last_update)
             result.append(retailer)
-        if len(result) == 1:
-            return result[0]
         return result

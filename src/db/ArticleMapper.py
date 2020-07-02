@@ -27,7 +27,7 @@ class ArticleMapper(Mapper):
         tuples = cursor.fetchall()
 
         result = Article.from_tuples(tuples)
-
+        
         self._connection.commit()
         cursor.close()
         return result
