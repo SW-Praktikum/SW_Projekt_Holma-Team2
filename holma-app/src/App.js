@@ -143,7 +143,7 @@ class App extends React.Component {
                       <GroupList />
                     </Route>
                     <Route path='/groupedit'>
-                      <MemberDetails member={34}/>
+                      <MemberDetails/>
                     </Route>
                     <Route path='/user'>
                       <User user={user}/>

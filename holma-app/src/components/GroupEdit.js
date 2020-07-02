@@ -86,17 +86,17 @@ class MemberDetails extends Component{
     }
   }
   componentDidMount(){
-    if(this.props.groupId){
+    if(this.props.location.groupId){
       this.loadMembers();
     }
   }
 
   loadMembers = () => {
-      AppAPI.getAPI().getUsersByGroupId(this.props).then((members) => {
+      AppAPI.getAPI().getUsersByGroupId(this.props.location.groupId).then((members) => {
         var memberElements = members.map((member) => 
           <Grid key={member.getId()} item xs={4}>
               <Paper className="paper" style ={{ textAlign:'center',}} >
-                <MemberCards key={this.props.groupId} member={member}/>
+                <MemberCards key={this.props.location.groupId} member={member}/>
               </Paper>
             </Grid>
         );
