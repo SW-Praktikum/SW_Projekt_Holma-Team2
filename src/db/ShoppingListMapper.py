@@ -70,6 +70,7 @@ class ShoppingListMapper(Mapper):
         command = "INSERT INTO shopping_list (shopping_list_id, name, " \
                   "group_id, creation_date, last_updated) " \
                   "VALUES (%s, %s, %s, %s, %s)"
+
         data = (shopping_list.get_id(),
                 shopping_list.get_name(),
                 shopping_list.get_group(),

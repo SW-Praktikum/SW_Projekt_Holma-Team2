@@ -508,7 +508,7 @@ class ListEntryListOperations(Resource):
         return le_list
 
 
-@holmaApp.route('/listentrie/<int:list_entry_id>')
+@holmaApp.route('/listentry/<int:list_entry_id>')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('list_entry_id', 'Die ID des ListEntry-Objekts')
 class ListEntryOperations(Resource):

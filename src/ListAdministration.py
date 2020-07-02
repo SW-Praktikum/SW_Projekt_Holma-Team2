@@ -226,7 +226,7 @@ class Administration():
 
     def create_shopping_list(self, name, group_id):
         shopping_list = ShoppingList()
-        shopping_list.set_id(1)
+        shopping_list.set_id(0)
         shopping_list.set_name(name)
         shopping_list.set_group(group_id)
         with ShoppingListMapper() as mapper:

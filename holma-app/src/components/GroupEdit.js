@@ -57,21 +57,19 @@ class GroupInformation extends Component {
   );
 }}
 
-class MemberCards extends Component{
+class MemberCard extends Component{
   render(){
     return(
-      <Grid item xs={8} sm={4}>
-          <Card className="root" style={{minWidth: 275, marginBottom:10, marginTop:10}}>
-            <CardActionArea >
+      <Card className="root" style={{minWidth: 275, marginBottom:10, marginTop:10}}>
+      <CardActionArea >
             <CardContent>
-                <Typography className="title" style={{fontSize: 14}} color="textPrimary">{this.state.members}</Typography>
+                <Typography className="title" style={{fontSize: 14}} color="textPrimary">{this.props.member.getName()}</Typography>
             </CardContent>
             </CardActionArea>
             <CardActions>
                 <Button size="small">Anzeigen</Button>
             </CardActions>
           </Card> 
-      </Grid>
     );
   }
 }
@@ -79,30 +77,27 @@ class MemberCards extends Component{
 class MemberDetails extends Component{
   constructor(props){
     super(props);
+    console.log("Props:", props)
     this.state ={
-        members:['Dennis','Veli','Tobse'],
-        loadingInProgress: false,
-        loadingError: null,
+      memberElements: [],
+      loadingInProgress: false,
+      loadingError: null,
     }
   }
   componentDidMount(){
-    if(this.props.location.groupId){
-      this.loadMembers();
-    }
+    if(this.props.match.params.groupId){
+       this.loadMembers();
+     }
   }
 
   loadMembers = () => {
-      AppAPI.getAPI().getUsersByGroupId(this.props.location.groupId).then((members) => {
+      AppAPI.getAPI().getUsersByGroupId(this.props.match.params.groupId).then((members) => {
         var memberElements = members.map((member) => 
-          <Grid key={member.getId()} item xs={4}>
-              <Paper className="paper" style ={{ textAlign:'center',}} >
-                <MemberCards key={this.props.location.groupId} member={member}/>
-              </Paper>
-            </Grid>
+            <MemberCard key={this.props.location.groupId} member={member}/>
         );
 
       this.setState({
-        members: memberElements,
+        memberElements: memberElements,
         loadingInProgress: true,
         loadingError: null
       })
@@ -115,14 +110,11 @@ class MemberDetails extends Component{
   }
 
     render(){
-      const elements = this.state.members;
+      const {memberElements} = this.state;
       this.loadMembers = this.loadMembers.bind(this)
-      console.log("!!!")
-      console.log(elements)
       return(
         <div>
-            
-            <ListWithBoxes groupElements={elements}/>
+            <ListWithBoxes groupElements={memberElements}/>
             <MemberAddDialog member={this.state.members} loadMembers={this.loadMembers}/> 
           </div>
       );

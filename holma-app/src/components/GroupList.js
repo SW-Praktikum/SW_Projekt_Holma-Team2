@@ -211,16 +211,23 @@ const useStyles = makeStyles((theme) => ({
 class GroupList extends Component {
     constructor(props) {
         super(props);
+        console.log(this.props.match.params.groupId)
         this.state = {
-            groupId: props.groupId,
+            group: null,
             loadingInProgress: false,
             loadingError: null
         }}
+      
+    componentDidMount(){
+      if(this.props.match.params.groupId){
+          this.loadShoppingLists();
+        }
+    }
     
     loadGroup = () => {
-        AppAPI.getAPI().getGroupById(this.state.groupId).then(res =>
+        AppAPI.getAPI().getGroupById(this.props.match.params.groupId).then((group) =>
             this.setState({
-                groupId:res,
+                group: group,
                 loadingInProgress: false,
                 loadingError: null
             })).catch(e =>
@@ -231,7 +238,24 @@ class GroupList extends Component {
                 );
     }
 
+    loadShoppingLists = () => {
+      AppAPI.getAPI().getShoppingListsByGroupId(this.props.match.params.groupId).then((shoppingLists) => {
+        var shoppingListElements = shoppingLists.map((shoppingList) => 
+            console.log(shoppingList.getName())
+        );
 
+      this.setState({
+        shoppingListElements: shoppingListElements,
+        loadingInProgress: true,
+        loadingError: null
+      })
+    }).catch(e =>
+      this.setState({
+        loadingInProgress: false,
+        loadingError: e
+      })
+    );
+  }
 
     render() {
         /*const {group} = this.props;
