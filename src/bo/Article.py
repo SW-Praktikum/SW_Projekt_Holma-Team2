@@ -53,6 +53,4 @@ class Article(BusinessObject):
             article.set_creation_date(creation_date)
             article.set_last_updated(last_updated)
             result.append(article)
-        if len(result) == 1:
-            return result[0]
         return result

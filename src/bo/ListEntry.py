@@ -124,8 +124,6 @@ class ListEntry(BusinessObject):
             listentry.set_last_updated(last_update)
             listentry.set_checked_ts(checked_ts)
             result.append(listentry)
-        if len(result) == 1:
-            return result[0]
         return result
     """
     def delete(self):
