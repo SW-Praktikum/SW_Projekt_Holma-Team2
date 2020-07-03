@@ -102,6 +102,9 @@ class Administration():
             mapper.add_user_to_group(group, user)
 
     def remove_member_from_group(self, group, user):
+        with GroupMapper() as mapper:
+            mapper.delete_owner(user, group)
+
         with UserGroupRelationsMapper() as mapper:
             mapper.remove_user_from_group(group, user)
 

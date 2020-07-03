@@ -103,10 +103,14 @@ class GroupMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
-    def delete_owner(self, user):
+    def delete_owner(self, user, group=None):
         cursor = self._connection.cursor()
-        command = "UPDATE holma.group SET owner= null WHERE owner = {}"\
+        if group is None:
+            command = "UPDATE holma.group SET owner= null WHERE owner = {}"\
             .format(user.get_id())
+        else:
+            command = "UPDATE holma.group SET owner= null WHERE owner = {} " \
+                      "AND group_id= {}".format(user.get_id(), group.get_id())
         cursor.execute(command)
 
         self._connection.commit()
