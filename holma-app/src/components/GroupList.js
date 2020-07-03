@@ -157,17 +157,17 @@ function CollapsibleTable() {
 
 function AddShoppinglist() {
   return (
-    <TableContainer component={Paper} style={{ width: '50%',}}>
+    <TableContainer component={Paper} style={{ width: '100%',}}>
       <Table aria-label="collapsible table">
         <TableHead>
           <TableRow>
             <TableCell><b>Add Shoppinglist</b></TableCell>
             <TableCell><form noValidate autoComplete="off">
-          <TextField id="standard-basic" label="name" />
+          <TextField id="standard-basic" label="name" style={{ width: '50%',}}/>
               </form>
             </TableCell>
             <TableCell><form noValidate autoComplete="off">
-          <TextField id="standard-basic" label="standardarticle_id" />
+          <TextField id="standard-basic" label="standardarticle_id" style={{ width: '50%',}}/>
         </form>
         </TableCell>
           </TableRow>
