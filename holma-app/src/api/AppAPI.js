@@ -54,8 +54,8 @@ export default class AppAPI {
     
     // ListEntry related
     //#getListEntryURL
-   /*  #getListEntryByIdURL = (listEntryId) => `${this.#appServerBaseURL}/listentry/${listEntryId}`;
-    #getListEntryByShoppingListIdURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppingLists/${shoppingListId}/listentry`; */
+    #getListEntryByIdURL = (listEntryId) => `${this.#appServerBaseURL}/listentry/${listEntryId}`;
+    #getListEntryByShoppingListIdURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppingLists/${shoppingListId}/listentry`; 
     //#createListEntryURL
     //#updateListEntryURL
     //#deleteListEntryURL
@@ -428,22 +428,22 @@ export default class AppAPI {
     };
 
 
-    /* getListEntryByShoppingListId(shoppingListId) {
+    getListEntryByShoppingListId(shoppingListId) {
         return this.#fetchAdv(this.#getListEntryByShoppingListIdURL(shoppingListId)).then((responseJSON) => {
             let responseListEntry = ListEntryBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
                 resolve(responseListEntry)
             })
         })
-    } */
+    } 
 
-    /* getListEntryById(listEntryId) {
+    getListEntryById(listEntryId) {
         return this.#fetchAdv(this.#getListEntryByIdURL(listEntryId)).then((responseJSON) => {
             let responseListEntry = ListEntryBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
                 resolve(responseListEntry)
             })
         })
-    }; */
+    }
 
 }
