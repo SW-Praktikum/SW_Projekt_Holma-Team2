@@ -16,6 +16,11 @@ import Paper from '@material-ui/core/Paper';
 import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
 import GroupEntries from './GroupEntries';
+import { Link } from 'react-router-dom';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItem from '@material-ui/core/ListItem';
+
+
 
 
 class GroupInformation extends Component {
@@ -29,7 +34,7 @@ class GroupInformation extends Component {
       <Box m={5} />
       <Grid container spaching={3}>
         <Grid item xs={8} sm={2}>
-          <Typography variant="h6" gutterBottom>Groupname</Typography>
+          <Typography variant="h6" gutterBottom>AppAPI.getAPI().get</Typography>
           <Fab size="small" color="secondary" aria-label="edit">
                 <EditIcon />
           </ Fab>
@@ -52,7 +57,6 @@ class GroupInformation extends Component {
       </Grid>
       <Box m={4} />
       <Typography variant="h6" gutterBottom>Groupmembers:</Typography>
-      <MemberDetails/>
       </div>
   );
 }}
@@ -67,7 +71,9 @@ class MemberCard extends Component{
             </CardContent>
             </CardActionArea>
             <CardActions>
+              <Link to={"/user/"}>
                 <Button size="small">Anzeigen</Button>
+              </Link>
             </CardActions>
           </Card> 
     );
@@ -80,6 +86,7 @@ class MemberDetails extends Component{
     console.log("Props:", props)
     this.state ={
       memberElements: [],
+      groupDetail:AppAPI.getAPI().getGroupById(this.props.match.param.groupId),
       loadingInProgress: false,
       loadingError: null,
     }
@@ -114,8 +121,9 @@ class MemberDetails extends Component{
       this.loadMembers = this.loadMembers.bind(this)
       return(
         <div>
-            <ListWithBoxes groupElements={memberElements}/>
-            <MemberAddDialog member={this.state.members} loadMembers={this.loadMembers}/> 
+          <GroupInformation group = {this.state.groupDetail}/>
+          <ListWithBoxes groupElements={memberElements}/>
+          <MemberAddDialog member={this.state.members} loadMembers={this.loadMembers}/> 
           </div>
       );
     }
