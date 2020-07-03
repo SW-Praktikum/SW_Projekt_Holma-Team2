@@ -34,7 +34,7 @@ class GroupInformation extends Component {
       <Box m={5} />
       <Grid container spaching={3}>
         <Grid item xs={8} sm={2}>
-          <Typography variant="h6" gutterBottom>AppAPI.getAPI().get</Typography>
+          <Typography variant="h6" gutterBottom>Groupname: name</Typography>
           <Fab size="small" color="secondary" aria-label="edit">
                 <EditIcon />
           </ Fab>
@@ -86,7 +86,7 @@ class MemberDetails extends Component{
     console.log("Props:", props)
     this.state ={
       memberElements: [],
-      groupDetail:AppAPI.getAPI().getGroupById(this.props.match.param.groupId),
+      /*groupDetail:AppAPI.getAPI().getGroupById(this.props.match.param.groupId),*/
       loadingInProgress: false,
       loadingError: null,
     }
