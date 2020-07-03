@@ -47,8 +47,9 @@ const useStyles = makeStyles({
     },
     avatar: {
         backgroundColor: red,
-      },
+      }, 
   });
+
 
 const randomImages = [
   "https://www.bahn-tickets.com/wp-content/uploads/2016/07/Gruppenreise_Personen-1000x683px.jpg",
@@ -66,7 +67,7 @@ class GroupEntry extends Component {
     render() {
         const path = "/grouplist/" + this.props.group.getId()
         return ( 
-        <Card className="root" style={{minWidth: 275, marginBottom:10, marginTop:10}}>
+        <Card className="root" style={{/* minHeight: 250 ,  */minWidth: '100%', marginBottom:10, marginTop:10}}>
             <CardActionArea>
             <CardMedia className="media" style={{height: 10, paddingTop: '56.25%',}} image={randomImages[Math.floor(Math.random() * randomImages.length)]} title="Groupname"/>
             <CardContent>
