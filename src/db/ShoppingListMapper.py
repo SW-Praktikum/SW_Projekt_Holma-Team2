@@ -32,7 +32,9 @@ class ShoppingListMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
-        return result
+        if len(result) == 0:
+            return None
+        return result[0]
 
     def find_by_name(self, name):
         cursor = self._connection.cursor()
@@ -68,6 +70,7 @@ class ShoppingListMapper(Mapper):
         command = "INSERT INTO shopping_list (shopping_list_id, name, " \
                   "group_id, creation_date, last_updated) " \
                   "VALUES (%s, %s, %s, %s, %s)"
+
         data = (shopping_list.get_id(),
                 shopping_list.get_name(),
                 shopping_list.get_group(),

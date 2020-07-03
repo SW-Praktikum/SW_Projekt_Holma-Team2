@@ -71,6 +71,4 @@ class User(BusinessObject):
             user.set_google_id(google_id)
             user.set_last_updated(last_updated)
             result.append(user)
-        if len(result) == 1:
-            return result[0]
         return result

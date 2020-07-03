@@ -15,6 +15,7 @@ import GroupAddDialog from './dialogs/GroupAddDialog';
 import Paper from '@material-ui/core/Paper';
 import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
+import GroupEntries from './GroupEntries';
 
 
 class GroupInformation extends Component {
@@ -56,21 +57,19 @@ class GroupInformation extends Component {
   );
 }}
 
-class MemberCards extends Component{
+class MemberCard extends Component{
   render(){
     return(
-      <Grid item xs={8} sm={4}>
-          <Card className="root" style={{minWidth: 275, marginBottom:10, marginTop:10}}>
-            <CardActionArea >
+      <Card className="root" style={{minWidth: 275, marginBottom:10, marginTop:10}}>
+      <CardActionArea >
             <CardContent>
-                <Typography className="title" style={{fontSize: 14}} color="textPrimary">{this.state.members}</Typography>
+                <Typography className="title" style={{fontSize: 14}} color="textPrimary">{this.props.member.getName()}</Typography>
             </CardContent>
             </CardActionArea>
             <CardActions>
                 <Button size="small">Anzeigen</Button>
             </CardActions>
           </Card> 
-      </Grid>
     );
   }
 }
@@ -78,49 +77,48 @@ class MemberCards extends Component{
 class MemberDetails extends Component{
   constructor(props){
     super(props);
+    console.log("Props:", props)
     this.state ={
-        members:[],
-        loadingInProgress: false,
-        loadingError: null,
+      memberElements: [],
+      loadingInProgress: false,
+      loadingError: null,
     }
   }
   componentDidMount(){
-    if(this.props.member){
-      this.loadMembers();
-    }
+    if(this.props.match.params.groupId){
+       this.loadMembers();
+     }
   }
 
   loadMembers = () => {
-      this.state.members = AppAPI.getAPI().getUsersByGroupId(this.props.groupId);
-      console.log(this.state.members);
-        this.state.members.map((member) =>
-        <Grid key={member.getId()} item xs={4}>
-            <Paper className="paper" style ={{ textAlign:'center',}} >
-              <MemberCards key={this.props.groupId} member={member}/>
-            </Paper>
-          </Grid>
-      );
+      AppAPI.getAPI().getUsersByGroupId(this.props.match.params.groupId).then((members) => {
+        var memberElements = members.map((member) => 
+            <MemberCard key={this.props.location.groupId} member={member}/>
+        );
 
       this.setState({
+        memberElements: memberElements,
         loadingInProgress: true,
         loadingError: null
-      }).catch(e =>
+      })
+    }).catch(e =>
       this.setState({
         loadingInProgress: false,
         loadingError: e
       })
-      );
-}
+    );
+  }
 
     render(){
-      const {elements} = this.state;
+      const {memberElements} = this.state;
+      this.loadMembers = this.loadMembers.bind(this)
       return(
         <div>
-            <ListWithBoxes elements={elements}/>
-            <MemberAddDialog member={this.props.members} loadMembers={this.loadMembers}/> 
+            <ListWithBoxes groupElements={memberElements}/>
+            <MemberAddDialog member={this.state.members} loadMembers={this.loadMembers}/> 
           </div>
       );
     }
 }
 
-export default {GroupInformation, MemberDetails};
+export default MemberDetails;

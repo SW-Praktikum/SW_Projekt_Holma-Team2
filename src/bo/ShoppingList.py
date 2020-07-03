@@ -54,6 +54,4 @@ class ShoppingList(BusinessObject):
             shoppinglist.set_creation_date(creation_date)
             shoppinglist.set_last_updated(last_update)
             result.append(shoppinglist)
-        if len(result) == 1:
-            return result[0]
         return result

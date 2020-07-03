@@ -104,6 +104,7 @@ class App extends React.Component {
       }
       else {
         console.log("User '" + name + "' already in database!")
+        console.log(user)
         this.setState({
           user: user
         })
@@ -131,12 +132,18 @@ class App extends React.Component {
                 user ?
                   <>
                     <Redirect to='/groups'/>
-                    <Navigation />
+                      <Navigation />
                     <Route path='/groups'>
                       <GroupEntries user={user}/>
                     </Route>
+                    <Route path='/groups/:groupId' component={GroupEdit}/>
                     <Route path='/about'>
                       <About/>
+                    </Route>
+                    <Route path='/grouplist/:groupId' component={GroupList}>
+                    </Route>
+                    <Route path='/groupedit'>
+                      <MemberDetails/>
                     </Route>
                     <Route path='/user'>
                       <User user={user}/>

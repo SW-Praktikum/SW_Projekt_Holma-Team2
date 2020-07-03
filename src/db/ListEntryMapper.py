@@ -32,7 +32,9 @@ class ListEntryMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
-        return result
+        if len(result) == 0:
+            return None
+        return result[0]
 
     def find_by_name(self, name):
         cursor = self._connection.cursor()
@@ -90,10 +92,10 @@ class ListEntryMapper(Mapper):
 
         return result
 
-    def find_list_entries_by_shopping_list_id(self, shopping_list_id):
+    def find_list_entries_by_shopping_list_id(self, shopping_list):
         cursor = self._connection.cursor()
         command = "SELECT * FROM holma.list_entry " \
-                  "WHERE shopping_list={}".format(shopping_list_id)
+                  "WHERE shopping_list={}".format(shopping_list.get_id())
         cursor.execute(command)
         tuples = cursor.fetchall()
 

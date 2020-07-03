@@ -84,7 +84,7 @@ export default function ScrollableTabsButtonForce() {
           </IconButton>
           <Tab className={classes.Home} label="" icon={<HomeRoundedIcon/>} {...a11yProps(0)} />
           <Tab label="Gruppen" icon={<GroupIcon />} {...a11yProps(1)} component={RouterLink} to={`/groups`}/>
-          <Tab label="Statistik" icon={<AssessmentIcon />} {...a11yProps(3)} component={RouterLink} to={`/about`}/>
+          <Tab label="Statistik" icon={<AssessmentIcon />} {...a11yProps(3)} component={RouterLink} to={`/groups/101`}/>
           <Tab label="User" icon={<AccountCircleIcon />} {...a11yProps(4)} component={RouterLink} to={`/user`}/>
         </Tabs>
       </AppBar>
