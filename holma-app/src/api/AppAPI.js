@@ -2,6 +2,7 @@ import GroupBO from './GroupBO';
 import UserBO from './UserBO';
 import ShoppingListBO from './ShoppingListBO';
 import ArticleBO from './ArticleBO'
+import ListEntryBO from './ListEntryBO'
 
 export default class AppAPI {
 
@@ -50,6 +51,15 @@ export default class AppAPI {
     #getShoppingListByIdURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppingLists/${shoppingListId}`;
     #updateShoppingListURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppingLists/${shoppingListId}`;
     #deleteShoppingListURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppingLists/${shoppingListId}`;
+    
+    // ListEntry related
+    //#getListEntryURL
+   /*  #getListEntryByIdURL = (listEntryId) => `${this.#appServerBaseURL}/listentry/${listEntryId}`;
+    #getListEntryByShoppingListIdURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppingLists/${shoppingListId}/listentry`; */
+    //#createListEntryURL
+    //#updateListEntryURL
+    //#deleteListEntryURL
+
     static getAPI() {
         if (this.#api == null) {
             this.#api = new AppAPI();
@@ -416,5 +426,24 @@ export default class AppAPI {
             })
         })
     };
-}
 
+
+    /* getListEntryByShoppingListId(shoppingListId) {
+        return this.#fetchAdv(this.#getListEntryByShoppingListIdURL(shoppingListId)).then((responseJSON) => {
+            let responseListEntry = ListEntryBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+                resolve(responseListEntry)
+            })
+        })
+    } */
+
+    /* getListEntryById(listEntryId) {
+        return this.#fetchAdv(this.#getListEntryByIdURL(listEntryId)).then((responseJSON) => {
+            let responseListEntry = ListEntryBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseListEntry)
+            })
+        })
+    }; */
+
+}
