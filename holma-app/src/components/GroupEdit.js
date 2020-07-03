@@ -19,11 +19,21 @@ import GroupEntries from './GroupEntries';
 import { Link } from 'react-router-dom';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import TextField from '@material-ui/core/TextField';
+import Avatar from '@material-ui/core/Avatar';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import FaceIcon from '@material-ui/icons/Face';
 
 
 
 
 class GroupInformation extends Component {
+  _handleClick = () => {
+    this.props.addMember();
+  };
   render(){
     return (
       <div>
@@ -34,94 +44,167 @@ class GroupInformation extends Component {
       <Box m={5} />
       <Grid container spaching={3}>
         <Grid item xs={8} sm={2}>
-          <Typography variant="h6" gutterBottom>Groupname: name</Typography>
+          <Typography variant="h6" gutterBottom>Groupname: </Typography>
+          
+          <TextField
+                  autoFocus
+                  onChange={this.props.handleChangeName}
+                  margin="dense"
+                  id="outlined-basic"
+                  variant="standard"
+                  type="text"
+                  value={this.props.groupName}
+                  fullWidth
+                />
+          
           <Fab size="small" color="secondary" aria-label="edit">
                 <EditIcon />
           </ Fab>
         </Grid>
         <Grid item xs={8} sm={2}>
-        
         </Grid>
         <Grid item xs={8} sm={4}>
-          <Typography variant="h6" gutterBottom>owner: name</Typography>
+          <Typography variant="h6" gutterBottom>owner: {this.props.groupOwner}</Typography>
         </Grid>
       </Grid>
       <Box m={4} />
       <Grid container spacing={3}>
         <Grid item xs={8} sm={4}>
-          <Typography variant="h6" gutterBottom>creation date: date</Typography>
+          <Typography variant="h6" gutterBottom>creation date: {this.props.groupCreationDate}</Typography>
         </Grid>
         <Grid item xs={8} sm={4}>
-          <Typography variant="h6" gutterBottom>last changed: date</Typography>
+          <Typography variant="h6" gutterBottom>last updated: {this.props.groupLastUpdated}</Typography>
         </Grid>
       </Grid>
       <Box m={4} />
       <Typography variant="h6" gutterBottom>Groupmembers:</Typography>
+      <TextField
+                  autoFocus
+                  onChange={this.props.handleChangeMember}
+                  margin="dense"
+                  id="outlined-basic"
+                  variant="outlined"
+                  label="Mitglieds ID"
+                  type="email"
+                  value={this.props.memberId}
+                  fullWidth
+                />
+      <Button onClick={this._handleClick} color="primary">
+                  hinzufügen
+                </Button>
       </div>
   );
 }}
 
-class MemberCard extends Component{
-  render(){
-    return(
-      <Card className="root" style={{minWidth: 275, marginBottom:10, marginTop:10}}>
-      <CardActionArea >
-            <CardContent>
-                <Typography className="title" style={{fontSize: 14}} color="textPrimary">{this.props.member.getName()}</Typography>
-            </CardContent>
-            </CardActionArea>
-            <CardActions>
-              <Link to={"/user/"}>
-                <Button size="small">Anzeigen</Button>
-              </Link>
-            </CardActions>
-          </Card> 
-    );
-  }
-}
-
 class MemberDetails extends Component{
   constructor(props){
     super(props);
+    this.addMember = this.addMember.bind(this)
     console.log("Props:", props)
     this.state ={
       memberElements: [],
-      /*groupDetail:AppAPI.getAPI().getGroupById(this.props.match.param.groupId),*/
+      groupId: this.props.match.params.groupId,
+      groupName: "",
+      groupCreationDate: "",
+      groupOwner: "",
+      groupLastUpdated: "",
       loadingInProgress: false,
       loadingError: null,
+      memberId: "",
     }
   }
+
   componentDidMount(){
     if(this.props.match.params.groupId){
-       this.loadMembers();
+      this.getGroupDetails();
+      this.loadMembers();
      }
   }
 
-  loadMembers = () => {
-      AppAPI.getAPI().getUsersByGroupId(this.props.match.params.groupId).then((members) => {
-        var memberElements = members.map((member) => 
-            <MemberCard key={this.props.location.groupId} member={member}/>
-        );
-
-      this.setState({
-        memberElements: memberElements,
-        loadingInProgress: true,
-        loadingError: null
-      })
-    }).catch(e =>
-      this.setState({
-        loadingInProgress: false,
-        loadingError: e
-      })
-    );
+  addMember() {
+    AppAPI.getAPI().addUserToGroup(this.state.groupId, this.state.memberId)
+    this.setState({memberId: ""})
+    this.loadMembers()
   }
+
+  handleChangeMember = (e) => {
+    this.setState({memberId: e.target.value})
+    this.loadMembers()
+  }
+
+  handleChangeName = (e) => {
+    this.setState({groupName: e.target.value})
+    // hier muss die Gruppe noch mit dem neuen Namen geupdated werden
+    // zusätzlich auch last updated
+  }
+
+  getGroupDetails(){
+    AppAPI.getAPI().getGroupById(this.state.groupId).then(group => {
+      this.setState({
+        groupName: group.getName(),
+        groupCreationDate: group.getCreationDate(),
+        groupOwner: group.getOwner(),
+        groupLastUpdated: group.getLastUpdated(),
+      })
+    })
+  }
+  
+  removeUser = (userId) => {
+    AppAPI.getAPI().deleteUsersFromGroup(this.state.groupId, userId).then(() => {
+      this.loadMembers()
+    })
+  }
+
+  loadMembers = () => {
+    console.log("Hier sollen die Member der Gruppe " + this.state.groupId + " geladen werden")
+    AppAPI.getAPI().getUsersByGroupId(this.state.groupId).then(users => {
+      console.log("Loaded users:", users)
+      var memberElements = users.map((user) => 
+            <ListItem key={user.getId()} item xs={4}>
+              <ListItemAvatar>
+                <Avatar>
+                  <FaceIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText
+                primary={user.getName()}
+                secondary={"ID: " + user.getId()}
+              />
+              <ListItemSecondaryAction onClick={() => this.removeUser(user.getId())}>
+                <IconButton >
+                  <DeleteIcon />
+                </IconButton>
+              </ListItemSecondaryAction>
+            </ListItem>
+        )
+        this.setState({
+            memberElements: memberElements,
+            loadingInProgress: true, // loading indicator 
+            loadingError: null
+          })
+        }).catch(e =>
+            this.setState({ // Reset state with error from catch 
+              loadingInProgress: false,
+              loadingError: e
+        })
+      );  
+    }
 
     render(){
       const {memberElements} = this.state;
       this.loadMembers = this.loadMembers.bind(this)
       return(
         <div>
-          <GroupInformation group = {this.state.groupDetail}/>
+          <GroupInformation
+            handleChangeMember={this.handleChangeMember}
+            handleChangeName={this.handleChangeName}
+            memberId={this.state.memberId}
+            addMember={this.addMember}
+            group={this.state.groupDetail}
+            groupName={this.state.groupName}
+            groupCreationDate={this.state.groupCreationDate}
+            groupOwner={this.state.groupOwner}
+            groupLastUpdated={this.state.groupLastUpdated} />
           <ListWithBoxes groupElements={memberElements}/>
           <MemberAddDialog member={this.state.members} loadMembers={this.loadMembers}/> 
           </div>
