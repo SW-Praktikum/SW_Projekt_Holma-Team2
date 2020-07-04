@@ -2,7 +2,7 @@ import BusinessObject from './BusinessObject';
 
 export default class ListEntryBO extends BusinessObject {
 
-    constructor(article_id, amount, unit, retailer_id, purchasing_user_id, shopping_list_id, checked, checked_ts, standardarticle) {
+    constructor(article_id, amount, unit, amount, retailer_id, purchasing_user_id, shopping_list_id, checked, checked_ts, standardarticle) {
         super();
         this.article_id = article_id;
         this.amount = amount;

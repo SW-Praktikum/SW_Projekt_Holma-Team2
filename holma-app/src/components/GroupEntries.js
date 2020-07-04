@@ -5,30 +5,25 @@ import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-d
 import { Link } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
+import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { red } from '@material-ui/core/colors';
-import CardActionArea from '@material-ui/core/CardActionArea';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import ListWithBoxes from './ListWithBoxes'
 import ListEntry from './ListEntry'
+import ListEntries from './ListEntries'
 import GroupAddDialog from './dialogs/GroupAddDialog';
 import MemberAddDialog from './dialogs/MemberAddDialog';
 import GroupBO from '../api/GroupBO';
-import UserBO from '../api/UserBO';
-import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
-import FolderIcon from '@material-ui/icons/Folder';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FaceIcon from '@material-ui/icons/Face';
 
@@ -45,9 +40,6 @@ const useStyles = makeStyles({
     pos: {
       marginBottom: 12,
     },
-    avatar: {
-        backgroundColor: red,
-      }, 
   });
 
 
@@ -83,19 +75,7 @@ class GroupEntry extends Component {
     )
 }
 }
-//                   <Button onclick={<Routen groupId={this.props.group.getId()}></Routen>} size="small">Anzeigen</Button>
 
-/*class Routen extends Component{
-  render() {  
-    const {groupId} = this.props;
-    let p = "/grouplist/"+groupId;
-    return (
-      <Route path={p}>
-        <GroupList/>
-      </Route>
-    );
-  }
-};*/
 
 class GroupEntries extends Component{
     constructor(props) {
@@ -147,7 +127,8 @@ class GroupEntries extends Component{
     handleClickOpenMember = () => {
       this.setState({
           openMember: true
-      })    
+      }) 
+      this.loadMembers()   
     }
 
     handleCloseMember = () => {
@@ -167,12 +148,10 @@ class GroupEntries extends Component{
         })  
       })
       this.handleClose();
-      this.handleClickOpenMember();//open new dialog
+      this.handleClickOpenMember();
     }
 
     addMember() {
-      //es muss gecheckt werden bei input ob der user existiert und ob er schon in der Gruppe ist,
-      // checken ob user id vorhanden und ob user schon in group
       AppAPI.getAPI().addUserToGroup(this.state.groupId, this.state.memberId)
       this.setState({memberId: ""})
       this.loadMembers()
@@ -183,19 +162,16 @@ class GroupEntries extends Component{
       this.loadMembers()
     }
 
-    deleteUser = (userId) => {
+    removeUser = (userId) => {
       AppAPI.getAPI().deleteUsersFromGroup(this.state.groupId, userId).then(() => {
         this.loadMembers()
       })
-      
-      //this.setState({memberElements})
     }
 
-    loadMembers = () => { // getUsersByGroupId not working yet
+    loadMembers = () => {
       console.log("Hier sollen die Member der Gruppe " + this.state.groupId + " geladen werden")
       AppAPI.getAPI().getUsersByGroupId(this.state.groupId).then(users => {
-        //console.log("Loaded users from database for group '" + this.state.groupId + "'")
-        //console.log("Loaded users:", users)
+        console.log("Loaded users:", users)
         var memberElements = users.map((user) => 
               <ListItem key={user.getId()} item xs={4}>
                 <ListItemAvatar>
@@ -207,15 +183,13 @@ class GroupEntries extends Component{
                   primary={user.getName()}
                   secondary={"ID: " + user.getId()}
                 />
-                <ListItemSecondaryAction onClick={() => this.deleteUser(user.getId())}>
+                <ListItemSecondaryAction onClick={() => this.removeUser(user.getId())}>
                   <IconButton >
                     <DeleteIcon />
                   </IconButton>
                 </ListItemSecondaryAction>
               </ListItem>
-          
           )
-
           this.setState({
               memberElements: memberElements,
               loadingInProgress: true, // loading indicator 
@@ -232,10 +206,7 @@ class GroupEntries extends Component{
     loadGroups = () => {
       const {user} = this.props
         AppAPI.getAPI().getGroupsByUserId(user.getId()).then(groups => {
-          //console.log("Loaded groups from database for user '" + user.getName() + "'")
-          //console.log("Loaded groups:", groups)
           var groupElements = groups.map((group) => 
-          //wie kann die einzelne Gruppe im nächsten Schritt angesprochen werden?
           <Grid key={group.getId()} item xs={4}>
             <Paper className="paper" style ={{ textAlign:'center',}} >
               <GroupEntry key={group.getId()} group={group} setPath={this.setPath}/>
@@ -256,13 +227,13 @@ class GroupEntries extends Component{
         );  
       }
     
-
     render() {
         const {groupElements, memberElements} = this.state;
-
         return (
           <div>
-            <ListWithBoxes groupElements={groupElements}/>
+            <ListWithBoxes 
+            groupElements={groupElements}
+            />
             <GroupAddDialog 
             addGroup={this.addGroup} 
             open={this.state.open}
@@ -282,7 +253,7 @@ class GroupEntries extends Component{
             handleCloseMember={this.handleCloseMember}
             openMember={this.state.openMember}/>
             <ListEntry  />
-            <ListEntry />
+            <ListEntries />
           </div>
         );
     }

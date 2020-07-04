@@ -19,7 +19,15 @@ class UserProfil extends Component {
     }
   }
 
-  
+  deleteUser = (user) => {
+    console.log(user)
+    AppAPI.getAPI().deleteUser(user).then(() => {
+      this.handleSignOutButtonClicked()
+    })
+    
+
+  }
+
   handleSignOutButtonClicked = () => {
     firebase.auth().signOut();
     window.location.reload();
@@ -58,7 +66,7 @@ class UserProfil extends Component {
             <Grid container spaching={2}>
               <Button color='primary' onClick={this.handleSignOutButtonClicked}>Logout</Button>
               <Grid item xs={8} sm={9}/>
-              <Button color='secondary'>Delete User</Button>
+              <Button color='secondary' onClick={() => this.deleteUser(user)}>Delete User</Button>
             </Grid>
           </div>
         </Paper>
