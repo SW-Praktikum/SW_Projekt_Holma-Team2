@@ -19,6 +19,7 @@ import GroupEntries from './GroupEntries';
 import { Link } from 'react-router-dom';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItem from '@material-ui/core/ListItem';
+import List from '@material-ui/core/List';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import TextField from '@material-ui/core/TextField';
@@ -33,6 +34,7 @@ import FaceIcon from '@material-ui/icons/Face';
 class GroupInformation extends Component {
   _handleClick = () => {
     this.props.addMember();
+    this.props.loadMembers();
   };
   render(){
     return (
@@ -145,13 +147,13 @@ class MemberDetails extends Component{
 
   addMember() {
     AppAPI.getAPI().addUserToGroup(this.state.groupId, this.state.memberId)
-    this.setState({memberId: ""})
-    this.loadMembers()
+    this.setState({memberId: ""}, () => {
+      this.loadMembers();
+    })
   }
 
   handleChangeMember = (e) => {
     this.setState({memberId: e.target.value})
-    this.loadMembers()
   }
 
   handleChangeName = (e) => {
@@ -184,7 +186,8 @@ class MemberDetails extends Component{
       var memberElements = users.map((user) => 
       <Grid  item xs={4}>
       <Paper style ={{ textAlign:'center',}} >
-      <ListItem item xs={4}>
+      <List item xs={4}>
+        <ListItem>
         <ListItemAvatar>
           <Avatar>
             <FaceIcon />
@@ -199,7 +202,8 @@ class MemberDetails extends Component{
               <DeleteIcon />
                 </IconButton>
         </ListItemSecondaryAction>
-          </ListItem>
+        </ListItem>
+        </List>
       </Paper>
        </Grid>
       )
@@ -226,6 +230,7 @@ class MemberDetails extends Component{
             handleChangeName={this.handleChangeName}
             memberId={this.state.memberId}
             addMember={this.addMember}
+            loadMembers={this.loadMembers}
             group={this.state.groupDetail}
             groupName={this.state.groupName}
             groupCreationDate={this.state.groupCreationDate}

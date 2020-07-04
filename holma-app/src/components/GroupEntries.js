@@ -32,6 +32,14 @@ import FolderIcon from '@material-ui/icons/Folder';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FaceIcon from '@material-ui/icons/Face';
 
+
+/**
+ * When adding more member to a Group and then adding a new group emediateley, deleting meber Elements from state not working properly
+ * 
+ * also rendering on open dialog not working as it sould
+ */
+
+
 const useStyles = makeStyles({
     root: {
       minWidth: 275,
@@ -135,14 +143,14 @@ class GroupEntries extends Component{
     handleClickOpenMember = () => {
       this.setState({
           openMember: true
-      }, () => {
-        this.loadMembers();
       });
+      this.loadMembers()
     }
 
     handleCloseMember = () => {
       this.setState({
-          openMember: false
+        memberElements: [],
+        openMember: false,
       })
     }
 
@@ -162,14 +170,16 @@ class GroupEntries extends Component{
     addMember = () => {
       // es muss gecheckt werden bei input ob der user existiert und ob er schon in der Gruppe ist,
       // checken ob user id vorhanden und ob user schon in group
-      AppAPI.getAPI().addUserToGroup(this.state.groupId, this.state.memberId)
+      AppAPI.getAPI().addUserToGroup(this.state.groupId, this.state.memberId).then(() => {
+        this.loadMembers()
+      })
       this.setState({memberId: ""})
-      this.loadMembers()
     }
     
     handleChangeMember = (e) => {
-      this.setState({memberId: e.target.value})
-      this.loadMembers()
+      this.setState({memberId: e.target.value}, () => {
+        this.loadMembers()
+      })
     }
 
     deleteUser = (userId) => {
