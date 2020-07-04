@@ -13,6 +13,7 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import ListWithBoxes from './ListWithBoxes'
 import ListEntry from './ListEntry'
+import ListEntries from './ListEntries'
 import GroupAddDialog from './dialogs/GroupAddDialog';
 import MemberAddDialog from './dialogs/MemberAddDialog';
 import GroupBO from '../api/GroupBO';
@@ -150,7 +151,7 @@ class GroupEntries extends Component{
       this.loadMembers()
     }
 
-    deleteUser = (userId) => {
+    removeUser = (userId) => {
       AppAPI.getAPI().deleteUsersFromGroup(this.state.groupId, userId).then(() => {
         this.loadMembers()
       })
@@ -171,7 +172,7 @@ class GroupEntries extends Component{
                   primary={user.getName()}
                   secondary={"ID: " + user.getId()}
                 />
-                <ListItemSecondaryAction onClick={() => this.deleteUser(user.getId())}>
+                <ListItemSecondaryAction onClick={() => this.removeUser(user.getId())}>
                   <IconButton >
                     <DeleteIcon />
                   </IconButton>
@@ -242,6 +243,7 @@ class GroupEntries extends Component{
             handleCloseMember={this.handleCloseMember}
             openMember={this.state.openMember}/>
             <ListEntry  />
+            <ListEntries />
           </div>
         );
     }

@@ -29,9 +29,7 @@ class MemberAddDialog extends Component {
         }        
     }
 
-    _handleClick = () => {
-      this.props.addMember();
-    };
+    
 
     render() {
       const {memberElements} = this.props;
