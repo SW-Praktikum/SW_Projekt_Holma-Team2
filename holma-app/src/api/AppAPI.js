@@ -8,8 +8,10 @@ export default class AppAPI {
 
     static #api = null;
 
-    // #appServerBaseURL = 'http://localhost:5000/app';
-    #appServerBaseURL = 'https://holma-sw-praktikum.ey.r.appspot.com/app';
+    #appServerBaseURL = 'http://localhost:5000/app';
+    
+    // Remote Backend:
+    // #appServerBaseURL = 'https://holma-sw-praktikum.ey.r.appspot.com/app';
 
 
 
