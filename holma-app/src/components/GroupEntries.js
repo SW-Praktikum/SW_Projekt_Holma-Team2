@@ -40,12 +40,6 @@ const useStyles = makeStyles({
     pos: {
       marginBottom: 12,
     },
-<<<<<<< HEAD
-=======
-    avatar: {
-        backgroundColor: red,
-      }, 
->>>>>>> master
   });
 
 
@@ -81,19 +75,7 @@ class GroupEntry extends Component {
     )
 }
 }
-//                   <Button onclick={<Routen groupId={this.props.group.getId()}></Routen>} size="small">Anzeigen</Button>
 
-/*class Routen extends Component{
-  render() {  
-    const {groupId} = this.props;
-    let p = "/grouplist/"+groupId;
-    return (
-      <Route path={p}>
-        <GroupList/>
-      </Route>
-    );
-  }
-};*/
 
 class GroupEntries extends Component{
     constructor(props) {
@@ -145,7 +127,8 @@ class GroupEntries extends Component{
     handleClickOpenMember = () => {
       this.setState({
           openMember: true
-      })    
+      }) 
+      this.loadMembers()   
     }
 
     handleCloseMember = () => {
