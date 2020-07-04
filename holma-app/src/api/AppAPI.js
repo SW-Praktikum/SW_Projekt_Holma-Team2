@@ -8,7 +8,8 @@ export default class AppAPI {
 
     static #api = null;
 
-    #appServerBaseURL = 'http://localhost:5000/app';
+    // #appServerBaseURL = 'http://localhost:5000/app';
+    #appServerBaseURL = 'https://holma-sw-praktikum.ey.r.appspot.com/app';
 
 
 
@@ -28,7 +29,7 @@ export default class AppAPI {
 
     // Group Related
     #getGroupsURL = () => `${this.#appServerBaseURL}/groups`;
-    #getGroupByIdURL = (groupId) => `${this.#appServerBaseURL}/groups/${groupId}`;
+    #getGroupByIdURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}`;
     #getGroupsByNameURL = (name) => `${this.#appServerBaseURL}/by-name/${name}`;
     #updateGroupURL = (groupId) => `${this.#appServerBaseURL}/groups/${groupId}`;
     #deleteGroupURL = (groupId) => `${this.#appServerBaseURL}/groups/${groupId}`;

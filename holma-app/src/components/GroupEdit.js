@@ -36,48 +36,68 @@ class GroupInformation extends Component {
   };
   render(){
     return (
-      <div>
+    <div>
+    <Grid style={{backgroundColor:'white'}}>
       <Box m={5} />
+        <ListItem elevation={3} align='center' style={{width:"auto"}}>
         <Typography  variant="h4" gutterBottom>
           Groupdetails
         </Typography>
+      </ListItem>
       <Box m={5} />
-      <Grid container spaching={3}>
-        <Grid item xs={8} sm={2}>
-          <Typography variant="h6" gutterBottom>Groupname: </Typography>
-          
-          <TextField
+      <Grid container spaching={1}>
+        <Grid item xs={6} sm={6}>
+        <ListItem align='center' style={{width:"auto"}}>
+        <Typography  variant="h6" gutterBottom>
+          Groupname:
+        </Typography>
+        <TextField
                   autoFocus
+                  align='center'
                   onChange={this.props.handleChangeName}
                   margin="dense"
                   id="outlined-basic"
                   variant="standard"
                   type="text"
                   value={this.props.groupName}
-                  fullWidth
+                  width='45'
                 />
-          
-          <Fab size="small" color="secondary" aria-label="edit">
-                <EditIcon />
-          </ Fab>
-        </Grid>
-        <Grid item xs={8} sm={2}>
-        </Grid>
-        <Grid item xs={8} sm={4}>
-          <Typography variant="h6" gutterBottom>owner: {this.props.groupOwner}</Typography>
-        </Grid>
+        </ListItem>    
       </Grid>
-      <Box m={4} />
-      <Grid container spacing={3}>
-        <Grid item xs={8} sm={4}>
-          <Typography variant="h6" gutterBottom>creation date: {this.props.groupCreationDate}</Typography>
-        </Grid>
-        <Grid item xs={8} sm={4}>
-          <Typography variant="h6" gutterBottom>last updated: {this.props.groupLastUpdated}</Typography>
-        </Grid>
+      
+      <Grid item xs={6} sm={6}>
+        <ListItem  align='center' style={{width:"auto"}}>
+        <Typography  variant="h6" gutterBottom>
+        owner: {this.props.groupOwner}
+        </Typography>
+        </ListItem>
       </Grid>
+      </Grid>
+      
+      <Box m={4}/>
+      <Grid container spaching={1}>
+      <Grid item xs={6} sm={6}>
+        <ListItem align='center' style={{width:"auto"}}>
+        <Typography  variant="h6" gutterBottom>
+        creation date: {this.props.groupCreationDate}
+        </Typography>
+        </ListItem>
+      </Grid>
+      <Grid item xs={6} sm={6}>
+        <ListItem  align='center' style={{width:"auto"}}>
+        <Typography  variant="h6" gutterBottom>
+        last updated: {this.props.groupLastUpdated}
+        </Typography>
+        </ListItem>
+      </Grid>
+      </Grid>
+
       <Box m={4} />
-      <Typography variant="h6" gutterBottom>Groupmembers:</Typography>
+      <ListItem elevation={3} align='center' style={{width:"auto"}}>
+        <Typography  variant="h4" gutterBottom>
+          Groupmembers
+        </Typography>
+      </ListItem>
       <TextField
                   autoFocus
                   onChange={this.props.handleChangeMember}
@@ -89,10 +109,12 @@ class GroupInformation extends Component {
                   value={this.props.memberId}
                   fullWidth
                 />
-      <Button onClick={this._handleClick} color="primary">
+      <Button onClick={this._handleClick} color="primary" style={{backgroundColor:"blue", color:"white"}}>
                   hinzufügen
                 </Button>
-      </div>
+      </Grid>
+    </div>
+    
   );
 }}
 
@@ -160,23 +182,27 @@ class MemberDetails extends Component{
     AppAPI.getAPI().getUsersByGroupId(this.state.groupId).then(users => {
       console.log("Loaded users:", users)
       var memberElements = users.map((user) => 
-            <ListItem key={user.getId()} item xs={4}>
-              <ListItemAvatar>
-                <Avatar>
-                  <FaceIcon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                primary={user.getName()}
-                secondary={"ID: " + user.getId()}
-              />
-              <ListItemSecondaryAction onClick={() => this.removeUser(user.getId())}>
-                <IconButton >
-                  <DeleteIcon />
+      <Grid  item xs={4}>
+      <Paper style ={{ textAlign:'center',}} >
+      <ListItem item xs={4}>
+        <ListItemAvatar>
+          <Avatar>
+            <FaceIcon />
+          </Avatar>
+        </ListItemAvatar>
+      <ListItemText
+        primary={user.getName()}
+        secondary={"ID: " + user.getId()}
+      />
+        <ListItemSecondaryAction onClick={() => this.removeUser(user.getId())}>
+           <IconButton >
+              <DeleteIcon />
                 </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-        )
+        </ListItemSecondaryAction>
+          </ListItem>
+      </Paper>
+       </Grid>
+      )
         this.setState({
             memberElements: memberElements,
             loadingInProgress: true, // loading indicator 
@@ -205,6 +231,7 @@ class MemberDetails extends Component{
             groupCreationDate={this.state.groupCreationDate}
             groupOwner={this.state.groupOwner}
             groupLastUpdated={this.state.groupLastUpdated} />
+          <Box m={1}></Box>
           <ListWithBoxes groupElements={memberElements}/>
           <MemberAddDialog member={this.state.members} loadMembers={this.loadMembers}/> 
           </div>

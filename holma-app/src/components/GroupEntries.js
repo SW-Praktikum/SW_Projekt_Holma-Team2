@@ -83,19 +83,7 @@ class GroupEntry extends Component {
     )
 }
 }
-//                   <Button onclick={<Routen groupId={this.props.group.getId()}></Routen>} size="small">Anzeigen</Button>
 
-/*class Routen extends Component{
-  render() {  
-    const {groupId} = this.props;
-    let p = "/grouplist/"+groupId;
-    return (
-      <Route path={p}>
-        <GroupList/>
-      </Route>
-    );
-  }
-};*/
 
 class GroupEntries extends Component{
     constructor(props) {
@@ -147,7 +135,9 @@ class GroupEntries extends Component{
     handleClickOpenMember = () => {
       this.setState({
           openMember: true
-      })    
+      }, () => {
+        this.loadMembers();
+      });
     }
 
     handleCloseMember = () => {
@@ -161,7 +151,6 @@ class GroupEntries extends Component{
       var grp = new GroupBO(this.state.groupName, user.getId());
       AppAPI.getAPI().createGroup(grp).then(group => {
         this.setState({groupId: group.getId()})
-        console.log(this.state.groupId)
         AppAPI.getAPI().addUserToGroup(group.getId(), user.getId()).then( () => {
           this.loadGroups();
         })  
@@ -170,8 +159,8 @@ class GroupEntries extends Component{
       this.handleClickOpenMember();//open new dialog
     }
 
-    addMember() {
-      //es muss gecheckt werden bei input ob der user existiert und ob er schon in der Gruppe ist,
+    addMember = () => {
+      // es muss gecheckt werden bei input ob der user existiert und ob er schon in der Gruppe ist,
       // checken ob user id vorhanden und ob user schon in group
       AppAPI.getAPI().addUserToGroup(this.state.groupId, this.state.memberId)
       this.setState({memberId: ""})
@@ -191,8 +180,7 @@ class GroupEntries extends Component{
       //this.setState({memberElements})
     }
 
-    loadMembers = () => { // getUsersByGroupId not working yet
-      console.log("Hier sollen die Member der Gruppe " + this.state.groupId + " geladen werden")
+    loadMembers = () => {
       AppAPI.getAPI().getUsersByGroupId(this.state.groupId).then(users => {
         //console.log("Loaded users from database for group '" + this.state.groupId + "'")
         //console.log("Loaded users:", users)
