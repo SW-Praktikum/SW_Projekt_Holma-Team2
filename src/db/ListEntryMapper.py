@@ -1,6 +1,7 @@
 from bo.ListEntry import ListEntry
 from db.Mapper import Mapper
 
+
 class ListEntryMapper(Mapper):
 
     def __init__(self):
@@ -8,7 +9,7 @@ class ListEntryMapper(Mapper):
 
     def find_all(self):
         cursor = self._connection.cursor()
-        command = "SELECT * FROM holma.listentry"
+        command = "SELECT * FROM holma.list_entry"
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -19,10 +20,10 @@ class ListEntryMapper(Mapper):
 
         return result
 
-    def find_by_id(self, listentry_id):
+    def find_by_id(self, list_entry_id):
         cursor = self._connection.cursor()
-        command = "SELECT * FROM holma.listentry " \
-                  "WHERE listentry_id={}".format(listentry_id)
+        command = "SELECT * FROM holma.list_entry " \
+                  "WHERE list_entry_id={}".format(list_entry_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -37,7 +38,7 @@ class ListEntryMapper(Mapper):
 
     def find_by_name(self, name):
         cursor = self._connection.cursor()
-        command = "SELECT * FROM holma.listentry WHERE name LIKE '{}' " \
+        command = "SELECT * FROM holma.list_entry WHERE name LIKE '{}' " \
                   "ORDER BY name".format(name)
         cursor.execute(command)
         tuples = cursor.fetchall()
@@ -51,7 +52,7 @@ class ListEntryMapper(Mapper):
 
     def find_by_retailer(self, retailer_id):
         cursor = self._connection.cursor()
-        command = "SELECT * FROM holma.listentry " \
+        command = "SELECT * FROM holma.list_entry " \
                   "WHERE retailer={}".format(retailer_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
@@ -65,22 +66,8 @@ class ListEntryMapper(Mapper):
 
     def find_by_purchasing_user(self, user_id):
         cursor = self._connection.cursor()
-        command = "SELECT * FROM holma.listentry " \
+        command = "SELECT * FROM holma.list_entry " \
                   "WHERE purchasing_user={}".format(user_id)
-        cursor.execute(command)
-        tuples = cursor.fetchall()
-
-        result = ListEntry.from_tuples(tuples)
-
-        self._connection.commit()
-        cursor.close()
-
-        return result
-
-    def find_checked_list_entries(self):
-        cursor = self._connection.cursor()
-        command = "SELECT * FROM holma.listentry " \
-                  "WHERE checked=1"
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -93,7 +80,7 @@ class ListEntryMapper(Mapper):
 
     def find_list_entries_by_article(self, article_id):
         cursor = self._connection.cursor()
-        command = "SELECT * FROM holma.listentry " \
+        command = "SELECT * FROM holma.list_entry " \
                   "WHERE article={}".format(article_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
@@ -105,10 +92,10 @@ class ListEntryMapper(Mapper):
 
         return result
 
-    def find_list_entries_by_shopping_list(self, shoppinglist_id):
+    def find_list_entries_by_shopping_list_id(self, shopping_list):
         cursor = self._connection.cursor()
-        command = "SELECT * FROM holma.listentry " \
-                  "WHERE shopping_list={}".format(shoppinglist_id)
+        command = "SELECT * FROM holma.list_entry " \
+                  "WHERE shopping_list={}".format(shopping_list.get_id())
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -119,6 +106,20 @@ class ListEntryMapper(Mapper):
 
         return result
 
+    def find_list_entries_checked_by_shopping_list_id(self, shopping_list_id):
+        cursor = self._connection.cursor()
+        command = "SELECT * FROM holma.list_entry " \
+                  "WHERE checked=1 AND shopping_list={}".format(
+            shopping_list_id)
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        result = ListEntry.from_tuples(tuples)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
 
     def find_standardarticle(self, standardarticle):
         """Standardarticle und Group Verbindungstabelle - ListEntrie Id und Group Id,
@@ -133,70 +134,73 @@ class ListEntryMapper(Mapper):
 
         """Standardarticle Funktionen in eigenen Mapper."""
 
-    def insert(self, listentry):
+    def insert(self, list_entry):
         cursor = self._connection.cursor()
-        command = "INSERT INTO holma.listentry (listentry_id, name, creation_date, " \
-                  "purchasing_user, amount, article, unit, retailer, standardarticle, checked, shopping_list, last_updated, checked_ts) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-        data = (listentry.get_id(),
-                listentry.get_name(),
-                listentry.get_creation_date(),
-                listentry.get_purchasing_user(),
-                listentry.get_amount(),
-                listentry.get_article(),
-                listentry.get_unit(),
-                listentry.get_retailer(),
-                listentry.get_standardarticle(),
-                listentry.get_checked(),
-                listentry.get_checked_ts(),
-                listentry.get_shopping_list(),
-                listentry.get_last_updated())
+        command = "INSERT INTO holma.list_entry (list_entry_id, name, " \
+                  "creation_date, purchasing_user, amount,  article, unit, " \
+                  "retailer, standardarticle, shopping_list, checked, " \
+                  "last_updated, checked_ts) " \
+                  "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        data = (list_entry.get_id(),
+                list_entry.get_name(),
+                list_entry.get_creation_date(),
+                list_entry.get_purchasing_user(),
+                list_entry.get_amount(),
+                list_entry.get_article(),
+                list_entry.get_unit(),
+                list_entry.get_retailer(),
+                list_entry.get_standardarticle(),
+                list_entry.get_shopping_list(),
+                list_entry.get_checked(),
+                list_entry.get_last_updated(),
+                list_entry.get_checked_ts())
         cursor.execute(command, data)
 
         self._connection.commit()
         cursor.close()
 
-        listentry.set_id(cursor.lastrowid)
-        return listentry
+        list_entry.set_id(cursor.lastrowid)
+        return list_entry
 
-    def update(self, listentry):
+    def update(self, list_entry):
         cursor = self._connection.cursor()
-        command = "UPDATE holma.listentry SET name=%s, purchasing_user=%s, " \
-                  "amount=%s, article=%s, unit=%s, retailer=%s. " \
-                  "standardarticle=%s, checked=%s," \
-                  "shopping_list=%s, last_updated=%s, checked_ts=%s " \
-                  "WHERE listentry_id=%s"
-        data = (listentry.get_name(),
-                listentry.get_purchasing_user(),
-                listentry.get_amount(),
-                listentry.get_article(),
-                listentry.get_unit(),
-                listentry.get_retailer(),
-                listentry.get_standardarticle(),
-                listentry.get_checked(),
-                listentry.get_checked_ts(),
-                listentry.get_shopping_list(),
-                listentry.get_last_updated(),
-                listentry.get_id())
+        command = "UPDATE holma.list_entry SET name=%s, purchasing_user=%s, " \
+                  "amount=%s, article=%s, unit=%s, retailer=%s, " \
+                  "standardarticle=%s, shopping_list=%s, checked=%s, " \
+                  "checked_ts=%s, last_updated=%s " \
+                  "WHERE list_entry_id=%s"
+        data = (list_entry.get_name(),
+                list_entry.get_purchasing_user(),
+                list_entry.get_amount(),
+                list_entry.get_article(),
+                list_entry.get_unit(),
+                list_entry.get_retailer(),
+                list_entry.get_standardarticle(),
+                list_entry.get_shopping_list(),
+                list_entry.get_checked(),
+                list_entry.get_checked_ts(),
+                list_entry.get_last_updated(),
+                list_entry.get_id())
         cursor.execute(command, data)
 
         self._connection.commit()
         cursor.close()
 
-        return listentry
+        return list_entry
 
-    def delete(self, listentry):
+    def delete(self, list_entry):
         cursor = self._connection.cursor()
-        command = "DELETE FROM holma.listentry " \
-                  "WHERE listentry_id={}".format(listentry.get_id())
+        command = "DELETE FROM holma.list_entry " \
+                  "WHERE list_entry_id={}".format(list_entry.get_id())
         cursor.execute(command)
 
         self._connection.commit()
         cursor.close()
 
-    def delete_by_shopping_list(self, shoppinglist):
+    def delete_by_shopping_list(self, shopping_list):
         cursor = self._connection.cursor()
-        command = "DELETE FROM holma.listentry " \
-                  "WHERE shopping_list={}".format(shoppinglist.get_id())
+        command = "DELETE FROM holma.list_entry " \
+                  "WHERE shopping_list={}".format(shopping_list.get_id())
         cursor.execute(command)
 
         self._connection.commit()
@@ -205,13 +209,12 @@ class ListEntryMapper(Mapper):
     def delete_by_article(self, article):
         cursor = self._connection.cursor()
 
-        command = "DELETE FROM holma.listentry " \
+        command = "DELETE FROM holma.list_entry " \
                   "WHERE article={}".format(article.get_id())
         cursor.execute(command)
 
         self._connection.commit()
         cursor.close()
-
 
 
 if __name__ == "__main__":

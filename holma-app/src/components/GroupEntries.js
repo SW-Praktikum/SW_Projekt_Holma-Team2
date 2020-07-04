@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import AppAPI from '../api/AppAPI';
 import { makeStyles } from '@material-ui/core/styles';
+import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -39,7 +40,14 @@ const useStyles = makeStyles({
     pos: {
       marginBottom: 12,
     },
+<<<<<<< HEAD
+=======
+    avatar: {
+        backgroundColor: red,
+      }, 
+>>>>>>> master
   });
+
 
 const randomImages = [
   "https://www.bahn-tickets.com/wp-content/uploads/2016/07/Gruppenreise_Personen-1000x683px.jpg",
@@ -55,8 +63,9 @@ const randomImages = [
 
 class GroupEntry extends Component {
     render() {
+        const path = "/grouplist/" + this.props.group.getId()
         return ( 
-        <Card className="root" style={{minWidth: 275, marginBottom:10, marginTop:10}}>
+        <Card className="root" style={{/* minHeight: 250 ,  */minWidth: '100%', marginBottom:10, marginTop:10}}>
             <CardActionArea>
             <CardMedia className="media" style={{height: 10, paddingTop: '56.25%',}} image={randomImages[Math.floor(Math.random() * randomImages.length)]} title="Groupname"/>
             <CardContent>
@@ -64,13 +73,27 @@ class GroupEntry extends Component {
             </CardContent>
             </CardActionArea>     
             <CardActions>
-                <Link to="/About">
+                <Link to={path}>
                   <Button size="small">Anzeigen</Button>
                 </Link>
             </CardActions>
          </Card>
     )
-}}
+}
+}
+//                   <Button onclick={<Routen groupId={this.props.group.getId()}></Routen>} size="small">Anzeigen</Button>
+
+/*class Routen extends Component{
+  render() {  
+    const {groupId} = this.props;
+    let p = "/grouplist/"+groupId;
+    return (
+      <Route path={p}>
+        <GroupList/>
+      </Route>
+    );
+  }
+};*/
 
 class GroupEntries extends Component{
     constructor(props) {
@@ -88,6 +111,11 @@ class GroupEntries extends Component{
             groupName: "",
             memberId: "",
         }
+    }
+
+    nextPath(path) {
+      console.log(path)
+      this.props.history.push(path);
     }
 
     componentDidMount() {
@@ -193,13 +221,12 @@ class GroupEntries extends Component{
       }
 
     loadGroups = () => {
-      console.log("Hier", this.state.groupId)
       const {user} = this.props
         AppAPI.getAPI().getGroupsByUserId(user.getId()).then(groups => {
           var groupElements = groups.map((group) => 
           <Grid key={group.getId()} item xs={4}>
             <Paper className="paper" style ={{ textAlign:'center',}} >
-              <GroupEntry key={group.getId()} group={group}/>
+              <GroupEntry key={group.getId()} group={group} setPath={this.setPath}/>
             </Paper>
           </Grid>
           )
