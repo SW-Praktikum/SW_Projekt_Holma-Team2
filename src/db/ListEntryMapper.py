@@ -216,6 +216,18 @@ class ListEntryMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
+    """def delete_purchasing_user(self, user, group=None):
+        cursor = self._connection.cursor()
+        if group is None:
+            command = "UPDATE holma.list_entry SET purchasing_user= null " \
+                      "WHERE purchasing_user = {}".format(user.get_id(), gro)
+        else
+            command = "UPDATE holma.list_entry SET purchasing_user= null " \
+                      "WHERE purchasing_user = {}"
+        cursor.execute(command)
+
+        self._connection.commit()
+        cursor.close()"""
 
 if __name__ == "__main__":
     with ListEntryMapper() as mapper:

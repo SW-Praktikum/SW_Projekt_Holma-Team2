@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from contextlib import AbstractContextManager
 
 import mysql.connector
+import os
 
 
 class Mapper(AbstractContextManager, ABC):
@@ -10,16 +11,27 @@ class Mapper(AbstractContextManager, ABC):
         self._connection = None
 
     def __enter__(self):
-        """
-        Hier exestiert bisher nur der connect zur lokalen DB.
-        """
-
+        # remote Database
+        """if os.getenv('GAE_ENV', '').startswith('standard'):
+            self._connection = mysql.connector.connect(
+                unix_socket='/cloudsql/holma-sw-praktikum:europe-west3:holma-db',
+                user="root",
+                passwd="root",
+                database="holma"
+                )
+        else:
+            self._connection = mysql.connector.connect(
+                host="localhost",
+                user="root",
+                passwd="root",
+                database="holma"
+                )  """
         self._connection = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            passwd="root",
-            database="holma"
-        )
+                host="localhost",
+                user="root",
+                passwd="root",
+                database="holma"
+                )     
         return self
 
     def __exit__(self, exc_type, value, traceback):

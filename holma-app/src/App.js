@@ -142,8 +142,7 @@ class App extends React.Component {
                     </Route>
                     <Route path='/grouplist/:groupId' component={GroupList}>
                     </Route>
-                    <Route path='/groupedit'>
-                      <MemberDetails/>
+                    <Route path='/groupedit/:groupId' component={MemberDetails}>
                     </Route>
                     <Route path='/user'>
                       <User user={user}/>

@@ -10,6 +10,7 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Box from '@material-ui/core/Box';
+import { Link } from 'react-router-dom';
 
 import TextField from '@material-ui/core/TextField';
 
@@ -182,6 +183,11 @@ function AddShoppinglist() {
 
 /*{this.props.group.getName()}*/
 /* Hierbei wird man an die Component "GroupEdit" weitergeleitet*/
+
+
+
+
+
 class Grouplink extends Component{
     render(){
         return(
@@ -256,7 +262,6 @@ class GroupList extends Component {
       })
     );
   }
-
     render() {
         /*const {group} = this.props;
         return ( 
@@ -279,8 +284,11 @@ class GroupList extends Component {
             return(
 
             <div>
+              
               <Box m={5} />
+              <Link to={"/groupedit/" + this.props.match.params.groupId}>
                 <Grouplink/>
+              </Link>
                 <Box m={2} />
                 <CollapsibleTable/>
                 <Box m={2} />
