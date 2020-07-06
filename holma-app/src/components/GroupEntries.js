@@ -234,7 +234,7 @@ class GroupEntries extends Component{
           //console.log("Loaded groups:", groups)
           var groupElements = groups.map((group) => 
           //wie kann die einzelne Gruppe im nächsten Schritt angesprochen werden?
-          <Grid key={group.getId()} item xs={4}>
+          <Grid key={group.getId()} item xs={6} item lg={4}>
             <Paper className="paper" style ={{ textAlign:'center',}} >
               <GroupEntry key={group.getId()} group={group} setPath={this.setPath}/>
             </Paper>
