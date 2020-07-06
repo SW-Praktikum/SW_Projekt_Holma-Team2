@@ -71,7 +71,7 @@ class UserProfil extends Component {
             <Grid container spaching={2}>
               <Button color='primary' onClick={this.handleSignOutButtonClicked}>Logout</Button>
               <Grid item xs={8} sm={9}/>
-              <Button color='secondary' onClick={this.handleDeleteUser}>Delete User</Button>
+              <Button className={classes.button} onClick={this.handleDeleteUser}>Delete User</Button>
             </Grid>
           </div>
         </Paper>

@@ -22,6 +22,7 @@ class GroupAddDialog extends Component {
     render() {
         return (
           <div>
+            <br/>
             <Button 
               style={{maxWidth: '120px', maxHeight: '120px', minWidth: '120px', minHeight: '120px',}}
               variant="outlined" 
@@ -29,6 +30,7 @@ class GroupAddDialog extends Component {
               startIcon={<AddIcon />} 
               onClick={this.props.handleClickOpen}>Add Group
               </Button>
+              <br/>
             <Dialog open={this.props.open} onClose={this.props.handleClose} aria-labelledby="form-dialog-title">
               <DialogTitle id="form-dialog-title">Neue Gruppe erstellen</DialogTitle>
               <DialogContent>
