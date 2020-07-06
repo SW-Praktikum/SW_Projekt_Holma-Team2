@@ -54,8 +54,8 @@ class Administration():
         with UserGroupRelationsMapper() as mapper:
             mapper.delete_user_relations(user)
 
-        with ListEntryMapper() as mapper:
-            mapper.delete_purchasing_user(user)
+        """with ListEntryMapper() as mapper:
+            mapper.delete_purchasing_user(user)"""
 
         with GroupMapper() as mapper:
             mapper.delete_owner(user)
