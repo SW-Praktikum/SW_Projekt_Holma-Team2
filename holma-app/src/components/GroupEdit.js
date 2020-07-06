@@ -184,9 +184,9 @@ class MemberDetails extends Component{
     AppAPI.getAPI().getUsersByGroupId(this.state.groupId).then(users => {
       console.log("Loaded users:", users)
       var memberElements = users.map((user) => 
-      <Grid  item xs={4}>
+      <Grid  item xs={12} item lg={4}>
       <Paper style ={{ textAlign:'center',}} >
-      <List item xs={4}>
+      <List item xs={12} item lg={4}>
         <ListItem>
         <ListItemAvatar>
           <Avatar>
