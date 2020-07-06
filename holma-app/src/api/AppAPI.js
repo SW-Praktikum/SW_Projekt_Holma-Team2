@@ -108,8 +108,8 @@ export default class AppAPI {
         })
     };
 
-    updateUser(user, userId) {
-        return this.#fetchAdv(this.#updateUserURL(userId), {
+    updateUser(user) {
+        return this.#fetchAdv(this.#updateUserURL(user.getId()), {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json, text/plain',
@@ -124,8 +124,8 @@ export default class AppAPI {
         })
     };
 
-    deleteUser(user, userId) {
-        return this.#fetchAdv(this.#deleteUserURL(userId), {
+    deleteUser(user) {
+        return this.#fetchAdv(this.#deleteUserURL(user.getId()), {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json, text/plain',

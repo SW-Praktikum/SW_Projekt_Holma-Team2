@@ -16,8 +16,6 @@ class UserProfil extends Component {
 
     // Init the state
     this.state = {
-      userName : this.props.user.name,
-      userId: this.props.user.id
     }
   }
 
@@ -27,13 +25,9 @@ class UserProfil extends Component {
     window.location.reload();
   }
 
-  handleDeleteUserButtonClicked = () => {
-    AppAPI.getAPI().deleteUser(this.state.userName, this.state.userId)
-  }
 
   render() {
-    console.log("!!!")
-    console.log(this.props)
+
       const { classes, user } = this.props;
       
       return (
@@ -64,7 +58,7 @@ class UserProfil extends Component {
             <Grid container spaching={2}>
               <Button color='primary' onClick={this.handleSignOutButtonClicked}>Logout</Button>
               <Grid item xs={8} sm={9}/>
-              <Button color='secondary'onClick={this.handleDeleteUserButtonClicked, this.handleSignOutButtonClicked}>Delete User</Button>
+              <Button color='secondary'>Delete User</Button>
             </Grid>
           </div>
         </Paper>

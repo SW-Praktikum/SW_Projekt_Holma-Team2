@@ -160,6 +160,8 @@ class MemberDetails extends Component{
     this.setState({groupName: e.target.value})
     AppAPI.getAPI().updateGroup(this.state.groupId, this.state.groupName)
     console.log(this.state.groupName)
+    AppAPI.getAPI()
+
     // hier muss die Gruppe noch mit dem neuen Namen geupdated werden
     // zusätzlich auch last updated
   }
