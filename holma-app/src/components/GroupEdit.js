@@ -61,7 +61,7 @@ class GroupInformation extends Component {
                   id="outlined-basic"
                   variant="standard"
                   type="text"
-                  value={this.props.groupName}
+                  label={this.props.groupName}
                   width='45'
                 />
         </ListItem>    
@@ -158,6 +158,8 @@ class MemberDetails extends Component{
 
   handleChangeName = (e) => {
     this.setState({groupName: e.target.value})
+    AppAPI.getAPI().updateGroup(this.state.groupId, this.state.groupName)
+    console.log(this.state.groupName)
     // hier muss die Gruppe noch mit dem neuen Namen geupdated werden
     // zusätzlich auch last updated
   }
