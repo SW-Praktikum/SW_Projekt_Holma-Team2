@@ -8,6 +8,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import PropTypes from 'prop-types';
+import Container from '@material-ui/core/Container'
 import { withStyles } from '@material-ui/styles';
 
 
@@ -16,11 +17,15 @@ const styles = theme => ({
     position: 'fixed',
     bottom: theme.spacing(2),
     right: theme.spacing(2),
-    //marginTop: theme.spacing(2)
+    
   },
   extendedIcon: {
     marginRight: theme.spacing(1),
+    
   },
+  container: {
+    //maxWidth: 600,
+  }
 });
 
 class GroupAddDialog extends Component {
@@ -38,11 +43,12 @@ class GroupAddDialog extends Component {
       const { classes } = this.props;
         return (
           <div>
+            <Container className={classes.container}>
             <Fab onClick={this.props.handleClickOpen} className={classes.root} variant="extended" color="primary" aria-label="add">
               <AddIcon className={classes.extendedIcon}/>
                 neue Gruppe
             </Fab>
-            
+            </Container>
             <Dialog open={this.props.open} onClose={this.props.handleClose} aria-labelledby="form-dialog-title">
               <DialogTitle id="form-dialog-title">Neue Gruppe erstellen</DialogTitle>
               <DialogContent>

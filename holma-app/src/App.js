@@ -149,7 +149,6 @@ class App extends React.Component {
                     </Route>
                     <Route path=''>
                     </Route>
-                    <div style={{fontStyle: "italic"}}><br/><b>User:</b> {user.getName()} | <b>ID:</b> {user.getId()} | <b>Google ID:</b> {user.getGoogleId()} | <b>Member since:</b> {user.getCreationDate()}</div>
                   </>
                   :
                   <>
