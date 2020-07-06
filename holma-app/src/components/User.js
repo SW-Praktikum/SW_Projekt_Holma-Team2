@@ -16,6 +16,9 @@ class UserProfil extends Component {
 
     // Init the state
     this.state = {
+      user: this.props.user,
+      userName: this.props.user.name,
+      userId: this.props.user.Id
     }
   }
 
@@ -23,12 +26,20 @@ class UserProfil extends Component {
   handleSignOutButtonClicked = () => {
     firebase.auth().signOut();
     window.location.reload();
+    
+  }
+
+  handleDeleteUser = () => {
+    AppAPI.getAPI().deleteUser(this.state.user);
+    console.log(this.state.userId)
+    console.log(this.state.userId)
   }
 
 
   render() {
 
       const { classes, user } = this.props;
+    
       
       return (
           
@@ -58,7 +69,7 @@ class UserProfil extends Component {
             <Grid container spaching={2}>
               <Button color='primary' onClick={this.handleSignOutButtonClicked}>Logout</Button>
               <Grid item xs={8} sm={9}/>
-              <Button color='secondary'>Delete User</Button>
+              <Button color='secondary' onClick={this.handleDeleteUser, this.handleSignOutButtonClicked}>Delete User</Button>
             </Grid>
           </div>
         </Paper>

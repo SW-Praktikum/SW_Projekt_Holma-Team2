@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import AppAPI from '../api/AppAPI';
+import GroupBO from '../api/GroupBO';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -158,9 +159,8 @@ class MemberDetails extends Component{
 
   handleChangeName = (e) => {
     this.setState({groupName: e.target.value})
-    AppAPI.getAPI().updateGroup(this.state.groupId, this.state.groupName)
+    AppAPI.getAPI().updateGroup(this.state.groupId, this.groupName)
     console.log(this.state.groupName)
-    AppAPI.getAPI()
 
     // hier muss die Gruppe noch mit dem neuen Namen geupdated werden
     // zusätzlich auch last updated
@@ -188,9 +188,9 @@ class MemberDetails extends Component{
     AppAPI.getAPI().getUsersByGroupId(this.state.groupId).then(users => {
       console.log("Loaded users:", users)
       var memberElements = users.map((user) => 
-      <Grid  item xs={12} item lg={4}>
+      <Grid  item xs={4}>
       <Paper style ={{ textAlign:'center',}} >
-      <List item xs={12} item lg={4}>
+      <List item xs={4}>
         <ListItem>
         <ListItemAvatar>
           <Avatar>
