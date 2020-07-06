@@ -5,7 +5,7 @@ import theme from './components/Theme';
 import firebase from "firebase/app";
 import "firebase/auth";
 import Header from './components/layout/Header';
-import Navigation from './components/navigation2'
+import Navigation from './components/navigation'
 import SignIn from './components/pages/SignIn';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';

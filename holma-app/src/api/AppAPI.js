@@ -245,7 +245,7 @@ export default class AppAPI {
     };
 
     updateGroup(group) {
-        return this.#fetchAdv(this.#updateGroupURL(group.getId()), {
+        return this.#fetchAdv(this.#updateGroupURL(group), {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json, text/plain',

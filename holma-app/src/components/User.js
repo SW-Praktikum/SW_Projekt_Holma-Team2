@@ -5,6 +5,8 @@ import {Link} from 'react-router-dom';
 import User from '../api/UserBO';
 import ListWithBoxes from './ListWithBoxes';
 import firebase from 'firebase/app'
+import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
+import Navigation from '../components/navigation';
 
 class UserProfil extends Component {
 
@@ -16,6 +18,9 @@ class UserProfil extends Component {
 
     // Init the state
     this.state = {
+      user: this.props.user,
+      userName: this.props.user.name,
+      userId: this.props.user.Id
     }
   }
 
@@ -23,12 +28,20 @@ class UserProfil extends Component {
   handleSignOutButtonClicked = () => {
     firebase.auth().signOut();
     window.location.reload();
+    
+  }
+
+  handleDeleteUser = () => {
+    AppAPI.getAPI().deleteUser(this.state.user).then( () =>{
+      window.location.reload(false)}
+    );
   }
 
 
   render() {
 
       const { classes, user } = this.props;
+    
       
       return (
           
@@ -58,7 +71,7 @@ class UserProfil extends Component {
             <Grid container spaching={2}>
               <Button color='primary' onClick={this.handleSignOutButtonClicked}>Logout</Button>
               <Grid item xs={8} sm={9}/>
-              <Button color='secondary'>Delete User</Button>
+              <Button color='secondary' onClick={this.handleDeleteUser}>Delete User</Button>
             </Grid>
           </div>
         </Paper>
