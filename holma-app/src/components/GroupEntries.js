@@ -74,20 +74,17 @@ const randomImages = [
 class GroupEntry extends Component {
     render() {
         const path = "/grouplist/" + this.props.group.getId()
-        return ( 
-        <Card className="root" style={{/* minHeight: 250 ,  */minWidth: '100%', marginBottom:10, marginTop:10}}>
+        return (
+        <Link to={path}>
+          <Card className="root" style={{/* minHeight: 250 ,  */minWidth: '100%', marginBottom:10, marginTop:10}}>
             <CardActionArea>
             <CardMedia className="media" style={{height: 10, paddingTop: '56.25%',}} image={randomImages[Math.floor(Math.random() * randomImages.length)]} title="Groupname"/>
             <CardContent>
                 <Typography className="title" style={{fontSize: 14}} color="textPrimary">{this.props.group.getName()}</Typography>
             </CardContent>
             </CardActionArea>     
-            <CardActions>
-                <Link to={path}>
-                  <Button size="small">Anzeigen</Button>
-                </Link>
-            </CardActions>
-         </Card>
+          </Card>
+        </Link> 
     )
 }
 }
