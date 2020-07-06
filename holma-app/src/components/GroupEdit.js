@@ -28,6 +28,7 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FaceIcon from '@material-ui/icons/Face';
+import SaveIcon from '@material-ui/icons/Save';
 
 
 
@@ -55,7 +56,6 @@ class GroupInformation extends Component {
           Groupname:
         </Typography>
         <TextField
-                  autoFocus
                   align='center'
                   onChange={this.props.handleChangeName}
                   margin="dense"
@@ -65,6 +65,13 @@ class GroupInformation extends Component {
                   label={this.props.groupName}
                   width='45'
                 />
+                <Button 
+                startIcon={<SaveIcon />}
+                 
+                color="primary"
+                onClick={this.props.handleClickSave}>
+                </Button>
+                
         </ListItem>    
       </Grid>
       
@@ -128,6 +135,7 @@ class MemberDetails extends Component{
     console.log("Props:", props)
     this.state ={
       memberElements: [],
+      groupObject:"",
       groupId: this.props.match.params.groupId,
       groupName: "",
       groupCreationDate: "",
@@ -143,6 +151,7 @@ class MemberDetails extends Component{
     if(this.props.match.params.groupId){
       this.getGroupDetails();
       this.loadMembers();
+      console.log(this.props)
      }
   }
 
@@ -158,12 +167,21 @@ class MemberDetails extends Component{
   }
 
   handleChangeName = (e) => {
-    this.setState({groupName: e.target.value})
-    AppAPI.getAPI().updateGroup(this.state.groupId, this.groupName)
-    console.log(this.state.groupName)
+    this.setState({
+      groupName: e.target.value,
+    })
 
-    // hier muss die Gruppe noch mit dem neuen Namen geupdated werden
-    // zusätzlich auch last updated
+  }
+
+  handleClickSave = () => {
+      AppAPI.getAPI().getGroupById(this.props.match.params.groupId).then (group => {
+        group.setName(this.state.groupName)
+        this.setState({
+          groupObject: group
+        })
+        }).then (() => {
+          AppAPI.getAPI().updateGroup(this.state.groupObject)
+      })
   }
 
   getGroupDetails(){
@@ -231,6 +249,7 @@ class MemberDetails extends Component{
         <div>
           <GroupInformation
             handleChangeMember={this.handleChangeMember}
+            handleClickSave={this.handleClickSave}
             handleChangeName={this.handleChangeName}
             memberId={this.state.memberId}
             addMember={this.addMember}

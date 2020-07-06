@@ -5,6 +5,8 @@ import {Link} from 'react-router-dom';
 import User from '../api/UserBO';
 import ListWithBoxes from './ListWithBoxes';
 import firebase from 'firebase/app'
+import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
+import Navigation from '../components/navigation';
 
 class UserProfil extends Component {
 
@@ -30,9 +32,9 @@ class UserProfil extends Component {
   }
 
   handleDeleteUser = () => {
-    AppAPI.getAPI().deleteUser(this.state.user);
-    console.log(this.state.userId)
-    console.log(this.state.userId)
+    AppAPI.getAPI().deleteUser(this.state.user).then( () =>{
+      window.location.reload(false)}
+    );
   }
 
 
@@ -69,7 +71,7 @@ class UserProfil extends Component {
             <Grid container spaching={2}>
               <Button color='primary' onClick={this.handleSignOutButtonClicked}>Logout</Button>
               <Grid item xs={8} sm={9}/>
-              <Button color='secondary' onClick={this.handleDeleteUser, this.handleSignOutButtonClicked}>Delete User</Button>
+              <Button color='secondary' onClick={this.handleDeleteUser}>Delete User</Button>
             </Grid>
           </div>
         </Paper>

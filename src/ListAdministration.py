@@ -143,13 +143,10 @@ class Administration():
             return mapper.update(group)
 
     """eventuell reichen die delete-methoden der objekte selbst
-
     def add_article_to_group(self, group, article):
         pass
-
     def remove_article_from_group(self, group, article):
         pass
-
     def remove_shopping_list_from_group(self, group, shopping_list):
         pass"""
 
