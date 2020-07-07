@@ -512,9 +512,6 @@ export default class AppAPI {
             })
         })
     };
-<<<<<<< HEAD
-}
-=======
 
     getRetailers() {
         return this.#fetchAdv(this.#getRetailersURL()).then((responseJSON) => {
@@ -544,4 +541,3 @@ export default class AppAPI {
     };
 
 }
->>>>>>> Yassine
