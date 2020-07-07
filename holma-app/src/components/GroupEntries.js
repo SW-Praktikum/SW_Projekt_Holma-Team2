@@ -31,7 +31,7 @@ import IconButton from '@material-ui/core/IconButton';
 import FolderIcon from '@material-ui/icons/Folder';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FaceIcon from '@material-ui/icons/Face';
-
+import { colors } from '@material-ui/core';
 
 /**
  * When adding more member to a Group and then adding a new group emediateley, deleting meber Elements from state not working properly
@@ -75,12 +75,12 @@ class GroupEntry extends Component {
     render() {
         const path = "/grouplist/" + this.props.group.getId()
         return (
-        <Link to={path}>
-          <Card className="root" style={{/* minHeight: 250 ,  */minWidth: '100%', marginBottom:10, marginTop:10}}>
+        <Link to={path} style={{textDecoration: 'none'}}>
+          <Card className="root" style={{/* minHeight: 250 ,  */minWidth: '100%', marginBottom:10, marginTop:10, backgroundColor: colors.teal[600]}}>
             <CardActionArea>
             <CardMedia className="media" style={{height: 10, paddingTop: '56.25%',}} image={randomImages[Math.floor(Math.random() * randomImages.length)]} title="Groupname"/>
             <CardContent>
-                <Typography className="title" style={{fontSize: 14}} color="textPrimary">{this.props.group.getName()}</Typography>
+                <Typography className="title" style={{fontSize: 14, color: 'white'}}>{this.props.group.getName()}</Typography>
             </CardContent>
             </CardActionArea>     
           </Card>
