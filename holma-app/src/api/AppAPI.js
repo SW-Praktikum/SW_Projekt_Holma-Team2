@@ -3,6 +3,7 @@ import UserBO from './UserBO';
 import ShoppingListBO from './ShoppingListBO';
 import ArticleBO from './ArticleBO'
 import ListEntryBO from './ListEntryBO'
+import RetailerBO from './RetailerBO'
 
 export default class AppAPI {
 
@@ -62,6 +63,11 @@ export default class AppAPI {
     #createListEntryURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppingLists/${shoppingListId}/listentries`;
     #updateListEntryURL = (listEntryId) => `${this.#appServerBaseURL}/listentry/${listEntryId}`;
     #deleteListEntryURL = (listEntryId) => `${this.#appServerBaseURL}/listentry/${listEntryId}`;
+
+    // Retailer related
+    #getRetailersURL = () => `${this.#appServerBaseURL}/retailers`;
+    #getRetailerByIdURL = (retailerId) => `${this.#appServerBaseURL}/retailer/${retailerId}`;
+    #getRetailerByNameURL = (name) => `${this.#appServerBaseURL}/by-name/${name}`;
 
     static getAPI() {
         if (this.#api == null) {
@@ -506,4 +512,36 @@ export default class AppAPI {
             })
         })
     };
+<<<<<<< HEAD
 }
+=======
+
+    getRetailers() {
+        return this.#fetchAdv(this.#getRetailersURL()).then((responseJSON) => {
+            let responseRetailer = RetailerBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+                resolve(responseRetailer)
+            })
+        })
+    };
+
+    getRetailerById(retailerId) {
+        return this.#fetchAdv(this.#getRetailerByIdURL(retailerId)).then((responseJSON) => {
+            let responseRetailer = ListEntryBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseRetailer)
+            })
+        })
+    }
+
+    getRetailerByName(name) {
+        return this.#fetchAdv(this.#getRetailerByNameURL(name)).then((responseJSON) => {
+            let responseRetailer = ListEntryBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+                resolve(responseRetailer)
+            })
+        })
+    };
+
+}
+>>>>>>> Yassine
