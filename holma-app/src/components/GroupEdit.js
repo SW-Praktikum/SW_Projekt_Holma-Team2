@@ -119,7 +119,7 @@ class GroupInformation extends Component {
                   value={this.props.memberId}
                   fullWidth
                 />
-      <Button onClick={this._handleClick} color="primary" style={{backgroundColor:"blue", color:"white"}}>
+      <Button onClick={this._handleClick} color="primary" variant="contained">
                   hinzufügen
                 </Button>
       </Grid>
