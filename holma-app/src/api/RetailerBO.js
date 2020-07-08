@@ -10,7 +10,7 @@ export default class RetailerBO extends BusinessObject {
     let result = [];
 
     if (Array.isArray(retailers)) {
-        articles.forEach((ret) => {
+        retailers.forEach((ret) => {
             Object.setPrototypeOf(ret, RetailerBO.prototype)
             result.push(ret)
         })
