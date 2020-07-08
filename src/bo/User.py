@@ -31,17 +31,14 @@ class User(BusinessObject):
     def set_google_id(self, google_id):
         self._google_id = google_id
 
-    @staticmethod
-    def to_dict(obj):
+    def to_dict(self):
         result = {
-            "id": obj.get_id(),
-            "name": obj.get_name(),
-            "creationDate": datetime.strftime(obj.get_creation_date(),
-                                              "%Y-%m-%dT%H:%M:%S.%fZ"),
-            "lastUpdated": datetime.strftime(obj.get_last_updated(),
-                                             "%Y-%m-%dT%H:%M:%S.%fZ"),
-            "email": obj.get_email(),
-            "googleId": obj.get_google_id()
+            "id": self.get_id(),
+            "name": self.get_name(),
+            "email": self.get_email(),
+            "googleId": self.get_google_id(),
+            "creationDate": self.get_creation_date(),
+            "lastUpdated": self.get_last_updated(),
         }
         return result
 
@@ -50,12 +47,10 @@ class User(BusinessObject):
         user = User()
         user.set_id(dictionary["id"])
         user.set_name(dictionary["name"])
-        user.set_creation_date(datetime.strptime(dictionary["creationDate"],
-                                                 "%Y-%m-%dT%H:%M:%S.%fZ"))
-        user.set_last_updated(datetime.strptime(dictionary["lastUpdated"],
-                                                 "%Y-%m-%dT%H:%M:%S.%fZ"))
         user.set_email(dictionary["email"])
         user.set_google_id(dictionary["googleId"])
+        user.set_creation_date(User.date_format(dictionary["creationDate"]))
+        user.set_last_updated(User.date_format(dictionary["lastUpdated"]))
         return user
 
     @staticmethod

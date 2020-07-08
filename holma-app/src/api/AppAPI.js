@@ -34,8 +34,8 @@ export default class AppAPI {
     #getGroupsURL = () => `${this.#appServerBaseURL}/groups`;
     #getGroupByIdURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}`;
     #getGroupsByNameURL = (name) => `${this.#appServerBaseURL}/by-name/${name}`;
-    #updateGroupURL = (groupId) => `${this.#appServerBaseURL}/groups/${groupId}`;
-    #deleteGroupURL = (groupId) => `${this.#appServerBaseURL}/groups/${groupId}`;
+    #updateGroupURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}`;
+    #deleteGroupURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}`;
 
     #getUsersByGroupIdURL = (groupId) =>`${this.#appServerBaseURL}/group/${groupId}/users`;
   
@@ -234,6 +234,7 @@ export default class AppAPI {
 
     getGroupById(groupId) {
         return this.#fetchAdv(this.#getGroupByIdURL(groupId)).then((responseJSON) => {
+            console.log("Get group by id", responseJSON)
             let responseGroups = GroupBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
                 resolve(responseGroups)

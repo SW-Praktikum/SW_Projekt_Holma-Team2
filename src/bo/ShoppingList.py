@@ -22,36 +22,35 @@ class ShoppingList(BusinessObject):
     def set_group(self, group_id):
         self._group = group_id
 
-    @staticmethod
-    def to_dict(obj):
+    def to_dict(self):
         result = {
-            "id": obj.get_id(),
-            "name": obj.get_name(),
-            "creationDate": datetime.strftime(obj.get_creation_date(),
-                                              "%Y-%m-%dT%H:%M:%S.%fZ"),
-            "lastUpdated": datetime.strftime(obj.get_last_updated(),
-                                             "%Y-%m-%dT%H:%M:%S.%fZ"),
-            "groupId": obj.get_group()
+            "id": self.get_id(),
+            "name": self.get_name(),
+            "groupId": self.get_group(),
+            "creationDate": self.get_creation_date(),
+            "lastUpdated": self.get_last_updated()
         }
         return result
 
     @staticmethod
     def from_dict(dictionary=dict()):
-        shoppinglist = ShoppingList()
-        shoppinglist.set_id(dictionary["id"])
-        shoppinglist.set_name(dictionary["name"])
-        shoppinglist.set_group(dictionary["groupId"])
-        return shoppinglist
+        shopping_list = ShoppingList()
+        shopping_list.set_id(dictionary["id"])
+        shopping_list.set_name(dictionary["name"])
+        shopping_list.set_group(dictionary["groupId"])
+        shopping_list.set_creation_date(ShoppingList.date_format(dictionary["creationDate"]))
+        shopping_list.set_last_updated(ShoppingList.date_format(dictionary["lastUpdated"]))
+        return shopping_list
 
     @staticmethod
     def from_tuples(tuples=list()):
         result = []
-        for (shoppinglist_id, name, creation_date, group, last_update) in tuples:
-            shoppinglist = ShoppingList()
-            shoppinglist.set_id(shoppinglist_id)
-            shoppinglist.set_name(name)
-            shoppinglist.set_group(group)
-            shoppinglist.set_creation_date(creation_date)
-            shoppinglist.set_last_updated(last_update)
-            result.append(shoppinglist)
+        for (shopping_list_id, name, creation_date, group, last_update) in tuples:
+            shopping_list = ShoppingList()
+            shopping_list.set_id(shopping_list_id)
+            shopping_list.set_name(name)
+            shopping_list.set_group(group)
+            shopping_list.set_creation_date(creation_date)
+            shopping_list.set_last_updated(last_update)
+            result.append(shopping_list)
         return result

@@ -34,12 +34,14 @@ bo = api.model('BusinessObject', {
     'id': fields.Integer(attribute='_id',
                          description='Der Unique Identifier '
                                      'eines Business Object'),
-    'creationDate': fields.Date(attribute='_creation_date',
+    'creationDate': fields.DateTime(attribute='_creation_date',
                                 description='Erstellungsdatum des BOs, wird '
-                                            'durch Unix Time Stamp ermittlet'),
-    'lastUpdated': fields.Date(attribute='_last_updated',
-                               description='Änderungsdatum des BOs, wird durch'
-                                           'Unix Time Stamp ermittlet')
+                                            'durch Unix Time Stamp ermittlet',
+                                    dt_format="iso8601"),
+    'lastUpdated': fields.DateTime(attribute='_last_updated',
+                                   description='Änderungsdatum des BOs, wird durch'
+                                           'Unix Time Stamp ermittlet',
+                                    dt_format="iso8601")
 })
 
 user = api.inherit('User', bo, {
@@ -509,6 +511,7 @@ class GroupRelatedShoppingListOperations(Resource):
         adm = Administration()
         sl = adm.get_group_by_id(group_id)
         proposal = ShoppingList.from_dict(api.payload)
+
         if sl is not None and proposal is not None:
             result = adm.create_shopping_list(proposal.get_name(), group_id)
             return result
