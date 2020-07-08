@@ -45,7 +45,7 @@ class GroupInformation extends Component {
       <Box m={5} />
         <ListItem elevation={3} align='center' style={{width:"auto"}}>
         <Typography  variant="h4" gutterBottom>
-          Groupdetails
+          Gruppendetails
         </Typography>
       </ListItem>
       <Box m={5} />
@@ -53,7 +53,7 @@ class GroupInformation extends Component {
         <Grid item xs={6} sm={6}>
         <ListItem align='center' style={{width:"auto"}}>
         <Typography  variant="h6" gutterBottom>
-          Groupname:
+          Gruppenname:
         </Typography>
         <TextField
                   align='center'
@@ -63,7 +63,7 @@ class GroupInformation extends Component {
                   variant="standard"
                   type="text"
                   label={this.props.groupName}
-                  width='45'
+                  minWidth='150'
                 />
                 <Button 
                 startIcon={<SaveIcon />}
@@ -78,7 +78,7 @@ class GroupInformation extends Component {
       <Grid item xs={6} sm={6}>
         <ListItem  align='center' style={{width:"auto"}}>
         <Typography  variant="h6" gutterBottom>
-        owner: {this.props.groupOwner}
+        Besitzer: {this.props.groupOwner}
         </Typography>
         </ListItem>
       </Grid>
@@ -89,14 +89,14 @@ class GroupInformation extends Component {
       <Grid item xs={6} sm={6}>
         <ListItem align='center' style={{width:"auto"}}>
         <Typography  variant="h6" gutterBottom>
-        creation date: {this.props.groupCreationDate}
+        Erstellt am: {this.props.groupCreationDate}
         </Typography>
         </ListItem>
       </Grid>
       <Grid item xs={6} sm={6}>
         <ListItem  align='center' style={{width:"auto"}}>
         <Typography  variant="h6" gutterBottom>
-        last updated: {this.props.groupLastUpdated}
+        Letzte Änderung: {this.props.groupLastUpdated}
         </Typography>
         </ListItem>
       </Grid>
@@ -105,23 +105,30 @@ class GroupInformation extends Component {
       <Box m={4} />
       <ListItem elevation={3} align='center' style={{width:"auto"}}>
         <Typography  variant="h4" gutterBottom>
-          Groupmembers
+          Mitglieder
         </Typography>
       </ListItem>
+      <Grid style={{marginLeft: 15, alignItems: 'center'}}>
       <TextField
-                  autoFocus
-                  onChange={this.props.handleChangeMember}
-                  margin="dense"
-                  id="outlined-basic"
-                  variant="outlined"
-                  label="Mitglieds ID"
-                  type="email"
-                  value={this.props.memberId}
-                  fullWidth
+          autoFocus
+          onChange={this.props.handleChangeMember}
+          margin="dense"
+          id="outlined-basic"
+          variant="outlined"
+          label="Mitglieds ID"
+          type="ID"
+          value={this.props.memberId} 
+          style={{width: 150, marginBottom: 15, marginRight: 15, alignItems: 'center'}}       
                 />
-      <Button onClick={this._handleClick} color="primary" variant="contained">
-                  hinzufügen
-                </Button>
+      <Button 
+          style={{marginTop: 9, marginBottom: 15, alignItems: 'center'}}
+          onClick={this._handleClick}
+          color="primary" 
+          variant="contained"
+          >
+            hinzufügen
+      </Button>
+      </Grid>
       </Grid>
     </div>
     
@@ -202,13 +209,11 @@ class MemberDetails extends Component{
   }
 
   loadMembers = () => {
-    console.log("Hier sollen die Member der Gruppe " + this.state.groupId + " geladen werden")
     AppAPI.getAPI().getUsersByGroupId(this.state.groupId).then(users => {
-      console.log("Loaded users:", users)
       var memberElements = users.map((user) => 
-      <Grid  item xs={4}>
+      <Grid  item xs={12} sm={6} md={4}>
       <Paper style ={{ textAlign:'center',}} >
-      <List item xs={4}>
+      <List item xs={12} sm={6} md={4}>
         <ListItem>
         <ListItemAvatar>
           <Avatar>

@@ -69,7 +69,7 @@ class UserProfil extends Component {
               </Grid>
             <Box m={4} />
             <Grid container spaching={2}>
-              <Button color='primary' onClick={this.handleSignOutButtonClicked}>Logout</Button>
+              <Button variant="contained" color='primary' onClick={this.handleSignOutButtonClicked}>Logout</Button>
               <Grid item xs={8} sm={9}/>
               <Button className={classes.button} onClick={this.handleDeleteUser}>Delete User</Button>
             </Grid>
@@ -91,6 +91,7 @@ const styles = theme => ({
   },
   button: {
     color: theme.palette.delete.main,
+    
   }
 });
 
