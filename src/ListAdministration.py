@@ -52,15 +52,18 @@ class Administration():
 
     def delete_user(self, user):
         with UserGroupRelationsMapper() as mapper:
+            print("delete relation")
             mapper.delete_user_relations(user)
 
         """with ListEntryMapper() as mapper:
             mapper.delete_purchasing_user(user)"""
 
         with GroupMapper() as mapper:
+            print("delete group")
             mapper.delete_owner(user)
 
         with UserMapper() as mapper:
+            print("delete user")
             mapper.delete(user)
 
     def save_user(self, user):
