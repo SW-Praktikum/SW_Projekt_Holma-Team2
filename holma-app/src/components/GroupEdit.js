@@ -176,7 +176,9 @@ class MemberDetails extends Component{
   handleChangeName = (e) => {
     this.setState({
       groupName: e.target.value,
+      
     })
+    console.log(e.target.value)
 
   }
 
