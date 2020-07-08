@@ -36,7 +36,7 @@ import ListItem from '@material-ui/core/ListItem';
 import List from '@material-ui/core/List';
 import Grid from '@material-ui/core/Grid';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-
+import AddListDialog from './dialogs/AddListDialog';
 
 const useRowStyles = makeStyles({
   root: {
@@ -252,6 +252,8 @@ class GroupList extends Component {
             shoppingListLastUpdated: "",
             memberId: "",
             ArticleName:"",
+            openDialog: false,
+            checked: false,
         }}
       
     componentDidMount(){
@@ -260,6 +262,41 @@ class GroupList extends Component {
         }
     }
     
+    openDialog = () => {
+      this.setState({
+        openDialog: true})
+    }
+
+    handleClose = () => {
+      this.setState({
+        openDialog: false})
+    }
+
+    addStandardArticles = () => {
+      if (this.state.checked === false)
+        this.setState({checked: true})
+      else
+        this.setState({checked: false})
+      
+    }
+    checkStandard = () => {
+      if (this.state.checked === false)
+        // Liste ohne Standardartikel erstellen
+        console.log("Ohne standard")
+      else
+        console.log("Mit standard")
+        this.createNewList()
+        // Liste mit Standardartikel erstellen
+    }
+
+    createNewList = () => {
+      AppAPI.getAPI().createShoppingList(this.state.groupId)
+    }
+
+    handleInputChange = (e) => {
+      this.setState({shoppingListName: e.target.value})
+      console.log(this.state.shoppingListName)
+    }
 
     loadShoppingLists = () => {
       AppAPI.getAPI().getShoppingListsByGroupId(this.state.groupId).then(lists => {
@@ -291,6 +328,15 @@ class GroupList extends Component {
                 <CollapsibleTable/>
                 <Box m={2} />
                 <AddShoppinglist/>
+                <AddListDialog 
+                  openDialog={this.openDialog}
+                  open={this.state.openDialog}
+                  handleClose={this.handleClose}
+                  checked={this.state.checked}
+                  addStandardArticles={this.addStandardArticles}
+                  checkStandard={this.checkStandard}
+                  handleInputChange={this.handleInputChange}
+                />
             </div>        
     );
 }}

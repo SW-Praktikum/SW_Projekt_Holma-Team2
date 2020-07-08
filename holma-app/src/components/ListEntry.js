@@ -92,7 +92,7 @@ class ListEntry extends Component {
           ];
           const retailer = [
               {
-                  value: 'Edeka',
+                value: 'Edeka',
               },
               {
                 value: 'Rewe',
@@ -155,7 +155,7 @@ class ListEntry extends Component {
                 value: 'Sonstige',
                 },
                 {
-                    value: 'Naturgut'
+                value: 'Naturgut'
 
               }
           ]

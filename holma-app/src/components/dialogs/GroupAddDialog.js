@@ -40,7 +40,6 @@ class GroupAddDialog extends Component {
               <DialogContent>
                 <TextField
                   autoFocus
-                  onKeyDown={this._handleKeyDown}
                   onChange={this.props.handleChange}
                   margin="dense"
                   id="outlined-basic"
