@@ -31,38 +31,43 @@ export default class AppAPI {
     #deleteUsersFromGroupURL =(groupId, userId) => `${this.#appServerBaseURL}/group/${groupId}/user/${userId}`;
 
     // Group Related
-    #getGroupsURL = () => `${this.#appServerBaseURL}/groups`;
+    #getGroupsURL = () => `${this.#appServerBaseURL}/group`;
     #getGroupByIdURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}`;
     #getGroupsByNameURL = (name) => `${this.#appServerBaseURL}/by-name/${name}`;
-    #updateGroupURL = (groupId) => `${this.#appServerBaseURL}/groups/${groupId}`;
-    #deleteGroupURL = (groupId) => `${this.#appServerBaseURL}/groups/${groupId}`;
+    #updateGroupURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}`;
+    #deleteGroupURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}`;
 
     #getUsersByGroupIdURL = (groupId) =>`${this.#appServerBaseURL}/group/${groupId}/users`;
   
     // Article Related
     #getArticlesURL = () => `${this.#appServerBaseURL}/articles`;
-    #createArticleURL = (groupId) => `${this.#appServerBaseURL}/groups/${groupId}/articles`;
-    #updateArticleURL = (articleId) =>  `${this.#appServerBaseURL}/articles/${articleId}`;
-    #deleteArticleURL = (articleId) => `${this.#appServerBaseURL}/articles/${articleId}` ;
-    #getArticleByIdURL = (articleId) => `${this.#appServerBaseURL}/articles/${articleId}`;
+    #createArticleURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/articles`;
+    #updateArticleURL = (articleId) =>  `${this.#appServerBaseURL}/article/${articleId}`;
+    #deleteArticleURL = (articleId) => `${this.#appServerBaseURL}/article/${articleId}` ;
+    #getArticleByIdURL = (articleId) => `${this.#appServerBaseURL}/article/${articleId}`;
     #getArticleByNameURL = (name) => `${this.#appServerBaseURL}/by-name/${name}`;
 
 
 
     // Shoppinglist related
     #getShoppingListsByGroupIdURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/shoppinglists`;
-    #createShoppingListURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/shoppinglists`;
-    #getShoppingListByIdURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglists/${shoppingListId}`;
-    #updateShoppingListURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglists/${shoppingListId}`;
-    #deleteShoppingListURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglists/${shoppingListId}`;
+    #createShoppingListURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/shoppingLists`;
+    #getShoppingListByIdURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppingList/${shoppingListId}`;
+    #updateShoppingListURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppingList/${shoppingListId}`;
+    #deleteShoppingListURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppingList/${shoppingListId}`;
     
     // ListEntry related
     #getListEntryURL = () => `${this.#appServerBaseURL}/listentries`;
     #getListEntryByIdURL = (listEntryId) => `${this.#appServerBaseURL}/listentry/${listEntryId}`;
-    #getListEntriesByShoppingListIdURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglist/${shoppingListId}/listentries`; 
-    #createListEntryURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglist/${shoppingListId}/listentries`;
+    #getListEntryByShoppingListIdURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppingList/${shoppingListId}/listentries`; 
+    #createListEntryURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppingList/${shoppingListId}/listentries`;
     #updateListEntryURL = (listEntryId) => `${this.#appServerBaseURL}/listentry/${listEntryId}`;
     #deleteListEntryURL = (listEntryId) => `${this.#appServerBaseURL}/listentry/${listEntryId}`;
+
+    // Standardarticle related
+    #getListEntryByGroupIdURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/listentries`; 
+    #addStandardArticleToGroupURL = (groupId, listEntryId) => `${this.#appServerBaseURL}/group/${groupId}/listentry/${listEntryId}`;
+    #deleteStandardArticleFromGroupURL =(groupId, listEntryId) => `${this.#appServerBaseURL}/group/${groupId}/listentry/${listEntryId}`;
 
     // Retailer related
     #getRetailersURL = () => `${this.#appServerBaseURL}/retailers`;
@@ -251,7 +256,7 @@ export default class AppAPI {
     };
 
     updateGroup(group) {
-        return this.#fetchAdv(this.#updateGroupURL(group), {
+        return this.#fetchAdv(this.#updateGroupURL(group.getId()), {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json, text/plain',
@@ -437,8 +442,8 @@ export default class AppAPI {
     };
 
 
-    getListEntriesByShoppingListId(shoppingListId) {
-        return this.#fetchAdv(this.#getListEntriesByShoppingListIdURL(shoppingListId)).then((responseJSON) => {
+    getListEntryByShoppingListId(shoppingListId) {
+        return this.#fetchAdv(this.#getListEntryByShoppingListIdURL(shoppingListId)).then((responseJSON) => {
             let responseListEntry = ListEntryBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
                 resolve(responseListEntry)
@@ -464,15 +469,15 @@ export default class AppAPI {
         })
     };
 
-    createListentries(listentries) {
-        console.log("Creating a ListEntry:", listentries)
-        return this.#fetchAdv(this.#createListEntryURL(listentries.getShoppingListId()), {
+    createListentries(listentry) {
+        console.log("Creating a ListEntry:", listentry)
+        return this.#fetchAdv(this.#createListEntryURL(listentry.getShoppingListId()), {
         method: 'POST',
             headers: {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
-            body: JSON.stringify(listentries)
+            body: JSON.stringify(listentry)
         }).then((responseJSON) => {
             let responseListEntry = ListEntryBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
@@ -481,14 +486,14 @@ export default class AppAPI {
         })
     }
 
-    updateListEntry(listentries) {
-        return this.#fetchAdv(this.#updateListEntryURL(listentries.getId()), {
+    updateListEntry(listentry) {
+        return this.#fetchAdv(this.#updateListEntryURL(listentry.getId()), {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
-            body: JSON.stringify(listentries)
+            body: JSON.stringify(listentry)
         }).then((responseJSON) => {
             let responseListEntry = ListEntryBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
@@ -497,14 +502,14 @@ export default class AppAPI {
         })
     };
 
-    deleteListEntry(listentries) {
-        return this.#fetchAdv(this.#deleteListEntryURL(listentries.getId()), {
+    deleteListEntry(listentry) {
+        return this.#fetchAdv(this.#deleteListEntryURL(listentry.getId()), {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
-            body: JSON.stringify(listentries)
+            body: JSON.stringify(listentry)
         }).then((responseJSON) => {
             let responseListEntry = ListEntryBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
@@ -540,4 +545,36 @@ export default class AppAPI {
         })
     };
 
+    getListEntryByGroupId(groupId) {
+        return this.#fetchAdv(this.#getListEntryByGroupIdURL(groupId)).then((responseJSON) => {
+            let responseListEntry = ListEntryBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+                resolve(responseListEntry)
+            })
+        })
+    }
+
+    addStandardArticleToGroup(groupId, listEntryId) {
+        return this.#fetchAdv(this.#addStandardArticleToGroupURL(groupId, listEntryId), {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/plain'
+            },
+        }).then((responseJSON) => {
+            let responseGroup = GroupBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseGroup)
+            })
+        })
+    };
+
+    deleteStandardArticleFromGroup(group, listentry) {
+        return this.#fetchAdv(this.#deleteStandardArticleFromGroupURL(group, listentry), {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+        })
+    };
 }
