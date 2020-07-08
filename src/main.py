@@ -13,7 +13,7 @@ from bo.Group import Group
 from bo.ShoppingList import ShoppingList
 from bo.User import User
 from bo.ListEntry import ListEntry
-'from bo.Retailer import Retailer'
+from bo.Retailer import Retailer
 
 """Hier wird Flask instanziert"""
 app = Flask(__name__)
@@ -110,7 +110,7 @@ class UserListOperations(Resource):
     @holmaApp.expect(user)  # Wir erwarten ein USer-Objekt von Client-Seite.
     # @secured
     def post(self):
-        """Anlegen eines neuen Customer-Objekts."""
+        """Anlegen eines neuen User-Objekts."""
         adm = Administration()
         proposal = User.from_dict(api.payload)
         if proposal is not None:
@@ -650,24 +650,22 @@ class ListEntryOperations(Resource):
         else:
             return '', 500
 
-"""
+
 @holmaApp.route('/retailers')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigem Fehler kommt.')
 class RetailerListOperations(Resource):
-
-    @holmaApp.marshal_list_with(Retailer)
+    @holmaApp.marshal_list_with(retailer)
     # @secured
     def get(self):
         adm = Administration()
         ret_list = adm.get_all_retailers()
         return ret_list
 
-
 @holmaApp.route('/retailer/<int:retailer_id>')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('retailer_id', 'Die ID des retailer-Objekts')
 class RetailerOperations(Resource):
-    @holmaApp.marshal_list_with(Retailer)
+    @holmaApp.marshal_list_with(retailer)
     # @secured
     def get(self, retailer_id):
         adm = Administration()
@@ -678,13 +676,13 @@ class RetailerOperations(Resource):
 @holmaApp.route('/retailer/by-name/<string:name>')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('name', 'Der Name des Retailers')
-class ArticlesByNameOperations(Resource):
-    @holmaApp.marshal_list_with(Retailer)
+class RetailerByNameOperations(Resource):
+    @holmaApp.marshal_list_with(retailer)
     # @secured
     def get(self, name):
         adm = Administration()
         rtl = adm.get_retailers_by_name(name)
-        return rtl """
+        return rtl
 
 
 if __name__ == '__main__':
