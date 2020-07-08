@@ -78,7 +78,7 @@ class GroupInformation extends Component {
       <Grid item xs={6} sm={6}>
         <ListItem  align='center' style={{width:"auto"}}>
         <Typography  variant="h6" gutterBottom>
-        Besitzer: {this.props.groupOwner}
+        Admin: {this.props.groupOwner}
         </Typography>
         </ListItem>
       </Grid>

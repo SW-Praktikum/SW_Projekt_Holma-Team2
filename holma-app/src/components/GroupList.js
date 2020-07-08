@@ -11,7 +11,8 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Box from '@material-ui/core/Box';
 import { Link } from 'react-router-dom';
-import GroupBO from '../api/GroupBO';
+import ShoppingListBO from '../api/ShoppingListBO';
+import AddListDialog from './dialogs/AddListDialog';
 
 import TextField from '@material-ui/core/TextField';
 
@@ -49,58 +50,25 @@ import CardMedia from '@material-ui/core/CardMedia';
 
 
 
-class AddShoppinglist extends Component {
-  render(){
-  return (
-    <TableContainer component={Paper} style={{ width: '100%',}}>
-      <Table aria-label="collapsible table">
-        <TableHead>
-          <TableRow>
-            <TableCell style={{ width: '20%',}}><b>Add Shoppinglist</b></TableCell>
-          <TextField id="standard-basic" label="name" style={{ width: '40%',}} />
-            <TableCell style={{ width: '30%',}}>Add all Standardarticles</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-
-        </TableBody>
-      </Table>
-    </TableContainer>
-  )
-  }
-}
-
 class Grouplink extends Component{
   render(){
       return(
           <Button variant="contained" color="primary" style={{width:'100%'}}>
-              Gruppe bearbeiten
+              Gruppe anzeigen
           </Button>
       )
   }
 }
 
 
-const randomImages = [
-  "https://www.bahn-tickets.com/wp-content/uploads/2016/07/Gruppenreise_Personen-1000x683px.jpg",
-  "https://www.br.de/telekolleg/faecher/psychologie/gruppe-kreis-maenner100~_v-img__16__9__xl_-d31c35f8186ebeb80b0cd843a7c267a0e0c81647.jpg?version=c8dde",
-  "https://www.verenathiem.com/wp-content/uploads/2016/01/Blog_pic_650_380_machtdergruppe.png",
-  "https://teamworks-gmbh.de/wp-content/uploads/2015/02/gruppedummFotolia_72297488_XS_copyright.jpg",
-  "https://s3-eu-central-1.amazonaws.com/vodafone-featured/wp-content/uploads/2019/01/18104102/erstelleeinesnapchatgruppemitdeinenfreunden-640x360.jpg",
-  "https://www.schule-bw.de/faecher-und-schularten/gesellschaftswissenschaftliche-und-philosophische-faecher/gemeinschaftskunde/materialien-und-medien/soziologie/zusammenleben-soziale-gruppen/gruppe.jpg",
-  "https://www.schulbilder.org/bild-in-der-gruppe-sprechen-dl14849.jpg",
-  "https://blog.pasch-net.de/klick/uploads/Sport5.PNG",
-  "https://cdn.businessinsider.de/wp-content/uploads/2020/03/Joggen-Fru%CC%88hling-600x400.jpg"
-]
-
 class ListCard extends Component {
   render() {
       return (
         <Card className="root" style={{/* minHeight: 250 ,  */minWidth: '100%', marginBottom:10, marginTop:10, backgroundColor: colors.teal[600]}}>
           <CardActionArea>
-          <CardMedia className="media" style={{height: 10, paddingTop: '56.25%',}} image={randomImages[Math.floor(Math.random() * randomImages.length)]} title="Shoppinglist"/>
           <CardContent>
-              <Typography className="title" style={{fontSize: 14, color: 'white'}}>{this.props.list.getName()}{this.props.list.getId()}</Typography>
+              <Typography className="title" style={{fontSize: 14, color: 'white'}}>{this.props.list.getName()}</Typography>
+              <Typography className="title" style={{fontSize: 14, color: 'white'}}>Id: {this.props.list.getId()}</Typography>
           </CardContent>
           </CardActionArea>     
         </Card>
@@ -124,6 +92,48 @@ class GroupList extends Component {
         }
     }
     
+    openDialog = () => {
+      this.setState({
+        openDialog: true})
+    }
+
+    handleClose = () => {
+      this.setState({
+        openDialog: false})
+    }
+
+    addStandardArticles = () => {
+      if (this.state.checked === false)
+        this.setState({checked: true})
+      else
+        this.setState({checked: false})
+      
+    }
+    checkStandard = () => {
+      if (this.state.checked === false) {
+        // Liste ohne Standardartikel erstellen
+        console.log("Ohne standard")
+        this.createNewList()
+      }
+      else {
+        console.log("Mit standard")
+        this.createNewList()
+        // add standardarticles to new list
+        // Liste mit Standardartikel erstellen
+      }
+    }
+
+    createNewList = () => {
+      var lst = new ShoppingListBO(this.state.shoppingListName, this.state.groupId);
+      AppAPI.getAPI().createShoppingList(lst).then(() => {
+        this.loadShoppingLists()
+      })
+    }
+
+    handleInputChange = (e) => {
+      this.setState({shoppingListName: e.target.value})
+    }
+
     loadShoppingLists = () => {
       AppAPI.getAPI().getShoppingListsByGroupId(this.props.match.params.groupId).then((lists) => {
         console.log(lists)
@@ -134,16 +144,16 @@ class GroupList extends Component {
         </Paper>
       </Grid>
       )
-            this.setState({
-              listElements: listElements,
-              loadingInProgress: true, // loading indicator 
-              loadingError: null,
-            });
-            console.log("Save in state", listElements)
-          }).catch(e =>
-              this.setState({ // Reset state with error from catch 
-                loadingInProgress: false,
-                loadingError: e
+        this.setState({
+          listElements: listElements,
+          loadingInProgress: true, // loading indicator 
+          loadingError: null,
+      });
+         console.log("Save in state", listElements)
+      }).catch(e =>
+          this.setState({ // Reset state with error from catch 
+            loadingInProgress: false,
+            loadingError: e
           })
         );  
       } 
@@ -154,12 +164,28 @@ class GroupList extends Component {
           return(
             <div>
               <Box m={5} />
+              <Card className="root" style={{/* minHeight: 250 ,  */minWidth: '100%', marginBottom:10, marginTop:10, backgroundColor: colors.teal[600]}}>
+                <CardActionArea>
+                  <CardContent>
+                    <Typography className="title" style={{fontSize: 14, color: 'white'}}>Aktuelle Gruppe: {this.state.groupId}</Typography>
+                  </CardContent>
+                </CardActionArea>     
+              </Card>
               <Link to={"/groupedit/" + this.props.match.params.groupId} style={{textDecoration: 'none'}}>
                 <Grouplink/>
               </Link>
                 <Box m={2} />
-                <AddShoppinglist/>
+                <Typography className="title" style={{fontSize: 14, color: 'black'}}>Shoppinglists:</Typography>
                 <ListWithBoxes groupElements={listElements}/>
+                <AddListDialog 
+                  openDialog={this.openDialog}
+                  open={this.state.openDialog}
+                  handleClose={this.handleClose}
+                  checked={this.state.checked}
+                  addStandardArticles={this.addStandardArticles}
+                  checkStandard={this.checkStandard}
+                  handleInputChange={this.handleInputChange}
+                />
             </div>        
     );
 }}

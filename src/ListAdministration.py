@@ -53,15 +53,18 @@ class Administration():
 
     def delete_user(self, user):
         with UserGroupRelationsMapper() as mapper:
+            print("delete relation")
             mapper.delete_user_relations(user)
 
-        """with ListEntryMapper() as mapper:
-            mapper.delete_purchasing_user(user)"""
+        with ListEntryMapper() as mapper:
+            mapper.delete_purchasing_user(user)
 
         with GroupMapper() as mapper:
+            print("delete group")
             mapper.delete_owner(user)
 
         with UserMapper() as mapper:
+            print("delete user")
             mapper.delete(user)
 
     def save_user(self, user):
@@ -95,8 +98,9 @@ class Administration():
         with ShoppingListMapper() as mapper:
             return mapper.find_by_group(group_id)
 
-    """def get_standardarticles_by_group_id(self, group_id):
-        pass"""
+    def get_standardarticles_by_group_id(self, group_id):
+        with ListEntryMapper() as mapper:
+            return mapper.find_standardarticles(group_id)
 
     def add_member_to_group(self, group, user):
         with UserGroupRelationsMapper() as mapper:
@@ -109,13 +113,17 @@ class Administration():
         with UserGroupRelationsMapper() as mapper:
             mapper.remove_user_from_group(group, user)
 
-    """def add_standardarticle_to_group(self, group, list_entry):
+    def add_standardarticle_to_group(self, list_entry, group):
         with ListEntryMapper() as mapper:
-            mapper."""
+            standardarticle = mapper.set_standardarticle(list_entry)
 
-    """def remove_standardarticle_from_group(self, group, list_entry):
+            mapper.insert_standardarticle(standardarticle, group)
+
+    def delete_standardarticle(self, list_entry, group):
         with ListEntryMapper() as mapper:
-            mapper."""
+            mapper.delete_standardarticle(list_entry, group)
+
+            mapper.delete(list_entry)
 
     def create_group(self, name, user_id):
         group = Group()
@@ -190,10 +198,11 @@ class Administration():
         with ListEntryMapper() as mapper:
             return mapper.find_by_id(list_entry_id)
 
-    def create_list_entry(self, purchasing_user_id, amount, article_id, unit, retailer_id,
-                          shopping_list_id):
+    def create_list_entry(self, name, amount, article_id, unit, purchasing_user_id, 
+                          retailer_id, shopping_list_id):
         list_entry = ListEntry()
         list_entry.set_id(0),
+        list_entry.set_name(name),
         list_entry.set_purchasing_user(purchasing_user_id),
         list_entry.set_amount(amount),
         list_entry.set_article(article_id),
