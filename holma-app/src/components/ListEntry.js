@@ -32,21 +32,25 @@ class ListEntry extends Component {
     };    
 
 
-    setOpen = () => {
-        if (this.state.open === false)
-            this.setState({open: true})
-        else
-            this.setState({open: false})
-    }
+        setOpen = () => {
+            if (this.state.open === false) {
+                this.setState({open: true})
+            }
+            else {
+                this.setState({open: false})
+            }
+        }
 
-    setStandard = () => { //not working yet
-        if(this.state.standard === false)
-            this.setState({standard: true})
-            //add as Standard article
-        else
-            this.setStandard({standard: false})
-            //remove from standard
-    }   
+        setStandard = () => { //not working yet
+            if(this.state.standard === false) {
+                this.setState({standard: true})
+                //add as Standard article
+            }
+            else {
+                this.setStandard({standard: false})
+                //remove from standard
+            }
+        }   
 
     handleChangeCheck = (e) => {
         this.setState({checked: e.target.checked})
@@ -109,7 +113,7 @@ class ListEntry extends Component {
           ];
           const retailer = [
               {
-                  value: 'Edeka',
+                value: 'Edeka',
               },
               {
                 value: 'Rewe',
@@ -172,7 +176,7 @@ class ListEntry extends Component {
                 value: 'Sonstige',
                 },
                 {
-                    value: 'Naturgut'
+                value: 'Naturgut'
 
               }
           ]

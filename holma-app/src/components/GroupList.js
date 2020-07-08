@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Box from '@material-ui/core/Box';
 import { Link } from 'react-router-dom';
-import GroupBO from '../api/GroupBO';
+import ShoppingListBO from '../api/ShoppingListBO';
 
 import TextField from '@material-ui/core/TextField';
 
@@ -36,7 +36,7 @@ import ListItem from '@material-ui/core/ListItem';
 import List from '@material-ui/core/List';
 import Grid from '@material-ui/core/Grid';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-
+import AddListDialog from './dialogs/AddListDialog';
 
 const useRowStyles = makeStyles({
   root: {
@@ -252,6 +252,8 @@ class GroupList extends Component {
             shoppingListLastUpdated: "",
             memberId: "",
             ArticleName:"",
+            openDialog: false,
+            checked: false,
         }}
       
     componentDidMount(){
@@ -260,6 +262,45 @@ class GroupList extends Component {
         }
     }
     
+    openDialog = () => {
+      this.setState({
+        openDialog: true})
+    }
+
+    handleClose = () => {
+      this.setState({
+        openDialog: false})
+    }
+
+    addStandardArticles = () => {
+      if (this.state.checked === false)
+        this.setState({checked: true})
+      else
+        this.setState({checked: false})
+      
+    }
+    checkStandard = () => {
+      if (this.state.checked === false) {
+        // Liste ohne Standardartikel erstellen
+        console.log("Ohne standard")
+        this.createNewList()
+      }
+      else {
+        console.log("Mit standard")
+        this.createNewList()
+        // add standardarticles to new list
+        // Liste mit Standardartikel erstellen
+      }
+    }
+
+    createNewList = () => {
+      var lst = new ShoppingListBO(this.state.shoppingListName, this.state.groupId);
+      AppAPI.getAPI().createShoppingList(lst)
+    }
+
+    handleInputChange = (e) => {
+      this.setState({shoppingListName: e.target.value})
+    }
 
     loadShoppingLists = () => {
       AppAPI.getAPI().getShoppingListsByGroupId(this.state.groupId).then(lists => {
@@ -291,6 +332,15 @@ class GroupList extends Component {
                 <CollapsibleTable/>
                 <Box m={2} />
                 <AddShoppinglist/>
+                <AddListDialog 
+                  openDialog={this.openDialog}
+                  open={this.state.openDialog}
+                  handleClose={this.handleClose}
+                  checked={this.state.checked}
+                  addStandardArticles={this.addStandardArticles}
+                  checkStandard={this.checkStandard}
+                  handleInputChange={this.handleInputChange}
+                />
             </div>        
     );
 }}

@@ -509,7 +509,6 @@ class GroupRelatedShoppingListOperations(Resource):
         adm = Administration()
         sl = adm.get_group_by_id(group_id)
         proposal = ShoppingList.from_dict(api.payload)
-
         if sl is not None and proposal is not None:
             result = adm.create_shopping_list(proposal.get_name(), group_id)
             return result
