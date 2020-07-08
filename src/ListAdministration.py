@@ -54,6 +54,12 @@ class Administration():
         with UserGroupRelationsMapper() as mapper:
             mapper.delete_user_relations(user)
 
+        """with ListEntryMapper() as mapper:
+            mapper.delete_purchasing_user(user)"""
+
+        with GroupMapper() as mapper:
+            mapper.delete_owner(user)
+
         with UserMapper() as mapper:
             mapper.delete(user)
 
@@ -96,6 +102,9 @@ class Administration():
             mapper.add_user_to_group(group, user)
 
     def remove_member_from_group(self, group, user):
+        with GroupMapper() as mapper:
+            mapper.delete_owner(user, group)
+
         with UserGroupRelationsMapper() as mapper:
             mapper.remove_user_from_group(group, user)
 
@@ -134,13 +143,10 @@ class Administration():
             return mapper.update(group)
 
     """eventuell reichen die delete-methoden der objekte selbst
-
     def add_article_to_group(self, group, article):
         pass
-
     def remove_article_from_group(self, group, article):
         pass
-
     def remove_shopping_list_from_group(self, group, shopping_list):
         pass"""
 
@@ -183,8 +189,8 @@ class Administration():
         with ListEntryMapper() as mapper:
             return mapper.find_by_id(list_entry_id)
 
-    def create_list_entry(self, article_id, amount, unit, retailer_id,
-                          purchasing_user_id, shopping_list_id):
+    def create_list_entry(self, purchasing_user_id, amount, article_id, unit, retailer_id,
+                          shopping_list_id):
         list_entry = ListEntry()
         list_entry.set_id(0),
         list_entry.set_purchasing_user(purchasing_user_id),
@@ -207,11 +213,11 @@ class Administration():
     """Einkaufsliste"""
 
     def get_shopping_list_by_id(self, shopping_list_id):
-        with ShoppingListMapper as mapper:
+        with ShoppingListMapper() as mapper:
             return mapper.find_by_id(shopping_list_id)
 
     def get_shopping_list_by_name(self, name):
-        with ShoppingListMapper as mapper:
+        with ShoppingListMapper() as mapper:
             return mapper.find_by_name(name)
 
     def get_list_entries_by_shopping_list_id(self, shopping_list_id):
@@ -226,7 +232,7 @@ class Administration():
 
     def create_shopping_list(self, name, group_id):
         shopping_list = ShoppingList()
-        shopping_list.set_id(1)
+        shopping_list.set_id(0)
         shopping_list.set_name(name)
         shopping_list.set_group(group_id)
         with ShoppingListMapper() as mapper:
@@ -246,15 +252,15 @@ class Administration():
     """Retailer"""
 
     def get_all_retailers(self):
-        with RetailerMapper as mapper:
+        with RetailerMapper() as mapper:
             return mapper.find_all()
 
     def get_retailer_by_id(self, retailer_id):
-        with RetailerMapper as mapper:
+        with RetailerMapper() as mapper:
             return mapper.find_by_id(retailer_id)
 
     def get_retailers_by_name(self, name):
-        with RetailerMapper as mapper:
+        with RetailerMapper() as mapper:
             return mapper.find_by_name(name)
 
 

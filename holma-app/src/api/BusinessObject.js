@@ -20,8 +20,8 @@ export default class BusinessObject {
         return this.creationDate
     }
 
-    getLastUpated() {
-        return this.lastUpated
+    getLastUpdated() {
+        return this.lastUpdated
     }
 
     setId(id) {
@@ -36,8 +36,8 @@ export default class BusinessObject {
         this.creationDate = creationDate
     }
 
-    setLastUpated(lastUpated) {
-        this.lastUpated = lastUpated
+    setLastUpdated(lastUpdated) {
+        this.lastUpdated = lastUpdated
     }
 
     toString() {

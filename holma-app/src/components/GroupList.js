@@ -10,6 +10,8 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Box from '@material-ui/core/Box';
+import { Link } from 'react-router-dom';
+import GroupBO from '../api/GroupBO';
 
 import TextField from '@material-ui/core/TextField';
 
@@ -25,6 +27,16 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItem from '@material-ui/core/ListItem';
+import List from '@material-ui/core/List';
+import Grid from '@material-ui/core/Grid';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+
 
 const useRowStyles = makeStyles({
   root: {
@@ -132,6 +144,29 @@ function EditButton(){
   )
 }
 
+class Checkboxes extends React.Component {
+  state = {
+    checked: true,
+  };
+
+  handleChange = name => event => {
+    this.setState({ [name]: event.target.checked });
+  };
+
+  render() {
+    return (
+      <div>
+        <Checkbox
+          checked={this.state.checkedA}
+          onChange={this.handleChange('checkedA')}
+          value="checked"
+        />
+      </div>
+    );
+  }
+}
+
+
 function CollapsibleTable() {
   return (
     <TableContainer component={Paper}>
@@ -157,30 +192,25 @@ function CollapsibleTable() {
 
 function AddShoppinglist() {
   return (
-    <TableContainer component={Paper} style={{ width: '50%',}}>
+    <TableContainer component={Paper} style={{ width: '100%',}}>
       <Table aria-label="collapsible table">
         <TableHead>
           <TableRow>
-            <TableCell><b>Add Shoppinglist</b></TableCell>
-            <TableCell><form noValidate autoComplete="off">
-          <TextField id="standard-basic" label="name" />
-              </form>
-            </TableCell>
-            <TableCell><form noValidate autoComplete="off">
-          <TextField id="standard-basic" label="standardarticle_id" />
-        </form>
-        </TableCell>
+            <TableCell style={{ width: '20%',}}><b>Add Shoppinglist</b></TableCell>
+          <TextField id="standard-basic" label="name" style={{ width: '40%',}} />
+            <TableCell style={{ width: '30%',}}>Add all Standardarticles</TableCell>
+            <Checkboxes style={{ width: '10%',}}/>
           </TableRow>
         </TableHead>
         <TableBody>
-      
+
         </TableBody>
       </Table>
     </TableContainer>
   );}
-  
+ 
 
-/*{this.props.group.getName()}*/
+
 /* Hierbei wird man an die Component "GroupEdit" weitergeleitet*/
 class Grouplink extends Component{
     render(){
@@ -212,60 +242,57 @@ class GroupList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            groupID: this.props.groupID,
-            loadingInProgress: false,
-            loadingError: null
+            group: null,
+            groupId: this.props.match.params.groupId,
+            shoppingLists:[],
+            shoppingListName: "",
+            shoppingListMember: [],
+            shoppingListNumberChecked: "",
+            shoppingListNumberUncheked: "",
+            shoppingListLastUpdated: "",
+            memberId: "",
+            ArticleName:"",
         }}
-    
-    loadGroup = () => {
-        AppAPI.getAPI().getGroupById(this.state.groupID).then(res =>
-            this.setState({
-                groupID:res,
-                loadingInProgress: false,
-                loadingError: null
-            })).catch(e =>
-                this.setState({
-                    loadingInProgress: false,
-                    loadingError: e
-                })
-                );
+      
+    componentDidMount(){
+      if(this.props.match.params.groupId){
+          this.loadShoppingLists();
+        }
     }
+    
 
-
+    loadShoppingLists = () => {
+      AppAPI.getAPI().getShoppingListsByGroupId(this.state.groupId).then(lists => {
+        console.log("Loaded lists:", lists)
+        console.log("Loaded lists:", this.state.groupId)
+          this.setState({
+              shoppingLists: lists,
+              loadingInProgress: true, // loading indicator 
+              loadingError: null
+            })
+            console.log("Loaded lists:", this.state.shoppingLists)
+          }).catch(e =>
+              this.setState({ // Reset state with error from catch 
+                loadingInProgress: false,
+                loadingError: e
+          })
+        );  
+      }
+      
 
     render() {
-        /*const {group} = this.props;
-        return ( 
-            <div>
-                {group ?
-                <>
-                {this.loadGroup()}
-                <Grouplink/>
-                </>
-                :
-                <>
-                <div>NOPE</div>
-                </>
-                }
-            </div>,
-            <div>
-                <EditButton/>
-                <ShoppingListBox/>
-            </div>*/
             return(
-
             <div>
               <Box m={5} />
+              <Link to={"/groupedit/" + this.props.match.params.groupId}>
                 <Grouplink/>
+              </Link>
                 <Box m={2} />
                 <CollapsibleTable/>
                 <Box m={2} />
                 <AddShoppinglist/>
             </div>        
-        
     );
 }}
 
 export default GroupList;
-
-

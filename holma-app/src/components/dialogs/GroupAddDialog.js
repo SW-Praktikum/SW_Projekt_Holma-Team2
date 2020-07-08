@@ -5,8 +5,14 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
+import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
+import PropTypes from 'prop-types';
+import Container from '@material-ui/core/Container'
+import { withStyles } from '@material-ui/styles';
+import { Typography } from '@material-ui/core';
+
+
 
 class GroupAddDialog extends Component {
     constructor (props) {
@@ -20,15 +26,15 @@ class GroupAddDialog extends Component {
     };
 
     render() {
+      const { classes } = this.props;
         return (
           <div>
-            <Button 
-              style={{maxWidth: '120px', maxHeight: '120px', minWidth: '120px', minHeight: '120px',}}
-              variant="outlined" 
-              color="primary"
-              startIcon={<AddIcon />} 
-              onClick={this.props.handleClickOpen}>Add Group
-              </Button>
+            <Typography className={classes.container} align="right">
+            <Fab onClick={this.props.handleClickOpen} className={classes.root} variant="extended" color="primary" aria-label="add">
+              <AddIcon className={classes.extendedIcon}/>
+                neue Gruppe
+            </Fab>
+            </Typography>
             <Dialog open={this.props.open} onClose={this.props.handleClose} aria-labelledby="form-dialog-title">
               <DialogTitle id="form-dialog-title">Neue Gruppe erstellen</DialogTitle>
               <DialogContent>
@@ -42,6 +48,7 @@ class GroupAddDialog extends Component {
                   label="Gruppenname"
                   type="email"
                   fullWidth
+                  inputProps = {{maxlength:60}}
                 />
               </DialogContent>
               <DialogActions>
@@ -58,4 +65,22 @@ class GroupAddDialog extends Component {
     }
 }
 
-export default GroupAddDialog
+const styles = theme => ({
+  root: {
+    position: 'fixed',
+    bottom: theme.spacing(2),
+    //right: theme.spacing(1),
+    
+    
+  },
+  extendedIcon: {
+    marginRight: theme.spacing(1),
+    
+  },
+  container: {
+    minWidth: 100, 
+    marginRight: 160
+  }
+});
+
+export default withStyles(styles)(GroupAddDialog)

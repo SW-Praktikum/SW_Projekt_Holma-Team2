@@ -32,7 +32,9 @@ class GroupMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
-        return result
+        if len(result) == 0:
+            return None
+        return result[0]
 
     def find_by_name(self, name):
         cursor = self._connection.cursor()
@@ -96,6 +98,19 @@ class GroupMapper(Mapper):
         cursor = self._connection.cursor()
         command = "DELETE FROM holma.group " \
                   "WHERE group_id={}".format(group.get_id())
+        cursor.execute(command)
+
+        self._connection.commit()
+        cursor.close()
+
+    def delete_owner(self, user, group=None):
+        cursor = self._connection.cursor()
+        if group is None:
+            command = "UPDATE holma.group SET owner= null WHERE owner = {}"\
+            .format(user.get_id())
+        else:
+            command = "UPDATE holma.group SET owner= null WHERE owner = {} " \
+                      "AND group_id= {}".format(user.get_id(), group.get_id())
         cursor.execute(command)
 
         self._connection.commit()

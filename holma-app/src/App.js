@@ -5,7 +5,7 @@ import theme from './components/Theme';
 import firebase from "firebase/app";
 import "firebase/auth";
 import Header from './components/layout/Header';
-import Navigation from './components/navigation2'
+import Navigation from './components/Navigation'
 import SignIn from './components/pages/SignIn';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
@@ -132,22 +132,23 @@ class App extends React.Component {
                 user ?
                   <>
                     <Redirect to='/groups'/>
-                    <Navigation />
+                      <Navigation />
                     <Route path='/groups'>
                       <GroupEntries user={user}/>
                     </Route>
+                    <Route path='/groups/:groupId' component={GroupEdit}/>
                     <Route path='/about'>
                       <About/>
                     </Route>
-                    <Route path='/grouplist'>
-                      <GroupList />
+                    <Route path='/grouplist/:groupId' component={GroupList}>
+                    </Route>
+                    <Route path='/groupedit/:groupId' component={MemberDetails}>
                     </Route>
                     <Route path='/user'>
                       <User user={user}/>
                     </Route>
                     <Route path=''>
                     </Route>
-                    <div style={{fontStyle: "italic"}}><br/><b>User:</b> {user.getName()} | <b>ID:</b> {user.getId()} | <b>Google ID:</b> {user.getGoogleId()} | <b>Member since:</b> {user.getCreationDate()}</div>
                   </>
                   :
                   <>

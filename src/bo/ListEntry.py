@@ -93,15 +93,16 @@ class ListEntry(BusinessObject):
         list_entry = ListEntry()
         list_entry.set_id(dictionary["id"])
         list_entry.set_name(dictionary["name"])
-        list_entry.set_article(dictionary["article"])
+        list_entry.set_purchasing_user(dictionary["purchasingUser"])
         list_entry.set_amount(dictionary["amount"])
+        list_entry.set_article(dictionary["article"])
         list_entry.set_unit(dictionary["unit"])
         list_entry.set_retailer(dictionary["retailer"])
-        list_entry.set_purchasing_user(dictionary["purchasingUser"])
+        list_entry.set_standardarticle(dictionary["standardarticle"])
+        list_entry.set_checked(dictionary["checked"])
         list_entry.set_shopping_list(dictionary["shoppingList"])
-        list_entry.set_checked(dictionary["isChecked"])
         list_entry.set_checked_ts(dictionary["checkedTs"])
-        list_entry.set_standardarticle(dictionary["isStandardarticle"])
+
         return list_entry
 
     @staticmethod
@@ -119,12 +120,10 @@ class ListEntry(BusinessObject):
             listentry.set_retailer(retailer)
             listentry.set_standardarticle(standardarticle)
             listentry.set_checked(checked)
-            listentry.set_checked_ts(checked_ts)
             listentry.set_shopping_list(shopping_list)
             listentry.set_last_updated(last_update)
+            listentry.set_checked_ts(checked_ts)
             result.append(listentry)
-        if len(result) == 1:
-            return result[0]
         return result
     """
     def delete(self):

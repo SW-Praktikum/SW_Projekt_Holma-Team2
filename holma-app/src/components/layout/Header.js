@@ -18,25 +18,24 @@ class Header extends React.Component {
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar >
-          <Typography variant="h6" color="inherit">
-            </Typography>
             <IconButton edge="false" className={classes.menuButton} color="inherit" aria-label="menu" component={RouterLink} to={`/groups`}>
               <ShoppingBasket />  
               <div>&nbsp;Holma</div>
             </IconButton>
-            <Grid justify="space-between" container spacing={24}></Grid>
+           <Typography style={{width: 960}} align="right">
             {
                 user ?
                 <>
                     <div user={user} style={{fontStyle: "italic"}}>
-                      <b>User:&nbsp;{user.getName()} </b>
-                      <b>ID:&nbsp;{user.getId()}</b> 
+                      <div>User:&nbsp;{user.getName()} </div>
+                      <div>ID:&nbsp;{user.getId()}</div> 
                     </div>
                 </>
                 :
                 <>
                 </>
             }
+            </Typography>
           </Toolbar>
         </AppBar>
       </div>
