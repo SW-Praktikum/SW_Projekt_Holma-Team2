@@ -134,7 +134,7 @@ class App extends React.Component {
                     <Redirect to='/groups'/>
                     <Navigation />
                     <Route path='/groups'>
-                      <MemberDetails groupId={15}/>
+                      <GroupEntries user={user}/>
                     </Route>
                     <Route path='/about'>
                       <About/>
