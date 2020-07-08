@@ -15,6 +15,7 @@ import GroupBO from '../api/GroupBO';
 
 import TextField from '@material-ui/core/TextField';
 
+
 import PropTypes from 'prop-types';
 import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
@@ -35,162 +36,21 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItem from '@material-ui/core/ListItem';
 import List from '@material-ui/core/List';
 import Grid from '@material-ui/core/Grid';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListWithBoxes from './ListWithBoxes';
+import GroupEntry from './GroupEntries';
+import { colors } from '@material-ui/core';
+import CardActionArea from '@material-ui/core/CardActionArea';
+
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardMedia from '@material-ui/core/CardMedia';
 
 
-const useRowStyles = makeStyles({
-  root: {
-    '& > *': {
-      borderBottom: 'unset',
-    },
-  },
-});
 
-function createData(shoppinglist, member, status, edit) {
-  return {
-    shoppinglist,
-    member,
-    status,
-    edit,
-    history: [//kann erst mit Logik hinterlegt werden, wenn die ListEntrys stehen
-      { date: '2020-01-05', memberId: '30', article: "Apfel" },
-      { date: '2020-20-05', memberId: '29', article: "Birne" },
-    ],
-  };
-}
-
-function Row(props) {
-  const { row } = props;
-  const [open, setOpen] = React.useState(false);
-  const classes = useRowStyles();
-
-  return (
-    <React.Fragment>
-      <TableRow className={classes.root}>
-        <TableCell>
-          <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
-        </TableCell>
-        <TableCell component="th" scope="row">{row.shoppinglist}</TableCell>
-        <TableCell align="right">{row.member}</TableCell>
-        <TableCell align="right">{row.status}</TableCell>
-        <TableCell align="right">{row.edit}</TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box margin={1}>
-              <Typography variant="h6" gutterBottom component="div">
-                History
-              </Typography>
-              <Table size="small" aria-label="purchases">
-                <TableHead>
-                  <TableRow>
-                    <TableCell><b>Date</b></TableCell>
-                    <TableCell><b>Member</b></TableCell>
-                    <TableCell><b>Article</b></TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {row.history.map((historyRow) => (
-                    <TableRow key={historyRow.date}>
-                      <TableCell component="th" scope="row">
-                        {historyRow.date}
-                      </TableCell>
-                      <TableCell>{historyRow.memberId}</TableCell>
-                      <TableCell>{historyRow.article}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </Box>
-          </Collapse>
-        </TableCell>
-      </TableRow>
-    </React.Fragment>
-  );
-}
-
-Row.propTypes = {
-  row: PropTypes.shape({
-    shoppinglist: PropTypes.string.isRequired,
-    member: PropTypes.number.isRequired,
-    status: PropTypes.string.isRequired,
-    history: PropTypes.arrayOf(
-      PropTypes.shape({
-        amount: PropTypes.number.isRequired,
-        customerId: PropTypes.string.isRequired,
-        date: PropTypes.string.isRequired,
-      }),
-    ).isRequired,
-    name: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-    protein: PropTypes.number.isRequired,
-  }).isRequired,
-};
-
-const rows = [
-  createData('Fahrradfreunde', 8, "7/12", <EditButton/>),
-  createData('Vortrinken', 2, "12/12", <EditButton/>),
-  createData('Familie-Maier', 6, "2/3", <EditButton/>),
-];
-
-function EditButton(){
-  return(
-      <Fab size="small" color="secondary" aria-label="edit">
-          <EditIcon />
-      </ Fab>
-  )
-}
-
-class Checkboxes extends React.Component {
-  state = {
-    checked: true,
-  };
-
-  handleChange = name => event => {
-    this.setState({ [name]: event.target.checked });
-  };
-
-  render() {
-    return (
-      <div>
-        <Checkbox
-          checked={this.state.checkedA}
-          onChange={this.handleChange('checkedA')}
-          value="checked"
-        />
-      </div>
-    );
-  }
-}
-
-
-function CollapsibleTable() {
-  return (
-    <TableContainer component={Paper}>
-      <Table aria-label="collapsible table">
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell><b>Shoppinglist</b></TableCell>
-            <TableCell align="right"><b>Member</b></TableCell>
-            <TableCell align="right"><b>Status</b></TableCell>
-            <TableCell align="right"><b>Edit</b></TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <Row key={row.name} row={row} />
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
-}
-
-function AddShoppinglist() {
+class AddShoppinglist extends Component {
+  render(){
   return (
     <TableContainer component={Paper} style={{ width: '100%',}}>
       <Table aria-label="collapsible table">
@@ -199,7 +59,6 @@ function AddShoppinglist() {
             <TableCell style={{ width: '20%',}}><b>Add Shoppinglist</b></TableCell>
           <TextField id="standard-basic" label="name" style={{ width: '40%',}} />
             <TableCell style={{ width: '30%',}}>Add all Standardarticles</TableCell>
-            <Checkboxes style={{ width: '10%',}}/>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -207,36 +66,47 @@ function AddShoppinglist() {
         </TableBody>
       </Table>
     </TableContainer>
-  );}
- 
-
-
-/* Hierbei wird man an die Component "GroupEdit" weitergeleitet*/
-class Grouplink extends Component{
-    render(){
-        return(
-            <Button variant="contained" color="primary" style={{width:'100%'}}>
-                Gruppe bearbeiten
-            </Button>
-        )
-    }
+  )
+  }
 }
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-      width: '100%',
-    },
-    heading: {
-      fontSize: theme.typography.pxToRem(15),
-      flexBasis: '33.33%',
-      flexShrink: 0,
-    },
-    secondaryHeading: {
-      fontSize: theme.typography.pxToRem(15),
-      color: theme.palette.text.secondary,
-    },
-  }));
-  
+class Grouplink extends Component{
+  render(){
+      return(
+          <Button variant="contained" color="primary" style={{width:'100%'}}>
+              Gruppe bearbeiten
+          </Button>
+      )
+  }
+}
+
+
+const randomImages = [
+  "https://www.bahn-tickets.com/wp-content/uploads/2016/07/Gruppenreise_Personen-1000x683px.jpg",
+  "https://www.br.de/telekolleg/faecher/psychologie/gruppe-kreis-maenner100~_v-img__16__9__xl_-d31c35f8186ebeb80b0cd843a7c267a0e0c81647.jpg?version=c8dde",
+  "https://www.verenathiem.com/wp-content/uploads/2016/01/Blog_pic_650_380_machtdergruppe.png",
+  "https://teamworks-gmbh.de/wp-content/uploads/2015/02/gruppedummFotolia_72297488_XS_copyright.jpg",
+  "https://s3-eu-central-1.amazonaws.com/vodafone-featured/wp-content/uploads/2019/01/18104102/erstelleeinesnapchatgruppemitdeinenfreunden-640x360.jpg",
+  "https://www.schule-bw.de/faecher-und-schularten/gesellschaftswissenschaftliche-und-philosophische-faecher/gemeinschaftskunde/materialien-und-medien/soziologie/zusammenleben-soziale-gruppen/gruppe.jpg",
+  "https://www.schulbilder.org/bild-in-der-gruppe-sprechen-dl14849.jpg",
+  "https://blog.pasch-net.de/klick/uploads/Sport5.PNG",
+  "https://cdn.businessinsider.de/wp-content/uploads/2020/03/Joggen-Fru%CC%88hling-600x400.jpg"
+]
+
+class ListCard extends Component {
+  render() {
+      return (
+        <Card className="root" style={{/* minHeight: 250 ,  */minWidth: '100%', marginBottom:10, marginTop:10, backgroundColor: colors.teal[600]}}>
+          <CardActionArea>
+          <CardMedia className="media" style={{height: 10, paddingTop: '56.25%',}} image={randomImages[Math.floor(Math.random() * randomImages.length)]} title="Shoppinglist"/>
+          <CardContent>
+              <Typography className="title" style={{fontSize: 14, color: 'white'}}>{this.props.list.getName()}{this.props.list.getId()}</Typography>
+          </CardContent>
+          </CardActionArea>     
+        </Card>
+  )
+}
+}
 
 class GroupList extends Component {
     constructor(props) {
@@ -244,14 +114,8 @@ class GroupList extends Component {
         this.state = {
             group: null,
             groupId: this.props.match.params.groupId,
-            shoppingLists:[],
+            listElements:[],
             shoppingListName: "",
-            shoppingListMember: [],
-            shoppingListNumberChecked: "",
-            shoppingListNumberUncheked: "",
-            shoppingListLastUpdated: "",
-            memberId: "",
-            ArticleName:"",
         }}
       
     componentDidMount(){
@@ -260,37 +124,42 @@ class GroupList extends Component {
         }
     }
     
-
     loadShoppingLists = () => {
-      AppAPI.getAPI().getShoppingListsByGroupId(this.state.groupId).then(lists => {
-        console.log("Loaded lists:", lists)
-        console.log("Loaded lists:", this.state.groupId)
-          this.setState({
-              shoppingLists: lists,
+      AppAPI.getAPI().getShoppingListsByGroupId(this.props.match.params.groupId).then((lists) => {
+        console.log(lists)
+        var listElements = lists.map((list) =>
+        <Grid key={list.getId()} item xs={6} item lg={4}>
+        <Paper className="paper" style ={{ textAlign:'center',}} >
+          <ListCard key={list.getId()} list={list}/>
+        </Paper>
+      </Grid>
+      )
+            this.setState({
+              listElements: listElements,
               loadingInProgress: true, // loading indicator 
-              loadingError: null
-            })
-            console.log("Loaded lists:", this.state.shoppingLists)
+              loadingError: null,
+            });
+            console.log("Save in state", listElements)
           }).catch(e =>
               this.setState({ // Reset state with error from catch 
                 loadingInProgress: false,
                 loadingError: e
           })
         );  
-      }
-      
+      } 
 
     render() {
-            return(
+      const {listElements} = this.state;
+      console.log("elements", listElements)
+          return(
             <div>
               <Box m={5} />
               <Link to={"/groupedit/" + this.props.match.params.groupId} style={{textDecoration: 'none'}}>
                 <Grouplink/>
               </Link>
                 <Box m={2} />
-                <CollapsibleTable/>
-                <Box m={2} />
                 <AddShoppinglist/>
+                <ListWithBoxes groupElements={listElements}/>
             </div>        
     );
 }}

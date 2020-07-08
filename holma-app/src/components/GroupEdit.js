@@ -175,11 +175,8 @@ class MemberDetails extends Component{
 
   handleChangeName = (e) => {
     this.setState({
-      groupName: e.target.value,
-      
+      groupName: e.target.value,  
     })
-    console.log(e.target.value)
-
   }
 
   handleClickSave = () => {
@@ -188,6 +185,7 @@ class MemberDetails extends Component{
         this.setState({
           groupObject: group
         })
+        console.log(this.state.groupObject)
         }).then (() => {
           AppAPI.getAPI().updateGroup(this.state.groupObject)
       })

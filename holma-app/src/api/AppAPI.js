@@ -255,7 +255,7 @@ export default class AppAPI {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json, text/plain',
-                'Content-type': 'application/json',
+                'Content-type': 'applicat   ion/json',
             },
             body: JSON.stringify(group)
         }).then((responseJSON) => {
