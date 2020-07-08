@@ -652,6 +652,57 @@ class ListEntryOperations(Resource):
             return '', 500
 
 
+@holmaApp.route('/group/<int:group_id>/listentries')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@holmaApp.param('group_id', 'Die ID des group-Objekts')
+class GroupRelatedListEntryOperations(Resource):
+    @holmaApp.marshal_with(listEntry)
+    # @ secured
+    def get(self, group_id):
+        """Auslesen von Listentry-Objekten die zu einer bestimmten
+        Groupe gehören."""
+        adm = Administration()
+        grp = adm.get_group_by_id(group_id)
+        if grp is not None:
+            listentry_list = adm.get_standardarticles_by_group_id(grp)
+            return listentry_list
+        else:
+            return "Group not found", 500
+
+
+@holmaApp.route('/group/<int:group_id>/listentry/<int:list_entry_id>')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@holmaApp.param('group_id', 'Die ID des Group-Objekts')
+@holmaApp.param('list_entry_id', 'Die ID des Listentry-Objekts')
+class GroupStandardArticleRelationOperations(Resource):
+    @holmaApp.marshal_with(listEntry)
+    @holmaApp.marshal_with(group)
+    # @secured
+    def post(self, group_id, list_entry_id):
+        """Füge ein bestimmten Listentry Objekt
+        einer bestimmten Groupe hinzu"""
+        adm = Administration()
+        grp = adm.get_group_by_id(group_id)
+        le = adm.get_list_entry_by_id(list_entry_id)
+
+        if grp is not None and le is not None:
+            result = adm.add_standardarticle_to_group(le, grp)
+            return result
+        else:
+            return "Group or ListEntry not found", 500
+
+    def delete(self, group_id, list_entry_id):
+        """Lösch ein bestimmten Listentry Objekt von einer bestimmten Groupe"""
+        adm = Administration()
+        grp = adm.get_group_by_id(group_id)
+        le = adm.get_list_entry_by_id(list_entry_id)
+        if grp is not None and le is not None:
+            result = adm.delete_standardarticle(le, grp)
+            return result
+        else:
+            return "Group or Listentry not found", 500
+
+
 @holmaApp.route('/retailers')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigem Fehler kommt.')
 class RetailerListOperations(Resource):
@@ -661,6 +712,7 @@ class RetailerListOperations(Resource):
         adm = Administration()
         ret_list = adm.get_all_retailers()
         return ret_list
+
 
 @holmaApp.route('/retailer/<int:retailer_id>')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
