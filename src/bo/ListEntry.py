@@ -101,7 +101,9 @@ class ListEntry(BusinessObject):
         list_entry.set_standardarticle(dictionary["standardarticle"])
         list_entry.set_checked(dictionary["checked"])
         list_entry.set_shopping_list(dictionary["shoppingList"])
-        list_entry.set_checked_ts(dictionary["checkedTs"])
+        list_entry.set_checked_ts(ListEntry.date_format(dictionary["checkedTs"]))
+        list_entry.set_creation_date(ListEntry.date_format(dictionary["creationDate"]))
+        list_entry.set_last_updated(ListEntry.date_format(dictionary["lastUpdated"]))
 
         return list_entry
 

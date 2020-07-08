@@ -304,14 +304,12 @@ class GroupList extends Component {
 
     loadShoppingLists = () => {
       AppAPI.getAPI().getShoppingListsByGroupId(this.state.groupId).then(lists => {
-        console.log("Loaded lists:", lists)
-        console.log("Loaded lists:", this.state.groupId)
+        console.log("Loaded lists for group id '" + this.state.groupId + "':", lists)
           this.setState({
               shoppingLists: lists,
               loadingInProgress: true, // loading indicator 
               loadingError: null
             })
-            console.log("Loaded lists:", this.state.shoppingLists)
           }).catch(e =>
               this.setState({ // Reset state with error from catch 
                 loadingInProgress: false,

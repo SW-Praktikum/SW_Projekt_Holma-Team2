@@ -158,7 +158,6 @@ class MemberDetails extends Component{
     if(this.props.match.params.groupId){
       this.getGroupDetails();
       this.loadMembers();
-      console.log(this.props)
      }
   }
 
@@ -177,7 +176,6 @@ class MemberDetails extends Component{
     this.setState({
       groupName: e.target.value,
     })
-
   }
 
   handleClickSave = () => {
