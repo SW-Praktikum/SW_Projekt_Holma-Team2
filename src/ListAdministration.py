@@ -100,7 +100,7 @@ class Administration():
 
     def get_standardarticles_by_group_id(self, group_id):
         with ListEntryMapper() as mapper:
-            return mapper.find_standardarticles(group_id)
+            return mapper.find_standardarticles_by_group(group_id)
 
     def add_member_to_group(self, group, user):
         with UserGroupRelationsMapper() as mapper:
@@ -115,7 +115,12 @@ class Administration():
 
     def add_standardarticle_to_group(self, list_entry, group):
         with ListEntryMapper() as mapper:
-            standardarticle = mapper.set_standardarticle(list_entry)
+            list_entry.set_id(0)
+            list_entry.set_standardarticle(True)
+            list_entry.set_purchasing_user(None)
+            list_entry.set_shopping_list(None)
+            list_entry.set_checked(False)
+            standardarticle = mapper.insert(list_entry)
 
             mapper.insert_standardarticle(standardarticle, group)
 
@@ -258,6 +263,16 @@ class Administration():
     def save_shopping_list(self, shopping_list):
         with ShoppingListMapper() as mapper:
             return mapper.update(shopping_list)
+
+    def add_standardarticle_to_shopping_list(self, group_id, shopping_list_id):
+        with ListEntryMapper() as mapper:
+            standardarticles = mapper.find_standardarticles_by_group(group_id)
+
+            for standardarticle in standardarticles:
+                standardarticle.set_id(0)
+                standardarticle.set_shopping_list(shopping_list_id)
+                mapper.insert(standardarticle)
+
 
     """Retailer"""
 

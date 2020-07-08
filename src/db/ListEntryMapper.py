@@ -222,7 +222,7 @@ class ListEntryMapper(Mapper):
 
     """Standardarticle"""
 
-    def find_standardarticles(self, group_id):
+    def find_standardarticles_by_group(self, group_id):
         cursor = self._connection.cursor()
         command = "SELECT standard_article_group_relations.list_entry_id," \
                   " holma.list_entry.name, holma.list_entry.creation_date, " \
@@ -248,22 +248,6 @@ class ListEntryMapper(Mapper):
         cursor.close()
 
         return result
-
-    def set_standardarticle(self, list_entry):
-        cursor = self._connection.cursor()
-        command = "Insert into holma.list_entry (name, creation_date, " \
-                  "amount, article, unit, retailer, standardarticle, " \
-                  "shopping_list, checked, last_updated) select name, " \
-                  "creation_date, amount, article, unit, retailer, " \
-                  "'1', NULL, '0', last_updated from holma.list_entry " \
-                  "where list_entry_id = {}".format(list_entry.get_id())
-        cursor.execute(command)
-
-        self._connection.commit()
-        cursor.close()
-
-        list_entry.set_id(cursor.lastrowid)
-        return list_entry
 
     def insert_standardarticle(self, list_entry, group):
         cursor = self._connection.cursor()
