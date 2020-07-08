@@ -23,6 +23,10 @@ export default class ListEntryBO extends BusinessObject {
         return this.amount
     }
 
+    getChecked(){
+        return this.checked
+    }
+
     getUnit(){
         return this.unit
     }
