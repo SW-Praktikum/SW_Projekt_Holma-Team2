@@ -13,7 +13,7 @@ from bo.Group import Group
 from bo.ShoppingList import ShoppingList
 from bo.User import User
 from bo.ListEntry import ListEntry
-from bo.Retailer import Retailer
+'from bo.Retailer import Retailer'
 
 """Hier wird Flask instanziert"""
 app = Flask(__name__)
@@ -650,7 +650,7 @@ class ListEntryOperations(Resource):
         else:
             return '', 500
 
-
+"""
 @holmaApp.route('/retailers')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigem Fehler kommt.')
 class RetailerListOperations(Resource):
@@ -684,7 +684,7 @@ class ArticlesByNameOperations(Resource):
     def get(self, name):
         adm = Administration()
         rtl = adm.get_retailers_by_name(name)
-        return rtl
+        return rtl """
 
 
 if __name__ == '__main__':
