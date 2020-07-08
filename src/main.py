@@ -13,7 +13,7 @@ from bo.Group import Group
 from bo.ShoppingList import ShoppingList
 from bo.User import User
 from bo.ListEntry import ListEntry
-'from bo.Retailer import Retailer'
+from bo.Retailer import Retailer
 
 """Hier wird Flask instanziert"""
 app = Flask(__name__)
@@ -61,17 +61,17 @@ shoppingList = api.inherit('ShoppingList', bo, {
 })
 
 listEntry = api.inherit('ListEntry', bo, {
-    'article': fields.Integer(attribute='_article',
+    'articleId': fields.Integer(attribute='_article',
                                  description='zu welchem Artikle gehört dieses Entry? '),
     'amount': fields.Float(attribute='_amount',
                            description='Menge des Entries '),
     'unit': fields.String(attribute='_unit',
                           description='Einheit des Entries '),
-    'purchasingUser': fields.Integer(attribute='_purchasing_user',
+    'purchasingUserId': fields.Integer(attribute='_purchasing_user',
                                     description='Wer das Artikle kaufen muss '),
-    'shoppingList': fields.Integer(attribute='_Shopping_list',
+    'shoppingListId': fields.Integer(attribute='_Shopping_list',
                                    description='zu welcher Liste diese Entry gehört?'),
-    'retailer': fields.Integer(attribute='_retailer',
+    'retailerId': fields.Integer(attribute='_retailer',
                               description='Bei wem das Artikle gekauft  '),
     'checked': fields.Boolean(attribute='_checked',
                               description='wurde es bereits gekauft'),
@@ -110,7 +110,7 @@ class UserListOperations(Resource):
     @holmaApp.expect(user)  # Wir erwarten ein USer-Objekt von Client-Seite.
     # @secured
     def post(self):
-        """Anlegen eines neuen Customer-Objekts."""
+        """Anlegen eines neuen User-Objekts."""
         adm = Administration()
         proposal = User.from_dict(api.payload)
         if proposal is not None:
@@ -509,7 +509,6 @@ class GroupRelatedShoppingListOperations(Resource):
         adm = Administration()
         sl = adm.get_group_by_id(group_id)
         proposal = ShoppingList.from_dict(api.payload)
-
         if sl is not None and proposal is not None:
             result = adm.create_shopping_list(proposal.get_name(), group_id)
             return result
@@ -590,13 +589,15 @@ class ShoppingListRelatedListEntryListOperations(Resource):
         sl = adm.get_shopping_list_by_id(shopping_list_id)
         proposal = ListEntry.from_dict(api.payload)
         if sl is not None and proposal is not None:
-            result = adm.create_list_entry(proposal.get_purchasing_user(),
-                                           proposal.get_amount(),
-                                           proposal.get_article(),
-                                           proposal.get_unit(),
-                                           proposal.get_retailer(),
-                                           proposal.get_shopping_list()
-                                           )
+            result = adm.create_list_entry(
+                proposal.get_name(),
+                proposal.get_amount(),
+                proposal.get_article(),
+                proposal.get_unit(),
+                proposal.get_purchasing_user(),
+                proposal.get_retailer(),
+                proposal.get_shopping_list()
+            )
             return result, 200
         else:
             return 'ShoppingList unknown or payload not valid', 500
@@ -650,24 +651,22 @@ class ListEntryOperations(Resource):
         else:
             return '', 500
 
-"""
+
 @holmaApp.route('/retailers')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigem Fehler kommt.')
 class RetailerListOperations(Resource):
-
-    @holmaApp.marshal_list_with(Retailer)
+    @holmaApp.marshal_list_with(retailer)
     # @secured
     def get(self):
         adm = Administration()
         ret_list = adm.get_all_retailers()
         return ret_list
 
-
 @holmaApp.route('/retailer/<int:retailer_id>')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('retailer_id', 'Die ID des retailer-Objekts')
 class RetailerOperations(Resource):
-    @holmaApp.marshal_list_with(Retailer)
+    @holmaApp.marshal_list_with(retailer)
     # @secured
     def get(self, retailer_id):
         adm = Administration()
@@ -678,13 +677,13 @@ class RetailerOperations(Resource):
 @holmaApp.route('/retailer/by-name/<string:name>')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('name', 'Der Name des Retailers')
-class ArticlesByNameOperations(Resource):
-    @holmaApp.marshal_list_with(Retailer)
+class RetailerByNameOperations(Resource):
+    @holmaApp.marshal_list_with(retailer)
     # @secured
     def get(self, name):
         adm = Administration()
         rtl = adm.get_retailers_by_name(name)
-        return rtl """
+        return rtl
 
 
 if __name__ == '__main__':

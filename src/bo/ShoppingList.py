@@ -40,7 +40,7 @@ class ShoppingList(BusinessObject):
         shoppinglist = ShoppingList()
         shoppinglist.set_id(dictionary["id"])
         shoppinglist.set_name(dictionary["name"])
-        shoppinglist.set_group(dictionary["group"])
+        shoppinglist.set_group(dictionary["groupId"])
         return shoppinglist
 
     @staticmethod

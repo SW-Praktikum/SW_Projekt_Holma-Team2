@@ -5,94 +5,91 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import AppAPI from '../../api/AppAPI';
-import GroupBO from '../../api/GroupBO';
+import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
+import PropTypes from 'prop-types';
+import Container from '@material-ui/core/Container'
+import { withStyles } from '@material-ui/styles';
+import { Typography } from '@material-ui/core';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 
-// API for Lists needs to be created first
 
 class AddListDialog extends Component {
     constructor (props) {
         super(props)
         this.state = {
-            groupName: "",
-            userId: 29,
-            open: false
         }        
     }
-
-    handleChange = (e) => {
-        this.state.groupName = e.target.value
-    }
     
-    handleClickOpen = () => {
-        this.setState({
-            open: true
-        })    
-    }
-
-    handleClose = () => {
-        this.setState({
-            open: false
-        })
-    }
-
     _handleClick = () => {
-        this.addGroup();
+      //this.props.addGroup();
     };
-
-    _handleKeyDown = (e) => {
-        if (e.key === 'Enter') {
-            this.addGroup();
-        };
-    };
-    
-    addGroup() {
-        // current UserID muss abgefragt werden, geht erst wenn firebase läuft
-        // id bisher deklarerte Variable
-        var grp = new GroupBO(this.state.groupName, this.state.userId);
-        AppAPI.getAPI().createGroup(grp);
-        //valdieren, dass Gruppe erstellt wurde, Fenster schließen
-    }
 
     render() {
+      const { classes } = this.props;
         return (
-            <div>
-              <Button 
-                style={{maxWidth: '120px', maxHeight: '120px', minWidth: '120px', minHeight: '120px',}}
-                variant="outlined" 
-                color="primary"
-                startIcon={<AddIcon />} 
-                onClick={this.handleClickOpen}>Add List
+          <div>
+            <Typography className={classes.container} align="right">
+            <Fab onClick={this.props.openDialog} className={classes.root} variant="extended" color="primary" aria-label="add">
+              <AddIcon className={classes.extendedIcon}/>
+                neue Shoppingliste
+            </Fab>
+            </Typography>
+            <Dialog className={classes.dialog} open={this.props.open} onClose={this.props.handleClose} aria-labelledby="form-dialog-title">
+              <DialogTitle id="form-dialog-title">Neue Shoppingliste</DialogTitle>
+              <DialogContent>
+                <TextField
+                  autoFocus
+                  onChange={this.props.handleInputChange}
+                  margin="dense"
+                  id="outlined-basic"
+                  variant="outlined"
+                  label="Name der Shoppingliste"
+                  type="email"
+                  fullWidth
+                  inputProps = {{maxlength:60}}
+                />
+                <FormControlLabel
+                  control={<Checkbox checked={this.props.checked} onChange={this.props.addStandardArticles} name="" />}
+                  label="Standardartikel übernehmen"
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={this.props.handleClose} color="primary">
+                  abbrechen
                 </Button>
-              <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Neue Liste erstellen</DialogTitle>
-                <DialogContent>
-                  <TextField
-                    autoFocus
-                    onKeyDown={this._handleKeyDown}
-                    onChange={this.handleChange}
-                    margin="dense"
-                    id="outlined-basic"
-                    variant="outlined"
-                    label="Listenname"
-                    type="email"
-                    fullWidth
-                  />
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={this.handleClose} color="primary">
-                    schließen
-                  </Button>
-                  <Button onClick={this._handleClick} color="primary">
-                    hinzufügen
-                  </Button>
-                </DialogActions>
-              </Dialog>
-            </div>
+                <Button onClick={this.props.checkStandard} color="primary">
+                  hinzufügen
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </div>
           );
     }
 }
 
-export default AddListDialog
+const styles = theme => ({
+  root: {
+    position: 'fixed',
+    bottom: theme.spacing(2),
+    //right: theme.spacing(1),
+    
+  },
+  extendedIcon: {
+    marginRight: theme.spacing(1),
+    
+  },
+  container: {
+    minWidth: 50, 
+    marginRight: 215
+  },
+
+  dialog: {
+    maxWidth: 350,
+    margin: 'auto',
+  }
+});
+
+export default withStyles(styles)(AddListDialog)

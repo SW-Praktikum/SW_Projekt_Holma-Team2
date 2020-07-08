@@ -29,40 +29,61 @@ class ListEntry extends Component {
             product: "",
             standard: false,
         }
-  };    
+    };    
 
 
         setOpen = () => {
-            if (this.state.open === false)
+            if (this.state.open === false) {
                 this.setState({open: true})
-            else
+            }
+            else {
                 this.setState({open: false})
-        }
-
-        setStandard = () => { //not working yet
-            if(this.state.standard === false)
-                this.setState({standard: true})
-                //add as Standard article
-            else
-                this.setStandard({standard: false})
-                //remove from standard
-        }   
-
-        handleChangeCheck = (e) => {
-            this.setState({checked: e.target.checked})
-        }
-
-        handleChangeAmount = (e) => {
-            const re = /^[0-9\b]+$/;
-            if (e.target.value === '' || re.test(e.target.value)) {
-            this.setState({amount: e.target.value})
             }
         }
 
-        handleChangeProduct = (e) => {
-            this.setState({product: e.target.value})
-        }
+        setStandard = () => { //not working yet
+            if(this.state.standard === false) {
+                this.setState({standard: true})
+                //add as Standard article
+            }
+            else {
+                this.setStandard({standard: false})
+                //remove from standard
+            }
+        }   
 
+    handleChangeCheck = (e) => {
+        this.setState({checked: e.target.checked})
+    }
+
+    handleChangeAmount = (e) => {
+        const re = /^[0-9\b]+$/;
+        if (e.target.value === '' || re.test(e.target.value)) {
+        this.setState({amount: e.target.value})
+        }
+    }
+
+    handleChangeProduct = (e) => {
+        this.setState({product: e.target.value})
+    }
+
+    loadShoppingLists = () => {
+        AppAPI.getAPI().getShoppingListsByGroupId(this.state.groupId).then(lists => {
+            console.log("Loaded lists:", lists)
+            console.log("Loaded lists:", this.state.groupId)
+            this.setState({
+                shoppingLists: lists,
+                loadingInProgress: true, // loading indicator 
+                loadingError: null
+                })
+                console.log("Loaded lists:", this.state.shoppingLists)
+            }).catch(e =>
+                this.setState({ // Reset state with error from catch 
+                    loadingInProgress: false,
+                    loadingError: e
+            })
+            );  
+        }
     render() {
         const units = [
             {
@@ -92,7 +113,7 @@ class ListEntry extends Component {
           ];
           const retailer = [
               {
-                  value: 'Edeka',
+                value: 'Edeka',
               },
               {
                 value: 'Rewe',
@@ -155,7 +176,7 @@ class ListEntry extends Component {
                 value: 'Sonstige',
                 },
                 {
-                    value: 'Naturgut'
+                value: 'Naturgut'
 
               }
           ]
