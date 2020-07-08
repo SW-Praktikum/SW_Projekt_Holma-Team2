@@ -135,19 +135,6 @@ class GroupList extends Component {
     }
 
     loadShoppingLists = () => {
-<<<<<<< HEAD
-      AppAPI.getAPI().getShoppingListsByGroupId(this.state.groupId).then(lists => {
-        console.log("Loaded lists for group id '" + this.state.groupId + "':", lists)
-          this.setState({
-              shoppingLists: lists,
-              loadingInProgress: true, // loading indicator 
-              loadingError: null
-            })
-          }).catch(e =>
-              this.setState({ // Reset state with error from catch 
-                loadingInProgress: false,
-                loadingError: e
-=======
       AppAPI.getAPI().getShoppingListsByGroupId(this.props.match.params.groupId).then((lists) => {
         console.log(lists)
         var listElements = lists.map((list) =>
@@ -167,7 +154,6 @@ class GroupList extends Component {
           this.setState({ // Reset state with error from catch 
             loadingInProgress: false,
             loadingError: e
->>>>>>> b2ad13390a158fd11a3b0f47c78601535bd4789b
           })
         );  
       } 
