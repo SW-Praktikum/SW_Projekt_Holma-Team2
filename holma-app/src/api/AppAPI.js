@@ -59,7 +59,7 @@ export default class AppAPI {
     // ListEntry related
     #getListEntryURL = () => `${this.#appServerBaseURL}/listentries`;
     #getListEntryByIdURL = (listEntryId) => `${this.#appServerBaseURL}/listentry/${listEntryId}`;
-    #getListEntryByShoppingListIdURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppingLists/${shoppingListId}/listentries`; 
+    #getListEntriesByShoppingListIdURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppingLists/${shoppingListId}/listentries`; 
     #createListEntryURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppingLists/${shoppingListId}/listentries`;
     #updateListEntryURL = (listEntryId) => `${this.#appServerBaseURL}/listentry/${listEntryId}`;
     #deleteListEntryURL = (listEntryId) => `${this.#appServerBaseURL}/listentry/${listEntryId}`;
@@ -437,8 +437,8 @@ export default class AppAPI {
     };
 
 
-    getListEntryByShoppingListId(shoppingListId) {
-        return this.#fetchAdv(this.#getListEntryByShoppingListIdURL(shoppingListId)).then((responseJSON) => {
+    getListEntriesByShoppingListId(shoppingListId) {
+        return this.#fetchAdv(this.#getListEntriesByShoppingListIdURL(shoppingListId)).then((responseJSON) => {
             let responseListEntry = ListEntryBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
                 resolve(responseListEntry)
