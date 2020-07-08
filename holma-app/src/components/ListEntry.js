@@ -33,19 +33,23 @@ class ListEntry extends Component {
 
 
         setOpen = () => {
-            if (this.state.open === false)
+            if (this.state.open === false) {
                 this.setState({open: true})
-            else
+            }
+            else {
                 this.setState({open: false})
+            }
         }
 
         setStandard = () => { //not working yet
-            if(this.state.standard === false)
+            if(this.state.standard === false) {
                 this.setState({standard: true})
                 //add as Standard article
-            else
+            }
+            else {
                 this.setStandard({standard: false})
                 //remove from standard
+            }
         }   
 
         handleChangeCheck = (e) => {

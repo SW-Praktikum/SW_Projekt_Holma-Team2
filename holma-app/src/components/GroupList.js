@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Box from '@material-ui/core/Box';
 import { Link } from 'react-router-dom';
-import GroupBO from '../api/GroupBO';
+import ShoppingListBO from '../api/ShoppingListBO';
 
 import TextField from '@material-ui/core/TextField';
 
@@ -280,22 +280,26 @@ class GroupList extends Component {
       
     }
     checkStandard = () => {
-      if (this.state.checked === false)
+      if (this.state.checked === false) {
         // Liste ohne Standardartikel erstellen
         console.log("Ohne standard")
-      else
+        this.createNewList()
+      }
+      else {
         console.log("Mit standard")
         this.createNewList()
+        // add standardarticles to new list
         // Liste mit Standardartikel erstellen
+      }
     }
 
     createNewList = () => {
-      AppAPI.getAPI().createShoppingList(this.state.groupId)
+      var lst = new ShoppingListBO(this.state.shoppingListName, this.state.groupId);
+      AppAPI.getAPI().createShoppingList(lst)
     }
 
     handleInputChange = (e) => {
       this.setState({shoppingListName: e.target.value})
-      console.log(this.state.shoppingListName)
     }
 
     loadShoppingLists = () => {
