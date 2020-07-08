@@ -193,10 +193,11 @@ class Administration():
         with ListEntryMapper() as mapper:
             return mapper.find_by_id(list_entry_id)
 
-    def create_list_entry(self, purchasing_user_id, amount, article_id, unit, retailer_id,
-                          shopping_list_id):
+    def create_list_entry(self, name, amount, article_id, unit, purchasing_user_id, 
+                          retailer_id, shopping_list_id):
         list_entry = ListEntry()
         list_entry.set_id(0),
+        list_entry.set_name(name),
         list_entry.set_purchasing_user(purchasing_user_id),
         list_entry.set_amount(amount),
         list_entry.set_article(article_id),

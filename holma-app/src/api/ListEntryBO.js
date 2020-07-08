@@ -2,21 +2,21 @@ import BusinessObject from './BusinessObject';
 
 export default class ListEntryBO extends BusinessObject {
 
-    constructor(article_id, amount, unit, retailer_id, purchasing_user_id, shopping_list_id, checked, checked_ts, standardarticle) {
+    constructor(articleId, amount, unit, retailerId, purchasingUserId, shoppingListId, checked, checkedTs, standardarticle) {
         super();
-        this.article_id = article_id;
+        this.articleId = articleId;
         this.amount = amount;
         this.unit = unit;
-        this.retailer_id = retailer_id;
-        this.purchasing_user_id = purchasing_user_id;
-        this.shopping_list_id = shopping_list_id;
+        this.retailerId = retailerId;
+        this.purchasingUserId = purchasingUserId;
+        this.shoppingListId = shoppingListId;
         this.checked = checked;
-        this.checked_ts = checked_ts;
+        this.checkedTs = checkedTs;
         this.standardarticle = standardarticle
     }
 
     getArticleId(){
-        return this.article_id
+        return this.articleId
     }
 
     getAmount(){
@@ -28,54 +28,58 @@ export default class ListEntryBO extends BusinessObject {
     }
 
     getRetailerId(){
-        return this.retailer_id
+        return this.retailerId
     }
 
     getPurchasingUserId(){
-        return this.purchasing_user_id
+        return this.purchasingUserId
     }
 
     getShoppingListId(){
-        return this.shopping_list_id
+        return this.shoppingListId
     }
 
     getCheckedTs(){
-        return this.checked_ts
+        return this.checkedTs
     }
 
-    set_article(article_id){
-        this.article_id = article_id
+    isStandardarticle() {
+        return this.standardarticle
     }
 
-    set_amount(amount){
+    setArticle(articleId){
+        this.articleId = articleId
+    }
+
+    setAmount(amount){
         this.amount = amount
     }
 
-    set_unit(unit){
+    setUnit(unit){
         this.unit = unit
     }
 
-    set_purchasing_user_id(purchasing_user_id){
-        this.purchasing_user_id = purchasing_user_id
+    setPurchasingUserId(purchasingUserId){
+        this.purchasingUserId = purchasingUserId
     }
 
-    set_shopping_list_id(shopping_list_id){
-        this.shopping_list_id = shopping_list_id
+    setShoppingListId(shoppingListId){
+        this.shoppingListId = shoppingListId
     }
 
-    set_retailer_id(retailer_id){
-        this.retailer_id = retailer_id
+    setRetailerId(retailerId){
+        this.retailerId = retailerId
     }
 
-    set_checked(checked){
+    setChecked(checked){
         this.checked = checked
     }
 
-    set_checked_ts(checked_ts){
-        this.checked_ts = checked_ts
+    setCheckedTs(checkedTs){
+        this.checkedTs = checkedTs
     }
 
-    set_standardarticle(standardarticle){
+    setStandardarticle(standardarticle){
         this.standardarticle = standardarticle
     }
 
