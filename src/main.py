@@ -545,6 +545,21 @@ class ShoppingListOperations(Resource):
         else:
             return '', 500
 
+    @holmaApp.marshal_with(shoppingList)
+    @holmaApp.expect(shoppingList, validate=True)
+    # @secured
+    def put(self, shopping_list_id):
+        """Update eines bestimmten ShoppingList-Objekts."""
+        adm = Administration()
+        sl = ShoppingList.from_dict(api.payload)
+
+        if sl is not None:
+            sl.set_id(shopping_list_id)
+            adm.save_shopping_list(sl)
+            return '', 200
+        else:
+            return '', 500
+
 
 @holmaApp.route('/shoppinglists')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigem Fehler kommt.')
@@ -653,6 +668,60 @@ class ListEntryOperations(Resource):
             return '', 200
         else:
             return '', 500
+
+
+@holmaApp.route('/user/<int:user_id>/listentries')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@holmaApp.param('user_id', 'Die ID des user-Objekts')
+class GroupRelatedListEntryOperations(Resource):
+    @holmaApp.marshal_with(user)
+    # @ secured
+    def get(self, user_id):
+        """Auslesen von Listentry-Objekten die zu einem bestimmten
+        User gehören."""
+        adm = Administration()
+        us = adm.get_user_by_id(user_id)
+        if us is not None:
+            listentry_list = adm.get_list_entries_by_user_id(us)
+            return listentry_list
+        else:
+            return "User not found", 500
+
+
+@holmaApp.route('/retailer/<int:retailer_id>/listentries')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@holmaApp.param('retailer_id', 'Die ID des retailer-Objekts')
+class RetailerRelatedListEntryOperations(Resource):
+    @holmaApp.marshal_with(retailer)
+    # @ secured
+    def get(self, retailer_id):
+        """Auslesen von Listentry-Objekten die zu einem bestimmten
+        Retailer gehören."""
+        adm = Administration()
+        rtl = adm.get_retailer_by_id(retailer_id)
+        if rtl is not None:
+            listentry_list = adm.get_list_entries_by_retailer_id(rtl)
+            return listentry_list
+        else:
+            return "Retailer not found", 500
+
+
+@holmaApp.route('/article/<int:article_id>/listentries')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@holmaApp.param('article_id', 'Die ID des Article-Objekts')
+class RetailerRelatedListEntryOperations(Resource):
+    @holmaApp.marshal_with(article)
+    # @ secured
+    def get(self, article_id):
+        """Auslesen von Listentry-Objekten die zu einem bestimmten
+        Article gehören."""
+        adm = Administration()
+        art = adm.get_article_by_id(article_id)
+        if art is not None:
+            listentry_list = adm.get_list_entries_by_article_id(art)
+            return listentry_list
+        else:
+            return "Article not found", 500
 
 
 @holmaApp.route('/group/<int:group_id>/listentries')
