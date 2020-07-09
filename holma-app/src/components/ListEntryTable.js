@@ -54,14 +54,13 @@ class ListEntry extends Component {
         this.setState({checked: e.target.checked}, () => {
             this.state.listEntry.setChecked(this.state.checked)
         })
+        console.log(this.state.listEntry)
         AppAPI.getAPI().updateListEntry(this.state.listEntry)
     }
-    
-    
 
     deleteEntry = (entry) => {
         AppAPI.getAPI().deleteListEntry(entry).then(() => {
-            //hier die loadListEntries Funktion von weiter unten ausführen
+            this.props.loadListEntries()
         })
     }
 
@@ -167,7 +166,7 @@ class ListEntryTable extends Component {
     loadListEntries = () => {
         AppAPI.getAPI().getListEntriesByShoppingListId(this.props.shoppingListId).then(listEntries => {
             console.log("Loaded list entries for shopping list '" + this.props.shoppingListId + "':", listEntries)
-            var listEntryTableElements = listEntries.map((listEntry) => <ListEntry listEntry={listEntry} />)
+            var listEntryTableElements = listEntries.map((listEntry) => <ListEntry listEntry={listEntry} loadListEntries={this.loadListEntries} />)
 
             this.setState({
                 listEntryTableElements: listEntryTableElements,
@@ -189,11 +188,9 @@ class ListEntryTable extends Component {
                 <Table aria-label="collapsible table">
                     <TableHead>
                         <TableRow>
-                            <TableCell width="6%"/>
-                            <TableCell width="10%" align="right"><b>Anzahl</b></TableCell>
-                            <TableCell width="15%" align="right"><b>Einheit</b></TableCell>
-                            <TableCell width="56%" ><b>Artikel</b></TableCell>
-                            <TableCell width="6%"/>
+                            <TableCell width="10%"/>
+                            <TableCell width="16%" align="left"><b>Menge</b></TableCell>
+                            <TableCell width="56%" align="left"><b>Artikel</b></TableCell>
                             <TableCell width="6%"/>
                             <TableCell width="6%"/>
                         </TableRow>
