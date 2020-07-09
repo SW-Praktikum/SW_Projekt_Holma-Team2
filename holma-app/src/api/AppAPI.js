@@ -239,6 +239,7 @@ export default class AppAPI {
 
     getGroupById(groupId) {
         return this.#fetchAdv(this.#getGroupByIdURL(groupId)).then((responseJSON) => {
+            console.log("Get group by id", responseJSON)
             let responseGroups = GroupBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
                 resolve(responseGroups)
@@ -260,7 +261,7 @@ export default class AppAPI {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json, text/plain',
-                'Content-type': 'application/json',
+                'Content-type': 'applicat   ion/json',
             },
             body: JSON.stringify(group)
         }).then((responseJSON) => {

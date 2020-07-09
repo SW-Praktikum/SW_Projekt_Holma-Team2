@@ -7,7 +7,7 @@ class BusinessObject(ABC):
         """Basisklasse, die in allen anderen Klassen übernommen wird."""
         self._id = 0
         self._name = ""
-        self._creation_date = datetime.now()
+        self._creation_date = datetime.now().isoformat()
         self._last_updated = self._creation_date
 
     def __str__(self):
@@ -36,3 +36,7 @@ class BusinessObject(ABC):
 
     def set_last_updated(self, last_updated):
         self._last_updated = last_updated
+
+    @staticmethod
+    def date_format(date_string):
+        return datetime.fromisoformat(date_string.replace("Z", ""))

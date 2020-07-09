@@ -8,12 +8,14 @@ class Retailer(BusinessObject):
         super().__init__()
 
     def __str__(self):
-        return "Retailer: {} {}, created: {}, last changed: {}".format(self.get_id(), self.get_name(),
-                                                                                  self.get_creation_date(),
-                                                                                  self.get_last_updated())
+        return "Retailer: {} {}, created: {}, " \
+               "last changed: {}".format(self.get_id(),
+                                         self.get_name(),
+                                         self.get_creation_date(),
+                                         self.get_last_updated())
 
     @staticmethod
-    def from_dict(self, dictionary=dict()):
+    def from_dict(dictionary=dict()):
         retailer = Retailer()
         retailer.set_id(dictionary["id"])
         retailer.set_name(dictionary["name"])
