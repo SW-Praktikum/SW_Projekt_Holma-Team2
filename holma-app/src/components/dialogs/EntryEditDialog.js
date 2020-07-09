@@ -54,6 +54,8 @@ class EntryEditDialog extends Component {
 
 
     saveChanges = () => {
+        this.state.listEntry.setShoppingListId(3000)
+        console.log(this.state.listEntry)
         AppAPI.getAPI().updateListEntry(this.state.listEntry)
     }
 

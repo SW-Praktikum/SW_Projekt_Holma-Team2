@@ -644,6 +644,7 @@ class ListEntryOperations(Resource):
     @holmaApp.expect(listEntry, validate=True)
     # @secured
     def put(self, list_entry_id):
+        print(api.payload)
         adm = Administration()
         le = ListEntry.from_dict(api.payload)
 
