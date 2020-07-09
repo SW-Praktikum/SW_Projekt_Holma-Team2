@@ -28,6 +28,8 @@ class EntryEditDialog extends Component {
             purchasingUser: this.props.listEntry.getPurchasingUserId(),
             retailer: this.props.listEntry.getRetailerId(),
             standard: false,
+            value: "halo",
+            inputValue: "hier"
         }        
     }
 
@@ -36,25 +38,38 @@ class EntryEditDialog extends Component {
         if (e.target.value === '' || re.test(e.target.value)) {
             this.setState({
                 amount: e.target.valueAsNumber
-            }, () => {
-                this.state.listEntry.setAmount(this.state.amount)
-                //console.log(this.state.listEntry)
-            })   
+            })
+            this.state.listEntry.setAmount(this.state.amount)
+            //console.log(this.state.listEntry)
+               
         }
     }
 
     handleChangeArticle = (e) => {
         // überlegen wie wir article und deren ID ansprechen oder alles über name
         // autovorschläge für neue ListenEinträge?
-        this.setState({article: e.target.value}, () => {
-            this.state.listEntry.setName(this.state.article)
-            //console.log(this.state.listEntry)
-        })   
+        this.setState({article: e.target.value})
+        this.state.listEntry.setName(this.state.article)
+            //console.log(this.state.listEntry)   
     }
 
 
     saveChanges = () => {
         AppAPI.getAPI().updateListEntry(this.state.listEntry)
+        AppAPI.getAPI().createListEntries(this.state.listEntry)
+        console.log(this.state.listEntry)
+    }
+
+    setInputValue = (e) => {
+        this.setState({
+            inputValue: e
+        })
+    }
+
+    setValue = (e) => {
+        this.setState({
+            value: e
+        })
     }
 
     render() {
@@ -155,7 +170,6 @@ class EntryEditDialog extends Component {
           }
       ]
       const user = [{value : "Herbert"}]
-      console.log(user)
         return (
           <div>
             <Typography className={classes.container} align="right">
@@ -177,7 +191,7 @@ class EntryEditDialog extends Component {
                     id="combo-unit"
                     inputValue={this.state.unit}
                     options={units} //liste der Einheiten laden
-                    getOptionLabel={(option) => option.value}
+                    getOptionLabel={(option) => option.label}
                     renderInput={(params) => <TextField {...params} label="Einheit" variant="standard" />}
                 />
                 <TextField
@@ -190,11 +204,13 @@ class EntryEditDialog extends Component {
                     label="Artikel"
                 />
                 <Autocomplete
+                    //not working yet
+                    
                     id="combo-purchasingUser"
-                    inputValue={this.state.purchasingUser.toString()}
-                    // mit inputValue Falsche Syntax -> Fehler
-                    // on Change methoden wie hier:
-                    // https://codesandbox.io/s/9v197?file=/demo.js
+                    value={this.state.value}
+                    onChange={(newValue) => this.setValue(newValue)}
+                    inputValue={this.state.inputValue}
+                    onInputChange={(newInputValue) => this.setInputValue(newInputValue)}
                     options={user} //liste der beutzer der Gruppe laden
                     getOptionLabel={(option) => option.value}
                     renderInput={(params) => <TextField {...params} label="Einkäufer" variant="standard" />}

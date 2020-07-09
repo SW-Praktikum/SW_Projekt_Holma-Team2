@@ -13,13 +13,18 @@ import { withStyles } from '@material-ui/styles';
 import { Typography } from '@material-ui/core';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-
+import ListEntryBO from '../../api/ListEntryBO';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import AppAPI from '../../api/AppAPI'
 
 
 class EntryAddDialog extends Component {
     constructor (props) {
         super(props)
         this.state = {
+            amount: 0,
+            unit: "",
+            article: "",
         }        
     }
     
@@ -27,7 +32,58 @@ class EntryAddDialog extends Component {
       //this.props.addGroup();
     };
 
+    handleChangeAmount = (e) => {
+        const re = /^[0-9\b]+$/;
+        if (e.target.value === '' || re.test(e.target.value)) {
+            this.setState({
+                amount: e.target.valueAsNumber
+            }) 
+        }
+    }
+
+    handleChangeArticle = (e) => {
+        this.setState({article: e.target.value})
+        // check if article exists -> if yes use that one with its id
+        // else: create new article
+        // wie mit article name/id was wie abspeichern und wie drauf zugreifen?
+    }
+
+
+    saveChanges = () => {
+        // 
+        var liEtry = new ListEntryBO(0, this.state.amount, this.state.unit, 0, 1004, 3000, 0, "", 0)
+        liEtry.setName(this.state.article)
+        console.log(liEtry)
+        AppAPI.getAPI().createListEntries(liEtry)
+    }
+
     render() {
+        const units = [
+            {
+              value: 'Stück',
+              label: 'st',
+            },
+            {
+              value: 'Gramm',
+              label: 'g',
+            },
+            {
+              value: 'Milligramm',
+              label: 'mg',
+            },
+            {
+              value: 'Kilogramm',
+              label: 'kg',
+            },
+            {
+              value: 'Milliliter',
+              label: 'ml',
+            },
+            {
+              value: 'Liter',
+              label: 'l',
+            },
+          ];
       const { classes } = this.props;
         return (
           <div>
@@ -40,16 +96,30 @@ class EntryAddDialog extends Component {
             <Dialog className={classes.dialog} open={this.props.open} onClose={this.props.handleClose} aria-labelledby="form-dialog-title">
               <DialogTitle id="form-dialog-title">Neuer Listeneintrag</DialogTitle>
               <DialogContent>
+              <TextField
+                    type="number"
+                    value={this.state.amount}
+                    onChange={this.handleChangeAmount}
+                    margin="dense"
+                    id="combo-amount"
+                    variant="standard"
+                    label="Menge"
+                />
+                <Autocomplete
+                    id="combo-unit"
+                    inputValue={this.state.unit}
+                    options={units} //liste der Einheiten laden
+                    getOptionLabel={(option) => option.label}
+                    renderInput={(params) => <TextField {...params} label="Einheit" variant="standard" />}
+                />
                 <TextField
-                  autoFocus
-                  onChange={this.props.handleInputChange}
-                  margin="dense"
-                  id="outlined-basic"
-                  variant="outlined"
-                  label="hier die einzelnen Elemente hinterlegen"
-                  type="email"
-                  fullWidth
-                  inputProps = {{maxlength:60}}
+                    type="text"
+                    value={this.state.article}
+                    onChange={this.handleChangeArticle}
+                    margin="dense"
+                    id="combo-article"
+                    variant="standard"
+                    label="Artikel"
                 />
                 
               </DialogContent>
@@ -57,7 +127,7 @@ class EntryAddDialog extends Component {
                 <Button onClick={this.props.handleClose} color="primary">
                   abbrechen
                 </Button>
-                <Button onClick={null} color="primary">
+                <Button onClick={this.saveChanges} color="primary">
                   hinzufügen
                 </Button>
               </DialogActions>
