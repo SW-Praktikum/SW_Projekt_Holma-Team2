@@ -67,6 +67,7 @@ export default class AppAPI {
     // Standardarticle related
     #getListEntryByGroupIdURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/listentries`; 
     #addStandardArticleToGroupURL = (groupId, listEntryId) => `${this.#appServerBaseURL}/group/${groupId}/listentry/${listEntryId}`;
+    #addStandardArticleToShoppingListURL = (groupId, shoppingListId) => `${this.#appServerBaseURL}/group/${groupId}/shoppingList/${shoppingListId}`;
     #deleteStandardArticleFromGroupURL =(groupId, listEntryId) => `${this.#appServerBaseURL}/group/${groupId}/listentry/${listEntryId}`;
 
     // Retailer related
@@ -565,6 +566,20 @@ export default class AppAPI {
             let responseGroup = GroupBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
                 resolve(responseGroup)
+            })
+        })
+    };
+
+    addStandardArticleToShoppingList(groupId, shoppingListId) {
+        return this.#fetchAdv(this.#addStandardArticleToShoppingListURL(groupId, shoppingListId), {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/plain'
+            },
+        }).then((responseJSON) => {
+            let responseShoppingLists = ShoppingListBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseShoppingLists)
             })
         })
     };
