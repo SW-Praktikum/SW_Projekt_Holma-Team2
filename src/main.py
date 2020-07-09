@@ -64,14 +64,14 @@ shoppingList = api.inherit('ShoppingList', bo, {
 
 listEntry = api.inherit('ListEntry', bo, {
     'articleId': fields.Integer(attribute='_article',
-                                 description='zu welchem Artikle gehört dieses Entry? '),
+                                 description='zu welchem Artikel gehört dieses Entry? '),
     'amount': fields.Float(attribute='_amount',
                            description='Menge des Entries '),
     'unit': fields.String(attribute='_unit',
                           description='Einheit des Entries '),
     'purchasingUserId': fields.Integer(attribute='_purchasing_user',
                                     description='Wer das Artikle kaufen muss '),
-    'shoppingListId': fields.Integer(attribute='_Shopping_list',
+    'shoppingListId': fields.Integer(attribute='_shopping_list',
                                    description='zu welcher Liste diese Entry gehört?'),
     'retailerId': fields.Integer(attribute='_retailer',
                               description='Bei wem das Artikle gekauft  '),

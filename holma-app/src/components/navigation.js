@@ -18,7 +18,7 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 
-//Navigation für Desktop
+//Navigation für Desktop 
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;

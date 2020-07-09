@@ -54,8 +54,6 @@ class EntryEditDialog extends Component {
 
 
     saveChanges = () => {
-        this.state.listEntry.setShoppingListId(3000)
-        console.log(this.state.listEntry)
         AppAPI.getAPI().updateListEntry(this.state.listEntry)
     }
 
@@ -157,7 +155,7 @@ class EntryEditDialog extends Component {
           }
       ]
       const user = [{value : "Herbert"}]
-      
+      console.log(user)
         return (
           <div>
             <Typography className={classes.container} align="right">
@@ -193,7 +191,7 @@ class EntryEditDialog extends Component {
                 />
                 <Autocomplete
                     id="combo-purchasingUser"
-                    inputValue={this.state.purchasingUser}
+                    inputValue={this.state.purchasingUser.toString()}
                     // mit inputValue Falsche Syntax -> Fehler
                     // on Change methoden wie hier:
                     // https://codesandbox.io/s/9v197?file=/demo.js

@@ -109,9 +109,8 @@ class ListEntry(BusinessObject):
 
     @staticmethod
     def from_tuples(tuples=list()):
-        print(tuples)
         result = []
-        for (listentry_id, name, creation_date, purchasing_user, amount, article, unit, retailer, standardarticle, checked, shopping_list,  last_updated, checked_ts) in tuples:
+        for (listentry_id, name, creation_date, purchasing_user, amount, article, unit, retailer, standardarticle, checked, shopping_list, last_updated, checked_ts) in tuples:
             listentry = ListEntry()
             listentry.set_id(listentry_id)
             listentry.set_name(name)

@@ -51,10 +51,10 @@ class ListEntry extends Component {
         }
     
     handleChangeCheck = (e) => {
-        this.setState({checked: e.target.checked}, () => {
-            this.state.listEntry.setChecked(this.state.checked)
+        this.setState({
+            checked: e.target.checked
         })
-        console.log(this.state.listEntry)
+        this.state.listEntry.setChecked(e.target.checked)
         AppAPI.getAPI().updateListEntry(this.state.listEntry)
     }
 
