@@ -78,7 +78,8 @@ listEntry = api.inherit('ListEntry', bo, {
     'checked': fields.Boolean(attribute='_checked',
                               description='wurde es bereits gekauft'),
     'checkedTs': fields.DateTime(attribute='_checked_ts',
-                                 description='wann wurde es gekauft'),
+                                 description='wann wurde es gekauft',
+                                 dt_format="iso8601"),
     'standardarticle': fields.Boolean(attribute='_standardarticle',
                                       description='ist es ein Standardartikle')
 })
@@ -641,7 +642,7 @@ class ListEntryOperations(Resource):
             return 'ListEntry not found', 500
 
     @holmaApp.marshal_with(listEntry)
-    @holmaApp.expect(listEntry, validate=True)
+    @holmaApp.expect(listEntry) #validate=True)
     # @secured
     def put(self, list_entry_id):
         print(api.payload)

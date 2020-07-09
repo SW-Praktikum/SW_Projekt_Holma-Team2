@@ -39,4 +39,6 @@ class BusinessObject(ABC):
 
     @staticmethod
     def date_format(date_string):
-        return datetime.fromisoformat(date_string.replace("Z", ""))
+        if date_string is not None:
+            return datetime.fromisoformat(date_string.replace("Z", ""))
+        return None

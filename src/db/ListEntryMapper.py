@@ -150,8 +150,6 @@ class ListEntryMapper(Mapper):
         return list_entry
 
     def update(self, list_entry):
-        print(list_entry.to_dict())
-
         cursor = self._connection.cursor()
         command = "UPDATE holma.list_entry SET name=%s, purchasing_user=%s, " \
                   "amount=%s, article=%s, unit=%s, retailer=%s, " \
