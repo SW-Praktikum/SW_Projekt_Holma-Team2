@@ -59,7 +59,12 @@ export default class AppAPI {
     // ListEntry related
     #getListEntryURL = () => `${this.#appServerBaseURL}/listentries`;
     #getListEntryByIdURL = (listEntryId) => `${this.#appServerBaseURL}/listentry/${listEntryId}`;
+    #getListEntryByUserIdURL = (userId) => `${this.#appServerBaseURL}/user/${userId}/listentries`;
+    
+    #getListEntryByArticleIdURL = (articleId) => `${this.#appServerBaseURL}/article/${articleId}/listentries`;
     #getListEntryByShoppingListIdURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppingList/${shoppingListId}/listentries`; 
+    #getListEntryByRetailerIdURL = (retailerId) => `${this.#appServerBaseURL}/retailer/${retailerId}/listentries`;
+
     #createListEntryURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppingList/${shoppingListId}/listentries`;
     #updateListEntryURL = (listEntryId) => `${this.#appServerBaseURL}/listentry/${listEntryId}`;
     #deleteListEntryURL = (listEntryId) => `${this.#appServerBaseURL}/listentry/${listEntryId}`;
@@ -443,6 +448,23 @@ export default class AppAPI {
         })
     };
 
+    getListEntryByUserId(userId) {
+        return this.#fetchAdv(this.#getListEntryByUserIdURL(userId)).then((responseJSON) => {
+            let responseListEntry = ListEntryBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+                resolve(responseListEntry)
+            })
+        })
+    };
+
+    getListEntryByArticleId(articleId) {
+        return this.#fetchAdv(this.#getListEntryByArticleIdURL(articleId)).then((responseJSON) => {
+            let responseListEntry = ListEntryBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+                resolve(responseListEntry)
+            })
+        })
+    } 
 
     getListEntryByShoppingListId(shoppingListId) {
         return this.#fetchAdv(this.#getListEntryByShoppingListIdURL(shoppingListId)).then((responseJSON) => {
@@ -452,6 +474,15 @@ export default class AppAPI {
             })
         })
     } 
+
+    getListEntryByRetailerId(retailerId) {
+        return this.#fetchAdv(this.#getListEntryByRetailerIdURL(retailerId)).then((responseJSON) => {
+            let responseListEntry = ListEntryBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+                resolve(responseListEntry)
+            })
+        })
+    };
 
     getListEntryById(listEntryId) {
         return this.#fetchAdv(this.#getListEntryByIdURL(listEntryId)).then((responseJSON) => {
