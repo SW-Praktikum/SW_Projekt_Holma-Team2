@@ -673,11 +673,31 @@ class GroupRelatedListEntryOperations(Resource):
             return "Group not found", 500
 
 
+@holmaApp.route('/group/<int:group_id>/shoppinglist/<int:shopping_list_id>')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@holmaApp.param('group_id', 'Die ID des Group-Objekts')
+@holmaApp.param('shopping_list_id', 'Die ID des Shoppinglist-Objekts')
+class GroupShoppingListStandardArticleRelationOperations(Resource):
+    @holmaApp.marshal_with(shoppingList)
+    @holmaApp.marshal_with(group)
+    # @secured
+    def post(self, group_id, shopping_list_id):
+        adm = Administration()
+        grp = adm.get_group_by_id(group_id)
+        sl = adm.get_shopping_list_by_id(shopping_list_id)
+
+        if grp is not None and sl is not None:
+            result = adm.add_standardarticle_to_shopping_list(sl, grp)
+            return result
+        else:
+            return "Group or ShoppingList not found", 500
+
+
 @holmaApp.route('/group/<int:group_id>/listentry/<int:list_entry_id>')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('group_id', 'Die ID des Group-Objekts')
 @holmaApp.param('list_entry_id', 'Die ID des Listentry-Objekts')
-class GroupStandardArticleRelationOperations(Resource):
+class GroupListEntryStandardArticleRelationOperations(Resource):
     @holmaApp.marshal_with(listEntry)
     @holmaApp.marshal_with(group)
     # @secured
