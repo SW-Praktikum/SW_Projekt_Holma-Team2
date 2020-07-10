@@ -20,6 +20,8 @@ import GroupInformation from './components/GroupEdit';
 import Groupmember from './components/GroupEditDialog';
 import MemberAddDialog from './components/dialogs/MemberAddDialog';
 import MemberDetails from './components/GroupEdit';
+import ListEntryTable from './components/ListEntryTable';
+import StartPage from './components/layout/Startpage';
 
 
 class App extends React.Component {
@@ -131,7 +133,8 @@ class App extends React.Component {
                 user ?
                   <>
                     <Redirect to='/groups'/>
-                      <Navigation />
+                    <Navigation />
+                    <Route path='/home' component={StartPage}/>
                     <Route path='/groups'>
                       <GroupEntries user={user}/>
                     </Route>
@@ -145,8 +148,9 @@ class App extends React.Component {
                     </Route>
                     <Route path='/user'>
                       <User user={user}/>
-                    </Route>
-                    <Route path=''>
+                    </Route>  
+                    <Route path='/shoppinglist'>
+                      <ListEntryTable shoppingListId="3000"/>
                     </Route>
                   </>
                   :

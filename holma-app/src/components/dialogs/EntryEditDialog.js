@@ -191,7 +191,7 @@ class EntryEditDialog extends Component {
                 />
                 <Autocomplete
                     id="combo-purchasingUser"
-                    inputValue={this.state.purchasingUser.toString()}
+                    //inputValue={this.state.purchasingUser.toString()}
                     // mit inputValue Falsche Syntax -> Fehler
                     // on Change methoden wie hier:
                     // https://codesandbox.io/s/9v197?file=/demo.js
