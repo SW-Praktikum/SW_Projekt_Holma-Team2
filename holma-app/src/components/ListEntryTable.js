@@ -20,8 +20,8 @@ import EditIcon from '@material-ui/icons/Edit';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import EntryEditDialog from './dialogs/EntryEditDialog';
-import EntryAddDialog from './dialogs/EntryAddDialog';
+import ListEntryEditDialog from './dialogs/ListEntryEditDialog';
+import ListEntryAddDialog from './dialogs/ListEntryAddDialog';
 import { colors } from '@material-ui/core';
 
 // classes for styling need to be created
@@ -128,7 +128,7 @@ class ListEntry extends Component {
                     </Collapse>
                     </TableCell>
                 </TableRow>
-                <EntryEditDialog 
+                <ListEntryEditDialog 
                     openDialog={this.openDialog}
                     open={this.state.openDialog}
                     handleClose={this.handleClose}
@@ -208,7 +208,7 @@ class ListEntryTable extends Component {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <EntryAddDialog 
+            <ListEntryAddDialog 
                 openDialog={this.openDialog}
                 open={this.state.openDialog}
                 handleClose={this.handleClose}

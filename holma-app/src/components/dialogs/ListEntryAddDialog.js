@@ -18,7 +18,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import AppAPI from '../../api/AppAPI'
 
 
-class EntryAddDialog extends Component {
+class ListEntryAddDialog extends Component {
     constructor (props) {
         super(props)
         this.state = {
@@ -159,4 +159,4 @@ const styles = theme => ({
   }
 });
 
-export default withStyles(styles)(EntryAddDialog)
+export default withStyles(styles)(ListEntryAddDialog)

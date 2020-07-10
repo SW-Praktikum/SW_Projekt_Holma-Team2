@@ -12,7 +12,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Box from '@material-ui/core/Box';
 import { Link } from 'react-router-dom';
 import ShoppingListBO from '../api/ShoppingListBO';
-import AddListDialog from './dialogs/AddListDialog';
+import ShoppingListAddDialog from './dialogs/ShoppingListAddDialog';
 
 import TextField from '@material-ui/core/TextField';
 
@@ -177,7 +177,7 @@ class GroupList extends Component {
                 <Box m={2} />
                 <Typography className="title" style={{fontSize: 14, color: 'black'}}>Shoppinglists:</Typography>
                 <ListWithBoxes groupElements={listElements}/>
-                <AddListDialog 
+                <ShoppingListAddDialog 
                   openDialog={this.openDialog}
                   open={this.state.openDialog}
                   handleClose={this.handleClose}
