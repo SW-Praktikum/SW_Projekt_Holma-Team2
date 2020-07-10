@@ -501,7 +501,7 @@ export default class AppAPI {
         })
     };
 
-    createListentries(listentry) {
+    createListEntry(listentry) {
         console.log("Creating a ListEntry:", listentry)
         return this.#fetchAdv(this.#createListEntryURL(listentry.getShoppingListId()), {
         method: 'POST',
