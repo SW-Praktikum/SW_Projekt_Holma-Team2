@@ -184,7 +184,6 @@ class MemberDetails extends Component{
         this.setState({
           groupObject: group
         })
-        console.log(this.state.groupObject)
         }).then (() => {
           AppAPI.getAPI().updateGroup(this.state.groupObject)
       })
