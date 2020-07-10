@@ -225,6 +225,14 @@ class Administration():
         with ListEntryMapper() as mapper:
             return mapper.update(list_entry)
 
+    def get_list_entries_by_retailer_id(self, retailer_id):
+        with ListEntryMapper() as mapper:
+            return mapper.find_by_retailer(retailer_id)
+
+    def get_list_entries_by_article_id(self, article_id):
+        with ListEntryMapper() as mapper:
+            return mapper.find_list_entries_by_article(article_id)
+
     """Einkaufsliste"""
 
     def get_shopping_list_by_id(self, shopping_list_id):
@@ -309,13 +317,6 @@ class StatisticAdministration(object):
         with ListEntryMapper() as mapper:
             return mapper.find_all()
 
-    def get_list_entries_by_retailer_id(self, retailer_id):
-        with ListEntryMapper() as mapper:
-            return mapper.find_by_retailer(retailer_id)
-
     def get_list_entries_in_time_period(self, start_date, end_date):
         pass
 
-    def get_list_entries_by_article_id(self, article_id):
-        with ListEntryMapper() as mapper:
-            return mapper.find_list_entries_by_article(article_id)
