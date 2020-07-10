@@ -207,7 +207,7 @@ export default class AppAPI {
     };
 
     createGroup(group) {
-        console.log("Creating group:", group)
+        console.log("Creating Group:", group)
         return this.#fetchAdv(this.#createGroupURL(group.getOwner()), {
             method: 'POST',
             headers: {
@@ -234,7 +234,6 @@ export default class AppAPI {
 
     getGroupById(groupId) {
         return this.#fetchAdv(this.#getGroupByIdURL(groupId)).then((responseJSON) => {
-            console.log("Get group by id", responseJSON)
             let responseGroups = GroupBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
                 resolve(responseGroups)
@@ -256,7 +255,7 @@ export default class AppAPI {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json, text/plain',
-                'Content-type': 'applicat   ion/json',
+                'Content-type': 'application/json',
             },
             body: JSON.stringify(group)
         }).then((responseJSON) => {
@@ -311,7 +310,7 @@ export default class AppAPI {
     }
 
     createShoppingList(shoppingLists) {
-        console.log("Creating shoppingList:", shoppingLists)
+        console.log("Creating ShoppingList:", shoppingLists)
         return this.#fetchAdv(this.#createShoppingListURL(shoppingLists.getGroupId()), {
         method: 'POST',
             headers: {

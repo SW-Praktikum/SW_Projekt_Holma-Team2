@@ -252,7 +252,7 @@ class GroupOperations(Resource):
             return '', 500
 
     @holmaApp.marshal_with(group)
-    @holmaApp.expect(group, validate=True)
+    @holmaApp.expect(group)#, validate=True)
     # @secured
     def put(self, group_id):
         """Update eines bestimmten Group-Objekts."""
@@ -642,10 +642,9 @@ class ListEntryOperations(Resource):
             return 'ListEntry not found', 500
 
     @holmaApp.marshal_with(listEntry)
-    @holmaApp.expect(listEntry) #validate=True)
+    @holmaApp.expect(listEntry, validate=True)
     # @secured
     def put(self, list_entry_id):
-        print(api.payload)
         adm = Administration()
         le = ListEntry.from_dict(api.payload)
 
