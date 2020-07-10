@@ -56,7 +56,7 @@ class EntryEditDialog extends Component {
 
     saveChanges = () => {
         AppAPI.getAPI().updateListEntry(this.state.listEntry)
-        AppAPI.getAPI().createListEntries(this.state.listEntry)
+        AppAPI.getAPI().createListEntry(this.state.listEntry)
         console.log(this.state.listEntry)
     }
 

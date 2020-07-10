@@ -54,7 +54,7 @@ class EntryAddDialog extends Component {
         var liEtry = new ListEntryBO(0, this.state.amount, this.state.unit, 0, 1004, 3000, 0, "", 0)
         liEtry.setName(this.state.article)
         console.log(liEtry)
-        AppAPI.getAPI().createListEntries(liEtry)
+        AppAPI.getAPI().createListEntry(liEtry)
     }
 
     render() {
