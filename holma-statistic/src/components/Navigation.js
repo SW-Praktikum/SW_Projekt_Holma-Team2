@@ -7,7 +7,6 @@ import Tab from "@material-ui/core/Tab";
 import GroupIcon from '@material-ui/icons/Group';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
-import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
 import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import AssessmentIcon from '@material-ui/icons/Assessment';
@@ -15,6 +14,7 @@ import ShoppingBasket from "@material-ui/icons/ShoppingBasket";
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ThumbUp from "@material-ui/icons/ThumbUp";
 import Typography from "@material-ui/core/Typography";
+import PersonIcon from '@material-ui/icons/Person';
 import Box from "@material-ui/core/Box";
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 
@@ -83,9 +83,8 @@ export default function ScrollableTabsButtonForce() {
           <IconButton label="Back">
           <ArrowBackIosRoundedIcon onClick={() => history.goBack()}/>
           </IconButton>
-          <Tab className={classes.Home} label="" icon={<HomeRoundedIcon/>} {...a11yProps(0)} />
-          <Tab label="Gruppen" icon={<GroupIcon />} {...a11yProps(1)} component={RouterLink} to={`/groups`}/>
-          <Tab label="Statistik" icon={<AssessmentIcon />} {...a11yProps(3)} component={RouterLink} to={`/groups/101`}/>
+          <Tab label="User-Statistik" icon={<PersonIcon />} {...a11yProps(0)} component={RouterLink} to={`/user-statistic`} />
+          <Tab label="Gruppen-Statistik" icon={<GroupIcon />} {...a11yProps(1)} component={RouterLink} to={`/groups`}/>
           <Tab label="User" icon={<AccountCircleIcon />} {...a11yProps(4)} component={RouterLink} to={`/user`}/>
         </Tabs>
       </AppBar>
