@@ -63,7 +63,7 @@ export default class AppAPI {
     
     #getListEntryByArticleIdURL = (articleId) => `${this.#appServerBaseURL}/article/${articleId}/listentries`;
     #getListEntryByShoppingListIdURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppingList/${shoppingListId}/listentries`; 
-    #getListEntryByRetailerIdURL = (retailerId) => `${this.#appServerBaseURL}/retailer/${retailerId}/listentries`;
+    #getListEntryByRetailerIdURL = (retailerId) => `${this.#appServerBaseURL}/retailer/${retailerId}/listentries`; 
 
     #createListEntryURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppingList/${shoppingListId}/listentries`;
     #updateListEntryURL = (listEntryId) => `${this.#appServerBaseURL}/listentry/${listEntryId}`;
@@ -455,7 +455,7 @@ export default class AppAPI {
                 resolve(responseListEntry)
             })
         })
-    };
+    }; 
 
     getListEntryByArticleId(articleId) {
         return this.#fetchAdv(this.#getListEntryByArticleIdURL(articleId)).then((responseJSON) => {
@@ -466,23 +466,23 @@ export default class AppAPI {
         })
     } 
 
-    getListEntryByShoppingListId(shoppingListId) {
+     getListEntryByShoppingListId(shoppingListId) {
         return this.#fetchAdv(this.#getListEntryByShoppingListIdURL(shoppingListId)).then((responseJSON) => {
             let responseListEntry = ListEntryBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
                 resolve(responseListEntry)
             })
         })
-    } 
+    }  
 
-    getListEntryByRetailerId(retailerId) {
+     getListEntryByRetailerId(retailerId) {
         return this.#fetchAdv(this.#getListEntryByRetailerIdURL(retailerId)).then((responseJSON) => {
             let responseListEntry = ListEntryBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
                 resolve(responseListEntry)
             })
         })
-    };
+    }; 
 
     getListEntryById(listEntryId) {
         return this.#fetchAdv(this.#getListEntryByIdURL(listEntryId)).then((responseJSON) => {
@@ -491,7 +491,7 @@ export default class AppAPI {
                 resolve(responseListEntry)
             })
         })
-    }
+    } 
 
     getListEntries() {
         return this.#fetchAdv(this.#getListEntryURL()).then((responseJSON) => {
