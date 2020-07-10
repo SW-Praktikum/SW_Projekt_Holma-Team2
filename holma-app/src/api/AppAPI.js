@@ -51,10 +51,10 @@ export default class AppAPI {
 
     // Shoppinglist related
     #getShoppingListsByGroupIdURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/shoppinglists`;
-    #createShoppingListURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/shoppingLists`;
-    #getShoppingListByIdURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppingList/${shoppingListId}`;
-    #updateShoppingListURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppingList/${shoppingListId}`;
-    #deleteShoppingListURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppingList/${shoppingListId}`;
+    #createShoppingListURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/shoppinglists`;
+    #getShoppingListByIdURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglist/${shoppingListId}`;
+    #updateShoppingListURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglist/${shoppingListId}`;
+    #deleteShoppingListURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglist/${shoppingListId}`;
     
     // ListEntry related
     #getListEntryURL = () => `${this.#appServerBaseURL}/listentries`;
@@ -62,17 +62,17 @@ export default class AppAPI {
     #getListEntriesByUserIdURL = (userId) => `${this.#appServerBaseURL}/user/${userId}/listentries`;
     
     #getListEntriesByArticleIdURL = (articleId) => `${this.#appServerBaseURL}/article/${articleId}/listentries`;
-    #getListEntriesByShoppingListIdURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppingList/${shoppingListId}/listentries`; 
+    #getListEntriesByShoppingListIdURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglist/${shoppingListId}/listentries`; 
     #getListEntriesByRetailerIdURL = (retailerId) => `${this.#appServerBaseURL}/retailer/${retailerId}/listentries`; 
 
-    #createListEntryURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppingList/${shoppingListId}/listentries`;
+    #createListEntryURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglist/${shoppingListId}/listentries`;
     #updateListEntryURL = (listEntryId) => `${this.#appServerBaseURL}/listentry/${listEntryId}`;
     #deleteListEntryURL = (listEntryId) => `${this.#appServerBaseURL}/listentry/${listEntryId}`;
 
     // Standardarticle related
     #getListEntryByGroupIdURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/listentries`; 
     #addStandardArticleToGroupURL = (groupId, listEntryId) => `${this.#appServerBaseURL}/group/${groupId}/listentry/${listEntryId}`;
-    #addStandardArticleToShoppingListURL = (groupId, shoppingListId) => `${this.#appServerBaseURL}/group/${groupId}/shoppingList/${shoppingListId}`;
+    #addStandardArticleToShoppingListURL = (groupId, shoppingListId) => `${this.#appServerBaseURL}/group/${groupId}/shoppinglist/${shoppingListId}`;
     #deleteStandardArticleFromGroupURL =(groupId, listEntryId) => `${this.#appServerBaseURL}/group/${groupId}/listentry/${listEntryId}`;
 
     // Retailer related
