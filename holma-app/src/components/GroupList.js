@@ -36,106 +36,33 @@ import ListItem from '@material-ui/core/ListItem';
 import List from '@material-ui/core/List';
 import Grid from '@material-ui/core/Grid';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListWithBoxes from './ListWithBoxes';
 
 
-const useRowStyles = makeStyles({
-  root: {
-    '& > *': {
-      borderBottom: 'unset',
-    },
-  },
-});
 
-function createData(shoppinglist, member, status, edit) {
-  return {
-    shoppinglist,
-    member,
-    status,
-    edit,
-    history: [//kann erst mit Logik hinterlegt werden, wenn die ListEntrys stehen
-      { date: '2020-01-05', memberId: '30', article: "Apfel" },
-      { date: '2020-20-05', memberId: '29', article: "Birne" },
-    ],
-  };
-}
+/*
+class Checkboxes extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      checked: true,
+  }};
+*/
+    
 
-function Row(props) {
-  const { row } = props;
-  const [open, setOpen] = React.useState(false);
-  const classes = useRowStyles();
-
-  return (
-    <React.Fragment>
-      <TableRow className={classes.root}>
-        <TableCell>
-          <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
-        </TableCell>
-        <TableCell component="th" scope="row">{row.shoppinglist}</TableCell>
-        <TableCell align="right">{row.member}</TableCell>
-        <TableCell align="right">{row.status}</TableCell>
-        <TableCell align="right">{row.edit}</TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box margin={1}>
-              <Typography variant="h6" gutterBottom component="div">
-                History
-              </Typography>
-              <Table size="small" aria-label="purchases">
-                <TableHead>
-                  <TableRow>
-                    <TableCell><b>Date</b></TableCell>
-                    <TableCell><b>Member</b></TableCell>
-                    <TableCell><b>Article</b></TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {row.history.map((historyRow) => (
-                    <TableRow key={historyRow.date}>
-                      <TableCell component="th" scope="row">
-                        {historyRow.date}
-                      </TableCell>
-                      <TableCell>{historyRow.memberId}</TableCell>
-                      <TableCell>{historyRow.article}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </Box>
-          </Collapse>
-        </TableCell>
-      </TableRow>
-    </React.Fragment>
-  );
-}
-
-Row.propTypes = {
-  row: PropTypes.shape({
-    shoppinglist: PropTypes.string.isRequired,
-    member: PropTypes.number.isRequired,
-    status: PropTypes.string.isRequired,
-    history: PropTypes.arrayOf(
-      PropTypes.shape({
-        amount: PropTypes.number.isRequired,
-        customerId: PropTypes.string.isRequired,
-        date: PropTypes.string.isRequired,
-      }),
-    ).isRequired,
-    name: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-    protein: PropTypes.number.isRequired,
-  }).isRequired,
-};
-
-const rows = [
-  createData('Fahrradfreunde', 8, "7/12", <EditButton/>),
-  createData('Vortrinken', 2, "12/12", <EditButton/>),
-  createData('Familie-Maier', 6, "2/3", <EditButton/>),
-];
-
+  /*render() {
+    return (
+      <div>
+        <Checkbox
+          checked={this.state.checked}
+          onChange={this.handleChange('checked')}
+          value="checked"
+        />
+      </div>
+    );
+  }
+}*/
+/*
 function EditButton(){
   return(
       <Fab size="small" color="secondary" aria-label="edit">
@@ -143,31 +70,9 @@ function EditButton(){
       </ Fab>
   )
 }
+*/
 
-class Checkboxes extends React.Component {
-  state = {
-    checked: true,
-  };
-
-  handleChange = name => event => {
-    this.setState({ [name]: event.target.checked });
-  };
-
-  render() {
-    return (
-      <div>
-        <Checkbox
-          checked={this.state.checkedA}
-          onChange={this.handleChange('checkedA')}
-          value="checked"
-        />
-      </div>
-    );
-  }
-}
-
-
-function CollapsibleTable() {
+/*function CollapsibleTable() {
   return (
     <TableContainer component={Paper}>
       <Table aria-label="collapsible table">
@@ -190,6 +95,7 @@ function CollapsibleTable() {
   );
 }
 
+
 function AddShoppinglist() {
   return (
     <TableContainer component={Paper} style={{ width: '100%',}}>
@@ -209,10 +115,10 @@ function AddShoppinglist() {
     </TableContainer>
   );}
  
-
+*/
 
 /* Hierbei wird man an die Component "GroupEdit" weitergeleitet*/
-class Grouplink extends Component{
+/*class Grouplink extends Component{
     render(){
         return(
             <Button variant="contained" color="primary" style={{width:'100%',}}>
@@ -220,30 +126,17 @@ class Grouplink extends Component{
             </Button>
         )
     }
-}
+}*/
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-      width: '100%',
-    },
-    heading: {
-      fontSize: theme.typography.pxToRem(15),
-      flexBasis: '33.33%',
-      flexShrink: 0,
-    },
-    secondaryHeading: {
-      fontSize: theme.typography.pxToRem(15),
-      color: theme.palette.text.secondary,
-    },
-  }));
-  
+
 
 class GroupList extends Component {
     constructor(props) {
         super(props);
+        //console.log(this.props.match.params.groupId)
         this.state = {
             group: null,
-            groupId: this.props.match.params.groupId,
+            groupId: this.props.params.groupId,
             shoppingLists:[],
             shoppingListName: "",
             shoppingListMember: [],
@@ -252,45 +145,69 @@ class GroupList extends Component {
             shoppingListLastUpdated: "",
             memberId: "",
             ArticleName:"",
-        }}
+        }
+      }
+        
       
     componentDidMount(){
       if(this.props.match.params.groupId){
+          
+          console.log(this.props)
           this.loadShoppingLists();
         }
     }
-    
 
     loadShoppingLists = () => {
-      AppAPI.getAPI().getShoppingListsByGroupId(this.state.groupId).then(lists => {
-        console.log("Loaded lists:", lists)
-        console.log("Loaded lists:", this.state.groupId)
-          this.setState({
-              shoppingLists: lists,
-              loadingInProgress: true, // loading indicator 
-              loadingError: null
-            })
-            console.log("Loaded lists:", this.state.shoppingLists)
-          }).catch(e =>
-              this.setState({ // Reset state with error from catch 
-                loadingInProgress: false,
-                loadingError: e
-          })
-        );  
-      }
+      console.log(AppAPI.getAPI().getShoppingListsByGroupId(this.state.groupId))
       
+      /** 
+      .then(lists => {
+        console.log("Loaded lists:", lists)
+        console.log("Group Id:", this.state.groupId)
+        var listElements = lists.map((list) => 
+        <Grid  item xs={4}>
+        <Paper style ={{ textAlign:'center',}} >
+        <List item xs={4}>
+          <ListItem>
+        <ListItemText
+          primary={list.getName()}
+          secondary={"List-Id " + list.getId()}
+        />
+      </ListItem>
+      </List>
+      </Paper>
+      </Grid>
+      )
+      this.setState({
+        shoppingLists: listElements,
+        loadingInProgress: true, // loading indicator 
+        loadingError: null
+      })
+      }).catch(e =>
+        this.setState({ // Reset state with error from catch 
+          loadingInProgress: false,
+          loadingError: e
+    })
+    );*/
+  }
 
     render() {
+      const {shoppingLists} = this.state;
+      this.loadShoppingLists = this.loadShoppingLists.bind(this)
             return(
             <div>
               <Box m={5} />
-              <Link to={"/groupedit/" + this.props.match.params.groupId}>
-                <Grouplink/>
-              </Link>
+              
+                
+              
                 <Box m={2} />
-                <CollapsibleTable/>
+                <GroupList
+                loadShoppingLists= {this.loadShoppingLists}
+                groupId = {this.state.groupId}
+                />
                 <Box m={2} />
-                <AddShoppinglist/>
+                
+              <ListWithBoxes groupElements ={shoppingLists}/>
             </div>        
     );
 }}

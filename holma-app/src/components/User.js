@@ -6,7 +6,7 @@ import User from '../api/UserBO';
 import ListWithBoxes from './ListWithBoxes';
 import firebase from 'firebase/app'
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
-import Navigation from '../components/Navigation';
+import Navigation from '../components/navigation';
 
 class UserProfil extends Component {
 
