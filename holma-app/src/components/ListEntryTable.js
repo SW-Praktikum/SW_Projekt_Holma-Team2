@@ -22,6 +22,9 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import EntryEditDialog from './dialogs/EntryEditDialog';
 import EntryAddDialog from './dialogs/EntryAddDialog';
+import { colors } from '@material-ui/core';
+
+// classes for styling need to be created
 
 class ListEntry extends Component {
     constructor(props) {
@@ -98,12 +101,12 @@ class ListEntry extends Component {
                     </TableCell>
                 </TableRow>
                 <TableRow>
-                    <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={10}>
+                    <TableCell style={{ paddingBottom: 0, paddingTop: 0, backgroundColor: colors.grey[100]}} colSpan={10}>
                     <Collapse in={this.state.open} timeout="auto" unmountOnExit>
                         <Table size="small" aria-label="purchases">
-                            <TableHead>
+                            <TableHead >
                                 <TableRow>
-                                    <TableCell colSpan={3} padding="none" width="30%" align="left">Einkäufer</TableCell>
+                                    <TableCell style={{borderBottom: "none"}} colSpan={3} padding="none" width="30%" align="left">Einkäufer</TableCell>
                                     <TableCell colSpan={2} padding="none" width="20%" align="left">Händler</TableCell>
                                     <TableCell colSpan={4} padding="none" width="40%" align="left">Geändert</TableCell>
                                     <TableCell colSpan={1} padding="none" width="10%" align="left">STD</TableCell>
@@ -184,13 +187,13 @@ class ListEntryTable extends Component {
     render() {
         return (
             <div display='flex'>
-            <TableContainer component={Paper}>
+            <TableContainer style={{marginTop: 20}}component={Paper}>
                 <Table aria-label="collapsible table">
-                    <TableHead>
+                    <TableHead style={{backgroundColor: colors.teal[600]}}>
                         <TableRow>
                             <TableCell width="10%"/>
-                            <TableCell width="16%" align="left"><b>Menge</b></TableCell>
-                            <TableCell width="56%" align="left"><b>Artikel</b></TableCell>
+                            <TableCell width="16%" align="left"><b style={{ color: '#ffffff'}}>Menge</b></TableCell>
+                            <TableCell width="56%" align="left"><b style={{ color: '#ffffff'}}>Artikel</b></TableCell>
                             <TableCell width="6%"/>
                             <TableCell width="6%"/>
                         </TableRow>
