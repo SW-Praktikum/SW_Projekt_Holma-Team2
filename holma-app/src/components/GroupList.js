@@ -121,8 +121,8 @@ function AddShoppinglist() {
 /*class Grouplink extends Component{
     render(){
         return(
-            <Button variant="contained" color="primary" style={{width:'100%',}}>
-                 Edit Group
+            <Button variant="contained" color="primary" style={{width:'100%'}}>
+                Gruppe bearbeiten
             </Button>
         )
     }
@@ -157,7 +157,7 @@ class GroupList extends Component {
         }
     }
 
-    loadShoppingLists = () => {
+    loadShoppingLists = () => {git 
       console.log(AppAPI.getAPI().getShoppingListsByGroupId(this.state.groupId))
       
       /** 
@@ -197,9 +197,9 @@ class GroupList extends Component {
             return(
             <div>
               <Box m={5} />
-              
-                
-              
+              <Link to={"/groupedit/" + this.props.match.params.groupId} style={{textDecoration: 'none'}}>
+                <Grouplink/>
+              </Link>
                 <Box m={2} />
                 <GroupList
                 loadShoppingLists= {this.loadShoppingLists}
