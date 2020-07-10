@@ -41,6 +41,7 @@ export default class AppAPI {
   
     // Article Related
     #getArticlesURL = () => `${this.#appServerBaseURL}/articles`;
+    #getArticleByGroupIdURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/articles`;
     #createArticleURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/articles`;
     #updateArticleURL = (articleId) =>  `${this.#appServerBaseURL}/article/${articleId}`;
     #deleteArticleURL = (articleId) => `${this.#appServerBaseURL}/article/${articleId}` ;
@@ -378,6 +379,15 @@ export default class AppAPI {
             })
         })
     };
+
+    getArticlesByGroupId(groupId) {
+        return this.#fetchAdv(this.#getArticleByGroupIdURL(groupId)).then((responseJSON) => {
+            let responseArticles = ArticleBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+                resolve(responseArticles)
+            })
+        })
+    }
 
     createArticle(article) {
         console.log("Creating Article:", article)
