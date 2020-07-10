@@ -41,7 +41,7 @@ export default class AppAPI {
   
     // Article Related
     #getArticlesURL = () => `${this.#appServerBaseURL}/articles`;
-    #getArticleByGroupIdURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/articles`;
+    #getArticlesByGroupIdURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/articles`;
     #createArticleURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/articles`;
     #updateArticleURL = (articleId) =>  `${this.#appServerBaseURL}/article/${articleId}`;
     #deleteArticleURL = (articleId) => `${this.#appServerBaseURL}/article/${articleId}` ;
@@ -71,7 +71,7 @@ export default class AppAPI {
     #deleteListEntryURL = (listEntryId) => `${this.#appServerBaseURL}/listentry/${listEntryId}`;
 
     // Standardarticle related
-    #getListEntriesByGroupIdURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/listentries`; 
+    #getStandardArticlesByGroupIdURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/listentries`; 
     #addStandardArticleToGroupURL = (groupId, listEntryId) => `${this.#appServerBaseURL}/group/${groupId}/listentry/${listEntryId}`;
     #addStandardArticlesToShoppingListURL = (groupId, shoppingListId) => `${this.#appServerBaseURL}/group/${groupId}/shoppinglist/${shoppingListId}`;
     #deleteStandardArticleFromGroupURL =(groupId, listEntryId) => `${this.#appServerBaseURL}/group/${groupId}/listentry/${listEntryId}`;
@@ -381,7 +381,7 @@ export default class AppAPI {
     };
 
     getArticlesByGroupId(groupId) {
-        return this.#fetchAdv(this.#getArticleByGroupIdURL(groupId)).then((responseJSON) => {
+        return this.#fetchAdv(this.#getArticlesByGroupIdURL(groupId)).then((responseJSON) => {
             let responseArticles = ArticleBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
                 resolve(responseArticles)
@@ -587,8 +587,8 @@ export default class AppAPI {
         })
     };
 
-    getListEntryByGroupId(groupId) {
-        return this.#fetchAdv(this.#getListEntriesByGroupIdURL(groupId)).then((responseJSON) => {
+    getStandardArticlesByGroupId(groupId) {
+        return this.#fetchAdv(this.#getStandardArticlesByGroupIdURL(groupId)).then((responseJSON) => {
             let responseListEntry = ListEntryBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
                 resolve(responseListEntry)
