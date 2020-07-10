@@ -78,7 +78,7 @@ class GroupInformation extends Component {
       <Grid item xs={6} sm={6}>
         <ListItem  align='center' style={{width:"auto"}}>
         <Typography  variant="h6" gutterBottom>
-        Besitzer: {this.props.groupOwner}
+        Admin: {this.props.groupOwner}
         </Typography>
         </ListItem>
       </Grid>
@@ -158,7 +158,6 @@ class MemberDetails extends Component{
     if(this.props.match.params.groupId){
       this.getGroupDetails();
       this.loadMembers();
-      console.log(this.props)
      }
   }
 
@@ -175,11 +174,8 @@ class MemberDetails extends Component{
 
   handleChangeName = (e) => {
     this.setState({
-      groupName: e.target.value,
-      
+      groupName: e.target.value,  
     })
-    console.log(e.target.value)
-
   }
 
   handleClickSave = () => {
@@ -188,6 +184,7 @@ class MemberDetails extends Component{
         this.setState({
           groupObject: group
         })
+        console.log(this.state.groupObject)
         }).then (() => {
           AppAPI.getAPI().updateGroup(this.state.groupObject)
       })

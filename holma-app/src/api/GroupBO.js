@@ -17,14 +17,13 @@ export default class GroupBO extends BusinessObject {
 
     static fromJSON(groups) {
         let result = [];
-
+        
         if (Array.isArray(groups)) {
             groups.forEach((g) => {
                 Object.setPrototypeOf(g, GroupBO.prototype);
                 result.push(g)
             })
         } else {
-            
             let g = groups;
             Object.setPrototypeOf(g, GroupBO.prototype);
             result.push(g)

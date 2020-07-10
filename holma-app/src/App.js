@@ -104,7 +104,6 @@ class App extends React.Component {
       }
       else {
         console.log("User '" + name + "' already in database!")
-        console.log(user)
         this.setState({
           user: user
         })

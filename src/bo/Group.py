@@ -27,16 +27,13 @@ class Group(BusinessObject):
     def set_owner(self, user_id):
         self._owner = user_id
 
-    @staticmethod
-    def to_dict(obj):
+    def to_dict(self):
         result = {
-            "id": obj.get_id(),
-            "name": obj.get_name(),
-            "creationDate": datetime.strftime(obj.get_creation_date(),
-                                              "%Y-%m-%dT%H:%M:%S.%fZ"),
-            "lastUpdated": datetime.strftime(obj.get_last_updated(),
-                                             "%Y-%m-%dT%H:%M:%S.%fZ"),
-            "owner": obj.get_owner()
+            "id": self.get_id(),
+            "name": self.get_name(),
+            "owner": self.get_owner(),
+            "creationDate": self.get_creation_date(),
+            "lastUpdated": self.get_last_updated()
         }
         return result
 
@@ -45,10 +42,8 @@ class Group(BusinessObject):
         group = Group()
         group.set_id(dictionary["id"])
         group.set_name(dictionary["name"])
-        group.set_creation_date(datetime.strptime(dictionary["creationDate"],
-                                                  "%Y-%m-%dT%H:%M:%S.%fZ"))
-        group.set_last_updated(datetime.strptime(dictionary["lastUpdated"],
-                                                  "%Y-%m-%dT%H:%M:%S.%fZ"))
+        group.set_creation_date(Group.date_format(dictionary["creationDate"]))
+        group.set_last_updated(Group.date_format(dictionary["lastUpdated"]))
         group.set_owner(dictionary["owner"])
         return group
 

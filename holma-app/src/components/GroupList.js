@@ -11,124 +11,54 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Box from '@material-ui/core/Box';
 import { Link } from 'react-router-dom';
-import GroupBO from '../api/GroupBO';
+import ShoppingListBO from '../api/ShoppingListBO';
+import AddListDialog from './dialogs/AddListDialog';
 
 import TextField from '@material-ui/core/TextField';
 
-import PropTypes from 'prop-types';
-import Collapse from '@material-ui/core/Collapse';
-import IconButton from '@material-ui/core/IconButton';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItem from '@material-ui/core/ListItem';
-import List from '@material-ui/core/List';
 import Grid from '@material-ui/core/Grid';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListWithBoxes from './ListWithBoxes';
+import GroupEntry from './GroupEntries';
+import { colors } from '@material-ui/core';
+import CardActionArea from '@material-ui/core/CardActionArea';
+
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardMedia from '@material-ui/core/CardMedia';
 
 
 
-/*
-class Checkboxes extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      checked: true,
-  }};
-*/
-    
-
-  /*render() {
-    return (
-      <div>
-        <Checkbox
-          checked={this.state.checked}
-          onChange={this.handleChange('checked')}
-          value="checked"
-        />
-      </div>
-    );
+class Grouplink extends Component{
+  render(){
+      return(
+          <Button variant="contained" color="primary" style={{width:'100%'}}>
+              Gruppe anzeigen
+          </Button>
+      )
   }
-}*/
-/*
-function EditButton(){
-  return(
-      <Fab size="small" color="secondary" aria-label="edit">
-          <EditIcon />
-      </ Fab>
+}
+
+
+class ListCard extends Component {
+  render() {
+      return (
+        <Card className="root" style={{/* minHeight: 250 ,  */minWidth: '100%', marginBottom:10, marginTop:10, backgroundColor: colors.teal[600]}}>
+          <CardActionArea>
+          <CardContent>
+              <Typography className="title" style={{fontSize: 14, color: 'white'}}>{this.props.list.getName()}</Typography>
+              <Typography className="title" style={{fontSize: 14, color: 'white'}}>Id: {this.props.list.getId()}</Typography>
+          </CardContent>
+          </CardActionArea>     
+        </Card>
   )
 }
-*/
-
-/*function CollapsibleTable() {
-  return (
-    <TableContainer component={Paper}>
-      <Table aria-label="collapsible table">
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell><b>Shoppinglist</b></TableCell>
-            <TableCell align="right"><b>Member</b></TableCell>
-            <TableCell align="right"><b>Status</b></TableCell>
-            <TableCell align="right"><b>Edit</b></TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <Row key={row.name} row={row} />
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
 }
-
-
-function AddShoppinglist() {
-  return (
-    <TableContainer component={Paper} style={{ width: '100%',}}>
-      <Table aria-label="collapsible table">
-        <TableHead>
-          <TableRow>
-            <TableCell style={{ width: '20%',}}><b>Add Shoppinglist</b></TableCell>
-          <TextField id="standard-basic" label="name" style={{ width: '40%',}} />
-            <TableCell style={{ width: '30%',}}>Add all Standardarticles</TableCell>
-            <Checkboxes style={{ width: '10%',}}/>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );}
- 
-*/
-
-/* Hierbei wird man an die Component "GroupEdit" weitergeleitet*/
-/*class Grouplink extends Component{
-    render(){
-        return(
-            <Button variant="contained" color="primary" style={{width:'100%'}}>
-                Gruppe bearbeiten
-            </Button>
-        )
-    }
-}*/
-
-
 
 class GroupList extends Component {
     constructor(props) {
@@ -136,18 +66,10 @@ class GroupList extends Component {
         //console.log(this.props.match.params.groupId)
         this.state = {
             group: null,
-            groupId: this.props.params.groupId,
-            shoppingLists:[],
+            groupId: this.props.match.params.groupId,
+            listElements:[],
             shoppingListName: "",
-            shoppingListMember: [],
-            shoppingListNumberChecked: "",
-            shoppingListNumberUncheked: "",
-            shoppingListLastUpdated: "",
-            memberId: "",
-            ArticleName:"",
-        }
-      }
-        
+        }}
       
     componentDidMount(){
       if(this.props.match.params.groupId){
@@ -156,58 +78,101 @@ class GroupList extends Component {
           this.loadShoppingLists();
         }
     }
+    
+    openDialog = () => {
+      this.setState({
+        openDialog: true})
+    }
 
-    loadShoppingLists = () => {git 
-      console.log(AppAPI.getAPI().getShoppingListsByGroupId(this.state.groupId))
+    handleClose = () => {
+      this.setState({
+        openDialog: false})
+    }
+
+    addStandardArticles = () => {
+      if (this.state.checked === false)
+        this.setState({checked: true})
+      else
+        this.setState({checked: false})
       
-      /** 
-      .then(lists => {
-        console.log("Loaded lists:", lists)
-        console.log("Group Id:", this.state.groupId)
-        var listElements = lists.map((list) => 
-        <Grid  item xs={4}>
-        <Paper style ={{ textAlign:'center',}} >
-        <List item xs={4}>
-          <ListItem>
-        <ListItemText
-          primary={list.getName()}
-          secondary={"List-Id " + list.getId()}
-        />
-      </ListItem>
-      </List>
-      </Paper>
+    }
+    checkStandard = () => {
+      if (this.state.checked === false) {
+        // Liste ohne Standardartikel erstellen
+        console.log("Ohne standard")
+        this.createNewList()
+      }
+      else {
+        console.log("Mit standard")
+        this.createNewList()
+        // add standardarticles to new list
+        // Liste mit Standardartikel erstellen
+      }
+    }
+
+    createNewList = () => {
+      var lst = new ShoppingListBO(this.state.shoppingListName, this.state.groupId);
+      AppAPI.getAPI().createShoppingList(lst).then(() => {
+        this.loadShoppingLists()
+      })
+    }
+
+    handleInputChange = (e) => {
+      this.setState({shoppingListName: e.target.value})
+    }
+
+    loadShoppingLists = () => {
+      AppAPI.getAPI().getShoppingListsByGroupId(this.props.match.params.groupId).then((lists) => {
+        console.log(lists)
+        var listElements = lists.map((list) =>
+        <Grid key={list.getId()} item xs={6} item lg={4}>
+        <Paper className="paper" style ={{ textAlign:'center',}} >
+          <ListCard key={list.getId()} list={list}/>
+        </Paper>
       </Grid>
       )
-      this.setState({
-        shoppingLists: listElements,
-        loadingInProgress: true, // loading indicator 
-        loadingError: null
-      })
+        this.setState({
+          listElements: listElements,
+          loadingInProgress: true, // loading indicator 
+          loadingError: null,
+      });
+         console.log("Save in state", listElements)
       }).catch(e =>
-        this.setState({ // Reset state with error from catch 
-          loadingInProgress: false,
-          loadingError: e
-    })
-    );*/
-  }
+          this.setState({ // Reset state with error from catch 
+            loadingInProgress: false,
+            loadingError: e
+          })
+        );  
+      } 
 
     render() {
-      const {shoppingLists} = this.state;
-      this.loadShoppingLists = this.loadShoppingLists.bind(this)
-            return(
+      const {listElements} = this.state;
+      console.log("elements", listElements)
+          return(
             <div>
               <Box m={5} />
+              <Card className="root" style={{/* minHeight: 250 ,  */minWidth: '100%', marginBottom:10, marginTop:10, backgroundColor: colors.teal[600]}}>
+                <CardActionArea>
+                  <CardContent>
+                    <Typography className="title" style={{fontSize: 14, color: 'white'}}>Aktuelle Gruppe: {this.state.groupId}</Typography>
+                  </CardContent>
+                </CardActionArea>     
+              </Card>
               <Link to={"/groupedit/" + this.props.match.params.groupId} style={{textDecoration: 'none'}}>
                 <Grouplink/>
               </Link>
                 <Box m={2} />
-                <GroupList
-                loadShoppingLists= {this.loadShoppingLists}
-                groupId = {this.state.groupId}
+                <Typography className="title" style={{fontSize: 14, color: 'black'}}>Shoppinglists:</Typography>
+                <ListWithBoxes groupElements={listElements}/>
+                <AddListDialog 
+                  openDialog={this.openDialog}
+                  open={this.state.openDialog}
+                  handleClose={this.handleClose}
+                  checked={this.state.checked}
+                  addStandardArticles={this.addStandardArticles}
+                  checkStandard={this.checkStandard}
+                  handleInputChange={this.handleInputChange}
                 />
-                <Box m={2} />
-                
-              <ListWithBoxes groupElements ={shoppingLists}/>
             </div>        
     );
 }}

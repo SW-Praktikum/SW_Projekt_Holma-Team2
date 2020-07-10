@@ -22,11 +22,9 @@ class Article(BusinessObject):
         result = {
             "id": self.get_id(),
             "name": self.get_name(),
-            "creationDate": datetime.strftime(self.get_creation_date(),
-                                              "%Y-%m-%dT%H:%M:%S.%fZ"),
-            "lastUpdated": datetime.strftime(self.get_last_updated(),
-                                             "%Y-%m-%dT%H:%M:%S.%fZ"),
-            "groupId": self.get_group()
+            "groupId": self.get_group(),
+            "creationDate": self.get_creation_date(),
+            "lastUpdated": self.get_last_updated()
         }
         return result
 
@@ -35,11 +33,9 @@ class Article(BusinessObject):
         article = Article()
         article.set_id(dictionary["id"])
         article.set_name(dictionary["name"])
-        article.set_creation_date(datetime.strptime(dictionary["creationDate"],
-                                                 "%Y-%m-%dT%H:%M:%S.%fZ"))
-        article.set_last_updated(datetime.strptime(dictionary["lastUpdated"],
-                                                 "%Y-%m-%dT%H:%M:%S.%fZ"))
         article.set_group(dictionary["groupId"])
+        article.set_creation_date(Article.date_format(dictionary["creationDate"]))
+        article.set_last_updated(Article.date_format(dictionary["lastUpdated"]))
         return article
 
     @staticmethod

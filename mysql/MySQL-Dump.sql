@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 8.0.20, for macos10.15 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.20, for Win64 (x86_64)
 --
 -- Host: localhost    Database: holma
 -- ------------------------------------------------------
@@ -7,7 +7,7 @@
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8mb4 */;
+/*!50503 SET NAMES utf8 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `article`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `article` (
   `article_id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL DEFAULT ' ',
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT ' ',
   `creation_date` datetime NOT NULL,
   `group_id` int DEFAULT NULL,
   `last_updated` datetime DEFAULT NULL,
@@ -53,7 +53,7 @@ DROP TABLE IF EXISTS `group`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `group` (
   `group_id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL DEFAULT ' ',
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT ' ',
   `creation_date` datetime NOT NULL,
   `owner` int DEFAULT NULL,
   `last_updated` datetime DEFAULT NULL,
@@ -82,16 +82,16 @@ DROP TABLE IF EXISTS `list_entry`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `list_entry` (
   `list_entry_id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) DEFAULT ' ',
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT ' ',
   `creation_date` datetime NOT NULL,
   `purchasing_user` int DEFAULT NULL,
   `amount` float DEFAULT '1',
   `article` int NOT NULL,
-  `unit` varchar(100) DEFAULT ' ',
+  `unit` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT ' ',
   `retailer` int DEFAULT NULL,
   `standardarticle` tinyint NOT NULL DEFAULT '0',
   `checked` tinyint NOT NULL DEFAULT '0',
-  `shopping_list` int NOT NULL,
+  `shopping_list` int DEFAULT NULL,
   `last_updated` datetime DEFAULT NULL,
   `checked_ts` datetime DEFAULT NULL,
   PRIMARY KEY (`list_entry_id`),
@@ -103,7 +103,7 @@ CREATE TABLE `list_entry` (
   CONSTRAINT `list_entry_ibfk_2` FOREIGN KEY (`retailer`) REFERENCES `retailer` (`retailer_id`),
   CONSTRAINT `list_entry_ibfk_3` FOREIGN KEY (`shopping_list`) REFERENCES `shopping_list` (`shopping_list_id`),
   CONSTRAINT `list_entry_ibfk_4` FOREIGN KEY (`article`) REFERENCES `article` (`article_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4000 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4009 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -112,33 +112,8 @@ CREATE TABLE `list_entry` (
 
 LOCK TABLES `list_entry` WRITE;
 /*!40000 ALTER TABLE `list_entry` DISABLE KEYS */;
+INSERT INTO `list_entry` VALUES (1,'Brot','2020-07-02 15:05:34',1000,12,5000,'kg.',9000,0,0,3000,'2020-07-02 15:05:34',NULL),(4001,'Brot','2020-07-02 15:05:34',NULL,12,5000,'kg.',9000,1,0,NULL,'2020-07-02 15:05:34',NULL),(4002,'Brot','2020-07-02 15:05:34',NULL,12,5000,'kg.',9000,1,0,NULL,'2020-07-02 15:05:34',NULL),(4003,'Brot','2020-07-02 15:05:34',NULL,12,5000,'kg.',9000,1,0,NULL,'2020-07-02 15:05:34',NULL),(4004,'Brot','2020-07-02 15:05:34',NULL,12,5000,'kg.',9000,1,0,NULL,'2020-07-02 15:05:34',NULL),(4005,'Brot','2020-07-02 15:05:34',NULL,12,5000,'kg.',9000,1,0,NULL,'2020-07-02 15:05:34',NULL),(4006,'Brot','2020-07-02 15:05:34',NULL,12,5000,'kg.',9000,1,0,NULL,'2020-07-02 15:05:34',NULL),(4007,'Brot','2020-07-02 15:05:34',NULL,12,5000,'kg.',9000,1,0,NULL,'2020-07-02 15:05:34',NULL);
 /*!40000 ALTER TABLE `list_entry` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `list_entry_group_relations`
---
-
-DROP TABLE IF EXISTS `list_entry_group_relations`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `list_entry_group_relations` (
-  `list_entry_id` int NOT NULL,
-  `group_id` int NOT NULL,
-  PRIMARY KEY (`list_entry_id`,`group_id`),
-  KEY `group_id` (`group_id`),
-  CONSTRAINT `list_entry_group_relations_ibfk_1` FOREIGN KEY (`list_entry_id`) REFERENCES `list_entry` (`list_entry_id`),
-  CONSTRAINT `list_entry_group_relations_ibfk_2` FOREIGN KEY (`group_id`) REFERENCES `group` (`group_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `list_entry_group_relations`
---
-
-LOCK TABLES `list_entry_group_relations` WRITE;
-/*!40000 ALTER TABLE `list_entry_group_relations` DISABLE KEYS */;
-/*!40000 ALTER TABLE `list_entry_group_relations` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -150,7 +125,7 @@ DROP TABLE IF EXISTS `retailer`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `retailer` (
   `retailer_id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL DEFAULT ' ',
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT ' ',
   `creation_date` datetime NOT NULL,
   `last_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`retailer_id`)
@@ -176,7 +151,7 @@ DROP TABLE IF EXISTS `shopping_list`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `shopping_list` (
   `shopping_list_id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL DEFAULT ' ',
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT ' ',
   `creation_date` datetime NOT NULL,
   `group_id` int DEFAULT NULL,
   `last_updated` datetime DEFAULT NULL,
@@ -197,6 +172,33 @@ INSERT INTO `shopping_list` VALUES (3000,'Wochenenkauf','2020-07-02 15:05:34',20
 UNLOCK TABLES;
 
 --
+-- Table structure for table `standard_article_group_relations`
+--
+
+DROP TABLE IF EXISTS `standard_article_group_relations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `standard_article_group_relations` (
+  `list_entry_id` int NOT NULL,
+  `group_id` int NOT NULL,
+  PRIMARY KEY (`list_entry_id`,`group_id`),
+  KEY `group_id` (`group_id`),
+  CONSTRAINT `standard_article_group_relations_ibfk_1` FOREIGN KEY (`list_entry_id`) REFERENCES `list_entry` (`list_entry_id`),
+  CONSTRAINT `standard_article_group_relations_ibfk_2` FOREIGN KEY (`group_id`) REFERENCES `group` (`group_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `standard_article_group_relations`
+--
+
+LOCK TABLES `standard_article_group_relations` WRITE;
+/*!40000 ALTER TABLE `standard_article_group_relations` DISABLE KEYS */;
+INSERT INTO `standard_article_group_relations` VALUES (4001,2000);
+/*!40000 ALTER TABLE `standard_article_group_relations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `user`
 --
 
@@ -205,10 +207,10 @@ DROP TABLE IF EXISTS `user`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
   `user_id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL DEFAULT ' ',
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT ' ',
   `creation_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `email` varchar(100) NOT NULL DEFAULT ' ',
-  `google_id` varchar(128) NOT NULL DEFAULT ' ',
+  `email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT ' ',
+  `google_id` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT ' ',
   `last_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1003 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -260,4 +262,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-07-03 10:29:46
+-- Dump completed on 2020-07-08 15:14:45

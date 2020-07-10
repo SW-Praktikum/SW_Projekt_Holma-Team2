@@ -15,7 +15,7 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import ListWithBoxes from './ListWithBoxes'
-import ListEntry from './ListEntry'
+import ListEntryTable from './ListEntryTable'
 import GroupAddDialog from './dialogs/GroupAddDialog';
 import MemberAddDialog from './dialogs/MemberAddDialog';
 import GroupBO from '../api/GroupBO';
@@ -138,10 +138,10 @@ class GroupEntries extends Component{
     }
 
     handleClickOpenMember = () => {
+      this.loadMembers()
       this.setState({
           openMember: true
       });
-      this.loadMembers()
     }
 
     handleCloseMember = () => {
@@ -276,8 +276,6 @@ class GroupEntries extends Component{
             handleClickOpenMember={this.handleClickOpenMember}
             handleCloseMember={this.handleCloseMember}
             openMember={this.state.openMember}/>
-            <ListEntry  />
-            <ListEntry />
           </div>
         );
     }
