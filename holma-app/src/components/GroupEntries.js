@@ -276,8 +276,6 @@ class GroupEntries extends Component{
             handleClickOpenMember={this.handleClickOpenMember}
             handleCloseMember={this.handleCloseMember}
             openMember={this.state.openMember}/>
-            <ListEntryTable shoppingListId="3000"/>
-            
           </div>
         );
     }
