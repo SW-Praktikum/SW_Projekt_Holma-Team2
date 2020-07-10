@@ -64,21 +64,22 @@ shoppingList = api.inherit('ShoppingList', bo, {
 
 listEntry = api.inherit('ListEntry', bo, {
     'articleId': fields.Integer(attribute='_article',
-                                 description='zu welchem Artikle gehört dieses Entry? '),
+                                 description='zu welchem Artikel gehört dieses Entry? '),
     'amount': fields.Float(attribute='_amount',
                            description='Menge des Entries '),
     'unit': fields.String(attribute='_unit',
                           description='Einheit des Entries '),
     'purchasingUserId': fields.Integer(attribute='_purchasing_user',
                                     description='Wer das Artikle kaufen muss '),
-    'shoppingListId': fields.Integer(attribute='_Shopping_list',
+    'shoppingListId': fields.Integer(attribute='_shopping_list',
                                    description='zu welcher Liste diese Entry gehört?'),
     'retailerId': fields.Integer(attribute='_retailer',
                               description='Bei wem das Artikle gekauft  '),
     'checked': fields.Boolean(attribute='_checked',
                               description='wurde es bereits gekauft'),
     'checkedTs': fields.DateTime(attribute='_checked_ts',
-                                 description='wann wurde es gekauft'),
+                                 description='wann wurde es gekauft',
+                                 dt_format="iso8601"),
     'standardarticle': fields.Boolean(attribute='_standardarticle',
                                       description='ist es ein Standardartikle')
 })
@@ -251,7 +252,7 @@ class GroupOperations(Resource):
             return '', 500
 
     @holmaApp.marshal_with(group)
-    @holmaApp.expect(group, validate=True)
+    @holmaApp.expect(group)#, validate=True)
     # @secured
     def put(self, group_id):
         """Update eines bestimmten Group-Objekts."""

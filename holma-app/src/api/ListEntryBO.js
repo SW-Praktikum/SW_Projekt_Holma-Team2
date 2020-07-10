@@ -23,6 +23,10 @@ export default class ListEntryBO extends BusinessObject {
         return this.amount
     }
 
+    getChecked(){
+        return this.checked
+    }
+
     getUnit(){
         return this.unit
     }
@@ -72,6 +76,13 @@ export default class ListEntryBO extends BusinessObject {
     }
 
     setChecked(checked){
+        if (checked == true) {
+            let checkedTs = new Date().toISOString();
+            this.setCheckedTs(checkedTs)
+        }
+        else {
+            this.setCheckedTs(null)
+        }
         this.checked = checked
     }
 
@@ -83,16 +94,15 @@ export default class ListEntryBO extends BusinessObject {
         this.standardarticle = standardarticle
     }
 
-    static fromJSON(listentries) {
+    static fromJSON(listEntries) {
         let result = [];
-
-        if (Array.isArray(listentries)) {
-            listentries.forEach((le) => {
+        if (Array.isArray(listEntries)) {
+            listEntries.forEach((le) => {
                 Object.setPrototypeOf(le, ListEntryBO.prototype)
                 result.push(le)
             })
         } else {
-            let le = listentries
+            let le = listEntries
             Object.setPrototypeOf(le, ListEntryBO.prototype)
             result.push(le)
         }

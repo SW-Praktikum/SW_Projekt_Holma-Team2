@@ -93,14 +93,14 @@ class ListEntry(BusinessObject):
         list_entry = ListEntry()
         list_entry.set_id(dictionary["id"])
         list_entry.set_name(dictionary["name"])
-        list_entry.set_purchasing_user(dictionary["purchasingUser"])
+        list_entry.set_purchasing_user(dictionary["purchasingUserId"])
         list_entry.set_amount(dictionary["amount"])
-        list_entry.set_article(dictionary["article"])
+        list_entry.set_article(dictionary["articleId"])
         list_entry.set_unit(dictionary["unit"])
-        list_entry.set_retailer(dictionary["retailer"])
+        list_entry.set_retailer(dictionary["retailerId"])
         list_entry.set_standardarticle(dictionary["standardarticle"])
         list_entry.set_checked(dictionary["checked"])
-        list_entry.set_shopping_list(dictionary["shoppingList"])
+        list_entry.set_shopping_list(dictionary["shoppingListId"])
         list_entry.set_checked_ts(ListEntry.date_format(dictionary["checkedTs"]))
         list_entry.set_creation_date(ListEntry.date_format(dictionary["creationDate"]))
         list_entry.set_last_updated(ListEntry.date_format(dictionary["lastUpdated"]))
@@ -110,7 +110,7 @@ class ListEntry(BusinessObject):
     @staticmethod
     def from_tuples(tuples=list()):
         result = []
-        for (listentry_id, name, creation_date, purchasing_user, amount, article, unit, retailer, standardarticle, checked, shopping_list,  last_updated, checked_ts) in tuples:
+        for (listentry_id, name, creation_date, purchasing_user, amount, article, unit, retailer, standardarticle, checked, shopping_list, last_updated, checked_ts) in tuples:
             listentry = ListEntry()
             listentry.set_id(listentry_id)
             listentry.set_name(name)
