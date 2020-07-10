@@ -122,7 +122,7 @@ class GroupInformation extends Component {
                 />
       <Button 
           style={{marginTop: 9, marginBottom: 15, alignItems: 'center'}}
-          onClick={this._handleClick}
+          onClick={this.props.handleClick}
           color="primary" 
           variant="contained"
           >
@@ -134,6 +134,18 @@ class GroupInformation extends Component {
     
   );
 }}
+
+class ArticleLink extends Component{
+  render(){
+      return(
+          <Button style={{marginTop: 9, marginBottom: 15, alignItems: 'center'}}
+          color="primary" 
+          variant="contained">
+              Artikel anzeigen
+          </Button>
+      )
+  }
+}
 
 class MemberDetails extends Component{
   constructor(props){
@@ -188,6 +200,7 @@ class MemberDetails extends Component{
           AppAPI.getAPI().updateGroup(this.state.groupObject)
       })
   }
+
 
   getGroupDetails(){
     AppAPI.getAPI().getGroupById(this.state.groupId).then(group => {
@@ -265,7 +278,18 @@ class MemberDetails extends Component{
           <Box m={1}></Box>
           <ListWithBoxes groupElements={memberElements}/>
           <MemberAddDialog member={this.state.members} loadMembers={this.loadMembers}/> 
-          </div>
+          <Box m={4} />
+            <ListItem elevation={3} align='center' style={{width:"auto"}}>
+              <Typography  variant="h4" gutterBottom>
+                Artikel
+              </Typography>
+            </ListItem>
+          <Grid style={{marginLeft: 15, alignItems: 'center'}}>
+            <Link to={"/articleedit/" + this.props.match.params.groupId} style={{textDecoration: 'none'}}>
+              <ArticleLink/>
+            </Link>
+          </Grid>
+        </div>
       );
     }
 }

@@ -20,6 +20,7 @@ import GroupInformation from './components/GroupEdit';
 import Groupmember from './components/GroupEditDialog';
 import MemberAddDialog from './components/dialogs/MemberAddDialog';
 import MemberDetails from './components/GroupEdit';
+import ArticleEdit from './components/ArticleEdit';
 
 
 class App extends React.Component {
@@ -142,6 +143,8 @@ class App extends React.Component {
                     <Route path='/grouplist/:groupId' component={GroupList}>
                     </Route>
                     <Route path='/groupedit/:groupId' component={MemberDetails}>
+                    </Route>
+                    <Route path='/articleedit/:groupId' component={ArticleEdit}>
                     </Route>
                     <Route path='/user'>
                       <User user={user}/>
