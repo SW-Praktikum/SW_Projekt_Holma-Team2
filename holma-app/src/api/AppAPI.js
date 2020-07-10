@@ -31,7 +31,7 @@ export default class AppAPI {
     #deleteUsersFromGroupURL =(groupId, userId) => `${this.#appServerBaseURL}/group/${groupId}/user/${userId}`;
 
     // Group Related
-    #getGroupsURL = () => `${this.#appServerBaseURL}/group`;
+    #getGroupsURL = () => `${this.#appServerBaseURL}/groups`;
     #getGroupByIdURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}`;
     #getGroupsByNameURL = (name) => `${this.#appServerBaseURL}/by-name/${name}`;
     #updateGroupURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}`;
