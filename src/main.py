@@ -657,7 +657,7 @@ class ListEntryOperations(Resource):
             return 'ListEntry not found', 500
 
     @holmaApp.marshal_with(listEntry)
-    @holmaApp.expect(listEntry, validate=True)
+    @holmaApp.expect(listEntry)#, validate=True)
     # @secured
     def put(self, list_entry_id):
         adm = Administration()
