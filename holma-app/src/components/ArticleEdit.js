@@ -69,7 +69,7 @@ class Article extends Component {
                                 <TableCell width="10%"/>
                                 <TableCell width="30%" align="left">{article.getId()}</TableCell>
                                 <TableCell width="30%" align="left">{article.getName()}</TableCell>
-                                <TableCell width="10%" align="left">x</TableCell>
+                                <TableCell width="10%" align="left"></TableCell>
                                 <TableCell width="10%" align='right'>
                                     <IconButton aria-label="expand row" size="small" onClick={() => this.openDialog()}>
                                         <EditIcon/>
@@ -121,8 +121,9 @@ class StandardArticle extends Component {
         }
     
 
-    deleteArticle = (standard) => {
-        AppAPI.getAPI().deleteArticle(standard).then(() => {
+    deleteStandardArticle = (standard) => {
+        var group = AppAPI.getAPI().getGroupById(this.props.match.params.groupId);
+        AppAPI.getAPI().deleteStandardArticleFromGroup(group,standard).then(() => {
             this.props.loadStandardArticles()
         })
     }
@@ -146,7 +147,7 @@ class StandardArticle extends Component {
                                     </IconButton>
                                 </TableCell>
                                 <TableCell width="10%" align='right'>
-                                    <IconButton aria-label="expand row" size="small" onClick={() => this.deleteArticle(standardArticle)}>
+                                    <IconButton aria-label="expand row" size="small" onClick={() => this.deleteStandardArticle(standardArticle)}>
                                         <DeleteIcon/>
                                     </IconButton>
                                 </TableCell>
@@ -171,6 +172,7 @@ class ArticleEdit extends Component {
             ArticleElements: [],
             StandardElements: [],
             openDialog: false,
+            groupId: this.props.match.params.groupId,
             
         }
     }
@@ -193,7 +195,7 @@ class ArticleEdit extends Component {
       }
   
     loadArticles = () => { //Hier muss eine neue Methode - getArticlesByGroupId hinzugefügt werden
-        AppAPI.getAPI().getArticles().then(articles => {
+        AppAPI.getAPI().getArticlesByGroupId(this.props.match.params.groupId).then(articles => {
             console.log("Loaded articles for group '" + this.props.match.params.groupId + "':", articles)
             var ArticleElements = articles.map((article) => <Article article={article} loadArticles={this.loadArticles} />)
             //hier noch ListEntrys ergänzen
@@ -210,10 +212,12 @@ class ArticleEdit extends Component {
         );  
     }
 
-    loadStandardArticles = () => { //Hier muss eine neue Methode - getArticlesByGroupId hinzugefügt werden
-        AppAPI.getAPI().getStandardArticlesByGroupId(this.props.match.params.groupId).then(articles => {
-            console.log("Loaded StandardArticles for group '" + this.props.match.params.groupId + "':", articles)
-            var StandardElements = articles.map((standardArticle) => <StandardArticle StandardArticle={standardArticle} loadStandardArticles={this.loadStandardArticles} />)
+    loadStandardArticles = () => {
+        console.log("xDDDDDD")
+        console.log(this.props.match.params.groupId)
+        AppAPI.getAPI().getStandardArticlesByGroupId(this.state.groupId).then(articles => {
+            console.log("Articles:"+articles)
+            var StandardElements = articles.map((standardArticle) => <StandardArticle standardArticle={standardArticle} loadStandardArticles={this.loadStandardArticles} />)
             //hier noch ListEntrys ergänzen
             this.setState({
                 StandardElements: StandardElements,
@@ -247,7 +251,7 @@ class ArticleEdit extends Component {
             <TableContainer  component={Paper}>
                 <Table>
                     <TableBody>
-                    {this.state.StandardElements}
+                    {this.state.ArticleElements}
                     </TableBody>
                 </Table>
             </TableContainer>
@@ -267,6 +271,7 @@ class ArticleEdit extends Component {
             <TableContainer  component={Paper}>
                 <Table>
                     <TableBody>
+                        {console.log(this.state.StandardElements)}
                     {this.state.StandardElements}
                     </TableBody>
                 </Table>

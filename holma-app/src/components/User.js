@@ -6,7 +6,7 @@ import User from '../api/UserBO';
 import ListWithBoxes from './ListWithBoxes';
 import firebase from 'firebase/app'
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
-import Navigation from '../components/navigation';
+
 
 class UserProfil extends Component {
 
@@ -34,6 +34,7 @@ class UserProfil extends Component {
   handleDeleteUser = () => {
     AppAPI.getAPI().deleteUser(this.state.user).then( () =>{
       this.handleSignOutButtonClicked()}
+    
     );
   }
 
@@ -41,8 +42,6 @@ class UserProfil extends Component {
   render() {
 
       const { classes, user } = this.props;
-
-
       return (
           
         <Paper elevation={0} className={classes.root}>
