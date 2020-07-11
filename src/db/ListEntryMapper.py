@@ -193,11 +193,11 @@ class ListEntryMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
-    def delete_by_article(self, article):
+    def delete_by_article(self, article_id):
         cursor = self._connection.cursor()
 
         command = "DELETE FROM holma.list_entry " \
-                  "WHERE article={}".format(article.get_id())
+                  "WHERE article={}".format(article_id)
         cursor.execute(command)
 
         self._connection.commit()

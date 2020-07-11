@@ -182,12 +182,12 @@ class Administration():
         with ArticleMapper() as mapper:
             return mapper.insert(article)
 
-    def delete_article(self, article):
+    def delete_article(self, article_id):
         with ListEntryMapper() as mapper:
-            mapper.delete_by_article(article)
+            mapper.delete_by_article(article_id)
 
         with ArticleMapper() as mapper:
-            mapper.delete(article)
+            mapper.delete(article_id)
 
     def save_article(self, article):
         with ArticleMapper() as mapper:
