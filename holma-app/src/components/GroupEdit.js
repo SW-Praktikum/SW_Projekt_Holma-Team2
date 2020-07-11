@@ -29,11 +29,19 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FaceIcon from '@material-ui/icons/Face';
 import SaveIcon from '@material-ui/icons/Save';
+import GroupNameEditDialog from '../components/dialogs/GroupNameEditDialog';
 
 
 
 
 class GroupInformation extends Component {
+  constructor(props) {
+    super(props)
+    this.state= {
+      group:"",
+      
+    }
+  }
   _handleClick = () => {
     this.props.addMember();
     this.props.loadMembers();
@@ -55,23 +63,9 @@ class GroupInformation extends Component {
         <Typography  variant="h6" gutterBottom>
           Gruppenname:
         </Typography>
-        <TextField
-                  align='center'
-                  onChange={this.props.handleChangeName}
-                  margin="dense"
-                  id="outlined-basic"
-                  variant="standard"
-                  type="text"
-                  label={this.props.groupName}
-                  minWidth='150'
-                />
-                <Button 
-                startIcon={<SaveIcon />}
-                 
-                color="primary"
-                onClick={this.props.handleClickSave}>
-                </Button>
-                
+        <IconButton aria-label="expand row" size="small" onClick={() => this.props.openDialog()}>
+          <EditIcon/>
+        </IconButton>
         </ListItem>    
       </Grid>
       
@@ -163,6 +157,8 @@ class MemberDetails extends Component{
       loadingInProgress: false,
       loadingError: null,
       memberId: "",
+      open: false,
+      openDialog: false,
     }
   }
 
@@ -268,6 +264,7 @@ class MemberDetails extends Component{
             handleClickSave={this.handleClickSave}
             handleChangeName={this.handleChangeName}
             memberId={this.state.memberId}
+            openDialog = {this.props.openDialog}
             addMember={this.addMember}
             loadMembers={this.loadMembers}
             group={this.state.groupDetail}
