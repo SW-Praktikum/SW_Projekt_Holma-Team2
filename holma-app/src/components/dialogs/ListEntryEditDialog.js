@@ -76,6 +76,7 @@ class ListEntryEditDialog extends Component {
     }
 
     setUser = (e) => {
+      console.log(e)
       this.setState({
           user: e
       })
@@ -89,9 +90,9 @@ class ListEntryEditDialog extends Component {
 
 
     render() {
-      const filter = createFilterOptions();
+      //const filter = createFilterOptions();
 
-      const { classes } = this.props;
+      const { classes, retailers, users } = this.props;
       const { articleAddDialogOpen } = this.state;
       const units = [
         {
@@ -119,76 +120,7 @@ class ListEntryEditDialog extends Component {
           label: 'l',
         },
       ];
-      const retailer = [
-          {
-            value: 'Edeka',
-          },
-          {
-            value: 'Rewe',
-          },
-          {
-            value: 'Netto',
-            },            
-            {
-            value: 'Penny',
-            },
-            {
-            value: 'Lidl',
-            },
-            {
-            value: 'Kaufland',
-            },
-            {
-            value: 'Aldi',
-            },
-            {
-            value: 'Real',
-            },
-            {
-            value: 'Metro',
-            },
-            {
-            value: 'dm',
-            },
-            {
-            value: 'Rossmann',
-            },
-            {
-            value: 'Norma',
-            },
-            {
-            value: 'Müller',
-            },
-            {
-            value: 'Tegut',
-            },
-            {
-            value: 'Alnatura',
-            },
-            {
-            value: 'Denn\'s',
-            },
-            {
-            value: 'Wochenmarkt',
-            },
-            {
-            value: 'Bauernladen',
-            },
-            {
-            value: 'Metzger',
-            },
-            {
-            value: 'Bäcker',
-            },
-            {
-            value: 'Sonstige',
-            },
-            {
-            value: 'Naturgut'
 
-          }
-      ]
-      const users = [{name : "Herbert", value: 1000}, {name : "Markus", value: 1001}]
       const articles = [{name : "Brot", value: 5001}, {name : "Banane", value: 5002}]
 
         return (
@@ -221,7 +153,7 @@ class ListEntryEditDialog extends Component {
                 />
 
                 {/* Artikel */}
-                <Autocomplete
+                {/* <Autocomplete
                     //not working yet
                     freeSolo
                     options={articles} //Artikel laden
@@ -270,27 +202,26 @@ class ListEntryEditDialog extends Component {
                     }}
                     defaultValue={this.state.article}
                     renderInput={(params) => <TextField {...params} label="Einkäufer" variant="standard" placeholder="Test" />}
-                />
+                /> */}
 
                 {/* Einkäufer */}
                 <Autocomplete
                     //not working yet
-                    freeSolo
                     options={users} //liste der beutzer der Gruppe laden
                     //onChange={(event, newValue) => this.setUser(newValue)}
                     onChange={(event, newValue) => {this.setUser(newValue)}}
                     getOptionLabel={(option) => option.name}
-                    defaultValue={this.state.user}
-                    renderInput={(params) => <TextField {...params} label="Einkäufer" variant="standard" placeholder="Test" />}
+                    //defaultValue={users[0]}
+                    renderInput={(params) => <TextField {...params} label="Einkäufer" variant="standard" placeholder="Einkäufer" />}
                 />
 
                 {/* Retailer */}
                 <Autocomplete
                     id="combo-retailer"
-                    options={retailer} //liste der retailer laden
-                    getOptionLabel={(option) => option.value}
+                    options={retailers} //liste der retailer laden
+                    getOptionLabel={(option) => option.name}
                     renderInput={(params) => (
-                      <TextField {...params} variant="standard" label="Händler" placeholder="Favorites" />
+                      <TextField {...params} variant="standard" label="Händler" placeholder="Retailer" />
                     )}                
                   />
 

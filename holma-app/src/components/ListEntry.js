@@ -1,286 +1,155 @@
 import React, { Component } from 'react';
-import Checkbox from '@material-ui/core/Checkbox';
+import AppAPI from '../api/AppAPI';
+import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core/styles';
+import Box from '@material-ui/core/Box';
+import Collapse from '@material-ui/core/Collapse';
+import IconButton from '@material-ui/core/IconButton';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import IconButton from '@material-ui/core/IconButton';
-import { Collapse } from '@material-ui/core';
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import Typography from '@material-ui/core/Typography';
+import Checkbox from '@material-ui/core/Checkbox';
+import Paper from '@material-ui/core/Paper';
 import StarIcon from '@material-ui/icons/Star';
 import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+//import ListEntryEditDialog from './dialogs/ListEntryEditDialog';
+import ListEntryEditDialog from './dialogs/ListEntryEditDialog1';
+import ListEntryAddDialog from './dialogs/ListEntryAddDialog';
 import { colors } from '@material-ui/core';
 
-//transaction list im Bankbeispiel dazu anschauen
+// classes for styling need to be created
 
 class ListEntry extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            checked: false,
             open: false,
-            amount: "",
-            product: "",
-            standard: false,
+            openDialog: false,
+            checked: this.props.listEntry.getChecked(),
+            listEntry: this.props.listEntry,
         }
-    };    
+    }
 
+    setOpen(bool) {
+        this.setState({
+            open: bool
+        })
+    }
 
-        setOpen = () => {
-            if (this.state.open === false) {
-                this.setState({open: true})
-            }
-            else {
-                this.setState({open: false})
-            }
+    openDialog = () => {
+        this.setState({
+            openDialog: true})
         }
 
-        setStandard = () => { //not working yet
-            if(this.state.standard === false) {
-                this.setState({standard: true})
-                //add as Standard article
-            }
-            else {
-                this.setStandard({standard: false})
-                //remove from standard
-            }
-        }   
-
+    handleClose = () => {
+        this.setState({
+            openDialog: false})
+        }
+    
     handleChangeCheck = (e) => {
-        this.setState({checked: e.target.checked})
+        this.setState({
+            checked: e.target.checked
+        })
+        this.state.listEntry.setChecked(e.target.checked)
+        AppAPI.getAPI().updateListEntry(this.state.listEntry)
     }
 
-    handleChangeAmount = (e) => {
-        const re = /^[0-9\b]+$/;
-        if (e.target.value === '' || re.test(e.target.value)) {
-        this.setState({amount: e.target.value})
-        }
+    deleteEntry = (entry) => {
+        AppAPI.getAPI().deleteListEntry(entry).then(() => {
+            this.props.loadListEntries()
+        })
     }
 
-    handleChangeProduct = (e) => {
-        this.setState({product: e.target.value})
-    }
-
-    loadShoppingLists = () => {
-        AppAPI.getAPI().getShoppingListsByGroupId(this.state.groupId).then(lists => {
-            console.log("Loaded lists:", lists)
-            console.log("Loaded lists:", this.state.groupId)
-            this.setState({
-                shoppingLists: lists,
-                loadingInProgress: true, // loading indicator 
-                loadingError: null
-                })
-                console.log("Loaded lists:", this.state.shoppingLists)
-            }).catch(e =>
-                this.setState({ // Reset state with error from catch 
-                    loadingInProgress: false,
-                    loadingError: e
-            })
-            );  
-        }
     render() {
-        const units = [
-            {
-              value: 'Stück',
-              label: 'st',
-            },
-            {
-              value: 'Gramm',
-              label: 'g',
-            },
-            {
-              value: 'Milligramm',
-              label: 'mg',
-            },
-            {
-              value: 'Kilogramm',
-              label: 'kg',
-            },
-            {
-              value: 'Milliliter',
-              label: 'ml',
-            },
-            {
-              value: 'Liter',
-              label: 'l',
-            },
-          ];
-          const retailer = [
-              {
-                value: 'Edeka',
-              },
-              {
-                value: 'Rewe',
-              },
-              {
-                value: 'Netto',
-                },            
-                {
-                value: 'Penny',
-                },
-                {
-                value: 'Lidl',
-                },
-                {
-                value: 'Kaufland',
-                },
-                {
-                value: 'Aldi',
-                },
-                {
-                value: 'Real',
-                },
-                {
-                value: 'Metro',
-                },
-                {
-                value: 'dm',
-                },
-                {
-                value: 'Rossmann',
-                },
-                {
-                value: 'Norma',
-                },
-                {
-                value: 'Müller',
-                },
-                {
-                value: 'Tegut',
-                },
-                {
-                value: 'Alnatura',
-                },
-                {
-                value: 'Denn\'s',
-                },
-                {
-                value: 'Wochenmarkt',
-                },
-                {
-                value: 'Bauernladen',
-                },
-                {
-                value: 'Metzger',
-                },
-                {
-                value: 'Bäcker',
-                },
-                {
-                value: 'Sonstige',
-                },
-                {
-                value: 'Naturgut'
-
-              }
-          ]
-          const user = [{value : "Herbert"}]
-          const lastUpdated ="22-06-20-14:45"
+        const { listEntry, groupId, users, retailers, articles } = this.props;
+        const { open } = this.state
         return (
-            <React.Fragment>
-            <TableContainer >
-                <Table >
-                <TableRow bgcolor={colors.lime[200]}>
-                <TableCell padding="checkbox">
-                    <Checkbox
-                        checked={this.state.checked}
-                        onChange={this.handleChangeCheck}
-                        inputProps={{ 'aria-label': 'primary checkbox' }}
-                    />
-                </TableCell>
-
-                <TableCell align='center'>
-                    <TextField
-                        type="number"
-                        value={this.state.amount}
-                        onChange={this.handleChangeAmount}
-                        margin="dense"
-                        id="outlined-basic"
-                        variant="standard"
-                        label="Menge"
-                        style={{ width: 60 }}
-                    />
-                </TableCell>
-
-                <TableCell align='center' component='th' scope='row'>
-                    <Autocomplete
-                        id="combo-box-demo"
-                        options={units}
-                        getOptionLabel={(option) => option.value}
-                        style={{ width: 140 }}
-                        renderInput={(params) => <TextField {...params} label="Einheit" variant="standard" />}
-                    />
-                </TableCell>
-
-                <TableCell align='center'>
-                    <TextField
-                        type="text"
-                        onChange={this.handleChangeProduct}
-                        margin="dense"
-                        id="outlined-basic"
-                        variant="standard"
-                        label="Artikel"
-                        style={{ width: 140 }}
-                    />
-                </TableCell>
-                
-                <TableCell align='right'>
-                    <IconButton aria-label="expand row" size="small" onClick={() => this.setStandard(this.state.standard)}>
-                        {this.state.standard ?  <StarIcon /> : <StarBorderIcon />}
-                    </IconButton>
-                </TableCell>
-
-                <TableCell align='right'>
-                    <DeleteIcon/>
-                </TableCell>
-
-                <TableCell align='right'>
-                    <IconButton aria-label="expand row" size="small" onClick={() => this.setOpen(this.state.open)}>
-                        {this.state.open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                    </IconButton>
-                </TableCell>
-                </TableRow >
-                </Table>
-                <Collapse in={this.state.open}>
-                    <Table>
-                    <TableRow bgcolor={colors.lime[100]}>
-                    <TableCell align='left'>
-                        <Autocomplete
-                            id="combo-box-demo"
-                            options={user}
-                            getOptionLabel={(option) => option.value}
-                            style={{ width: 140 }}
-                            renderInput={(params) => <TextField {...params} label="Einkäufer" variant="standard" />}
+            <div >
+                <TableRow width="100%">
+                    <TableCell padding="checkbox" width="6%">
+                        <Checkbox
+                            color="primary"
+                            checked={this.state.checked}
+                            onChange={this.handleChangeCheck}
+                            inputProps={{ 'aria-label': 'primary checkbox' }}
                         />
                     </TableCell>
-                    
-                    <TableCell align='left'>
-                        <Autocomplete
-                            id="combo-box-demo"
-                            options={retailer}
-                            getOptionLabel={(option) => option.value}
-                            style={{ width: 140 }}
-                            renderInput={(params) => <TextField {...params} label="Einzelhändler" variant="standard" />}
-                        />
+                    <TableCell style={{paddingLeft: 5, paddingTop: 0, paddingBottom: 0, paddingRight: 10}} width="10%" align="right">{listEntry.getAmount()}</TableCell>
+                    <TableCell padding="none" width="15%" align="left">{listEntry.getUnit()}</TableCell>
+                    <TableCell padding="none" width="56%" align="left">{listEntry.getName()}</TableCell>
+                    <TableCell padding="none" width="6%">
+                        <IconButton aria-label="expand row" size="small" onClick={() => this.setOpen(!open)}>
+                            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                        </IconButton>
                     </TableCell>
-
-                    <TableCell align='left'>
-                        <b>geändert: </b>{lastUpdated}
+                    <TableCell padding="none" width="6%" align='right'>
+                        <IconButton aria-label="expand row" size="small" onClick={() => this.openDialog()}>
+                            <EditIcon/>
+                        </IconButton>
                     </TableCell>
+                    <TableCell style={{paddingLeft: 0, paddingTop: 0, paddingBottom: 0, paddingRight: 15}} width="6%" align='right'>
+                        <IconButton aria-label="expand row" size="small" onClick={() => this.deleteEntry(listEntry)}>
+                            <DeleteIcon/>
+                        </IconButton>
+                    </TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell style={{ paddingBottom: 0, paddingTop: 0, backgroundColor: colors.grey[100]}} colSpan={10}>
+                    <Collapse in={this.state.open} timeout="auto" unmountOnExit>
+                        <Table size="small" aria-label="purchases">
+                            <TableHead >
+                                <TableRow>
+                                    <TableCell style={{borderBottom: "none"}} colSpan={3} padding="none" width="30%" align="left">Einkäufer</TableCell>
+                                    <TableCell colSpan={2} padding="none" width="20%" align="left">Händler</TableCell>
+                                    <TableCell colSpan={4} padding="none" width="40%" align="left">Geändert</TableCell>
+                                    <TableCell colSpan={1} padding="none" width="10%" align="left">STD</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                
+                                <TableCell colSpan={3} padding="none" width="30%" align="left">{listEntry.getPurchasingUserId()}</TableCell>
+                                <TableCell colSpan={2} padding="none" width="20%" align="left">{listEntry.getRetailerId()}</TableCell>
+                                <TableCell colSpan={4} padding="none" width="40%" align="left">{listEntry.getLastUpdated()}</TableCell>
+                                <TableCell colSpan={1} padding="none" width="10%" align='left'>
+                                    <IconButton aria-label="expand row" size="small" >
+                                        {listEntry.isStandardarticle() ?  <StarIcon /> : <StarBorderIcon />}
+                                    </IconButton>
+                                </TableCell>
+                                
+                            </TableBody>
+                        </Table>
+                    </Collapse>
+                    </TableCell>
+                </TableRow>
+                <ListEntryEditDialog
+                    listEntry={listEntry}
+                    groupId={groupId}
 
-                    </TableRow>
-                    </Table>
-                </Collapse>
-                
-            </TableContainer>
-            </React.Fragment>
-  );
-}}
+                    users={users}
+                    purchasingUser={users[0]}
+
+                    articles={articles}
+                    article={articles[0]}
+
+                    retailers={retailers}
+                    retailer={retailers[0]}
+
+                    loadArticles={this.props.loadArticles}
+                    openDialog={this.openDialog}
+                    open={this.state.openDialog}
+                    handleClose={this.handleClose}
+                />
+            </div>
+        );
+    }
+}
 
 export default ListEntry;

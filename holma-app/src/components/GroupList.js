@@ -84,7 +84,8 @@ class GroupList extends Component {
             groupId: this.props.match.params.groupId,
             listElements: [],
             shoppingListName: "",
-            retailers: []
+            retailers: [],
+            users: []
         }}
       
     componentDidMount(){
@@ -152,7 +153,22 @@ class GroupList extends Component {
           })
         );  
       } 
-
+    
+      loadRetailers = () => {
+        AppAPI.getAPI().getUsersByGroupId(this.props.match.params.groupId).then((users) => {
+          console.log("Loaded users for group:", users)
+          this.setState({
+            users: users,
+            loadingInProgress: true, // loading indicator 
+            loadingError: null,
+        });
+        }).catch(e =>
+            this.setState({ // Reset state with error from catch 
+              loadingInProgress: false,
+              loadingError: e
+            })
+          );  
+        } 
     loadShoppingLists = () => {
       AppAPI.getAPI().getShoppingListsByGroupId(this.props.match.params.groupId).then((lists) => {
         console.log(lists)

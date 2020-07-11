@@ -51,7 +51,7 @@ export default class ListEntryBO extends BusinessObject {
         return this.standardarticle
     }
 
-    setArticle(articleId){
+    setArticleId(articleId){
         this.articleId = articleId
     }
 
