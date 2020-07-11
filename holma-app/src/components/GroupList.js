@@ -82,13 +82,16 @@ class GroupList extends Component {
         this.state = {
             group: null,
             groupId: this.props.match.params.groupId,
-            listElements:[],
+            listElements: [],
             shoppingListName: "",
+            retailers: []
         }}
       
     componentDidMount(){
       if(this.props.match.params.groupId){
+          this.loadRetailers();
           this.loadShoppingLists();
+
         }
     }
     
@@ -133,6 +136,22 @@ class GroupList extends Component {
     handleInputChange = (e) => {
       this.setState({shoppingListName: e.target.value})
     }
+
+    loadRetailers = () => {
+      AppAPI.getAPI().getRetailers().then((retailers) => {
+        console.log("Loaded retailers:", retailers)
+        this.setState({
+          retailers: retailers,
+          loadingInProgress: true, // loading indicator 
+          loadingError: null,
+      });
+      }).catch(e =>
+          this.setState({ // Reset state with error from catch 
+            loadingInProgress: false,
+            loadingError: e
+          })
+        );  
+      } 
 
     loadShoppingLists = () => {
       AppAPI.getAPI().getShoppingListsByGroupId(this.props.match.params.groupId).then((lists) => {
