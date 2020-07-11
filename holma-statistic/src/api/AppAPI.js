@@ -31,7 +31,7 @@ export default class AppAPI {
     #deleteUsersFromGroupURL =(groupId, userId) => `${this.#appServerBaseURL}/group/${groupId}/user/${userId}`;
 
     // Group Related
-    #getGroupsURL = () => `${this.#appServerBaseURL}/groups`;
+    #getGroupsURL = () => `${this.#appServerBaseURL}/group`;
     #getGroupByIdURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}`;
     #getGroupsByNameURL = (name) => `${this.#appServerBaseURL}/by-name/${name}`;
     #updateGroupURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}`;
@@ -41,7 +41,6 @@ export default class AppAPI {
   
     // Article Related
     #getArticlesURL = () => `${this.#appServerBaseURL}/articles`;
-    #getArticlesByGroupIdURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/articles`;
     #createArticleURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/articles`;
     #updateArticleURL = (articleId) =>  `${this.#appServerBaseURL}/article/${articleId}`;
     #deleteArticleURL = (articleId) => `${this.#appServerBaseURL}/article/${articleId}` ;
@@ -71,7 +70,7 @@ export default class AppAPI {
     #deleteListEntryURL = (listEntryId) => `${this.#appServerBaseURL}/listentry/${listEntryId}`;
 
     // Standardarticle related
-    #getStandardArticlesByGroupIdURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/listentries`; 
+    #getListEntriesByGroupIdURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/listentries`; 
     #addStandardArticleToGroupURL = (groupId, listEntryId) => `${this.#appServerBaseURL}/group/${groupId}/listentry/${listEntryId}`;
     #addStandardArticlesToShoppingListURL = (groupId, shoppingListId) => `${this.#appServerBaseURL}/group/${groupId}/shoppinglist/${shoppingListId}`;
     #deleteStandardArticleFromGroupURL =(groupId, listEntryId) => `${this.#appServerBaseURL}/group/${groupId}/listentry/${listEntryId}`;
@@ -380,15 +379,6 @@ export default class AppAPI {
         })
     };
 
-    getArticlesByGroupId(groupId) {
-        return this.#fetchAdv(this.#getArticlesByGroupIdURL(groupId)).then((responseJSON) => {
-            let responseArticles = ArticleBO.fromJSON(responseJSON);
-            return new Promise(function (resolve) {
-                resolve(responseArticles)
-            })
-        })
-    }
-
     createArticle(article) {
         console.log("Creating Article:", article)
         return this.#fetchAdv(this.#createArticleURL(article.getGroupId()), {
@@ -511,7 +501,7 @@ export default class AppAPI {
         })
     };
 
-    createListEntry(listentry) {
+    createListentries(listentry) {
         console.log("Creating a ListEntry:", listentry)
         return this.#fetchAdv(this.#createListEntryURL(listentry.getShoppingListId()), {
         method: 'POST',
@@ -587,8 +577,8 @@ export default class AppAPI {
         })
     };
 
-    getStandardArticlesByGroupId(groupId) {
-        return this.#fetchAdv(this.#getStandardArticlesByGroupIdURL(groupId)).then((responseJSON) => {
+    getListEntryByGroupId(groupId) {
+        return this.#fetchAdv(this.#getListEntriesByGroupIdURL(groupId)).then((responseJSON) => {
             let responseListEntry = ListEntryBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
                 resolve(responseListEntry)

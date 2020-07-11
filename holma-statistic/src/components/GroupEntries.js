@@ -15,8 +15,6 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import ListWithBoxes from './ListWithBoxes'
-import ListEntryTable from './ListEntryTable'
-import GroupAddDialog from './dialogs/GroupAddDialog';
 import MemberAddDialog from './dialogs/MemberAddDialog';
 import GroupBO from '../api/GroupBO';
 import UserBO from '../api/UserBO';
@@ -93,7 +91,6 @@ class GroupEntry extends Component {
 class GroupEntries extends Component{
     constructor(props) {
         super(props);
-        this.addGroup = this.addGroup.bind(this)
         this.addMember = this.addMember.bind(this)
         this.state = {
             groupElements: [],
@@ -125,44 +122,6 @@ class GroupEntries extends Component{
       this.setState({groupName: e.target.value})
     }
 
-    handleClose = () => {
-      this.setState({
-          open: false
-      })
-    }
-
-    handleClickOpen = () => {
-      this.setState({
-          open: true
-      })    
-    }
-
-    handleClickOpenMember = () => {
-      this.loadMembers()
-      this.setState({
-          openMember: true
-      });
-    }
-
-    handleCloseMember = () => {
-      this.setState({
-        memberElements: [],
-        openMember: false,
-      })
-    }
-
-    addGroup = () => { 
-      const {user} = this.props;
-      var grp = new GroupBO(this.state.groupName, user.getId());
-      AppAPI.getAPI().createGroup(grp).then(group => {
-        this.setState({groupId: group.getId()})
-        AppAPI.getAPI().addUserToGroup(group.getId(), user.getId()).then( () => {
-          this.loadGroups();
-        })  
-      })
-      this.handleClose();
-      this.handleClickOpenMember();//open new dialog
-    }
 
     addMember = () => {
       // es muss gecheckt werden bei input ob der user existiert und ob er schon in der Gruppe ist,
@@ -172,7 +131,7 @@ class GroupEntries extends Component{
       })
       this.setState({memberId: ""})
     }
-    
+
     handleChangeMember = (e) => {
       this.setState({memberId: e.target.value}, () => {
         this.loadMembers()
@@ -183,7 +142,7 @@ class GroupEntries extends Component{
       AppAPI.getAPI().deleteUsersFromGroup(this.state.groupId, userId).then(() => {
         this.loadMembers()
       })
-      
+
       //this.setState({memberElements})
     }
 
@@ -258,25 +217,7 @@ class GroupEntries extends Component{
         return (
           <div>
             <ListWithBoxes groupElements={groupElements}/>
-            <GroupAddDialog 
-            addGroup={this.addGroup} 
-            open={this.state.open}
-            groupName={this.state.groupName} 
-            handleChange={this.handleChange} 
-            handleClickOpen={this.handleClickOpen} 
-            handleClose={this.handleClose} 
-            user={this.props.user} 
-            loadGroups={this.loadGroups}/> 
-            <MemberAddDialog
-            memberElements={memberElements}
-            groupId={this.state.groupId} 
-            memberId={this.state.memberId}
-            handleChangeMember={this.handleChangeMember}
-            addMember={this.addMember}
-            handleClickOpenMember={this.handleClickOpenMember}
-            handleCloseMember={this.handleCloseMember}
-            openMember={this.state.openMember}/>
-            
+
             
           </div>
         );
