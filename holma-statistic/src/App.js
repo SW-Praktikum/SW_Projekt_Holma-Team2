@@ -5,25 +5,18 @@ import theme from './components/Theme';
 import firebase from "firebase/app";
 import "firebase/auth";
 import Header from './components/layout/Header';
-import Navigation from './components/navigation'
+import Navigation from './components/Navigation'
 import SignIn from './components/pages/SignIn';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import About from './components/pages/About';
 import GroupEntries from './components/GroupEntries';
-import GroupEdit from './components/GroupEdit';
 import AppAPI from './api/AppAPI';
 import UserBO from './api/UserBO';
-import GroupList from './components/GroupList';
 import User from './components/User';
-import GroupInformation from './components/GroupEdit';
-import Groupmember from './components/GroupEditDialog';
 import MemberAddDialog from './components/dialogs/MemberAddDialog';
-import MemberDetails from './components/GroupEdit';
-import ArticleEdit from './components/ArticleEdit';
-import ListEntryTable from './components/ListEntryTable';
 import StartPage from './components/layout/Startpage';
-
+import GroupList from './components/GroupList';
 
 class App extends React.Component {
   #firebaseConfig = {
@@ -135,25 +128,17 @@ class App extends React.Component {
                   <>
                     <Redirect to='/groups'/>
                     <Navigation />
-                    <Route path='/home' component={StartPage}/>
+                    <Route path='/user-statistic' component={StartPage}/>
                     <Route path='/groups'>
                       <GroupEntries user={user}/>
                     </Route>
-                    <Route path='/groups/:groupId' component={GroupEdit}/>
+                    <Route path='/grouplist/:groupId' component={GroupList}>
+                    </Route>
                     <Route path='/about'>
                       <About/>
                     </Route>
-                    <Route path='/grouplist/:groupId' component={GroupList}>
-                    </Route>
-                    <Route path='/groupedit/:groupId' component={MemberDetails}>
-                    </Route>
-                    <Route path='/articleedit/:groupId' component={ArticleEdit}>
-                    </Route>
                     <Route path='/user'>
                       <User user={user}/>
-                    </Route>  
-                    <Route path='/shoppinglist'>
-                      <ListEntryTable shoppingListId="3000"/>
                     </Route>
                   </>
                   :

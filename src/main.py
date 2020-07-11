@@ -674,7 +674,7 @@ class ListEntryOperations(Resource):
 @holmaApp.route('/user/<int:user_id>/listentries')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('user_id', 'Die ID des user-Objekts')
-class GroupRelatedListEntryOperations(Resource):
+class UserRelatedListEntryOperations(Resource):
     @holmaApp.marshal_with(user)
     # @ secured
     def get(self, user_id):
@@ -710,7 +710,7 @@ class RetailerRelatedListEntryOperations(Resource):
 @holmaApp.route('/article/<int:article_id>/listentries')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('article_id', 'Die ID des Article-Objekts')
-class RetailerRelatedListEntryOperations(Resource):
+class ArticleRelatedListEntryOperations(Resource):
     @holmaApp.marshal_with(article)
     # @ secured
     def get(self, article_id):
