@@ -190,6 +190,7 @@ class Administration():
             mapper.delete(article_id)
 
     def save_article(self, article):
+        article.set_last_updated(datetime.now())
         with ArticleMapper() as mapper:
             return mapper.update(article)
 
@@ -222,6 +223,7 @@ class Administration():
             mapper.delete(list_entry)
 
     def save_list_entry(self, list_entry):
+        list_entry.set_last_updated(datetime.now())
         with ListEntryMapper() as mapper:
             return mapper.update(list_entry)
 
@@ -269,6 +271,7 @@ class Administration():
             mapper.delete(shopping_list)
 
     def save_shopping_list(self, shopping_list):
+        shopping_list.set_last_updated(datetime.now())
         with ShoppingListMapper() as mapper:
             return mapper.update(shopping_list)
 

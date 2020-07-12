@@ -85,10 +85,8 @@ listEntry = api.inherit('ListEntry', bo, {
 })
 
 article = api.inherit('Article', bo, {
-    'group_id': fields.Integer(attribute='_group_id',
-                               description='zu welcher Groupe dieses Artikle gehört?'),
-    'groupId': fields.Integer(attribute='_group',
-                              description='zu welcher Groupe dieses Artikle gehört?')
+    'groupId': fields.Integer(attribute='_group_id',
+                               description='zu welcher Groupe dieses Artikle gehört?')
 
 })
 
@@ -414,8 +412,7 @@ class ArticleOperations(Resource):
         Das zu löschende Objekt wird durch die article_id in dem URI bestimmt.
                       """
         adm = Administration()
-        art = adm.get_article_by_id(article_id)
-        adm.delete_article(art)
+        adm.delete_article(article_id)
         return 'deleted', 200
 
     @holmaApp.marshal_with(article)
