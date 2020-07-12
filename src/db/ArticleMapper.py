@@ -94,11 +94,11 @@ class ArticleMapper(Mapper):
 
         return article
 
-    def delete(self, article):
+    def delete(self, article_id):
         cursor = self._connection.cursor()
 
         command = "DELETE FROM holma.article " \
-                  "WHERE article_id={}".format(article.get_id())
+                  "WHERE article_id={}".format(article_id)
         cursor.execute(command)
 
         self._connection.commit()
