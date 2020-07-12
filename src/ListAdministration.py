@@ -98,9 +98,9 @@ class Administration():
         with ShoppingListMapper() as mapper:
             return mapper.find_by_group(group_id)
 
-    def get_standardarticles_by_group_id(self, group_id):
+    def get_standardarticles_by_group_id(self, group):
         with ListEntryMapper() as mapper:
-            return mapper.find_standardarticles_by_group(group_id)
+            return mapper.find_standardarticles_by_group(group)
 
     def add_member_to_group(self, group, user):
         with UserGroupRelationsMapper() as mapper:
