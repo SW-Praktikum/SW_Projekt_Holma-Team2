@@ -81,8 +81,8 @@ class ArticleMapper(Mapper):
 
     def update(self, article):
         cursor = self._connection.cursor()
-        command = "UPDATE holma.article SET name={}, group_id={}, " \
-                  "last_updated={} WHERE article_id={}"
+        command = "UPDATE holma.article SET name=%s, group_id=%s, " \
+                  "last_updated=%s WHERE article_id=%s"
         data = (article.get_name(),
                 article.get_group(),
                 article.get_last_updated(),
