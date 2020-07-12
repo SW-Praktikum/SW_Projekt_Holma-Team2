@@ -415,7 +415,7 @@ class ArticleOperations(Resource):
                       """
         adm = Administration()
         art = adm.get_article_by_id(article_id)
-        adm.delete_article(art)
+        adm.delete_article(article_id)
         return 'deleted', 200
 
     @holmaApp.marshal_with(article)
