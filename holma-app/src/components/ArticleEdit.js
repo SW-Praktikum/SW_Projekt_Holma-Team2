@@ -215,8 +215,13 @@ class ArticleEdit extends Component {
     loadStandardArticles = () => {
         console.log("xDDDDDD")
         console.log(this.props.match.params.groupId)
+<<<<<<< HEAD
         AppAPI.getAPI().getStandardArticlesByGroupId(this.state.groupId).then(articles => {
             console.log("Articles:"+articles)
+=======
+        AppAPI.getAPI().getStandardArticlesByGroupId(this.props.match.params.groupId).then(articles => {
+            console.log("Articles:", articles)
+>>>>>>> master
             var StandardElements = articles.map((standardArticle) => <StandardArticle standardArticle={standardArticle} loadStandardArticles={this.loadStandardArticles} />)
             //hier noch ListEntrys ergänzen
             this.setState({
