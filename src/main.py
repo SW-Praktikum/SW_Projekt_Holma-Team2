@@ -414,7 +414,6 @@ class ArticleOperations(Resource):
         Das zu löschende Objekt wird durch die article_id in dem URI bestimmt.
                       """
         adm = Administration()
-        art = adm.get_article_by_id(article_id)
         adm.delete_article(article_id)
         return 'deleted', 200
 
