@@ -193,11 +193,11 @@ class ListEntryMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
-    def delete_by_article(self, article):
+    def delete_by_article(self, article_id):
         cursor = self._connection.cursor()
 
         command = "DELETE FROM holma.list_entry " \
-                  "WHERE article={}".format(article.get_id())
+                  "WHERE article={}".format(article_id)
         cursor.execute(command)
 
         self._connection.commit()
@@ -222,7 +222,7 @@ class ListEntryMapper(Mapper):
 
     """Standardarticle"""
 
-    def find_standardarticles_by_group(self, group_id):
+    def find_standardarticles_by_group(self, group):
         cursor = self._connection.cursor()
         command = "SELECT standard_article_group_relations.list_entry_id," \
                   " holma.list_entry.name, holma.list_entry.creation_date, " \
@@ -237,7 +237,7 @@ class ListEntryMapper(Mapper):
                   " standard_article_group_relations.list_entry_id=" \
                   "holma.list_entry.list_entry_id WHERE " \
                   "standard_article_group_relations.group_id = {}".format(
-            group_id)
+group.get_id())
         cursor.execute(command)
 
         tuples = cursor.fetchall()

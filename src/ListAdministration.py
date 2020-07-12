@@ -98,9 +98,9 @@ class Administration():
         with ShoppingListMapper() as mapper:
             return mapper.find_by_group(group_id)
 
-    def get_standardarticles_by_group_id(self, group_id):
+    def get_standardarticles_by_group_id(self, group):
         with ListEntryMapper() as mapper:
-            return mapper.find_standardarticles_by_group(group_id)
+            return mapper.find_standardarticles_by_group(group)
 
     def add_member_to_group(self, group, user):
         with UserGroupRelationsMapper() as mapper:
@@ -182,14 +182,15 @@ class Administration():
         with ArticleMapper() as mapper:
             return mapper.insert(article)
 
-    def delete_article(self, article):
+    def delete_article(self, article_id):
         with ListEntryMapper() as mapper:
-            mapper.delete_by_article(article)
+            mapper.delete_by_article(article_id)
 
         with ArticleMapper() as mapper:
-            mapper.delete(article)
+            mapper.delete(article_id)
 
     def save_article(self, article):
+        article.set_last_updated(datetime.now())
         with ArticleMapper() as mapper:
             return mapper.update(article)
 
@@ -222,6 +223,7 @@ class Administration():
             mapper.delete(list_entry)
 
     def save_list_entry(self, list_entry):
+        list_entry.set_last_updated(datetime.now())
         with ListEntryMapper() as mapper:
             return mapper.update(list_entry)
 
@@ -269,6 +271,7 @@ class Administration():
             mapper.delete(shopping_list)
 
     def save_shopping_list(self, shopping_list):
+        shopping_list.set_last_updated(datetime.now())
         with ShoppingListMapper() as mapper:
             return mapper.update(shopping_list)
 
