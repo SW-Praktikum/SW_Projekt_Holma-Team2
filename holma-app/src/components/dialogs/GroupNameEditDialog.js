@@ -21,24 +21,21 @@ class GroupNameEditDialog extends Component {
         super(props)
         this.state = {
             groupName: this.props.groupName,
-            group: this.props.group,
+            group: this.props.groupObject,
             standard: false,
-            groupObject: "",
+            groupObject: this.props.groupObject,
         }        
     }
 
     handleChangeName = (e) => {
         this.setState({groupName: e.target.value})
-        AppAPI.getAPI().getGroupById(this.props.groupId).then (group => {
+        AppAPI.getAPI().getGroupById(this.props.groupId).then((group) => {
           group.setName(this.state.groupName)
           this.setState({
             groupObject: group
-          }); {
-            AppAPI.getAPI().updateGroup(this.state.groupObject)
-          }
-    })
-  }
-
+          })
+        })
+      }
 
     saveChanges = () => {
         AppAPI.getAPI().updateGroup(this.state.groupObject)
@@ -81,7 +78,6 @@ const styles = theme => ({
   root: {
     position: 'fixed',
     bottom: theme.spacing(2),
-    //right: theme.spacing(1),
     
   },
   extendedIcon: {

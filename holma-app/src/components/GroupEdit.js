@@ -40,10 +40,9 @@ class GroupInformation extends Component {
   constructor(props) {
     super(props)
     this.state= {
-      group:"",
       open: false,
       openDialog: false,
-      group: this.props.group,     
+      groupObject: this.props.groupObject,     
     }
   }
 
@@ -68,7 +67,6 @@ handleClose = () => {
     this.props.loadMembers();
   };
   render(){
-    const {group} = this.props;
     const {open} = this.state;
     return (
     <div>
@@ -96,7 +94,8 @@ handleClose = () => {
         openDialog={this.openDialog}
         open={this.state.openDialog}
         handleClose={this.handleClose}
-        group={group}
+        groupObject={this.props.groupObject}
+        groupId={this.props.groupId}
         />
         </ListItem>    
       </Grid>
@@ -255,31 +254,10 @@ handleClose = () => {
     this.setState({memberId: e.target.value})
   }
 
-  handleChangeName = (e) => {
-    this.setState({
-      groupName: e.target.value,  
-    })
-  }
-
-  handleInputChange = (e) => {
-    this.setState({shoppingListName: e.target.value})
-  }
-
-  handleClickSave = () => {
-      AppAPI.getAPI().getGroupById(this.props.match.params.groupId).then (group => {
-        group.setName(this.state.groupName)
-        this.setState({
-          groupObject: group
-        })
-        }).then (() => {
-          AppAPI.getAPI().updateGroup(this.state.groupObject)
-      })
-  }
-
-
   getGroupDetails(){
     AppAPI.getAPI().getGroupById(this.state.groupId).then(group => {
       this.setState({
+        groupObject: group,
         groupName: group.getName(),
         groupCreationDate: group.getCreationDate(),
         groupOwner: group.getOwner(),
@@ -334,10 +312,13 @@ handleClose = () => {
     }
 
     render(){
+        console.log(this.state.groupObject);
+        console.log("JFEJEFOJEFOJEF");
       const {memberElements} = this.state;
       const {open} = this.state
       this.loadMembers = this.loadMembers.bind(this)
       return(
+        
         <div>
           <GroupInformation
             handleChangeMember={this.handleChangeMember}
@@ -359,6 +340,7 @@ handleClose = () => {
             open={this.state.openDialog}
             handleClose={this.handleClose}
             handleInputChange={this.handleInputChange}
+            groupObject={this.state.groupObject}
             />
           <Box m={1}></Box>
           <ListWithBoxes groupElements={memberElements}/>
