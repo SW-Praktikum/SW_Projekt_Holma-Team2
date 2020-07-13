@@ -16,26 +16,10 @@ import AddListDialog from './dialogs/AddListDialog';
 
 import TextField from '@material-ui/core/TextField';
 
-
-import PropTypes from 'prop-types';
-import Collapse from '@material-ui/core/Collapse';
-import IconButton from '@material-ui/core/IconButton';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItem from '@material-ui/core/ListItem';
-import List from '@material-ui/core/List';
 import Grid from '@material-ui/core/Grid';
 import ListWithBoxes from './ListWithBoxes';
 import GroupEntry from './GroupEntries';
@@ -79,6 +63,7 @@ class ListCard extends Component {
 class GroupList extends Component {
     constructor(props) {
         super(props);
+        //console.log(this.props.match.params.groupId)
         this.state = {
             group: null,
             groupId: this.props.match.params.groupId,
@@ -88,6 +73,8 @@ class GroupList extends Component {
       
     componentDidMount(){
       if(this.props.match.params.groupId){
+          
+          console.log(this.props)
           this.loadShoppingLists();
         }
     }

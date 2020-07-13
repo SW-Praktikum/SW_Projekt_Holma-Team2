@@ -416,7 +416,7 @@ class ArticleOperations(Resource):
         return 'deleted', 200
 
     @holmaApp.marshal_with(article)
-    @holmaApp.expect(article, validate=True)
+    @holmaApp.expect(article) #validate=True)
     # @secured
     def put(self, article_id):
         """Update eines bestimmten article-Objekts."""
