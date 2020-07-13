@@ -237,7 +237,7 @@ class ListEntryMapper(Mapper):
                   " standard_article_group_relations.list_entry_id=" \
                   "holma.list_entry.list_entry_id WHERE " \
                   "standard_article_group_relations.group_id = {}".format(
-group.get_id())
+        group.get_id())
         cursor.execute(command)
 
         tuples = cursor.fetchall()
@@ -271,9 +271,18 @@ group.get_id())
         self._connection.commit()
         cursor.close()
 
+    def delete_standardarticle_by_group(self, group):
+        cursor = self._connection.cursor()
+        command = "DELETE FROM holma.standard_article_group_relations" \
+                  "WHERE group_id={}".format(group.get_id())
+        cursor.execute(command)
 
-if __name__ == "__main__":
+        self._connection.commit()
+        cursor.close()
+
+
+"""if __name__ == "__main__":
     with ListEntryMapper() as mapper:
-        result = mapper.find_standardarticles(2000)
+        result = mapper.find_standardarticles_by_group(gr)
         for entries in result:
-            print(entries)
+            print(entries)"""
