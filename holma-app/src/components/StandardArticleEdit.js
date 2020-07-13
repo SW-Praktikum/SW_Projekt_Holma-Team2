@@ -24,13 +24,14 @@ import ArticleEditDialog from './dialogs/ArticleEditDialog';
 import EntryAddDialog from './dialogs/EntryAddDialog';
 import { colors } from '@material-ui/core';
 
-class Article extends Component {
+
+class StandardArticle extends Component {
     constructor(props) {
         super(props);
         this.state = {
             open: false,
             openDialog: false,
-            article: this.props.article,
+            standardArticle: this.props.standardArticle,
         }
     }
 
@@ -51,15 +52,16 @@ class Article extends Component {
         }
     
 
-    deleteArticle = (article) => {
-        AppAPI.getAPI().deleteArticle(article).then(() => {
-            this.props.loadArticles()
+    deleteStandardArticle = (standard) => {
+        var group = AppAPI.getAPI().getGroupById(this.props.match.params.groupId);
+        AppAPI.getAPI().deleteStandardArticleFromGroup(group,standard).then(() => {
+            this.props.loadStandardArticles()
         })
     }
 
 
     render() {
-        const { article } = this.props;
+        const {standardArticle} = this.props;
         const { open } = this.state;
         return (
             <div >
@@ -67,16 +69,16 @@ class Article extends Component {
                     <Table aria-label="collapsible table">
                             <TableRow>
                                 <TableCell width="10%"/>
-                                <TableCell width="30%" align="left">{article.getId()}</TableCell>
-                                <TableCell width="30%" align="left">{article.getName()}</TableCell>
-                                <TableCell width="10%" align="left"></TableCell>
+                                <TableCell width="30%" align="left">{standardArticle.getId()}</TableCell>
+                                <TableCell width="30%" align="left">{standardArticle.getName()}</TableCell>
+                                <TableCell width="10%" align="left">x</TableCell>
                                 <TableCell width="10%" align='right'>
                                     <IconButton aria-label="expand row" size="small" onClick={() => this.openDialog()}>
                                         <EditIcon/>
                                     </IconButton>
                                 </TableCell>
                                 <TableCell width="10%" align='right'>
-                                    <IconButton aria-label="expand row" size="small" onClick={() => this.deleteArticle(article)}>
+                                    <IconButton aria-label="expand row" size="small" onClick={() => this.deleteStandardArticle(standardArticle)}>
                                         <DeleteIcon/>
                                     </IconButton>
                                 </TableCell>
@@ -87,28 +89,26 @@ class Article extends Component {
                     openDialog={this.openDialog}
                     open={this.state.openDialog}
                     handleClose={this.handleClose}
-                    article={article}
+                    article={standardArticle}
                 />
                 </div>
         );
     }
 }
 
-
-class ArticleEdit extends Component {
+class StandardArticleEdit extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            ArticleElements: [],
+            StandardElements: [],
             openDialog: false,
             groupId: this.props.match.params.groupId,
-            
         }
     }
 
     componentDidMount(){
         if(this.props.match.params.groupId){
-            this.loadArticles();
+            this.loadStandardArticles();
           }
     }
 
@@ -122,13 +122,16 @@ class ArticleEdit extends Component {
           openDialog: false})
       }
   
-    loadArticles = () => { //Hier muss eine neue Methode - getArticlesByGroupId hinzugefügt werden
-        AppAPI.getAPI().getArticlesByGroupId(this.props.match.params.groupId).then(articles => {
-            console.log("Loaded articles for group '" + this.props.match.params.groupId + "':", articles)
-            var ArticleElements = articles.map((article) => <Article article={article} loadArticles={this.loadArticles} />)
+
+    loadStandardArticles = () => {
+        console.log("xDDDDDD")
+        console.log(this.props.match.params.groupId)
+        AppAPI.getAPI().getStandardArticlesByGroupId(this.props.match.params.groupId).then(articles => {
+            console.log("Articles:", articles)
+            var StandardElements = articles.map((standardArticle) => <StandardArticle standardArticle={standardArticle} loadStandardArticles={this.loadStandardArticles} />)
             //hier noch ListEntrys ergänzen
             this.setState({
-                ArticleElements: ArticleElements,
+                StandardElements: StandardElements,
                 loadingInProgress: true, // loading indicator 
                 loadingError: null
                 })
@@ -139,7 +142,6 @@ class ArticleEdit extends Component {
             })
         );  
     }
-
     
     render() {
         return (
@@ -151,7 +153,7 @@ class ArticleEdit extends Component {
                             <TableCell width="10%"/>
                             <TableCell width="30%" align="left"><b style={{ color: '#ffffff'}}>Id</b></TableCell>
                             <TableCell width="30%" align="left "><b style={{ color: '#ffffff'}}>Name</b></TableCell>
-                            <TableCell width="10%" align="center"></TableCell>
+                            <TableCell width="10%" align="center"><b style={{ color: '#ffffff'}}>Standardartikel</b></TableCell>
                             <TableCell width="20%" align="center"><b style={{ color: '#ffffff'}}>Edit</b></TableCell>
                         </TableRow>
                     </TableHead>
@@ -160,7 +162,7 @@ class ArticleEdit extends Component {
             <TableContainer  component={Paper}>
                 <Table>
                     <TableBody>
-                    {this.state.ArticleElements}
+                        {this.state.StandardElements}
                     </TableBody>
                 </Table>
             </TableContainer>
@@ -170,4 +172,4 @@ class ArticleEdit extends Component {
 }
 
 
-export default ArticleEdit;
+export default StandardArticleEdit;

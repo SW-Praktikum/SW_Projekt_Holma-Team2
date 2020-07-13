@@ -14,14 +14,14 @@ class ContextErrorMessage extends Component {
 
         return (
             (error !== null) ?
-            <Alert severity ='error' className ={classes.root}>
+            <Alert severity ='error'>
                 <div>
                     {this.#defaultText}
                 </div>
             <AlertTitle>
                 {contextErrorMsg}
             </AlertTitle>
-                <div className={classes.margins}>
+                <div>
                     Error message (for debugging only) is:
                 </div>
             <div>
@@ -29,7 +29,7 @@ class ContextErrorMessage extends Component {
             </div>
             {
                 onReload?
-                <div className={classes.margings}>
+                <div>
                     <Button variant = 'contained' color='primary' startIcon={<AutorenewIcon />} onClick={onReload}>
                         Reload
                     </Button>

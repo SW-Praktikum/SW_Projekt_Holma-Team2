@@ -30,6 +30,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import FaceIcon from '@material-ui/icons/Face';
 import SaveIcon from '@material-ui/icons/Save';
 import GroupNameEditDialog from '../components/dialogs/GroupNameEditDialog';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
 
 
@@ -39,14 +41,35 @@ class GroupInformation extends Component {
     super(props)
     this.state= {
       group:"",
-      
+      open: false,
+      openDialog: false,
+      group: this.props.group,     
     }
   }
+
+  setOpen(bool) {
+    this.setState({
+        open: bool
+    })
+}
+
+openDialog = () => {
+    this.setState({
+        openDialog: true})
+    }
+
+handleClose = () => {
+    this.setState({
+        openDialog: false})
+    }
+
   _handleClick = () => {
     this.props.addMember();
     this.props.loadMembers();
   };
   render(){
+    const {group} = this.props;
+    const {open} = this.state;
     return (
     <div>
     <Grid style={{backgroundColor:'white'}}>
@@ -61,11 +84,20 @@ class GroupInformation extends Component {
         <Grid item xs={6} sm={6}>
         <ListItem align='center' style={{width:"auto"}}>
         <Typography  variant="h6" gutterBottom>
-          Gruppenname:
+          Gruppenname:  
         </Typography>
-        <IconButton aria-label="expand row" size="small" onClick={() => this.props.openDialog()}>
+        <Typography  variant="h6" gutterBottom>
+          {this.props.groupName}
+        </Typography>
+        <IconButton aria-label="expand row" size="small" onClick={() => this.openDialog()}>
           <EditIcon/>
         </IconButton>
+        <GroupNameEditDialog
+        openDialog={this.openDialog}
+        open={this.state.openDialog}
+        handleClose={this.handleClose}
+        group={group}
+        />
         </ListItem>    
       </Grid>
       
@@ -79,6 +111,7 @@ class GroupInformation extends Component {
       </Grid>
       
       <Box m={4}/>
+      
       <Grid container spaching={1}>
       <Grid item xs={6} sm={6}>
         <ListItem align='center' style={{width:"auto"}}>
@@ -95,8 +128,10 @@ class GroupInformation extends Component {
         </ListItem>
       </Grid>
       </Grid>
-
       <Box m={4} />
+
+      <Grid container spaching={1}>
+      <Grid item xs={6} sm={6}>
       <ListItem elevation={3} align='center' style={{width:"auto"}}>
         <Typography  variant="h4" gutterBottom>
           Mitglieder
@@ -123,7 +158,25 @@ class GroupInformation extends Component {
             hinzufügen
       </Button>
       </Grid>
-      </Grid>
+    </Grid>
+
+    <Grid style={{marginLeft: 15, alignItems: 'center'}}>
+      <ListItem elevation={3} align='center' style={{width:"auto"}}>
+              <Typography  variant="h4" gutterBottom>
+                Artikel
+              </Typography>
+            </ListItem>
+          <Grid style={{marginLeft: 15, alignItems: 'center'}}>
+            <Link to={"/articleedit/" + this.props.groupId} style={{textDecoration: 'none'}}>
+              <ArticleLink/>
+            </Link>
+            <Link to={"/standardarticleedit/" + this.props.groupId} style={{textDecoration: 'none'}}>
+            <StandardArticleLink/>
+            </Link>
+          </Grid>
+        </Grid>
+    </Grid>
+    </Grid>
     </div>
     
   );
@@ -136,6 +189,18 @@ class ArticleLink extends Component{
           color="primary" 
           variant="contained">
               Artikel anzeigen
+          </Button>
+      )
+  }
+}
+
+class StandardArticleLink extends Component{
+  render(){
+      return(
+          <Button style={{marginTop: 9, marginBottom: 15, alignItems: 'center'}}
+          color="primary" 
+          variant="contained">
+              Standardartikel
           </Button>
       )
   }
@@ -169,6 +234,16 @@ class MemberDetails extends Component{
      }
   }
 
+openDialog = () => {
+    this.setState({
+      openDialog: true})
+  }
+
+handleClose = () => {
+    this.setState({
+      openDialog: false})
+  }
+
   addMember() {
     AppAPI.getAPI().addUserToGroup(this.state.groupId, this.state.memberId)
     this.setState({memberId: ""}, () => {
@@ -184,6 +259,10 @@ class MemberDetails extends Component{
     this.setState({
       groupName: e.target.value,  
     })
+  }
+
+  handleInputChange = (e) => {
+    this.setState({shoppingListName: e.target.value})
   }
 
   handleClickSave = () => {
@@ -256,6 +335,7 @@ class MemberDetails extends Component{
 
     render(){
       const {memberElements} = this.state;
+      const {open} = this.state
       this.loadMembers = this.loadMembers.bind(this)
       return(
         <div>
@@ -264,28 +344,27 @@ class MemberDetails extends Component{
             handleClickSave={this.handleClickSave}
             handleChangeName={this.handleChangeName}
             memberId={this.state.memberId}
-            openDialog = {this.props.openDialog}
             addMember={this.addMember}
             loadMembers={this.loadMembers}
             group={this.state.groupDetail}
+            groupId={this.state.groupId}
             groupName={this.state.groupName}
             groupCreationDate={this.state.groupCreationDate}
             groupOwner={this.state.groupOwner}
-            groupLastUpdated={this.state.groupLastUpdated} />
+            groupLastUpdated={this.state.groupLastUpdated} 
+            setOpen={this.setOpen}
+            openDialog={this.openDialog}
+            handleClose={this.handleClose}
+            openDialog={this.openDialog}
+            open={this.state.openDialog}
+            handleClose={this.handleClose}
+            handleInputChange={this.handleInputChange}
+            />
           <Box m={1}></Box>
           <ListWithBoxes groupElements={memberElements}/>
           <MemberAddDialog member={this.state.members} loadMembers={this.loadMembers}/> 
           <Box m={4} />
-            <ListItem elevation={3} align='center' style={{width:"auto"}}>
-              <Typography  variant="h4" gutterBottom>
-                Artikel
-              </Typography>
-            </ListItem>
-          <Grid style={{marginLeft: 15, alignItems: 'center'}}>
-            <Link to={"/articleedit/" + this.props.match.params.groupId} style={{textDecoration: 'none'}}>
-              <ArticleLink/>
-            </Link>
-          </Grid>
+            
         </div>
       );
     }

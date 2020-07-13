@@ -35,7 +35,6 @@ class ArticleEditDialog extends Component {
 
     saveChanges = () => {
         AppAPI.getAPI().updateArticle(this.state.article);
-        //AppAPI.getAPI().createArticle(this.state.article)
     }
 
 

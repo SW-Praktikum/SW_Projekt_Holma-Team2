@@ -6,7 +6,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
 import PropTypes from 'prop-types';
 import Container from '@material-ui/core/Container'
 import { withStyles } from '@material-ui/styles';
@@ -20,7 +20,7 @@ class GroupNameEditDialog extends Component {
     constructor (props) {
         super(props)
         this.state = {
-            groupName: "",
+            groupName: this.props.groupName,
             group: this.props.group,
             standard: false,
             groupObject: "",
@@ -29,53 +29,53 @@ class GroupNameEditDialog extends Component {
 
     handleChangeName = (e) => {
         this.setState({groupName: e.target.value})
-        AppAPI.getAPI().getGroupById(this.props.match.params.groupId).then (group => {
+        AppAPI.getAPI().getGroupById(this.props.groupId).then (group => {
           group.setName(this.state.groupName)
           this.setState({
             groupObject: group
-          })
+          }); {
+            AppAPI.getAPI().updateGroup(this.state.groupObject)
+          }
     })
   }
 
 
     saveChanges = () => {
-        AppAPI.getAPI().updateGroup(this.state.groupObject);
-        //AppAPI.getAPI().createArticle(this.state.article)
+        AppAPI.getAPI().updateGroup(this.state.groupObject)
     }
 
-
-    render() {
-      const { classes } = this.props;
-        return (
-          <div>
-            <Typography className={classes.container} align="right">
-            
-            </Typography>
-            <Dialog className={classes.dialog} open={this.props.open} onClose={this.props.handleClose} aria-labelledby="form-dialog-title">
-              <DialogTitle id="form-dialog-editEntry">Gruppe bearbeiten</DialogTitle>
-              <DialogContent>
-                <TextField
-                    type="text"
-                    onChange={this.handleChangeName}
-                    margin="dense"
-                    id="combo-article"
-                    variant="standard"
-                    label={this.state.groupName}
-                />
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={this.props.handleClose} color="primary">
-                  abbrechen
-                </Button>
-                <Button onClick={this.saveChanges} color="primary">
-                  speichern
-                </Button>
-              </DialogActions>
-            </Dialog>
-          </div>
-          );
-    }
-}
+      render() {
+        const { classes } = this.props;
+          return (
+            <div>
+              <Typography className={classes.container} align="right">
+              
+              </Typography>
+              <Dialog className={classes.dialog} open={this.props.open} onClose={this.props.handleClose} aria-labelledby="form-dialog-title">
+                <DialogTitle id="form-dialog-editEntry">Gruppenname bearbeiten</DialogTitle>
+                <DialogContent>
+                  <TextField
+                      type="text"
+                      onChange={this.handleChangeName}
+                      margin="dense"
+                      id="combo-article"
+                      variant="standard"
+                      label={this.state.groupName}
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={this.props.handleClose} color="primary">
+                    abbrechen
+                  </Button>
+                  <Button onClick={this.saveChanges} color="primary">
+                    speichern
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </div>
+            );
+      }
+  }
 
 const styles = theme => ({
   root: {
