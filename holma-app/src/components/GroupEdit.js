@@ -29,16 +29,45 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FaceIcon from '@material-ui/icons/Face';
 import SaveIcon from '@material-ui/icons/Save';
+import GroupNameEditDialog from '../components/dialogs/GroupNameEditDialog';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
 
 
 
 class GroupInformation extends Component {
+  constructor(props) {
+    super(props)
+    this.state= {
+      open: false,
+      openDialog: false,
+      groupObject: this.props.groupObject,     
+    }
+  }
+
+  setOpen(bool) {
+    this.setState({
+        open: bool
+    })
+}
+
+openDialog = () => {
+    this.setState({
+        openDialog: true})
+    }
+
+handleClose = () => {
+    this.setState({
+        openDialog: false})
+    }
+
   _handleClick = () => {
     this.props.addMember();
     this.props.loadMembers();
   };
   render(){
+    const {open} = this.state;
     return (
     <div>
     <Grid style={{backgroundColor:'white'}}>
@@ -53,25 +82,21 @@ class GroupInformation extends Component {
         <Grid item xs={6} sm={6}>
         <ListItem align='center' style={{width:"auto"}}>
         <Typography  variant="h6" gutterBottom>
-          Gruppenname:
+          Gruppenname:  
         </Typography>
-        <TextField
-                  align='center'
-                  onChange={this.props.handleChangeName}
-                  margin="dense"
-                  id="outlined-basic"
-                  variant="standard"
-                  type="text"
-                  label={this.props.groupName}
-                  minWidth='150'
-                />
-                <Button 
-                startIcon={<SaveIcon />}
-                 
-                color="primary"
-                onClick={this.props.handleClickSave}>
-                </Button>
-                
+        <Typography  variant="h6" gutterBottom>
+          {this.props.groupName}
+        </Typography>
+        <IconButton aria-label="expand row" size="small" onClick={() => this.openDialog()}>
+          <EditIcon/>
+        </IconButton>
+        <GroupNameEditDialog
+        openDialog={this.openDialog}
+        open={this.state.openDialog}
+        handleClose={this.handleClose}
+        groupObject={this.props.groupObject}
+        groupId={this.props.groupId}
+        />
         </ListItem>    
       </Grid>
       
@@ -85,6 +110,7 @@ class GroupInformation extends Component {
       </Grid>
       
       <Box m={4}/>
+      
       <Grid container spaching={1}>
       <Grid item xs={6} sm={6}>
         <ListItem align='center' style={{width:"auto"}}>
@@ -101,8 +127,10 @@ class GroupInformation extends Component {
         </ListItem>
       </Grid>
       </Grid>
-
       <Box m={4} />
+
+      <Grid container spaching={1}>
+      <Grid item xs={6} sm={6}>
       <ListItem elevation={3} align='center' style={{width:"auto"}}>
         <Typography  variant="h4" gutterBottom>
           Mitglieder
@@ -122,18 +150,60 @@ class GroupInformation extends Component {
                 />
       <Button 
           style={{marginTop: 9, marginBottom: 15, alignItems: 'center'}}
-          onClick={this._handleClick}
+          onClick={this.props.handleClick}
           color="primary" 
           variant="contained"
           >
             hinzufügen
       </Button>
       </Grid>
-      </Grid>
+    </Grid>
+
+    <Grid style={{marginLeft: 15, alignItems: 'center'}}>
+      <ListItem elevation={3} align='center' style={{width:"auto"}}>
+              <Typography  variant="h4" gutterBottom>
+                Artikel
+              </Typography>
+            </ListItem>
+          <Grid style={{marginLeft: 15, alignItems: 'center'}}>
+            <Link to={"/articleedit/" + this.props.groupId} style={{textDecoration: 'none'}}>
+              <ArticleLink/>
+            </Link>
+            <Link to={"/standardarticleedit/" + this.props.groupId} style={{textDecoration: 'none'}}>
+            <StandardArticleLink/>
+            </Link>
+          </Grid>
+        </Grid>
+    </Grid>
+    </Grid>
     </div>
     
   );
 }}
+
+class ArticleLink extends Component{
+  render(){
+      return(
+          <Button style={{marginTop: 9, marginBottom: 15, alignItems: 'center'}}
+          color="primary" 
+          variant="contained">
+              Artikel anzeigen
+          </Button>
+      )
+  }
+}
+
+class StandardArticleLink extends Component{
+  render(){
+      return(
+          <Button style={{marginTop: 9, marginBottom: 15, alignItems: 'center'}}
+          color="primary" 
+          variant="contained">
+              Standardartikel
+          </Button>
+      )
+  }
+}
 
 class MemberDetails extends Component{
   constructor(props){
@@ -151,6 +221,8 @@ class MemberDetails extends Component{
       loadingInProgress: false,
       loadingError: null,
       memberId: "",
+      open: false,
+      openDialog: false,
     }
   }
 
@@ -159,6 +231,16 @@ class MemberDetails extends Component{
       this.getGroupDetails();
       this.loadMembers();
      }
+  }
+
+openDialog = () => {
+    this.setState({
+      openDialog: true})
+  }
+
+handleClose = () => {
+    this.setState({
+      openDialog: false})
   }
 
   addMember() {
@@ -172,26 +254,10 @@ class MemberDetails extends Component{
     this.setState({memberId: e.target.value})
   }
 
-  handleChangeName = (e) => {
-    this.setState({
-      groupName: e.target.value,  
-    })
-  }
-
-  handleClickSave = () => {
-      AppAPI.getAPI().getGroupById(this.props.match.params.groupId).then (group => {
-        group.setName(this.state.groupName)
-        this.setState({
-          groupObject: group
-        })
-        }).then (() => {
-          AppAPI.getAPI().updateGroup(this.state.groupObject)
-      })
-  }
-
   getGroupDetails(){
     AppAPI.getAPI().getGroupById(this.state.groupId).then(group => {
       this.setState({
+        groupObject: group,
         groupName: group.getName(),
         groupCreationDate: group.getCreationDate(),
         groupOwner: group.getOwner(),
@@ -246,9 +312,13 @@ class MemberDetails extends Component{
     }
 
     render(){
+        console.log(this.state.groupObject);
+        console.log("JFEJEFOJEFOJEF");
       const {memberElements} = this.state;
+      const {open} = this.state
       this.loadMembers = this.loadMembers.bind(this)
       return(
+        
         <div>
           <GroupInformation
             handleChangeMember={this.handleChangeMember}
@@ -258,14 +328,26 @@ class MemberDetails extends Component{
             addMember={this.addMember}
             loadMembers={this.loadMembers}
             group={this.state.groupDetail}
+            groupId={this.state.groupId}
             groupName={this.state.groupName}
             groupCreationDate={this.state.groupCreationDate}
             groupOwner={this.state.groupOwner}
-            groupLastUpdated={this.state.groupLastUpdated} />
+            groupLastUpdated={this.state.groupLastUpdated} 
+            setOpen={this.setOpen}
+            openDialog={this.openDialog}
+            handleClose={this.handleClose}
+            openDialog={this.openDialog}
+            open={this.state.openDialog}
+            handleClose={this.handleClose}
+            handleInputChange={this.handleInputChange}
+            groupObject={this.state.groupObject}
+            />
           <Box m={1}></Box>
           <ListWithBoxes groupElements={memberElements}/>
           <MemberAddDialog member={this.state.members} loadMembers={this.loadMembers}/> 
-          </div>
+          <Box m={4} />
+            
+        </div>
       );
     }
 }
