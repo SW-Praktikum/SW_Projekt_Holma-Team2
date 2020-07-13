@@ -680,7 +680,7 @@ class UserRelatedListEntryOperations(Resource):
         adm = Administration()
         us = adm.get_user_by_id(user_id)
         if us is not None:
-            listentry_list = adm.get_list_entries_by_user_id(us)
+            listentry_list = adm.get_list_entries_by_user_id(user_id)
             return listentry_list
         else:
             return "User not found", 500
