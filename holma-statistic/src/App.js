@@ -17,6 +17,7 @@ import User from './components/User';
 import MemberAddDialog from './components/dialogs/MemberAddDialog';
 import StartPage from './components/layout/Startpage';
 import GroupList from './components/GroupList';
+import ListEntryTable from './components/ListEntryTable';
 
 class App extends React.Component {
   #firebaseConfig = {
@@ -128,7 +129,9 @@ class App extends React.Component {
                   <>
                     <Redirect to='/groups'/>
                     <Navigation />
-                    <Route path='/user-statistic' component={StartPage}/>
+                    <Route path='/user-statistic'>
+                      <ListEntryTable user={user}/> 
+                    </Route>
                     <Route path='/groups'>
                       <GroupEntries user={user}/>
                     </Route>
