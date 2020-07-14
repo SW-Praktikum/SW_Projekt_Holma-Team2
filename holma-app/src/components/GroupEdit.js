@@ -236,7 +236,7 @@ handleClose = () => {
   }
 
   addMember() {
-    AppAPI.getAPI().addUserToGroup(this.state.groupId, this.state.memberId)
+    AppAPI.getAPI().addUserToGroup(this.props.match.params.groupId, this.state.memberId)
     this.setState({memberId: ""}, () => {
       this.loadMembers();
     })
