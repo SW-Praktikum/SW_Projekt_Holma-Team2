@@ -47,7 +47,8 @@ class GroupAddDialog extends Component {
                   label="Gruppenname"
                   type="email"
                   fullWidth
-                  inputProps = {{maxlength:60}}
+                  inputProps = {{maxlength:5}}
+                  inputProps = {{min:1}}
                 />
               </DialogContent>
               <DialogActions>

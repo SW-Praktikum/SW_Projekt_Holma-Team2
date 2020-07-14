@@ -38,7 +38,8 @@ class GroupNameEditDialog extends Component {
       }
 
     saveChanges = () => {
-        AppAPI.getAPI().updateGroup(this.state.groupObject)
+        AppAPI.getAPI().updateGroup(this.state.groupObject).then(()=>
+        window.location.reload())
     }
 
       render() {

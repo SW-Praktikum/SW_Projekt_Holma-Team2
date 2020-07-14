@@ -69,12 +69,11 @@ class GroupList extends Component {
             groupId: this.props.match.params.groupId,
             listElements:[],
             shoppingListName: "",
+            shoppingListId:"",
         }}
       
     componentDidMount(){
       if(this.props.match.params.groupId){
-          
-          console.log(this.props)
           this.loadShoppingLists();
         }
     }
@@ -135,8 +134,10 @@ class GroupList extends Component {
           listElements: listElements,
           loadingInProgress: true, // loading indicator 
           loadingError: null,
+          shoppingListId: lists.id,
       });
          console.log("Save in state", listElements)
+         console.log(this.state.shoppingListId)
       }).catch(e =>
           this.setState({ // Reset state with error from catch 
             loadingInProgress: false,
@@ -147,7 +148,6 @@ class GroupList extends Component {
 
     render() {
       const {listElements} = this.state;
-      console.log("elements", listElements)
           return(
             <div>
               <Box m={5} />
@@ -163,7 +163,9 @@ class GroupList extends Component {
               </Link>
                 <Box m={2} />
                 <Typography className="title" style={{fontSize: 14, color: 'black'}}>Shoppinglists:</Typography>
-                <ListWithBoxes groupElements={listElements}/>
+                <Link to={"/shoppinglist/" + this.props.match.params.groupId} style={{textDecoration: 'none'}}>
+                  <ListWithBoxes groupElements={listElements}/>
+                </Link>
                 <AddListDialog 
                   openDialog={this.openDialog}
                   open={this.state.openDialog}

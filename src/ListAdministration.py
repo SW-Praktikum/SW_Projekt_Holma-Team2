@@ -142,6 +142,9 @@ class Administration():
         with UserGroupRelationsMapper() as mapper:
             mapper.delete_group_relations(group)
 
+        with ListEntryMapper() as mapper:
+            mapper.delete_standardarticle_by_group(group)
+
         with ShoppingListMapper() as mapper:
             mapper.delete_by_group(group)
 
