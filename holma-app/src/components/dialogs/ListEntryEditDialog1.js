@@ -20,14 +20,24 @@ import ArticleBO from '../../api/ArticleBO';
 
 import ArticleAddDialog from './ArticleAddDialog'
 
+
 class ListEntryEditDialog extends Component {
     constructor (props) {
         super(props)
         this.state = {
+            open: this.props.open,
             listEntry: this.props.listEntry,
+            amount: this.props.listEntry.getAmount(),
+            unit: {
+                label: this.props.listEntry.getUnit(),
+                value: this.props.listEntry.getUnit()
+            },
             purchasingUser: this.props.purchasingUser,
+            users: this.props.users,
             article: this.props.article,
+            articles: this.props.articles,
             retailer: this.props.retailer,
+            retailers: this.props.retailers,
         }
     }
 
@@ -35,6 +45,27 @@ class ListEntryEditDialog extends Component {
         this.setState({
             listEntry: listEntry
         })
+    }
+
+    setAmount = (e) => {
+        const re = /^[0-9\b]+$/;
+        if (e.target.value === '' || re.test(e.target.value)) {
+            this.setState({
+                amount: e.target.valueAsNumber
+            })
+            let updatedListEntry = this.state.listEntry
+            updatedListEntry.setAmount(this.state.amount)
+            this.updateListEntry(updatedListEntry)
+        }
+    }
+
+    setUnit = (unit) => {
+        this.setState({
+            unit: unit
+        })
+        let updatedListEntry = this.state.listEntry
+        updatedListEntry.setUnit(unit["value"])
+        this.updateListEntry(updatedListEntry)
     }
 
     setPurchasingUser = (purchasingUser) => {
@@ -54,7 +85,6 @@ class ListEntryEditDialog extends Component {
             let updatedListEntry = this.state.listEntry
             updatedListEntry.setArticleId(article.getId())
             updatedListEntry.setName(article.getName())
-
             this.updateListEntry(updatedListEntry)
         }
     }
@@ -66,7 +96,6 @@ class ListEntryEditDialog extends Component {
                 this.props.loadArticles()
             }
         )
-
     }
 
     setRetailer = (retailer) => {
@@ -78,62 +107,115 @@ class ListEntryEditDialog extends Component {
         this.updateListEntry(updatedListEntry)
     }
 
+    articleAlreadyExists = (articleName) => {
+        try {
+            this.state.articles.forEach( article => {
+                if (article.getName() == articleName){
+                    throw BreakException
+                }
+            })
+            return false
+        } catch (e) {
+            return true
+        };
+    }
     
-
     saveChanges = () => {
         AppAPI.getAPI().updateListEntry(this.state.listEntry)
+        this.props.closeDialog()
     }
 
     render() {
-        const filter = createFilterOptions();
+        const units = [
+            {
+                label: 'Stück',
+                value: 'Stück',
+            },
+            {
+                label: 'g',
+                value: 'g',
+            },
+            {
+                label: 'mg',
+                value: 'mg',
+            },
+            {
+                label: 'kg',
+                value: 'kg',
+            },
+            {
+                label: 'ml',
+                value: 'ml',
+            },
+            {
+                label: 'l',
+                value: 'l',
+            },
+        ];
 
-        const { classes, users, purchasingUser, retailers, retailer, article, articles} = this.props;
-        
+        const filter = createFilterOptions();
+        const { classes, open } = this.props;
+        const { unit, amount, article, articles, purchasingUser, users, retailer, retailers } = this.state;
+
         return (
           <div>
             <Typography className={classes.container} align="right">
             
             </Typography>
-            <Dialog className={classes.dialog} open={this.props.open} onClose={this.props.handleClose} aria-labelledby="form-dialog-title">
+            <Dialog className={classes.dialog} open={open} onClose={this.props.closeDialog} aria-labelledby="form-dialog-title">
               <DialogTitle id="form-dialog-editEntry">Eintrag bearbeiten</DialogTitle>
               <DialogContent>
+
+                {/* Anzahl */}
+                <TextField
+                    type="number"
+                    value={amount}
+                    onChange={this.setAmount}
+                    margin="dense"
+                    id="combo-amount"
+                    variant="standard"
+                    label="Menge"
+                /> 
+
+                {/* Einheit */}
+<               Autocomplete
+                    options={units} 
+                    onChange={(event, unit) => {this.setUnit(unit);}}
+                    defaultValue={unit}
+                    getOptionLabel={(option) => option.label}
+                    renderInput={(params) => <TextField {...params} label="Einheit" variant="standard" placeholder="Einheit" />}
+                />
+
                 {/* Artikel */}
                 <Autocomplete
-                    value={article}
-                    selectOnFocus
-                    clearOnBlur
-                    handleHomeEndKeys
-                    id="free-solo-with-text-demo"
-                    options={articles} 
-                    //onChange={(event, article) => {this.setArticle(article);}}
-                    onChange={(event, article) => {
-                        if (typeof article === 'string') {
-                            console.log(article, "is string!")
-                            this.createNewArticle(article)
-                        } else if (article && article.inputValue) {
+                    defaultValue={article}
+                    onChange={(event, articleName) => {
+                        if (typeof articleName === 'string') {
+                            this.createNewArticle(articleName)
+                        } else if (articleName && articleName.inputValue) {
                           // Create a new value from the user input
-                            console.log("New Article from user input:", article.inputValue)
-                            this.createNewArticle(article.inputValue)
+                            this.createNewArticle(articleName.inputValue)
                         } else {
-                            console.log("Normal selection")
-                            this.setArticle(article);
+                            this.setArticle(articleName);
                         }
                     }}
                     filterOptions={(options, params) => {
-                        console.log(options, params)
                         const filtered = filter(options, params);
-                
+
                         // Suggest the creation of a new value
-                        if (params.inputValue !== '') {
+                        if (params.inputValue !== '' && !this.articleAlreadyExists(params.inputValue)) {
                           filtered.push({
                             inputValue: params.inputValue,
-                            name: `Add "${params.inputValue}"`,
+                            name: `Erstelle "${params.inputValue}"`,
                           });
                         }
                 
                         return filtered;
                     }}
-                    defaultValue={article}
+                    selectOnFocus
+                    clearOnBlur
+                    handleHomeEndKeys
+                    options={articles} 
                     getOptionLabel={(option) => {
                         // Value selected with enter, right from the input
                         if (typeof option === 'string') {
@@ -146,6 +228,8 @@ class ListEntryEditDialog extends Component {
                         // Regular option
                         return option.name;
                       }}                    
+                    renderOption={(option) => option.name}
+                    freeSolo
                     renderInput={(params) => <TextField {...params} label="Artikel" variant="standard" placeholder="Artikel" />}
                 />
 
@@ -170,7 +254,7 @@ class ListEntryEditDialog extends Component {
               
               </DialogContent>
               <DialogActions>
-                <Button onClick={this.props.handleClose} color="primary">
+                <Button onClick={this.props.closeDialog} color="primary">
                   abbrechen
                 </Button>
                 <Button onClick={this.saveChanges} color="primary">
@@ -178,14 +262,6 @@ class ListEntryEditDialog extends Component {
                 </Button>
               </DialogActions>
             </Dialog>
-
-            {/* <ArticleAddDialog 
-              articleAddDialogOpen={articleAddDialogOpen} 
-              openArticleAddDialog={this.openArticleAddDialog} 
-              setNewArticleDialogValue={this.setNewArticleDialogValue}
-              setArticle = {this.setArticle}
-            />            */}
-
           </div>
           );
     }

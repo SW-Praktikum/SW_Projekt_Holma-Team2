@@ -36,17 +36,19 @@ class ListEntryTable extends Component {
             retailers: [],
             users: [],
             articles: [],
+            articlesCount: 0,
             openDialog: false,
         }
     }
 
     componentDidMount(){
-        if(this.props.shoppingListId){
-            this.loadUsers();
-            this.loadRetailers();
-            this.loadArticles();
-            this.loadListEntries();
-          }
+        if(this.props.shoppingListId) {
+            this.loadRetailers().then(() => {this.loadArticles()
+                .then(() => { this.loadUsers()
+                    .then(() => {this.loadListEntries()})
+                })
+            })
+        }
     }
 
     openDialog = () => {
@@ -56,77 +58,82 @@ class ListEntryTable extends Component {
   
     handleClose = () => {
         this.setState({
-          openDialog: false})
-      }
+        openDialog: false})
+    }
 
     // Muss noch verschoben werden in GroupList.js!!
     loadRetailers = () => {
-    AppAPI.getAPI().getRetailers().then((retailers) => {
-        console.log("Loaded all retailers:", retailers)
-        this.setState({
-        retailers: retailers,
-        loadingInProgress: true, // loading indicator 
-        loadingError: null,
-    });
-    }).catch(e =>
-        this.setState({ // Reset state with error from catch 
-            loadingInProgress: false,
-            loadingError: e
-        })
-        );  
-    } 
-  
-    loadUsers = () => {
-        AppAPI.getAPI().getUsersByGroupId(this.props.groupId).then((users) => {
-          console.log("Loaded users for group '" + this.props.groupId + "':", users)
-          this.setState({
-            users: users,
-            loadingInProgress: true, // loading indicator 
-            loadingError: null,
-        });
-        }).catch(e =>
-            this.setState({ // Reset state with error from catch 
-              loadingInProgress: false,
-              loadingError: e
-            })
-          );  
-        } 
-
-    loadArticles = () => {
-        AppAPI.getAPI().getArticlesByGroupId(this.props.groupId).then((articles) => {
-            console.log("Loaded articles for group '" + this.props.groupId + "':", articles)
+        return AppAPI.getAPI().getRetailers().then((retailers) => {
+            console.log("Loaded all retailers:", retailers)
             this.setState({
-            articles: articles,
-            loadingInProgress: true, // loading indicator 
-            loadingError: null,
-        });
+                retailers: retailers,
+                loadingInProgress: true, // loading indicator 
+                loadingError: null,
+            });
+            return new Promise(function (resolve) {resolve(retailers)})
         }).catch(e =>
             this.setState({ // Reset state with error from catch 
                 loadingInProgress: false,
                 loadingError: e
             })
-            );  
-        } 
+        );  
+    } 
+  
+    loadUsers = () => {
+        return AppAPI.getAPI().getUsersByGroupId(this.props.groupId).then((users) => {
+            console.log("Loaded users for group '" + this.props.groupId + "':", users)
+            this.setState({
+                users: users,
+                loadingInProgress: true, // loading indicator 
+                loadingError: null,
+            });
+            return new Promise(function (resolve) {resolve(users)})
+        }).catch(e =>
+            this.setState({ // Reset state with error from catch 
+              loadingInProgress: false,
+              loadingError: e
+            })
+        );  
+    } 
+
+    loadArticles = () => {
+        return AppAPI.getAPI().getArticlesByGroupId(this.props.groupId).then((articles) => {
+            console.log("Loaded articles for group '" + this.props.groupId + "':", articles)
+            this.setState({
+                articles: articles,
+                loadingInProgress: true, // loading indicator 
+                loadingError: null,
+            });
+            return new Promise(function (resolve) {resolve(articles)})
+        }).catch(e =>
+            this.setState({ // Reset state with error from catch 
+                loadingInProgress: false,
+                loadingError: e
+            })
+        );  
+    } 
             
     loadListEntries = () => {
         AppAPI.getAPI().getListEntriesByShoppingListId(this.props.shoppingListId).then(listEntries => {
             console.log("Loaded list entries for shopping list '" + this.props.shoppingListId + "':", listEntries)
             var listEntryTableElements = listEntries.map((listEntry) => 
-            <ListEntry 
-                listEntry={listEntry} 
-                loadListEntries={this.loadListEntries} 
-                retailers={this.state.retailers}
-                users={this.state.users}
-                articles={this.state.articles}
-                loadArticles={this.loadArticles}
-                groupId={this.props.groupId}
-            />)
+                <ListEntry 
+                    listEntry={listEntry} 
+                    loadListEntries={this.loadListEntries} 
+                    retailers={this.state.retailers}
+                    users={this.state.users}
+                    articles={this.state.articles}
+                    loadArticles={this.loadArticles}
+                    groupId={this.props.groupId}
+                />
+            )
 
             this.setState({
                 listEntryTableElements: listEntryTableElements,
                 loadingInProgress: true, // loading indicator 
                 loadingError: null
-                })
+            })
+            return new Promise(function (resolve) { resolve(1) })
             }).catch(e =>
                 this.setState({ // Reset state with error from catch 
                 loadingInProgress: false,

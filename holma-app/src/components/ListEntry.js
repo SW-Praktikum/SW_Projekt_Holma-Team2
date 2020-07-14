@@ -35,6 +35,7 @@ class ListEntry extends Component {
             openDialog: false,
             checked: this.props.listEntry.getChecked(),
             listEntry: this.props.listEntry,
+            articles: this.props.articles
         }
     }
 
@@ -49,7 +50,7 @@ class ListEntry extends Component {
             openDialog: true})
         }
 
-    handleClose = () => {
+    closeDialog = () => {
         this.setState({
             openDialog: false})
         }
@@ -69,8 +70,9 @@ class ListEntry extends Component {
     }
 
     render() {
-        const { listEntry, groupId, users, retailers, articles } = this.props;
-        const { open } = this.state
+        const { listEntry, groupId, users, retailers } = this.props;
+        const { open, articles } = this.state
+
         return (
             <div >
                 <TableRow width="100%">
@@ -145,7 +147,7 @@ class ListEntry extends Component {
                     loadArticles={this.props.loadArticles}
                     openDialog={this.openDialog}
                     open={this.state.openDialog}
-                    handleClose={this.handleClose}
+                    closeDialog={this.closeDialog}
                 />
             </div>
         );
