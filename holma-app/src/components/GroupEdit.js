@@ -73,7 +73,7 @@ handleClose = () => {
       <Grid container spaching={1}>
         <Grid item xs={6} sm={6}>
         <ListItem align='center' style={{width:"auto"}}>
-        <Typography  variant="h6" gutterBottom>
+        <Typography  variant="h6" style={{fontWeight: "bold"}} gutterBottom>
           Gruppenname:   
         </Typography>
         <Typography  variant="h6" gutterBottom>
@@ -94,8 +94,11 @@ handleClose = () => {
       
       <Grid item xs={6} sm={6}>
         <ListItem  align='center' style={{width:"auto"}}>
+        <Typography  variant="h6" style={{fontWeight: "bold"}} gutterBottom>
+        Admin:
+        </Typography>
         <Typography  variant="h6" gutterBottom>
-        Admin: {this.props.groupOwner}
+        {this.props.groupOwner}
         </Typography>
         </ListItem>
       </Grid>
@@ -106,15 +109,21 @@ handleClose = () => {
       <Grid container spaching={1}>
       <Grid item xs={6} sm={6}>
         <ListItem align='center' style={{width:"auto"}}>
+        <Typography  variant="h6" style={{fontWeight: "bold"}} gutterBottom>
+        Erstellt am:
+        </Typography>
         <Typography  variant="h6" gutterBottom>
-        Erstellt am: {this.props.groupCreationDate}
+        {this.props.groupCreationDate}
         </Typography>
         </ListItem>
       </Grid>
       <Grid item xs={6} sm={6}>
         <ListItem  align='center' style={{width:"auto"}}>
+        <Typography  variant="h6" style={{fontWeight: "bold"}} gutterBottom>
+        Letzte Änderung:
+        </Typography>
         <Typography  variant="h6" gutterBottom>
-        Letzte Änderung: {this.props.groupLastUpdated}
+        {this.props.groupLastUpdated}
         </Typography>
         </ListItem>
       </Grid>
