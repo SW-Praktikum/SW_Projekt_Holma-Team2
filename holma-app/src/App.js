@@ -23,7 +23,7 @@ import MemberDetails from './components/GroupEdit';
 import ArticleEdit from './components/ArticleEdit';
 import StandardArticleEdit from './components/StandardArticleEdit';
 import ListEntryTable from './components/ListEntryTable';
-import StartPage from './components/layout/Startpage';
+import Startpage from './components/layout/Startpage';
 
 
 class App extends React.Component {
@@ -134,9 +134,11 @@ class App extends React.Component {
               {
                 user ?
                   <>
-                    <Redirect to='/groups'/>
+                    <Redirect to='/home'/>
                     <Navigation />
-                    <Route path='/home' component={StartPage}/>
+                    <Route path='/home'>
+                      <Startpage user={user}/>
+                    </Route>
                     <Route path='/groups'>
                       <GroupEntries user={user}/>
                     </Route>
