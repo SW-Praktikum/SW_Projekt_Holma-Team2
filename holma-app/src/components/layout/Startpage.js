@@ -8,34 +8,72 @@ import Assessment from '@material-ui/icons/Assessment';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Settings from '@material-ui/icons/Settings';
 import Grid from '@material-ui/core/Grid';
+import AppAPI from '../../api/AppAPI';
+import Box from '@material-ui/core/Box';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import { colors } from '@material-ui/core';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import ListWithBoxes from '../ListWithBoxes';
 
 
-
-//import theme from '../theme';
-
-/*const useStyles = makeStyles({
-  root: {
-    flexGrow: 1,
-    maxWidth: 1000,
-  },
-});
-
-export default function IconLabelTabs() {
-  const classes = useStyles();
-  const [value, setValue] = React.useState(0);
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
-  */
-
+class ListCard extends React.Component {
+  render() {
+      return (
+        <Card className="root" style={{/* minHeight: 250 ,  */minWidth: '100%', marginBottom:10, marginTop:10, backgroundColor: colors.teal[600]}}>
+          <CardActionArea>
+          <CardContent>
+              <Typography className="title" style={{fontSize: 14, color: 'white'}}>{this.props.entry.getName()}</Typography>
+              <Typography className="title" style={{fontSize: 14, color: 'white'}}>Id: {this.props.entry.getId()}</Typography>
+          </CardContent>
+          </CardActionArea>     
+        </Card>
+  )
+}
+}
 
 
 class Startpage extends React.Component {
   constructor(props) {
     super(props)
-    console.log(props)
+    this.state={
+      user: this.props.user,
+      userName: this.props.user.name,
+      userId: this.props.user.id,
+      privatEntries: [],
+    }
+    
   }
+
+  componentDidMount(){
+    if(this.props.user){
+        this.loadPrivatList();
+      }
+  }
+
+  loadPrivatList = () => {
+    AppAPI.getAPI().getListEntriesByUserId(this.state.userId).then((entries)=> {
+      var privatEntries = entries.map((entry) =>
+      <Grid key={entry.getId()} item xs={6} item lg={4}>
+      <Paper className="paper" style ={{ textAlign:'center',}} >
+        <ListCard key={entry.getId()} entry={entry}/>
+      </Paper>
+    </Grid>
+      )
+      this.setState({
+        privatEntries: privatEntries,
+        loadingInProgress: true, 
+        loadingError: null,
+        userId: entries.id,
+    });
+    }).catch(e =>
+        this.setState({ // Reset state with error from catch 
+          loadingInProgress: false,
+          loadingError: e
+        })
+      );  
+    } 
   
   makeStyles = (theme) => ({
     root: {
@@ -48,46 +86,18 @@ class Startpage extends React.Component {
   })
 
   render() {
+    console.log(this.state.user)
+    const {privatEntries} = this.state
     const classes = this.makeStyles
     return (
-    <div>
-    <Paper square className={classes.root}>
-      <div>
-      <Tabs
-
-        variant="fullWidth"
-        indicatorColor="secondary"
-        textColor="black"
-        aria-label="icon label tabs example"
-      >
-        <Tab icon={<Group />} label="Gruppen" value="1"/>
-        <Tab icon={<List />} label="Listen" value="2"/>        
-      </Tabs>
-      <Tabs
-
-        variant="fullWidth"
-        indicatorColor="secondary"
-        textColor="black"
-        aria-label="icon label tabs example"
-      >
-        <Tab icon={<GroupAdd />} label="Gruppe hinzufügen" value="3" />
-        <Tab icon={<Assessment />} label="Statistik" value="4" />
-        
-      </Tabs>
-      <Tabs
-
-        variant="fullWidth"
-        indicatorColor="secondary"
-        textColor="red"
-        aria-label="icon label tabs example"
-      >
-        <Tab icon={<AccountCircle />} label="Mein Konto" value="5" />
-        <Tab icon={<Settings />} label="Settings" value="6" />
-        
-      </Tabs>
-      </div>
-    </Paper>
-    </div>
+        <Paper>
+          <Grid>
+          <h2>Hallo {this.state.userName} schön, dass du unsere App verwendest!</h2>
+          <h2>Deine persönliche Einkaufsliste - besteht aus den Listeneinträgen deiner gesamten Gruppen:</h2>
+          </Grid>
+      <Box m={2}/>
+      <ListWithBoxes groupElements={privatEntries}/>
+      </Paper>
   );
 }
 }
