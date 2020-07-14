@@ -191,7 +191,7 @@ class ListEntryTable extends Component {
         console.log(retailer)
         console.log("Die Id des Händlers:", retailer.id)
         this.setState({retailerName: retailer.name})
-        this.loadListEntriesByRetailer("9001") 
+        this.loadListEntriesByRetailer(retailer.id) 
    }
 
    loadListEntriesByRetailer = (retailerId) => {

@@ -707,7 +707,7 @@ class ShoppingListRelatedCheckedByListEntryOperations(Resource):
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('retailer_id', 'Die ID des retailer-Objekts')
 class RetailerRelatedListEntryOperations(Resource):
-    @holmaApp.marshal_with(retailer)
+    @holmaApp.marshal_with(listEntry)
     # @ secured
     def get(self, retailer_id):
         """Auslesen von Listentry-Objekten die zu einem bestimmten
