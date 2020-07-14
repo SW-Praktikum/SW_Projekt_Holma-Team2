@@ -178,7 +178,7 @@ class GroupList extends Component {
                 <Link to={"/shoppinglist/" + this.props.match.params.groupId} style={{textDecoration: 'none'}}>
                   <ListWithBoxes groupElements={listElements}/>
                 </Link>
-                <AddListDialog 
+                <ShoppingListAddDialog 
                   openDialog={this.openDialog}
                   open={this.state.openDialog}
                   handleClose={this.handleClose}
