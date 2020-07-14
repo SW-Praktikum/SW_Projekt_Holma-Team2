@@ -16,218 +16,245 @@ import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import AppAPI from '../../api/AppAPI'
+import ArticleBO from '../../api/ArticleBO';
+
 import ArticleAddDialog from './ArticleAddDialog'
+
 
 class ListEntryEditDialog extends Component {
     constructor (props) {
         super(props)
         this.state = {
-            entryId: this.props.entryId,
+            open: this.props.open,
             listEntry: this.props.listEntry,
             amount: this.props.listEntry.getAmount(),
-            unit: this.props.listEntry.getUnit(),
-            article: {name: this.props.listEntry.getName(), value: 5000},
-            purchasingUser: this.props.listEntry.getPurchasingUserId(),
-            retailer: this.props.listEntry.getRetailerId(),
-            standard: false,
-            user: {name : "Herbert", value: 1000},
-            articleAddDialogOpen: false
-          }        
+            unit: {
+                label: this.props.listEntry.getUnit(),
+                value: this.props.listEntry.getUnit()
+            },
+            purchasingUser: this.props.purchasingUser,
+            users: this.props.users,
+            article: this.props.article,
+            articles: this.props.articles,
+            retailer: this.props.retailer,
+            retailers: this.props.retailers,
+        }
     }
 
-    handleChangeAmount = (e) => {
+    updateListEntry = (listEntry) => {
+        this.setState({
+            listEntry: listEntry
+        })
+    }
+
+    setAmount = (e) => {
         const re = /^[0-9\b]+$/;
         if (e.target.value === '' || re.test(e.target.value)) {
             this.setState({
                 amount: e.target.valueAsNumber
             })
-            this.state.listEntry.setAmount(this.state.amount)
-            //console.log(this.state.listEntry)
-               
+            let updatedListEntry = this.state.listEntry
+            updatedListEntry.setAmount(this.state.amount)
+            this.updateListEntry(updatedListEntry)
         }
     }
 
-    handleChangeArticle = (e) => {
-        // überlegen wie wir article und deren ID ansprechen oder alles über name
-        // autovorschläge für neue ListenEinträge?
-        this.setState({article: e.target.value})
-        this.state.listEntry.setName(this.state.article)
-            //console.log(this.state.listEntry)   
+    setUnit = (unit) => {
+        this.setState({
+            unit: unit
+        })
+        let updatedListEntry = this.state.listEntry
+        updatedListEntry.setUnit(unit["value"])
+        this.updateListEntry(updatedListEntry)
     }
 
+    setPurchasingUser = (purchasingUser) => {
+        this.setState({
+            purchasingUser: purchasingUser
+        })
+        let updatedListEntry = this.state.listEntry
+        updatedListEntry.setPurchasingUserId(purchasingUser.getId())
+        this.updateListEntry(updatedListEntry)
+    }
+
+    setArticle = (article) => {
+        if (article !== null) {
+            this.setState({
+                article: article
+            })
+            let updatedListEntry = this.state.listEntry
+            updatedListEntry.setArticleId(article.getId())
+            updatedListEntry.setName(article.getName())
+            this.updateListEntry(updatedListEntry)
+        }
+    }
+
+    createNewArticle = (articleName) => {
+        let newArticle = new ArticleBO(articleName, this.props.groupId)
+        AppAPI.getAPI().createArticle(newArticle).then((article) => {
+                this.setArticle(article)
+                this.props.loadArticles()
+            }
+        )
+    }
+
+    setRetailer = (retailer) => {
+        this.setState({
+            retailer: retailer
+        })
+        let updatedListEntry = this.state.listEntry
+        updatedListEntry.setRetailerId(retailer.getId())
+        this.updateListEntry(updatedListEntry)
+    }
+
+    articleAlreadyExists = (articleName) => {
+        try {
+            this.state.articles.forEach( article => {
+                if (article.getName() == articleName){
+                    throw BreakException
+                }
+            })
+            return false
+        } catch (e) {
+            return true
+        };
+    }
+    
     saveChanges = () => {
         AppAPI.getAPI().updateListEntry(this.state.listEntry)
-        //AppAPI.getAPI().createListEntry(this.state.listEntry)
-        console.log(this.state.listEntry)
+        this.props.closeDialog()
     }
-
-    setInputValue = (e) => {
-      console.log(e)
-      this.setState({
-          inputValue: e
-      })
-    }
-
-    openArticleAddDialog= (e) => {
-      console.log(e)
-      this.setState({
-        articleAddDialogOpen: e
-      })
-    }
-
-    setUser = (e) => {
-      console.log(e)
-      this.setState({
-          user: e
-      })
-    } 
-
-    setArticle = (e) => {
-      this.setState({
-          article: e
-      })
-    } 
-
 
     render() {
-      //const filter = createFilterOptions();
+        const units = [
+            {
+                label: 'Stück',
+                value: 'Stück',
+            },
+            {
+                label: 'g',
+                value: 'g',
+            },
+            {
+                label: 'mg',
+                value: 'mg',
+            },
+            {
+                label: 'kg',
+                value: 'kg',
+            },
+            {
+                label: 'ml',
+                value: 'ml',
+            },
+            {
+                label: 'l',
+                value: 'l',
+            },
+        ];
 
-      const { classes, retailers, users } = this.props;
-      const { articleAddDialogOpen } = this.state;
-      const units = [
-        {
-          value: 'Stück',
-          label: 'st',
-        },
-        {
-          value: 'Gramm',
-          label: 'g',
-        },
-        {
-          value: 'Milligramm',
-          label: 'mg',
-        },
-        {
-          value: 'Kilogramm',
-          label: 'kg',
-        },
-        {
-          value: 'Milliliter',
-          label: 'ml',
-        },
-        {
-          value: 'Liter',
-          label: 'l',
-        },
-      ];
-
-      const articles = [{name : "Brot", value: 5001}, {name : "Banane", value: 5002}]
+        const filter = createFilterOptions();
+        const { classes, open } = this.props;
+        const { unit, amount, article, articles, purchasingUser, users, retailer, retailers } = this.state;
 
         return (
           <div>
             <Typography className={classes.container} align="right">
             
             </Typography>
-            <Dialog className={classes.dialog} open={this.props.open} onClose={this.props.handleClose} aria-labelledby="form-dialog-title">
+            <Dialog className={classes.dialog} open={open} onClose={this.props.closeDialog} aria-labelledby="form-dialog-title">
               <DialogTitle id="form-dialog-editEntry">Eintrag bearbeiten</DialogTitle>
               <DialogContent>
 
                 {/* Anzahl */}
                 <TextField
                     type="number"
-                    value={this.state.amount}
-                    onChange={this.handleChangeAmount}
+                    value={amount}
+                    onChange={this.setAmount}
                     margin="dense"
                     id="combo-amount"
                     variant="standard"
                     label="Menge"
-                />
+                /> 
 
                 {/* Einheit */}
-                <Autocomplete
-                    id="combo-unit"
-                    inputValue={this.state.unit}
-                    options={units} //liste der Einheiten laden
+<               Autocomplete
+                    options={units} 
+                    onChange={(event, unit) => {this.setUnit(unit);}}
+                    defaultValue={unit}
                     getOptionLabel={(option) => option.label}
-                    renderInput={(params) => <TextField {...params} label="Einheit" variant="standard" />}
+                    renderInput={(params) => <TextField {...params} label="Einheit" variant="standard" placeholder="Einheit" />}
                 />
 
                 {/* Artikel */}
-                {/* <Autocomplete
-                    //not working yet
-                    freeSolo
-                    options={articles} //Artikel laden
-                    //onChange={(event, newValue) => this.setUser(newValue)}
-                    onChange={(event, newValue) => {
-                      if (typeof newValue === 'string') {
-                        // timeout to avoid instant validation of the dialog's form.
-                        setTimeout(() => {
-                          this.openArticleAddDialog(true);
-                          this.setNewArticleDialogValue({
-                            name: newValue,
-                            value: '',
-                          });
-                        });
-                      } else if (newValue && newValue.inputValue) {
-                        this.openArticleAddDialog(true);
-                        this.setNewArticleDialogValue({
-                          name: newValue.inputValue,
-                          value: '',
-                        });
-                      } else {
-                        this.setArticle(newValue);
-                      }
+                <Autocomplete
+                    defaultValue={article}
+                    onChange={(event, articleName) => {
+                        if (typeof articleName === 'string') {
+                            this.createNewArticle(articleName)
+                        } else if (articleName && articleName.inputValue) {
+                          // Create a new value from the user input
+                            this.createNewArticle(articleName.inputValue)
+                        } else {
+                            this.setArticle(articleName);
+                        }
                     }}
-
                     filterOptions={(options, params) => {
-                      const filtered = filter(options, params);
-                      if (params.inputValue !== '') {
-                        filtered.push({
-                          inputValue: params.inputValue,
-                          name: "Add " + params.inputValue,
-                        });
-                      }
-                      return filtered;
-                    }}
+                        const filtered = filter(options, params);
 
-                    getOptionLabel={(option) => {
-                      // e.g value selected with enter, right from the input
-                      if (typeof option === 'string') {
-                        return option;
-                      }
-                      if (option.inputValue) {
-                        return option.inputValue;
-                      }
-                      return option.name;
+                        // Suggest the creation of a new value
+                        if (params.inputValue !== '' && !this.articleAlreadyExists(params.inputValue)) {
+                          filtered.push({
+                            inputValue: params.inputValue,
+                            name: `Erstelle "${params.inputValue}"`,
+                          });
+                        }
+                
+                        return filtered;
                     }}
-                    defaultValue={this.state.article}
-                    renderInput={(params) => <TextField {...params} label="Einkäufer" variant="standard" placeholder="Test" />}
-                /> */}
+                    selectOnFocus
+                    clearOnBlur
+                    handleHomeEndKeys
+                    options={articles} 
+                    getOptionLabel={(option) => {
+                        // Value selected with enter, right from the input
+                        if (typeof option === 'string') {
+                          return option;
+                        }
+                        // Add "xxx" option created dynamically
+                        if (option.inputValue) {
+                          return option.inputValue;
+                        }
+                        // Regular option
+                        return option.name;
+                      }}                    
+                    renderOption={(option) => option.name}
+                    freeSolo
+                    renderInput={(params) => <TextField {...params} label="Artikel" variant="standard" placeholder="Artikel" />}
+                />
 
                 {/* Einkäufer */}
                 <Autocomplete
-                    //not working yet
-                    options={users} //liste der beutzer der Gruppe laden
-                    //onChange={(event, newValue) => this.setUser(newValue)}
-                    onChange={(event, newValue) => {this.setUser(newValue)}}
+                    options={users} 
+                    onChange={(event, purchasingUser) => {this.setPurchasingUser(purchasingUser);}}
+                    defaultValue={purchasingUser}
                     getOptionLabel={(option) => option.name}
-                    //defaultValue={users[0]}
                     renderInput={(params) => <TextField {...params} label="Einkäufer" variant="standard" placeholder="Einkäufer" />}
                 />
 
                 {/* Retailer */}
                 <Autocomplete
-                    id="combo-retailer"
-                    options={retailers} //liste der retailer laden
+                    options={retailers} 
+                    onChange={(event, retailer) => {this.setRetailer(retailer);}}
+                    defaultValue={retailer}
                     getOptionLabel={(option) => option.name}
-                    renderInput={(params) => (
-                      <TextField {...params} variant="standard" label="Händler" placeholder="Retailer" />
-                    )}                
-                  />
+                    renderInput={(params) => <TextField {...params} label="Retailer" variant="standard" placeholder="Retailer" />}
+                />
 
+              
               </DialogContent>
               <DialogActions>
-                <Button onClick={this.props.handleClose} color="primary">
+                <Button onClick={this.props.closeDialog} color="primary">
                   abbrechen
                 </Button>
                 <Button onClick={this.saveChanges} color="primary">
@@ -235,48 +262,6 @@ class ListEntryEditDialog extends Component {
                 </Button>
               </DialogActions>
             </Dialog>
-            <ArticleAddDialog 
-              articleAddDialogOpen={articleAddDialogOpen} 
-              openArticleAddDialog={this.openArticleAddDialog} 
-              setNewArticleDialogValue={this.setNewArticleDialogValue}
-              setArticle = {this.setArticle}
-            /> 
-          
-            {/* <Dialog open={open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
-              <form onSubmit={this.handleSubmit}>
-                <DialogTitle id="form-dialog-title">Neuen Artikel erstellen</DialogTitle>
-                <DialogContent>
-                  <DialogContentText>
-                    Fehlt ein Artikel? Dann füg ihn hinzu!
-                  </DialogContentText>
-                  <TextField
-                    autoFocus
-                    margin="dense"
-                    id="name"
-                    value={newArticleDialogValue.name}
-                    onChange={(event) => this.setNewArticleDialogValue({ ...newArticleDialogValue, name: event.target.value })}
-                    label="name"
-                    type="text"
-                  />
-                  <TextField
-                    margin="dense"
-                    id="name"
-                    value={newArticleDialogValue.value}
-                    onChange={(event) => this.setNewArticleDialogValue({ ...newArticleDialogValue, value: event.target.value })}
-                    label="value"
-                    type="number"
-                  />
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={this.handleClose} color="primary">
-                    Cancel
-                  </Button>
-                  <Button type="submit" color="primary">
-                    Add
-                  </Button>
-                </DialogActions>
-              </form>
-            </Dialog>           */}
           </div>
           );
     }

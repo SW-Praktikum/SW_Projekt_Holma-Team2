@@ -20,8 +20,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-//import ListEntryEditDialog from './dialogs/ListEntryEditDialog';
-import ListEntryEditDialog from './dialogs/ListEntryEditDialog1';
+import ListEntryEditDialog from './dialogs/ListEntryEditDialog';
 import ListEntryAddDialog from './dialogs/ListEntryAddDialog';
 import { colors } from '@material-ui/core';
 
