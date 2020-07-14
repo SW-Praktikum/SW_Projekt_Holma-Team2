@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
-import IconButton from '@material-ui/core/IconButton';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -164,16 +163,7 @@ class ListEntryTable extends Component {
             })
             );  
         } 
-
-    filterByArticleName = (e) => {
-        this.setState({textInput: e.target.value})
-        console.log(this.state.listEntryTableElements)
-        
-        // listentrytableelements aus state filtern
-        // nur objekte mit entsprechendem Namen anzeigen
-        
-        
-    }
+    
     // install: npm i @date-io/date-fns
     // install: npm i @material-ui/pickers
     // install: npm i date-fns
@@ -186,19 +176,24 @@ class ListEntryTable extends Component {
         this.setState({endDate: date})
         console.log(date)
    }
+   // doku for the date library: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#Several_ways_to_create_a_Date_object
 
-   filterByRetailer = (retailer) => {
+   filterByRetailer = (event, retailer) => {
+    if (retailer === null) {
+        this.loadListEntries()
+    }
+    else {
         console.log(retailer)
         console.log("Die Id des Händlers:", retailer.id)
         this.setState({retailerName: retailer.name})
         this.loadListEntriesByRetailer(retailer.id) 
-   }
+   }}
 
    loadListEntriesByRetailer = (retailerId) => {
     console.log("Current Retailer id:", retailerId)
     // get listentries by Retailer ID
     AppAPI.getAPI().getListEntriesByRetailerId(retailerId).then(listEntries => {
-        console.log("Loaded list entries for user '" + retailerId + "':", listEntries)
+        console.log("Loaded list entries for retailer '" + retailerId + "':", listEntries)
         var listEntryTableElements = listEntries.map((listEntry) => <ListEntry listEntry={listEntry} loadListEntries={this.loadListEntries} />)
 
         this.setState({
@@ -222,11 +217,17 @@ class ListEntryTable extends Component {
             <div display='flex'>
             
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <Grid container justify="space-around">
+            <Grid container direction="row" justify="space-between" alignItems="center" component={Paper} style={{marginTop: 10, marginBottom: 10}}>
+                <Grid item xs={12} sm={12} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10}}>
+                    <Typography color="primary" style={{fontSize: 18}}>
+                        Nach Zeitaum filtern
+                    </Typography>
+                </Grid>
+                <Grid item xs={12} sm={6} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
                     <KeyboardDatePicker
                     disableToolbar
                     variant="inline"
-                    format="MM/dd/yyyy"
+                    format="dd/MM/yyyy"
                     margin="normal"
                     id="date-picker-start"
                     label="Startdatum"
@@ -236,10 +237,12 @@ class ListEntryTable extends Component {
                         'aria-label': 'change date',
                     }}
                     />
+                </Grid>
+                <Grid item xs={12} sm={6} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
                     <KeyboardDatePicker
                     disableToolbar
                     variant="inline"
-                    format="MM/dd/yyyy"
+                    format="dd/MM/yyyy"
                     margin="normal"
                     id="date-picker-end"
                     label="Enddatum"
@@ -250,22 +253,28 @@ class ListEntryTable extends Component {
                     }}
                     />
                 </Grid>
+                </Grid>
             </MuiPickersUtilsProvider>
-            
-            <Autocomplete
-                id="combo-retailer"
-                style={{width: 300}}
-                value={this.state.retailerName}
-                onChange={(e, retailer) => this.filterByRetailer(retailer)}
-                options={retailers} //liste der retailer laden
-                getOptionLabel={(option) => option.name}
-                renderInput={(params) => (
-                    <TextField {...params} variant="standard" label="Händler" placeholder="Retailer" />
-                )}                
-                />
-
-            
-            <TableContainer style={{marginTop: 20}}component={Paper}>
+            <Grid container direction="row" justify="space-between" alignItems="center" component={Paper}>
+                <Grid item xs={12} sm={6} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
+                    <Typography color="primary" style={{fontSize: 18}}>
+                        Nach Einzelhändler filtern
+                    </Typography>
+                </Grid>
+                <Grid item xs={12} sm={6} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
+                    <Autocomplete
+                        id="combo-retailer"
+                        onChange={this.filterByRetailer}
+                        options={retailers} //liste der retailer laden
+                        getOptionLabel={(option) => option.name}
+                        getOptionSelected={(option) => option.name}
+                        renderInput={(params) => (
+                            <TextField {...params} variant="standard" label="Händler" placeholder="Händler" />
+                        )}                
+                    />
+                </Grid>
+            </Grid>
+            <TableContainer style={{marginTop: 20}} component={Paper}>
                 <Table aria-label="collapsible table">
                     <TableHead style={{backgroundColor: colors.teal[600]}}>
                         <TableRow>
