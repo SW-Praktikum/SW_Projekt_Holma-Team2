@@ -67,15 +67,16 @@ class GroupList extends Component {
         this.state = {
             group: null,
             groupId: this.props.match.params.groupId,
+            groupName: "",
             listElements:[],
             shoppingListName: "",
+            shoppingListId:"",
         }}
       
     componentDidMount(){
       if(this.props.match.params.groupId){
-          
-          console.log(this.props)
-          this.loadShoppingLists();
+          this.loadShoppingLists()
+          this.loadGroupName();
         }
     }
     
@@ -121,6 +122,16 @@ class GroupList extends Component {
       this.setState({shoppingListName: e.target.value})
     }
 
+    loadGroupName = () => {
+      AppAPI.getAPI().getGroupById(this.state.groupId).then((group) =>{
+        this.setState({
+          group: group,
+          groupName: group.name,
+        });
+      }
+       )
+      }
+
     loadShoppingLists = () => {
       AppAPI.getAPI().getShoppingListsByGroupId(this.props.match.params.groupId).then((lists) => {
         console.log(lists)
@@ -135,8 +146,10 @@ class GroupList extends Component {
           listElements: listElements,
           loadingInProgress: true, // loading indicator 
           loadingError: null,
+          shoppingListId: lists.id,
       });
          console.log("Save in state", listElements)
+         console.log(this.state.shoppingListId)
       }).catch(e =>
           this.setState({ // Reset state with error from catch 
             loadingInProgress: false,
@@ -147,14 +160,13 @@ class GroupList extends Component {
 
     render() {
       const {listElements} = this.state;
-      console.log("elements", listElements)
           return(
             <div>
               <Box m={5} />
               <Card className="root" style={{/* minHeight: 250 ,  */minWidth: '100%', marginBottom:10, marginTop:10, backgroundColor: colors.teal[600]}}>
                 <CardActionArea>
                   <CardContent>
-                    <Typography className="title" style={{fontSize: 14, color: 'white'}}>Aktuelle Gruppe: {this.state.groupId}</Typography>
+                    <Typography className="title" style={{fontSize: 14, color: 'white'}}>Aktuelle Gruppe: {this.state.groupName} / {this.state.groupId}</Typography>
                   </CardContent>
                 </CardActionArea>     
               </Card>
@@ -163,7 +175,9 @@ class GroupList extends Component {
               </Link>
                 <Box m={2} />
                 <Typography className="title" style={{fontSize: 14, color: 'black'}}>Shoppinglists:</Typography>
-                <ListWithBoxes groupElements={listElements}/>
+                <Link to={"/shoppinglist/" + this.props.match.params.groupId} style={{textDecoration: 'none'}}>
+                  <ListWithBoxes groupElements={listElements}/>
+                </Link>
                 <AddListDialog 
                   openDialog={this.openDialog}
                   open={this.state.openDialog}

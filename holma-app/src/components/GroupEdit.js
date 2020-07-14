@@ -1,22 +1,16 @@
 import React, { Component } from 'react';
 import AppAPI from '../api/AppAPI';
-import GroupBO from '../api/GroupBO';
-import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import CardActionArea from '@material-ui/core/CardActionArea';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Fab from '@material-ui/core/Fab';
 import EditIcon from '@material-ui/icons/Edit';
+import {withStyles} from '@material-ui/core';
 import MemberAddDialog from '../components/dialogs/MemberAddDialog';
+import GroupBO from '../api/GroupBO';
 import ListWithBoxes from './ListWithBoxes'
-import GroupAddDialog from './dialogs/GroupAddDialog';
 import Paper from '@material-ui/core/Paper';
-import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
-import GroupEntries from './GroupEntries';
 import { Link } from 'react-router-dom';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItem from '@material-ui/core/ListItem';
@@ -28,10 +22,8 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FaceIcon from '@material-ui/icons/Face';
-import SaveIcon from '@material-ui/icons/Save';
 import GroupNameEditDialog from '../components/dialogs/GroupNameEditDialog';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+
 
 
 
@@ -82,7 +74,7 @@ handleClose = () => {
         <Grid item xs={6} sm={6}>
         <ListItem align='center' style={{width:"auto"}}>
         <Typography  variant="h6" gutterBottom>
-          Gruppenname:  
+          Gruppenname:   
         </Typography>
         <Typography  variant="h6" gutterBottom>
           {this.props.groupName}
@@ -150,7 +142,7 @@ handleClose = () => {
                 />
       <Button 
           style={{marginTop: 9, marginBottom: 15, alignItems: 'center'}}
-          onClick={this.props.handleClick}
+          onClick={this._handleClick}
           color="primary" 
           variant="contained"
           >
@@ -196,7 +188,7 @@ class ArticleLink extends Component{
 class StandardArticleLink extends Component{
   render(){
       return(
-          <Button style={{marginTop: 9, marginBottom: 15, alignItems: 'center'}}
+          <Button style={{marginTop: 9, marginBottom: 15, marginLeft: 15, alignItems: 'center'}}
           color="primary" 
           variant="contained">
               Standardartikel
@@ -232,6 +224,7 @@ class MemberDetails extends Component{
       this.loadMembers();
      }
   }
+
 
 openDialog = () => {
     this.setState({
@@ -311,14 +304,17 @@ handleClose = () => {
       );  
     }
 
+    handleDeleteGroup = () => {
+      AppAPI.getAPI().deleteGroup(this.state.groupObject);
+      window.location.reload();
+    }
+
     render(){
-        console.log(this.state.groupObject);
-        console.log("JFEJEFOJEFOJEF");
       const {memberElements} = this.state;
+      const {classes} = this.props;
       const {open} = this.state
       this.loadMembers = this.loadMembers.bind(this)
       return(
-        
         <div>
           <GroupInformation
             handleChangeMember={this.handleChangeMember}
@@ -344,12 +340,28 @@ handleClose = () => {
             />
           <Box m={1}></Box>
           <ListWithBoxes groupElements={memberElements}/>
-          <MemberAddDialog member={this.state.members} loadMembers={this.loadMembers}/> 
+          <MemberAddDialog members={memberElements} loadMembers={this.loadMembers}/> 
           <Box m={4} />
-            
+          <Button className={classes.button} variant="contained" style={{marginBottom: 20, color: 'white', backgroundColor: 'red'}} onClick={this.handleDeleteGroup}>Gruppe löschen</Button>
         </div>
       );
     }
 }
 
-export default MemberDetails;
+const styles = theme => ({
+  root: {
+    width: '100%',
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+    padding: theme.spacing(1)
+  },
+  content: {
+    margin: theme.spacing(1),
+  },
+  button: {
+    color: theme.palette.delete.main,
+    
+  }
+});
+
+export default withStyles(styles)(MemberDetails);
