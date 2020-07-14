@@ -7,6 +7,7 @@ import Fab from '@material-ui/core/Fab';
 import EditIcon from '@material-ui/icons/Edit';
 import {withStyles} from '@material-ui/core';
 import MemberAddDialog from '../components/dialogs/MemberAddDialog';
+import GroupBO from '../api/GroupBO';
 import ListWithBoxes from './ListWithBoxes'
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
@@ -141,7 +142,7 @@ handleClose = () => {
                 />
       <Button 
           style={{marginTop: 9, marginBottom: 15, alignItems: 'center'}}
-          onClick={this.props.handleClick}
+          onClick={this._handleClick}
           color="primary" 
           variant="contained"
           >
@@ -236,7 +237,7 @@ handleClose = () => {
   }
 
   addMember() {
-    AppAPI.getAPI().addUserToGroup(this.props.match.params.groupId, this.state.memberId)
+    AppAPI.getAPI().addUserToGroup(this.state.groupId, this.state.memberId)
     this.setState({memberId: ""}, () => {
       this.loadMembers();
     })
@@ -339,7 +340,7 @@ handleClose = () => {
             />
           <Box m={1}></Box>
           <ListWithBoxes groupElements={memberElements}/>
-          <MemberAddDialog member={this.state.members} loadMembers={this.loadMembers}/> 
+          <MemberAddDialog members={memberElements} loadMembers={this.loadMembers}/> 
           <Box m={4} />
           <Button className={classes.button} onClick={this.handleDeleteGroup}>Delete Group</Button>
         </div>
