@@ -690,7 +690,7 @@ class UserRelatedListEntryOperations(Resource):
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('shoppinglist_id', 'Die ID des Shopping-Lis-Objekts')
 class ShoppingListRelatedCheckedByListEntryOperations(Resource):
-    @holmaApp.marshal_with(shoppingList)
+    @holmaApp.marshal_with(listEntry)
     # @ secured
     def get(self, shopping_list_id):
         """Auslesen von Listentry-Objekten die bereits gecheckt wurden """
@@ -725,7 +725,7 @@ class RetailerRelatedListEntryOperations(Resource):
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('article_id', 'Die ID des Article-Objekts')
 class ArticleRelatedListEntryOperations(Resource):
-    @holmaApp.marshal_with(article)
+    @holmaApp.marshal_with(listEntry)
     # @ secured
     def get(self, article_id):
         """Auslesen von Listentry-Objekten die zu einem bestimmten
@@ -733,7 +733,7 @@ class ArticleRelatedListEntryOperations(Resource):
         adm = Administration()
         art = adm.get_article_by_id(article_id)
         if art is not None:
-            listentry_list = adm.get_list_entries_by_article_id(art)
+            listentry_list = adm.get_list_entries_by_article_id(article_id)
             return listentry_list
         else:
             return "Article not found", 500
@@ -751,7 +751,7 @@ class GroupRelatedListEntryOperations(Resource):
         adm = Administration()
         grp = adm.get_group_by_id(group_id)
         if grp is not None:
-            listentry_list = adm.get_standardarticles_by_group_id(grp)
+            listentry_list = adm.get_standardarticles_by_group_id(group_id)
             return listentry_list
         else:
             return "Group not found", 500
