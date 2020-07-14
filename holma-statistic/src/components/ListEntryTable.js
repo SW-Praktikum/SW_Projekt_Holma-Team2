@@ -82,9 +82,10 @@ class ListEntry extends Component {
                 <TableRow width="100%">
                     
                     <TableCell style={{paddingLeft: 5, paddingTop: 0, paddingBottom: 0, paddingRight: 10}} width="10%" align="right">{listEntry.getAmount()}</TableCell>
-                    <TableCell padding="none" width="15%" align="left">{listEntry.getUnit()}</TableCell>
-                    <TableCell padding="none" width="56%" align="left">{listEntry.getName()}</TableCell>
-                    <TableCell padding="none" width="20%" align="right">{listEntry.getRetailerId()}</TableCell>
+                    <TableCell padding="dense" width="15%" align="left">{listEntry.getUnit()}</TableCell>
+                    <TableCell padding="dense" width="30%" align="left">{listEntry.getName()}</TableCell>
+                    <TableCell padding="dense" width="20%" align="right">{listEntry.getRetailerId()}</TableCell>
+                    <TableCell padding="dense" width="30%" align="right">{listEntry.getCheckedTs()}</TableCell>
                     
                    
                     
@@ -281,6 +282,8 @@ class ListEntryTable extends Component {
                             <TableCell width="10%"/>
                             <TableCell width="16%" align="left"><b style={{ color: '#ffffff'}}>Menge</b></TableCell>
                             <TableCell width="56%" align="left"><b style={{ color: '#ffffff'}}>Artikel</b></TableCell>
+                            <TableCell width="20%" align="left"><b style={{ color: '#ffffff'}}>Händler</b></TableCell>
+                            <TableCell width="20%" align="left"><b style={{ color: '#ffffff'}}>gekauft am</b></TableCell>
                             <TableCell width="6%"/>
                             <TableCell width="6%"/>
                         </TableRow>
