@@ -48,30 +48,32 @@ class UserProfil extends Component {
           <div className={classes.content}>
             <Box m={2} />
                 <Typography  variant="h4" gutterBottom>
-                Userdetails:
+                Nutzerdetails:
                 </Typography>
             <Box m={5} />
             <Grid container spaching={3}>
               <Grid item xs={8} sm={2}>
-                <Typography variant="h6" gutterBottom>Username:{user.getName()}</Typography>
+                <Typography variant="h6" style={{fontWeight: "bold"}} gutterBottom>Nutzername: </Typography>
+                <Typography variant="h6" gutterBottom>{user.getName()}</Typography>
               </Grid>
               <Grid item xs={8} sm={2}/>
               <Grid item xs={8} sm={4}>
-                <Typography variant="h6" gutterBottom>User-Id: {user.getId()}</Typography>
+                <Typography variant="h6" style={{fontWeight: "bold"}} gutterBottom>Nutzer-Id: </Typography>
+                <Typography variant="h6" gutterBottom>{user.getId()}</Typography>
               </Grid>
             </Grid>
             <Box m={4} />
               <Grid container spacing={3}>
                   <Grid item xs={8} sm={4}>
-                      <Typography variant="h6" gutterBottom>Member since:</Typography>
+                      <Typography variant="h6" style={{fontWeight: "bold"}} gutterBottom>Nutzer seit: </Typography>
                       <Typography variant="h6" gutterBottom>{user.getCreationDate()}</Typography>
                   </Grid>
               </Grid>
             <Box m={4} />
             <Grid container spaching={2}>
-              <Button variant="contained" color='primary' onClick={this.handleSignOutButtonClicked}>Logout</Button>
+              <Button variant="contained" color='primary' onClick={this.handleSignOutButtonClicked}>Ausloggen</Button>
               <Grid item xs={2} sm={2}/>
-              <Button variant="contained" style={{color: 'white', backgroundColor: 'red'}}className={classes.button} onClick={this.handleDeleteUser}>Delete User</Button>
+              <Button variant="contained" style={{color: 'white', backgroundColor: 'red'}}className={classes.button} onClick={this.handleDeleteUser}>Nutzer löschen</Button>
             </Grid>
           </div>
         </Paper>

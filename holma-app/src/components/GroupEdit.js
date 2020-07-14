@@ -73,7 +73,7 @@ handleClose = () => {
         <Grid item xs={6} sm={6}>
         <ListItem align='center' style={{width:"auto"}}>
         <Typography  variant="h6" gutterBottom>
-          Gruppenname:  
+          Gruppenname:   
         </Typography>
         <Typography  variant="h6" gutterBottom>
           {this.props.groupName}
@@ -187,7 +187,7 @@ class ArticleLink extends Component{
 class StandardArticleLink extends Component{
   render(){
       return(
-          <Button style={{marginTop: 9, marginBottom: 15, alignItems: 'center'}}
+          <Button style={{marginTop: 9, marginBottom: 15, marginLeft: 15, alignItems: 'center'}}
           color="primary" 
           variant="contained">
               Standardartikel
@@ -341,7 +341,7 @@ handleClose = () => {
           <ListWithBoxes groupElements={memberElements}/>
           <MemberAddDialog member={this.state.members} loadMembers={this.loadMembers}/> 
           <Box m={4} />
-          <Button className={classes.button} onClick={this.handleDeleteGroup}>Delete Group</Button>
+          <Button className={classes.button} variant="contained" style={{marginBottom: 20, color: 'white', backgroundColor: 'red'}} onClick={this.handleDeleteGroup}>Gruppe löschen</Button>
         </div>
       );
     }
