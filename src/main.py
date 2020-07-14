@@ -672,7 +672,7 @@ class ListEntryOperations(Resource):
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('user_id', 'Die ID des user-Objekts')
 class UserRelatedListEntryOperations(Resource):
-    @holmaApp.marshal_with(user)
+    @holmaApp.marshal_with(listEntry)
     # @ secured
     def get(self, user_id):
         """Auslesen von Listentry-Objekten die zu einem bestimmten

@@ -22,6 +22,16 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import EntryEditDialog from './dialogs/EntryEditDialog';
 import EntryAddDialog from './dialogs/EntryAddDialog';
 import { colors, Button, TextField } from '@material-ui/core';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import Grid from '@material-ui/core/Grid';
+import DateFnsUtils from '@date-io/date-fns'; // choose your lib
+import {
+  DatePicker,
+  KeyboardDatePicker,
+  DateTimePicker,
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
+
 
 // classes for styling need to be created
 
@@ -57,7 +67,14 @@ class ListEntry extends Component {
             this.props.loadListEntries()
         })
     }
-
+/** 
+    getRetailerName () {
+        var retailerId = this.state.listEntry.getRetailerId()
+        AppAPI.getAPI().getRetailerById(retailerId).then((retailer) => {
+            this.setState({retailerName: retailer.getName()}) 
+        })
+    }
+*/
     render() {
         const { listEntry } = this.props;
         const { open } = this.state
@@ -68,46 +85,12 @@ class ListEntry extends Component {
                     <TableCell style={{paddingLeft: 5, paddingTop: 0, paddingBottom: 0, paddingRight: 10}} width="10%" align="right">{listEntry.getAmount()}</TableCell>
                     <TableCell padding="none" width="15%" align="left">{listEntry.getUnit()}</TableCell>
                     <TableCell padding="none" width="56%" align="left">{listEntry.getName()}</TableCell>
-                    <TableCell padding="none" width="6%">
-                        <IconButton aria-label="expand row" size="small" onClick={() => this.setOpen(!open)}>
-                            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                        </IconButton>
-                    </TableCell>
+                    <TableCell padding="none" width="20%" align="right">{listEntry.getRetailerId()}</TableCell>
+                    
                    
-                    <TableCell style={{paddingLeft: 0, paddingTop: 0, paddingBottom: 0, paddingRight: 15}} width="6%" align='right'>
-                        <IconButton aria-label="expand row" size="small" onClick={() => this.deleteEntry(listEntry)}>
-                            <DeleteIcon/>
-                        </IconButton>
-                    </TableCell>
+                    
                 </TableRow>
-                <TableRow>
-                    <TableCell style={{ paddingBottom: 0, paddingTop: 0, backgroundColor: colors.grey[100]}} colSpan={10}>
-                    <Collapse in={this.state.open} timeout="auto" unmountOnExit>
-                        <Table size="small" aria-label="purchases">
-                            <TableHead >
-                                <TableRow>
-                                    <TableCell style={{borderBottom: "none"}} colSpan={3} padding="none" width="30%" align="left">Einkäufer</TableCell>
-                                    <TableCell colSpan={2} padding="none" width="20%" align="left">Händler</TableCell>
-                                    <TableCell colSpan={4} padding="none" width="40%" align="left">Geändert</TableCell>
-                                    <TableCell colSpan={1} padding="none" width="10%" align="left">STD</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                
-                                <TableCell colSpan={3} padding="none" width="30%" align="left">{listEntry.getPurchasingUserId()}</TableCell>
-                                <TableCell colSpan={2} padding="none" width="20%" align="left">{listEntry.getRetailerId()}</TableCell>
-                                <TableCell colSpan={4} padding="none" width="40%" align="left">{listEntry.getLastUpdated()}</TableCell>
-                                <TableCell colSpan={1} padding="none" width="10%" align='left'>
-                                    <IconButton aria-label="expand row" size="small" >
-                                        {listEntry.isStandardarticle() ?  <StarIcon /> : <StarBorderIcon />}
-                                    </IconButton>
-                                </TableCell>
-                                
-                            </TableBody>
-                        </Table>
-                    </Collapse>
-                    </TableCell>
-                </TableRow>
+                
                 
             </div>
         );
@@ -120,17 +103,19 @@ class ListEntryTable extends Component {
         this.state = {
             listEntryTableElements: [],
             openDialog: false,
-            textInput: "",
             //userId : this.props.user.getId(),
             userId: "1003",
-
-            
+            startDate: null,
+            endDate: null,
+            retailers: [],
+            retailerName: null,
         }
     }
 
     componentDidMount(){
         if(this.state.userId){
             this.loadListEntries();
+            this.loadRetailers()
           }
     }
 
@@ -163,6 +148,23 @@ class ListEntryTable extends Component {
             })
         );  
     }
+    
+    loadRetailers = () => {
+        AppAPI.getAPI().getRetailers().then((retailers) => {
+            console.log("Loaded all retailers:", retailers)
+            this.setState({
+            retailers: retailers,
+            loadingInProgress: true, // loading indicator 
+            loadingError: null,
+        });
+        }).catch(e =>
+            this.setState({ // Reset state with error from catch 
+                loadingInProgress: false,
+                loadingError: e
+            })
+            );  
+        } 
+
     filterByArticleName = (e) => {
         this.setState({textInput: e.target.value})
         console.log(this.state.listEntryTableElements)
@@ -172,21 +174,97 @@ class ListEntryTable extends Component {
         
         
     }
+    // install: npm i @date-io/date-fns
+    // install: npm i @material-ui/pickers
+    // install: npm i date-fns
+    
+   handleStartDate = (date) => {
+        this.setState({startDate: date})
+        console.log(date)
+   }
+   handleEndDate = (date) => {
+        this.setState({endDate: date})
+        console.log(date)
+   }
 
+   filterByRetailer = (retailer) => {
+        console.log(retailer)
+        console.log("Die Id des Händlers:", retailer.id)
+        this.setState({retailerName: retailer.name})
+        this.loadListEntriesByRetailer("9001") 
+   }
+
+   loadListEntriesByRetailer = (retailerId) => {
+    console.log("Current Retailer id:", retailerId)
+    // get listentries by Retailer ID
+    AppAPI.getAPI().getListEntriesByRetailerId(retailerId).then(listEntries => {
+        console.log("Loaded list entries for user '" + retailerId + "':", listEntries)
+        var listEntryTableElements = listEntries.map((listEntry) => <ListEntry listEntry={listEntry} loadListEntries={this.loadListEntries} />)
+
+        this.setState({
+            listEntryTableElements: listEntryTableElements,
+            loadingInProgress: true, // loading indicator 
+            loadingError: null
+            })
+        }).catch(e =>
+            this.setState({ // Reset state with error from catch 
+            loadingInProgress: false,
+            loadingError: e
+        })
+    );  
+}
    
 
+
     render() {
+        const {retailers} = this.state;
         return (
             <div display='flex'>
             
-            <TextField
-                      type="text"
-                      onChange={this.filterByArticleName}
-                      margin="dense"
-                      id="combo-article"
-                      variant="standard"
-                      label="Nach Artikelname filtern"
-                  />
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <Grid container justify="space-around">
+                    <KeyboardDatePicker
+                    disableToolbar
+                    variant="inline"
+                    format="MM/dd/yyyy"
+                    margin="normal"
+                    id="date-picker-start"
+                    label="Startdatum"
+                    value={this.state.startDate}
+                    onChange={(date) => this.handleStartDate(date)}
+                    KeyboardButtonProps={{
+                        'aria-label': 'change date',
+                    }}
+                    />
+                    <KeyboardDatePicker
+                    disableToolbar
+                    variant="inline"
+                    format="MM/dd/yyyy"
+                    margin="normal"
+                    id="date-picker-end"
+                    label="Enddatum"
+                    value={this.state.endDate}
+                    onChange={(date) => this.handleEndDate(date)}
+                    KeyboardButtonProps={{
+                        'aria-label': 'change date',
+                    }}
+                    />
+                </Grid>
+            </MuiPickersUtilsProvider>
+            
+            <Autocomplete
+                id="combo-retailer"
+                style={{width: 300}}
+                value={this.state.retailerName}
+                onChange={(e, retailer) => this.filterByRetailer(retailer)}
+                options={retailers} //liste der retailer laden
+                getOptionLabel={(option) => option.name}
+                renderInput={(params) => (
+                    <TextField {...params} variant="standard" label="Händler" placeholder="Retailer" />
+                )}                
+                />
+
+            
             <TableContainer style={{marginTop: 20}}component={Paper}>
                 <Table aria-label="collapsible table">
                     <TableHead style={{backgroundColor: colors.teal[600]}}>
