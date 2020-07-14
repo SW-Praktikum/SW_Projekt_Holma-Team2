@@ -67,6 +67,7 @@ class GroupList extends Component {
         this.state = {
             group: null,
             groupId: this.props.match.params.groupId,
+            groupName: "",
             listElements:[],
             shoppingListName: "",
             shoppingListId:"",
@@ -74,7 +75,8 @@ class GroupList extends Component {
       
     componentDidMount(){
       if(this.props.match.params.groupId){
-          this.loadShoppingLists();
+          this.loadShoppingLists()
+          this.loadGroupName();
         }
     }
     
@@ -120,6 +122,16 @@ class GroupList extends Component {
       this.setState({shoppingListName: e.target.value})
     }
 
+    loadGroupName = () => {
+      AppAPI.getAPI().getGroupById(this.state.groupId).then((group) =>{
+        this.setState({
+          group: group,
+          groupName: group.name,
+        });
+      }
+       )
+      }
+
     loadShoppingLists = () => {
       AppAPI.getAPI().getShoppingListsByGroupId(this.props.match.params.groupId).then((lists) => {
         console.log(lists)
@@ -154,7 +166,7 @@ class GroupList extends Component {
               <Card className="root" style={{/* minHeight: 250 ,  */minWidth: '100%', marginBottom:10, marginTop:10, backgroundColor: colors.teal[600]}}>
                 <CardActionArea>
                   <CardContent>
-                    <Typography className="title" style={{fontSize: 14, color: 'white'}}>Aktuelle Gruppe: {this.state.groupId}</Typography>
+                    <Typography className="title" style={{fontSize: 14, color: 'white'}}>Aktuelle Gruppe: {this.state.groupName} / {this.state.groupId}</Typography>
                   </CardContent>
                 </CardActionArea>     
               </Card>
