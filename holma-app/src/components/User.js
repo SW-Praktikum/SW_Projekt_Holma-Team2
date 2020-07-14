@@ -53,7 +53,7 @@ class UserProfil extends Component {
             <Box m={5} />
             <Grid container spaching={3}>
               <Grid item xs={8} sm={2}>
-                <Typography variant="h6" gutterBottom>{user.getName()}</Typography>
+                <Typography variant="h6" gutterBottom>Username:{user.getName()}</Typography>
               </Grid>
               <Grid item xs={8} sm={2}/>
               <Grid item xs={8} sm={4}>
@@ -63,14 +63,15 @@ class UserProfil extends Component {
             <Box m={4} />
               <Grid container spacing={3}>
                   <Grid item xs={8} sm={4}>
-                      <Typography variant="h6" gutterBottom>Member since: {user.getCreationDate()}</Typography>
+                      <Typography variant="h6" gutterBottom>Member since:</Typography>
+                      <Typography variant="h6" gutterBottom>{user.getCreationDate()}</Typography>
                   </Grid>
               </Grid>
             <Box m={4} />
             <Grid container spaching={2}>
               <Button variant="contained" color='primary' onClick={this.handleSignOutButtonClicked}>Logout</Button>
-              <Grid item xs={8} sm={9}/>
-              <Button className={classes.button} onClick={this.handleDeleteUser}>Delete User</Button>
+              <Grid item xs={2} sm={2}/>
+              <Button variant="contained" style={{color: 'white', backgroundColor: 'red'}}className={classes.button} onClick={this.handleDeleteUser}>Delete User</Button>
             </Grid>
           </div>
         </Paper>
