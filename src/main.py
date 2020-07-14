@@ -715,7 +715,7 @@ class RetailerRelatedListEntryOperations(Resource):
         adm = Administration()
         rtl = adm.get_retailer_by_id(retailer_id)
         if rtl is not None:
-            listentry_list = adm.get_list_entries_by_retailer_id(rtl)
+            listentry_list = adm.get_list_entries_by_retailer_id(retailer_id)
             return listentry_list
         else:
             return "Retailer not found", 500
