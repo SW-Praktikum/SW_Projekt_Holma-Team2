@@ -686,6 +686,23 @@ class UserRelatedListEntryOperations(Resource):
             return "User not found", 500
 
 
+@holmaApp.route('/shoppinglist/<int:shopping_list_id>/listentries')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@holmaApp.param('shoppinglist_id', 'Die ID des Shopping-Lis-Objekts')
+class ShoppingListRelatedCheckedByListEntryOperations(Resource):
+    @holmaApp.marshal_with(shoppingList)
+    # @ secured
+    def get(self, shopping_list_id):
+        """Auslesen von Listentry-Objekten die bereits gecheckt wurden """
+        adm = Administration()
+        sl = adm.get_shopping_list_by_id(shopping_list_id)
+        if sl is not None:
+            listentry_list = adm.get_list_entries_by_user_id(shopping_list_id)
+            return listentry_list
+        else:
+            return "Shopping List not found", 500
+
+
 @holmaApp.route('/retailer/<int:retailer_id>/listentries')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('retailer_id', 'Die ID des retailer-Objekts')
@@ -698,7 +715,7 @@ class RetailerRelatedListEntryOperations(Resource):
         adm = Administration()
         rtl = adm.get_retailer_by_id(retailer_id)
         if rtl is not None:
-            listentry_list = adm.get_list_entries_by_retailer_id(rtl)
+            listentry_list = adm.get_list_entries_by_retailer_id(retailer_id)
             return listentry_list
         else:
             return "Retailer not found", 500
