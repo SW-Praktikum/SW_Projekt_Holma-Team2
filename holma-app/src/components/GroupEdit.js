@@ -1,22 +1,15 @@
 import React, { Component } from 'react';
 import AppAPI from '../api/AppAPI';
-import GroupBO from '../api/GroupBO';
-import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import CardActionArea from '@material-ui/core/CardActionArea';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Fab from '@material-ui/core/Fab';
 import EditIcon from '@material-ui/icons/Edit';
+import {withStyles} from '@material-ui/core';
 import MemberAddDialog from '../components/dialogs/MemberAddDialog';
 import ListWithBoxes from './ListWithBoxes'
-import GroupAddDialog from './dialogs/GroupAddDialog';
 import Paper from '@material-ui/core/Paper';
-import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
-import GroupEntries from './GroupEntries';
 import { Link } from 'react-router-dom';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItem from '@material-ui/core/ListItem';
@@ -28,17 +21,44 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FaceIcon from '@material-ui/icons/Face';
-import SaveIcon from '@material-ui/icons/Save';
+import GroupNameEditDialog from '../components/dialogs/GroupNameEditDialog';
+
 
 
 
 
 class GroupInformation extends Component {
+  constructor(props) {
+    super(props)
+    this.state= {
+      open: false,
+      openDialog: false,
+      groupObject: this.props.groupObject,     
+    }
+  }
+
+  setOpen(bool) {
+    this.setState({
+        open: bool
+    })
+}
+
+openDialog = () => {
+    this.setState({
+        openDialog: true})
+    }
+
+handleClose = () => {
+    this.setState({
+        openDialog: false})
+    }
+
   _handleClick = () => {
     this.props.addMember();
     this.props.loadMembers();
   };
   render(){
+    const {open} = this.state;
     return (
     <div>
     <Grid style={{backgroundColor:'white'}}>
@@ -53,25 +73,21 @@ class GroupInformation extends Component {
         <Grid item xs={6} sm={6}>
         <ListItem align='center' style={{width:"auto"}}>
         <Typography  variant="h6" gutterBottom>
-          Gruppenname:
+          Gruppenname:  
         </Typography>
-        <TextField
-                  align='center'
-                  onChange={this.props.handleChangeName}
-                  margin="dense"
-                  id="outlined-basic"
-                  variant="standard"
-                  type="text"
-                  label={this.props.groupName}
-                  minWidth='150'
-                />
-                <Button 
-                startIcon={<SaveIcon />}
-                 
-                color="primary"
-                onClick={this.props.handleClickSave}>
-                </Button>
-                
+        <Typography  variant="h6" gutterBottom>
+          {this.props.groupName}
+        </Typography>
+        <IconButton aria-label="expand row" size="small" onClick={() => this.openDialog()}>
+          <EditIcon/>
+        </IconButton>
+        <GroupNameEditDialog
+        openDialog={this.openDialog}
+        open={this.state.openDialog}
+        handleClose={this.handleClose}
+        groupObject={this.props.groupObject}
+        groupId={this.props.groupId}
+        />
         </ListItem>    
       </Grid>
       
@@ -85,6 +101,7 @@ class GroupInformation extends Component {
       </Grid>
       
       <Box m={4}/>
+      
       <Grid container spaching={1}>
       <Grid item xs={6} sm={6}>
         <ListItem align='center' style={{width:"auto"}}>
@@ -101,8 +118,10 @@ class GroupInformation extends Component {
         </ListItem>
       </Grid>
       </Grid>
-
       <Box m={4} />
+
+      <Grid container spaching={1}>
+      <Grid item xs={6} sm={6}>
       <ListItem elevation={3} align='center' style={{width:"auto"}}>
         <Typography  variant="h4" gutterBottom>
           Mitglieder
@@ -122,18 +141,60 @@ class GroupInformation extends Component {
                 />
       <Button 
           style={{marginTop: 9, marginBottom: 15, alignItems: 'center'}}
-          onClick={this._handleClick}
+          onClick={this.props.handleClick}
           color="primary" 
           variant="contained"
           >
             hinzufügen
       </Button>
       </Grid>
-      </Grid>
+    </Grid>
+
+    <Grid style={{marginLeft: 15, alignItems: 'center'}}>
+      <ListItem elevation={3} align='center' style={{width:"auto"}}>
+              <Typography  variant="h4" gutterBottom>
+                Artikel
+              </Typography>
+            </ListItem>
+          <Grid style={{marginLeft: 15, alignItems: 'center'}}>
+            <Link to={"/articleedit/" + this.props.groupId} style={{textDecoration: 'none'}}>
+              <ArticleLink/>
+            </Link>
+            <Link to={"/standardarticleedit/" + this.props.groupId} style={{textDecoration: 'none'}}>
+            <StandardArticleLink/>
+            </Link>
+          </Grid>
+        </Grid>
+    </Grid>
+    </Grid>
     </div>
     
   );
 }}
+
+class ArticleLink extends Component{
+  render(){
+      return(
+          <Button style={{marginTop: 9, marginBottom: 15, alignItems: 'center'}}
+          color="primary" 
+          variant="contained">
+              Artikel anzeigen
+          </Button>
+      )
+  }
+}
+
+class StandardArticleLink extends Component{
+  render(){
+      return(
+          <Button style={{marginTop: 9, marginBottom: 15, alignItems: 'center'}}
+          color="primary" 
+          variant="contained">
+              Standardartikel
+          </Button>
+      )
+  }
+}
 
 class MemberDetails extends Component{
   constructor(props){
@@ -151,6 +212,8 @@ class MemberDetails extends Component{
       loadingInProgress: false,
       loadingError: null,
       memberId: "",
+      open: false,
+      openDialog: false,
     }
   }
 
@@ -159,6 +222,17 @@ class MemberDetails extends Component{
       this.getGroupDetails();
       this.loadMembers();
      }
+  }
+
+
+openDialog = () => {
+    this.setState({
+      openDialog: true})
+  }
+
+handleClose = () => {
+    this.setState({
+      openDialog: false})
   }
 
   addMember() {
@@ -172,26 +246,10 @@ class MemberDetails extends Component{
     this.setState({memberId: e.target.value})
   }
 
-  handleChangeName = (e) => {
-    this.setState({
-      groupName: e.target.value,  
-    })
-  }
-
-  handleClickSave = () => {
-      AppAPI.getAPI().getGroupById(this.props.match.params.groupId).then (group => {
-        group.setName(this.state.groupName)
-        this.setState({
-          groupObject: group
-        })
-        }).then (() => {
-          AppAPI.getAPI().updateGroup(this.state.groupObject)
-      })
-  }
-
   getGroupDetails(){
     AppAPI.getAPI().getGroupById(this.state.groupId).then(group => {
       this.setState({
+        groupObject: group,
         groupName: group.getName(),
         groupCreationDate: group.getCreationDate(),
         groupOwner: group.getOwner(),
@@ -245,8 +303,15 @@ class MemberDetails extends Component{
       );  
     }
 
+    handleDeleteGroup = () => {
+      AppAPI.getAPI().deleteGroup(this.state.groupObject);
+      window.location.reload();
+    }
+
     render(){
       const {memberElements} = this.state;
+      const {classes} = this.props;
+      const {open} = this.state
       this.loadMembers = this.loadMembers.bind(this)
       return(
         <div>
@@ -258,16 +323,44 @@ class MemberDetails extends Component{
             addMember={this.addMember}
             loadMembers={this.loadMembers}
             group={this.state.groupDetail}
+            groupId={this.state.groupId}
             groupName={this.state.groupName}
             groupCreationDate={this.state.groupCreationDate}
             groupOwner={this.state.groupOwner}
-            groupLastUpdated={this.state.groupLastUpdated} />
+            groupLastUpdated={this.state.groupLastUpdated} 
+            setOpen={this.setOpen}
+            openDialog={this.openDialog}
+            handleClose={this.handleClose}
+            openDialog={this.openDialog}
+            open={this.state.openDialog}
+            handleClose={this.handleClose}
+            handleInputChange={this.handleInputChange}
+            groupObject={this.state.groupObject}
+            />
           <Box m={1}></Box>
           <ListWithBoxes groupElements={memberElements}/>
           <MemberAddDialog member={this.state.members} loadMembers={this.loadMembers}/> 
-          </div>
+          <Box m={4} />
+          <Button className={classes.button} onClick={this.handleDeleteGroup}>Delete Group</Button>
+        </div>
       );
     }
 }
 
-export default MemberDetails;
+const styles = theme => ({
+  root: {
+    width: '100%',
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+    padding: theme.spacing(1)
+  },
+  content: {
+    margin: theme.spacing(1),
+  },
+  button: {
+    color: theme.palette.delete.main,
+    
+  }
+});
+
+export default withStyles(styles)(MemberDetails);

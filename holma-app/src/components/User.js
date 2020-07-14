@@ -34,6 +34,7 @@ class UserProfil extends Component {
   handleDeleteUser = () => {
     AppAPI.getAPI().deleteUser(this.state.user).then( () =>{
       this.handleSignOutButtonClicked()}
+    
     );
   }
 
@@ -41,8 +42,6 @@ class UserProfil extends Component {
   render() {
 
       const { classes, user } = this.props;
-
-
       return (
           
         <Paper elevation={0} className={classes.root}>
