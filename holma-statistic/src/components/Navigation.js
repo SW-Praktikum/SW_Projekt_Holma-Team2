@@ -83,7 +83,7 @@ export default function ScrollableTabsButtonForce() {
           <IconButton label="Back">
           <ArrowBackIosRoundedIcon onClick={() => history.goBack()}/>
           </IconButton>
-          <Tab label="User-Statistik" icon={<PersonIcon />} {...a11yProps(0)} component={RouterLink} to={`/user-statistic`} />
+          <Tab label="User-Statistik" icon={<PersonIcon />} {...a11yProps(0)} component={RouterLink} to={`/user-statistics`} />
           <Tab label="Gruppen-Statistik" icon={<GroupIcon />} {...a11yProps(1)} component={RouterLink} to={`/groups`}/>
           <Tab label="User" icon={<AccountCircleIcon />} {...a11yProps(4)} component={RouterLink} to={`/user`}/>
         </Tabs>

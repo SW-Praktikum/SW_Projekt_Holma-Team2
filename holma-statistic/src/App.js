@@ -5,6 +5,7 @@ import theme from './components/Theme';
 import firebase from "firebase/app";
 import "firebase/auth";
 import Header from './components/layout/Header';
+import Startpage from './components/layout/Startpage';
 import Navigation from './components/Navigation'
 import SignIn from './components/pages/SignIn';
 import LoadingProgress from './components/dialogs/LoadingProgress';
@@ -15,8 +16,9 @@ import AppAPI from './api/AppAPI';
 import UserBO from './api/UserBO';
 import User from './components/User';
 import MemberAddDialog from './components/dialogs/MemberAddDialog';
-import StartPage from './components/layout/Startpage';
-import GroupList from './components/GroupList';
+import UserStatistics from './components/UserStatistics';
+import OneGroupStat from './components/OneGroupStat';
+
 
 class App extends React.Component {
   #firebaseConfig = {
@@ -128,11 +130,14 @@ class App extends React.Component {
                   <>
                     <Redirect to='/groups'/>
                     <Navigation />
-                    <Route path='/user-statistic' component={StartPage}/>
+                    <Route path='/startpage' component={Startpage}/>
+                    <Route path='/user-statistics'>
+                    <UserStatistics user={user}/>
+                    </Route>
                     <Route path='/groups'>
                       <GroupEntries user={user}/>
                     </Route>
-                    <Route path='/grouplist/:groupId' component={GroupList}>
+                    <Route path='/OneGroupStat/:groupId' component={OneGroupStat}>
                     </Route>
                     <Route path='/about'>
                       <About/>
