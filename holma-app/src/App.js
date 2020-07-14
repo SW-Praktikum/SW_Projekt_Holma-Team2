@@ -5,7 +5,7 @@ import theme from './components/Theme';
 import firebase from "firebase/app";
 import "firebase/auth";
 import Header from './components/layout/Header';
-import Navigation from './components/Navigation'
+import Navigation from './components/Navigation';
 import SignIn from './components/pages/SignIn';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
@@ -20,8 +20,10 @@ import GroupInformation from './components/GroupEdit';
 import Groupmember from './components/GroupEditDialog';
 import MemberAddDialog from './components/dialogs/MemberAddDialog';
 import MemberDetails from './components/GroupEdit';
+import ArticleEdit from './components/ArticleEdit';
+import StandardArticleEdit from './components/StandardArticleEdit';
 import ListEntryTable from './components/ListEntryTable';
-import StartPage from './components/layout/Startpage';
+import Startpage from './components/layout/Startpage';
 
 
 class App extends React.Component {
@@ -132,9 +134,11 @@ class App extends React.Component {
               {
                 user ?
                   <>
-                    <Redirect to='/groups'/>
+                    <Redirect to='/home'/>
                     <Navigation />
-                    <Route path='/home' component={StartPage}/>
+                    <Route path='/home'>
+                      <Startpage user={user}/>
+                    </Route>
                     <Route path='/groups'>
                       <GroupEntries user={user}/>
                     </Route>
@@ -145,6 +149,10 @@ class App extends React.Component {
                     <Route path='/grouplist/:groupId' component={GroupList}>
                     </Route>
                     <Route path='/groupedit/:groupId' component={MemberDetails}>
+                    </Route>
+                    <Route path='/articleedit/:groupId' component={ArticleEdit}>
+                    </Route>
+                    <Route path='/standardarticleedit/:groupId' component={StandardArticleEdit}>
                     </Route>
                     <Route path='/user'>
                       <User user={user}/>

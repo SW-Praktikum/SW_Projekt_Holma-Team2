@@ -16,26 +16,10 @@ import ShoppingListAddDialog from './dialogs/ShoppingListAddDialog';
 
 import TextField from '@material-ui/core/TextField';
 
-
-import PropTypes from 'prop-types';
-import Collapse from '@material-ui/core/Collapse';
-import IconButton from '@material-ui/core/IconButton';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItem from '@material-ui/core/ListItem';
-import List from '@material-ui/core/List';
 import Grid from '@material-ui/core/Grid';
 import ListWithBoxes from './ListWithBoxes';
 import GroupEntry from './GroupEntries';
@@ -79,20 +63,20 @@ class ListCard extends Component {
 class GroupList extends Component {
     constructor(props) {
         super(props);
+        //console.log(this.props.match.params.groupId)
         this.state = {
             group: null,
             groupId: this.props.match.params.groupId,
-            listElements: [],
+            groupName: "",
+            listElements:[],
             shoppingListName: "",
-            retailers: [],
-            users: []
+            shoppingListId:"",
         }}
       
     componentDidMount(){
       if(this.props.match.params.groupId){
-          this.loadRetailers();
-          this.loadShoppingLists();
-
+          this.loadShoppingLists()
+          this.loadGroupName();
         }
     }
     
@@ -138,37 +122,16 @@ class GroupList extends Component {
       this.setState({shoppingListName: e.target.value})
     }
 
-    loadRetailers = () => {
-      AppAPI.getAPI().getRetailers().then((retailers) => {
-        console.log("Loaded retailers:", retailers)
+    loadGroupName = () => {
+      AppAPI.getAPI().getGroupById(this.state.groupId).then((group) =>{
         this.setState({
-          retailers: retailers,
-          loadingInProgress: true, // loading indicator 
-          loadingError: null,
-      });
-      }).catch(e =>
-          this.setState({ // Reset state with error from catch 
-            loadingInProgress: false,
-            loadingError: e
-          })
-        );  
-      } 
-    
-      loadRetailers = () => {
-        AppAPI.getAPI().getUsersByGroupId(this.props.match.params.groupId).then((users) => {
-          console.log("Loaded users for group:", users)
-          this.setState({
-            users: users,
-            loadingInProgress: true, // loading indicator 
-            loadingError: null,
+          group: group,
+          groupName: group.name,
         });
-        }).catch(e =>
-            this.setState({ // Reset state with error from catch 
-              loadingInProgress: false,
-              loadingError: e
-            })
-          );  
-        } 
+      }
+       )
+      }
+
     loadShoppingLists = () => {
       AppAPI.getAPI().getShoppingListsByGroupId(this.props.match.params.groupId).then((lists) => {
         console.log(lists)
@@ -183,8 +146,10 @@ class GroupList extends Component {
           listElements: listElements,
           loadingInProgress: true, // loading indicator 
           loadingError: null,
+          shoppingListId: lists.id,
       });
          console.log("Save in state", listElements)
+         console.log(this.state.shoppingListId)
       }).catch(e =>
           this.setState({ // Reset state with error from catch 
             loadingInProgress: false,
@@ -195,14 +160,13 @@ class GroupList extends Component {
 
     render() {
       const {listElements} = this.state;
-      console.log("elements", listElements)
           return(
             <div>
               <Box m={5} />
               <Card className="root" style={{/* minHeight: 250 ,  */minWidth: '100%', marginBottom:10, marginTop:10, backgroundColor: colors.teal[600]}}>
                 <CardActionArea>
                   <CardContent>
-                    <Typography className="title" style={{fontSize: 14, color: 'white'}}>Aktuelle Gruppe: {this.state.groupId}</Typography>
+                    <Typography className="title" style={{fontSize: 14, color: 'white'}}>Aktuelle Gruppe: {this.state.groupName} / {this.state.groupId}</Typography>
                   </CardContent>
                 </CardActionArea>     
               </Card>
@@ -211,8 +175,10 @@ class GroupList extends Component {
               </Link>
                 <Box m={2} />
                 <Typography className="title" style={{fontSize: 14, color: 'black'}}>Shoppinglists:</Typography>
-                <ListWithBoxes groupElements={listElements}/>
-                <ShoppingListAddDialog 
+                <Link to={"/shoppinglist/" + this.props.match.params.groupId} style={{textDecoration: 'none'}}>
+                  <ListWithBoxes groupElements={listElements}/>
+                </Link>
+                <AddListDialog 
                   openDialog={this.openDialog}
                   open={this.state.openDialog}
                   handleClose={this.handleClose}

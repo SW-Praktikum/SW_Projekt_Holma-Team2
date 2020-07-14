@@ -65,6 +65,8 @@ export default class AppAPI {
     #getListEntriesByArticleIdURL = (articleId) => `${this.#appServerBaseURL}/article/${articleId}/listentries`;
     #getListEntriesByShoppingListIdURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglist/${shoppingListId}/listentries`; 
     #getListEntriesByRetailerIdURL = (retailerId) => `${this.#appServerBaseURL}/retailer/${retailerId}/listentries`; 
+    #getCheckedListEntriesByShoppingListIdURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglist/${shoppingListId}/listentries`; 
+
 
     #createListEntryURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglist/${shoppingListId}/listentries`;
     #updateListEntryURL = (listEntryId) => `${this.#appServerBaseURL}/listentry/${listEntryId}`;
@@ -483,6 +485,15 @@ export default class AppAPI {
 
      getListEntriesByShoppingListId(shoppingListId) {
         return this.#fetchAdv(this.#getListEntriesByShoppingListIdURL(shoppingListId)).then((responseJSON) => {
+            let responseListEntry = ListEntryBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+                resolve(responseListEntry)
+            })
+        })
+    }  
+
+    getListEntriesByShoppingListId(shoppingListId) {
+        return this.#fetchAdv(this.#getCheckedListEntriesByShoppingListIdURL(shoppingListId)).then((responseJSON) => {
             let responseListEntry = ListEntryBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
                 resolve(responseListEntry)

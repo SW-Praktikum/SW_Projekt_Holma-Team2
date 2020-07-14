@@ -85,10 +85,8 @@ listEntry = api.inherit('ListEntry', bo, {
 })
 
 article = api.inherit('Article', bo, {
-    'group_id': fields.Integer(attribute='_group_id',
-                               description='zu welcher Groupe dieses Artikle gehört?'),
-    'groupId': fields.Integer(attribute='_group',
-                              description='zu welcher Groupe dieses Artikle gehört?')
+    'groupId': fields.Integer(attribute='_group_id',
+                               description='zu welcher Groupe dieses Artikle gehört?')
 
 })
 
@@ -414,12 +412,11 @@ class ArticleOperations(Resource):
         Das zu löschende Objekt wird durch die article_id in dem URI bestimmt.
                       """
         adm = Administration()
-        art = adm.get_article_by_id(article_id)
-        adm.delete_article(art)
+        adm.delete_article(article_id)
         return 'deleted', 200
 
     @holmaApp.marshal_with(article)
-    @holmaApp.expect(article, validate=True)
+    @holmaApp.expect(article) #validate=True)
     # @secured
     def put(self, article_id):
         """Update eines bestimmten article-Objekts."""
@@ -675,7 +672,7 @@ class ListEntryOperations(Resource):
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('user_id', 'Die ID des user-Objekts')
 class UserRelatedListEntryOperations(Resource):
-    @holmaApp.marshal_with(user)
+    @holmaApp.marshal_with(listEntry)
     # @ secured
     def get(self, user_id):
         """Auslesen von Listentry-Objekten die zu einem bestimmten
@@ -683,17 +680,34 @@ class UserRelatedListEntryOperations(Resource):
         adm = Administration()
         us = adm.get_user_by_id(user_id)
         if us is not None:
-            listentry_list = adm.get_list_entries_by_user_id(us)
+            listentry_list = adm.get_list_entries_by_user_id(user_id)
             return listentry_list
         else:
             return "User not found", 500
+
+
+@holmaApp.route('/shoppinglist/<int:shopping_list_id>/listentries')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@holmaApp.param('shoppinglist_id', 'Die ID des Shopping-Lis-Objekts')
+class ShoppingListRelatedCheckedByListEntryOperations(Resource):
+    @holmaApp.marshal_with(listEntry)
+    # @ secured
+    def get(self, shopping_list_id):
+        """Auslesen von Listentry-Objekten die bereits gecheckt wurden """
+        adm = Administration()
+        sl = adm.get_shopping_list_by_id(shopping_list_id)
+        if sl is not None:
+            listentry_list = adm.get_list_entries_by_user_id(shopping_list_id)
+            return listentry_list
+        else:
+            return "Shopping List not found", 500
 
 
 @holmaApp.route('/retailer/<int:retailer_id>/listentries')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('retailer_id', 'Die ID des retailer-Objekts')
 class RetailerRelatedListEntryOperations(Resource):
-    @holmaApp.marshal_with(retailer)
+    @holmaApp.marshal_with(listEntry)
     # @ secured
     def get(self, retailer_id):
         """Auslesen von Listentry-Objekten die zu einem bestimmten
@@ -701,7 +715,7 @@ class RetailerRelatedListEntryOperations(Resource):
         adm = Administration()
         rtl = adm.get_retailer_by_id(retailer_id)
         if rtl is not None:
-            listentry_list = adm.get_list_entries_by_retailer_id(rtl)
+            listentry_list = adm.get_list_entries_by_retailer_id(retailer_id)
             return listentry_list
         else:
             return "Retailer not found", 500
@@ -711,7 +725,7 @@ class RetailerRelatedListEntryOperations(Resource):
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('article_id', 'Die ID des Article-Objekts')
 class ArticleRelatedListEntryOperations(Resource):
-    @holmaApp.marshal_with(article)
+    @holmaApp.marshal_with(listEntry)
     # @ secured
     def get(self, article_id):
         """Auslesen von Listentry-Objekten die zu einem bestimmten
@@ -719,7 +733,7 @@ class ArticleRelatedListEntryOperations(Resource):
         adm = Administration()
         art = adm.get_article_by_id(article_id)
         if art is not None:
-            listentry_list = adm.get_list_entries_by_article_id(art)
+            listentry_list = adm.get_list_entries_by_article_id(article_id)
             return listentry_list
         else:
             return "Article not found", 500
@@ -737,7 +751,7 @@ class GroupRelatedListEntryOperations(Resource):
         adm = Administration()
         grp = adm.get_group_by_id(group_id)
         if grp is not None:
-            listentry_list = adm.get_standardarticles_by_group_id(grp)
+            listentry_list = adm.get_standardarticles_by_group_id(group_id)
             return listentry_list
         else:
             return "Group not found", 500
