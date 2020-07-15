@@ -84,7 +84,7 @@ class ListEntry extends Component {
                     <TableCell style={{paddingLeft: 5, paddingTop: 0, paddingBottom: 0, paddingRight: 10}} width="10%" align="right">{listEntry.getAmount()}</TableCell>
                     <TableCell padding="dense" width="15%" align="left">{listEntry.getUnit()}</TableCell>
                     <TableCell padding="dense" width="30%" align="left">{listEntry.getName()}</TableCell>
-                    <TableCell padding="dense" width="20%" align="right">{listEntry.getRetailerId()}</TableCell>
+                    <TableCell padding="dense" width="20%" align="right">{listEntry.getRetailerName()}</TableCell>
                     <TableCell padding="dense" width="30%" align="right">{listEntry.getCheckedTs()}</TableCell>
                     
                    
