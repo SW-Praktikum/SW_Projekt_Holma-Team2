@@ -63,6 +63,7 @@ class ListEntry extends Component {
     }
 
     deleteEntry = (entry) => {
+        console.log("hier")
         AppAPI.getAPI().deleteListEntry(entry).then(() => {
             this.props.loadListEntries()
         })

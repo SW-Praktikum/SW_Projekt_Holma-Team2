@@ -18,7 +18,9 @@ import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete
 import AppAPI from '../../api/AppAPI'
 import ArticleBO from '../../api/ArticleBO';
 import ListEntryBO from '../../api/ListEntryBO';
-
+import StarIcon from '@material-ui/icons/Star';
+import StarBorderIcon from '@material-ui/icons/StarBorder';
+import IconButton from '@material-ui/core/IconButton';
 import ArticleAddDialog from './ArticleAddDialog'
 
 
@@ -43,8 +45,15 @@ class ListEntryAddDialog extends Component {
                 name: "",
                 id: ""
             },
+            isStandard: false,
         }
     }
+
+    setStandard(bool) {
+      this.setState({
+          isStandard: bool
+      })
+  }
 
     updateLocalListEntry(updatedListEntry) {
         // this.setState({
@@ -143,13 +152,36 @@ class ListEntryAddDialog extends Component {
         this.state.article.name,
         false, 
         null, //checkedTs
-        false //standardarticle
+        this.state.isStandard,
         )
-        listEntry.setName(this.state.article.name)
-        AppAPI.getAPI().createListEntry(listEntry).then(() => {
-            this.props.loadListEntries()
-        })
-        this.props.handleClose()
+      listEntry.setName(this.state.article.name)
+      AppAPI.getAPI().createListEntry(listEntry).then(() => {
+        this.setState({
+          amount: 1,
+          unit: {
+              name: "",
+              id: ""
+          },
+          purchasingUser: {
+              name: "",
+              id: ""
+          },
+          article: {
+              name: "",
+              id: ""
+          },
+          retailer: {
+              name: "",
+              id: ""
+          },
+          isStandard: false,
+        },
+        this.props.loadListEntries())
+      })
+      this.props.handleClose()
+      console.log(this.state.isStandard)
+      
+
     }
 
     undoChanges = () => {
@@ -189,7 +221,7 @@ class ListEntryAddDialog extends Component {
 
         const filter = createFilterOptions();
         const { classes, open } = this.props;
-        const { unit, amount, article, purchasingUser, retailer } = this.state;
+        const { unit, amount, article, purchasingUser, retailer, isStandard } = this.state;
         
         const retailers = this.props.retailers.map(retailer => ({"name": retailer.getName(), "id": retailer.getId()}))
         const articles = this.props.articles.map(article => ({"name": article.getName(), "id": article.getId()}))
@@ -291,7 +323,16 @@ class ListEntryAddDialog extends Component {
                     renderInput={(params) => <TextField {...params} label="Retailer" variant="standard" placeholder="Retailer" />}
                 />
 
-              
+
+                <IconButton 
+                  aria-label="expand row" 
+                  size="small" 
+                  onClick={() => this.setStandard(!isStandard)}
+                  >
+                  {isStandard ? <StarIcon /> : <StarBorderIcon />}
+                  Standardartikel
+                </IconButton>
+                      
               </DialogContent>
               <DialogActions>
                 <Button onClick={this.undoChanges} color="primary">
