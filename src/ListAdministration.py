@@ -208,6 +208,7 @@ class Administration():
 
     def delete_article(self, article_id):
         article = self.get_article_by_id(article_id)
+
         # Standardartikel löschen
         with ListEntryMapper() as mapper:
             group = self.get_group_by_id(article.get_group())
@@ -325,6 +326,8 @@ class Administration():
 
     def delete_shopping_list(self, shopping_list):
         with ListEntryMapper() as mapper:
+            group = self.get_group_by_id(shopping_list.get_group())
+            mapper.delete_standardarticle_by_group(group)
             mapper.delete_by_shopping_list(shopping_list)
 
         with ShoppingListMapper() as mapper:
