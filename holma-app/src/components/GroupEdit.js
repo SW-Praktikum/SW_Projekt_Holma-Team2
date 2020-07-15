@@ -73,30 +73,6 @@ handleClose = () => {
         </ListItem>
       
       <Box m={5} />
-<<<<<<< HEAD
-      <Grid container spaching={3}>
-        <Grid item xs={12} sm={6} lg={4}>
-          <ListItem align='center' style={{width:"auto"}}>
-            
-            <Typography  variant="h6" style={{fontWeight: "bold"}} gutterBottom>
-              Gruppenname:
-            </Typography>
-            <Typography  variant="h6" gutterBottom>
-              {this.props.groupName}
-            </Typography>
-
-              <IconButton aria-label="expand row" size="small" onClick={() => this.openDialog()}>
-            <EditIcon/>
-            </IconButton>
-              <GroupNameEditDialog
-              openDialog={this.openDialog}
-              open={this.state.openDialog}
-              handleClose={this.handleClose}
-              groupObject={this.props.groupObject}
-              groupId={this.props.groupId}
-              />
-          </ListItem>    
-=======
       <Grid container spaching={1}>
         <Grid item xs={6} sm={6}>
         <ListItem align='center' style={{width:"auto"}}>
@@ -119,7 +95,6 @@ handleClose = () => {
           getGroupDetails={this.props.getGroupDetails}
         />
         </ListItem>    
->>>>>>> master
       </Grid>
       
       <Grid item xs={12} sm={6} lg={4}>
