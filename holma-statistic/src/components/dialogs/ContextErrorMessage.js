@@ -10,18 +10,18 @@ class ContextErrorMessage extends Component {
     #defaultText = 'Das hätte nicht passieren sollen, entschuldige!';
 
     render() {
-        const { classes, error, contextErrorMsg, onReload } =this.props;
+        const {error, contextErrorMsg, onReload } =this.props;
 
         return (
             (error !== null) ?
-            <Alert severity ='error' className ={classes.root}>
+            <Alert severity ='error'>
                 <div>
                     {this.#defaultText}
                 </div>
             <AlertTitle>
                 {contextErrorMsg}
             </AlertTitle>
-                <div className={classes.margins}>
+                <div>
                     Error message (for debugging only) is:
                 </div>
             <div>
@@ -29,7 +29,7 @@ class ContextErrorMessage extends Component {
             </div>
             {
                 onReload?
-                <div className={classes.margings}>
+                <div>
                     <Button variant = 'contained' color='primary' startIcon={<AutorenewIcon />} onClick={onReload}>
                         Reload
                     </Button>
@@ -42,16 +42,8 @@ class ContextErrorMessage extends Component {
     }
 }
 
-const styles = theme => ({
-    margins: {
-      marginTop: theme.spacing(2)
-    }
-  });
-
-//Component specific styles hab ich mal weggelassen
 
 ContextErrorMessage.propTypes ={
-    classes: PropTypes.object.isRequired,
     error: PropTypes.object,
     contextErrorMsg: PropTypes.string,
     onReload: PropTypes.func
