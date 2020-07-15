@@ -213,6 +213,28 @@ class UserByNameOperations(Resource):
         return us
 
 
+@holmaApp.route('/group/<int:group_id>/users')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@holmaApp.param('group_id', 'Die ID des Group-Objekts')
+class GroupRelatedUserOperations(Resource):
+    @holmaApp.marshal_with(user)
+    # @secured
+    def get(self, group_id):
+        """Auslesen aller User-Objekte einer bestimmten Groupe.
+
+                        Sollten keine Group-Objekte verfügbar sein,
+                        so wird eine leere Sequenz zurückgegeben."""
+        # objekt nicht benötigt, nur group ID
+        adm = Administration()
+        grp = adm.get_group_by_id(group_id)
+
+        if grp is not None:
+            user_list = adm.get_members_by_group_id(group_id)
+            return user_list
+        else:
+            return "Group not found", 500
+
+
 @holmaApp.route('/groups')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigem Fehler kommt.')
 class GroupListOperations(Resource):
@@ -324,28 +346,6 @@ class UserRelatedGroupOperations(Resource):
             return result
         else:
             return "User unkown or payload not valid", 500
-
-
-@holmaApp.route('/group/<int:group_id>/users')
-@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@holmaApp.param('group_id', 'Die ID des Group-Objekts')
-class GroupRelatedUserOperations(Resource):
-    @holmaApp.marshal_with(user)
-    # @secured
-    def get(self, group_id):
-        """Auslesen aller User-Objekte einer bestimmten Groupe.
-
-                        Sollten keine Group-Objekte verfügbar sein,
-                        so wird eine leere Sequenz zurückgegeben."""
-        # objekt nicht benötigt, nur group ID
-        adm = Administration()
-        grp = adm.get_group_by_id(group_id)
-
-        if grp is not None:
-            user_list = adm.get_members_by_group_id(group_id)
-            return user_list
-        else:
-            return "Group not found", 500
 
 
 @holmaApp.route('/group/<int:group_id>/user/<int:user_id>')
@@ -591,6 +591,24 @@ class ShoppingListsByNameOperations(Resource):
         return le
 
 
+@holmaApp.route('/group/<int:group_id>/shoppinglist/<int:shopping_list_id>')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@holmaApp.param('group_id', 'Die ID des Group-Objekts')
+@holmaApp.param('shopping_list_id', 'Die ID des Shoppinglist-Objekts')
+class GroupShoppingListStandardArticleRelationOperations(Resource):
+    # @secured
+    def post(self, group_id, shopping_list_id):
+        adm = Administration()
+        grp = adm.get_group_by_id(group_id)
+        sl = adm.get_shopping_list_by_id(shopping_list_id)
+
+        if grp is not None and sl is not None:
+            result = adm.add_standardarticle_to_shopping_list(sl, grp)
+            return result
+        else:
+            return "Group or ShoppingList not found", 500
+
+
 @holmaApp.route('/shoppinglist/<int:shopping_list_id>/listentries')
 @holmaApp.response(500, 'Falls es zu einem Server -seitigen Fehler kommt')
 class ShoppingListRelatedListEntryListOperations(Resource):
@@ -709,6 +727,24 @@ class ShoppingListRelatedCheckedByListEntryOperations(Resource):
             return result
         else:
             return "Shopping List not found", 500
+
+
+@holmaApp.route('/listentries/by-date/<string:from_date>/<string:to_date>')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@holmaApp.param('from_date', 'Datum ab wann die ListEntry-Objekte'
+                             ' ausgegeben werden sollen')
+@holmaApp.param('to_date', 'Datum bis wann die ListEntry-Objekte'
+                             'ausgegeben werden sollen')
+class ListEntryDateTimeRelationOperations(Resource):
+    @holmaApp.marshal_with(list_entry)
+    # @secured
+    def get(self, from_date, to_date):
+        """Auslesen aller Listentry-Objekten die zwischen den zwei eingegebenen
+        Daten geupdaten wurden.
+                               """
+        adm = StatisticAdministration()
+        le = adm.get_list_entries_in_time_period(from_date, to_date)
+        return le
 
 
 @holmaApp.route('/retailer/<int:retailer_id>/listentries')
