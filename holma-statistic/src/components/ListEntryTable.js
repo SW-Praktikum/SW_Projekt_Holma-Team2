@@ -20,7 +20,7 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import EntryEditDialog from './dialogs/EntryEditDialog';
 import EntryAddDialog from './dialogs/EntryAddDialog';
-import { colors, Button, TextField } from '@material-ui/core';
+import { colors, Button, TextField, Checkbox } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns'; // choose your lib
@@ -79,16 +79,26 @@ class ListEntry extends Component {
         const { open } = this.state
         return (
             <div >
+                <colgroup>
+                    <col style={{width:'10%'}}/>
+                    <col style={{width:'20%'}}/>
+                    <col style={{width:'20%'}}/>
+                    <col style={{width:'50%'}}/>
+                    <col style={{width:'40%'}}/>
+                    <col style={{width:'40%'}}/>
+                </colgroup>
                 <TableRow width="100%">
-                    
-                    <TableCell style={{paddingLeft: 5, paddingTop: 0, paddingBottom: 0, paddingRight: 10}} width="10%" align="right">{listEntry.getAmount()}</TableCell>
-                    <TableCell padding="dense" width="15%" align="left">{listEntry.getUnit()}</TableCell>
-                    <TableCell padding="dense" width="30%" align="left">{listEntry.getName()}</TableCell>
-                    <TableCell padding="dense" width="20%" align="right">{listEntry.getRetailerName()}</TableCell>
-                    <TableCell padding="dense" width="30%" align="right">{listEntry.getCheckedTs()}</TableCell>
-                    
-                   
-                    
+                    <TableCell padding="checkbox" >
+                        <Checkbox
+                            color="primary"
+                            checked={listEntry.getChecked()}
+                            disabled="true"
+                        />
+                    </TableCell>
+                    <TableCell style={{paddingLeft: 5, paddingTop: 0, paddingBottom: 0, paddingRight: 10}} align="right">{listEntry.getAmount()}</TableCell>
+                    <TableCell padding="dense" align="left">{listEntry.getUnit()}</TableCell>
+                    <TableCell padding="dense" align="left">{listEntry.getName()}</TableCell>
+                    <TableCell padding="dense" align="right">{listEntry.getRetailerName()}</TableCell> 
                 </TableRow>
                 
                 
@@ -280,15 +290,22 @@ class ListEntryTable extends Component {
             </Grid>
             <TableContainer style={{marginTop: 20}} component={Paper}>
                 <Table aria-label="collapsible table">
+                <colgroup>
+                    <col style={{width:'10%'}}/>
+                    <col style={{width:'10%'}}/>
+                    <col style={{width:'20%'}}/>
+                    <col style={{width:'30%'}}/>
+                    <col style={{width:'30%'}}/>
+                </colgroup>
+                    
                     <TableHead style={{backgroundColor: colors.teal[600]}}>
+                        
                         <TableRow>
-                            <TableCell width="10%"/>
-                            <TableCell width="16%" align="left"><b style={{ color: '#ffffff'}}>Menge</b></TableCell>
-                            <TableCell width="56%" align="left"><b style={{ color: '#ffffff'}}>Artikel</b></TableCell>
-                            <TableCell width="20%" align="left"><b style={{ color: '#ffffff'}}>Händler</b></TableCell>
-                            <TableCell width="20%" align="left"><b style={{ color: '#ffffff'}}>gekauft am</b></TableCell>
-                            <TableCell width="6%"/>
-                            <TableCell width="6%"/>
+                            <TableCell align="left"></TableCell>
+                            <TableCell align="right"><b style={{ color: '#ffffff'}}>Menge</b></TableCell>
+                            <TableCell align="left"><b style={{ color: '#ffffff'}}>Artikel</b></TableCell>
+                            <TableCell align="left"><b style={{ color: '#ffffff'}}>Händler</b></TableCell>
+                            
                         </TableRow>
                     </TableHead>
                     

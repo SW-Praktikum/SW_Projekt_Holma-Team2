@@ -152,7 +152,7 @@ class ListEntryEditDialog extends Component {
     saveChanges = () => {
         let { localListEntry } = this.state
         let { listEntry } = this.state
-
+        localListEntry.setName(localListEntry.articleName)
         AppAPI.getAPI().updateListEntry(localListEntry)
         
         listEntry.setAmount(localListEntry.getAmount())
