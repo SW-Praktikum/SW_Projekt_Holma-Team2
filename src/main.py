@@ -731,6 +731,24 @@ class ShoppingListRelatedCheckedByListEntryOperations(Resource):
             return "Shopping List not found", 500
 
 
+@holmaApp.route('/listentries/by-date/<string:from_date>/<string:to_date>')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@holmaApp.param('from_date', 'Datum ab wann die ListEntry-Objekte'
+                             ' ausgegeben werden sollen')
+@holmaApp.param('to_date', 'Datum bis wann die ListEntry-Objekte'
+                             'ausgegeben werden sollen')
+class ListEntryDateTimeRelationOperations(Resource):
+    @holmaApp.marshal_with(listEntry)
+    # @secured
+    def get(self, from_date, to_date):
+        """Auslesen aller Listentry-Objekten die zwischen den zwei eingegebenen
+        Daten geupdaten wurden.
+                               """
+        adm = StatisticAdministration()
+        le = adm.get_list_entries_in_time_period(from_date, to_date)
+        return le
+
+
 @holmaApp.route('/retailer/<int:retailer_id>/listentries')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('retailer_id', 'Die ID des retailer-Objekts')
