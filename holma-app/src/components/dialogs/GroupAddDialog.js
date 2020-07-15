@@ -17,8 +17,6 @@ import { Typography } from '@material-ui/core';
 class GroupAddDialog extends Component {
     constructor (props) {
         super(props)
-        this.state = {
-        }        
     }
     
     _handleClick = () => {
@@ -39,6 +37,8 @@ class GroupAddDialog extends Component {
               <DialogTitle id="form-dialog-title">Neue Gruppe erstellen</DialogTitle>
               <DialogContent>
                 <TextField
+                  error ={this.props.groupName.length >= this.props.minLength ? false : true }
+                  helperText =  {this.props.groupName.length >= this.props.minLength ? "" : "Mindestens 3 Zeichen" }
                   autoFocus
                   onChange={this.props.handleChange}
                   margin="dense"
@@ -47,15 +47,16 @@ class GroupAddDialog extends Component {
                   label="Gruppenname"
                   type="email"
                   fullWidth
-                  inputProps = {{maxlength:5}}
-                  inputProps = {{min:1}}
+                  inputProps={{
+                    maxLength: 30,
+                  }}                
                 />
               </DialogContent>
               <DialogActions>
                 <Button onClick={this.props.handleClose} color="primary">
                   abbrechen
                 </Button>
-                <Button onClick={this._handleClick} color="primary">
+                <Button onClick={this._handleClick} disabled={this.props.buttonDisabled} color="primary">
                   weiter
                 </Button>
               </DialogActions>
