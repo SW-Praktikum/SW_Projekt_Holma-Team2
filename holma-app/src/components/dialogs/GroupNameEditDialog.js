@@ -39,11 +39,14 @@ class GroupNameEditDialog extends Component {
 
     saveChanges = () => {
         AppAPI.getAPI().updateGroup(this.state.groupObject).then(()=>
-        window.location.reload())
+        this.props.getGroupDetails(),
+        this.props.handleClose()
+        )
     }
 
       render() {
-        const { classes } = this.props;
+        const { classes, groupName } = this.props;
+        
           return (
             <div>
               <Typography className={classes.container} align="right">
@@ -58,7 +61,7 @@ class GroupNameEditDialog extends Component {
                       margin="dense"
                       id="combo-article"
                       variant="standard"
-                      label={this.state.groupName}
+                      label={groupName}
                   />
                 </DialogContent>
                 <DialogActions>

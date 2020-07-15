@@ -34,7 +34,7 @@ class GroupInformation extends Component {
     this.state= {
       open: false,
       openDialog: false,
-      groupObject: this.props.groupObject,     
+      groupObject: this.props.groupObject, 
     }
   }
 
@@ -60,6 +60,7 @@ handleClose = () => {
   };
   render(){
     const {open} = this.state;
+    const {groupName} = this.props;
     return (
     <div>
     <Grid style={{backgroundColor:'white'}}>
@@ -77,17 +78,19 @@ handleClose = () => {
           Gruppenname:   
         </Typography>
         <Typography  variant="h6" gutterBottom>
-          {this.props.groupName}
+          {groupName}
         </Typography>
         <IconButton aria-label="expand row" size="small" onClick={() => this.openDialog()}>
           <EditIcon/>
         </IconButton>
         <GroupNameEditDialog
-        openDialog={this.openDialog}
-        open={this.state.openDialog}
-        handleClose={this.handleClose}
-        groupObject={this.props.groupObject}
-        groupId={this.props.groupId}
+          openDialog={this.openDialog}
+          open={this.state.openDialog}
+          handleClose={this.handleClose}
+          groupObject={this.props.groupObject}
+          groupId={this.props.groupId}
+          groupName={groupName}
+          getGroupDetails={this.props.getGroupDetails}
         />
         </ListItem>    
       </Grid>
@@ -209,6 +212,7 @@ class StandardArticleLink extends Component{
 class MemberDetails extends Component{
   constructor(props){
     super(props);
+    this.getGroupDetails = this.getGroupDetails.bind(this)
     this.addMember = this.addMember.bind(this)
     console.log("Props:", props)
     this.state ={
@@ -347,6 +351,7 @@ handleClose = () => {
             handleClose={this.handleClose}
             handleInputChange={this.handleInputChange}
             groupObject={this.state.groupObject}
+            getGroupDetails={this.getGroupDetails}
             />
           <Box m={1}></Box>
           <ListWithBoxes groupElements={memberElements}/>
