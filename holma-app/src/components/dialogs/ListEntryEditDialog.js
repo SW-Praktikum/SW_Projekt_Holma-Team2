@@ -136,6 +136,7 @@ class ListEntryEditDialog extends Component {
     }
 
     objectExistsByName = (list, name) => {
+        var BreakException = {}
         try {
             list.forEach(element => {
                 if (element.name == name){
