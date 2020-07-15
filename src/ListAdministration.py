@@ -129,7 +129,6 @@ class Administration():
     def delete_standardarticle(self, list_entry, group):
         with ListEntryMapper() as mapper:
             mapper.delete_standardarticle(list_entry, group)
-
             mapper.delete(list_entry)
 
     def create_group(self, name, user_id):
@@ -141,18 +140,38 @@ class Administration():
             return mapper.insert(group)
 
     def delete_group(self, group):
+
+        # User löschen
         with UserGroupRelationsMapper() as mapper:
             mapper.delete_group_relations(group)
 
+        # Standardartikel löschen
         with ListEntryMapper() as mapper:
             mapper.delete_standardarticle_by_group(group)
 
-        with ShoppingListMapper() as mapper:
-            mapper.delete_by_group(group)
+        # Shoppinglists löschen
+        with ShoppingListMapper() as shopping_list_mapper:
+            shopping_lists = shopping_list_mapper.find_by_group(group)
 
-        with ArticleMapper() as mapper:
-            mapper.delete_by_group(group)
+            # Listeineinträge anhand der ShoppingLists löschen
+            with ListEntryMapper() as mapper:
+                for shopping_list in shopping_lists:
+                    mapper.delete_by_shopping_list(shopping_list)
 
+            shopping_list_mapper.delete_by_group(group)
+
+        # Artikel löschen
+        with ArticleMapper() as article_mapper:
+            articles = article_mapper.find_by_group(group.get_id())
+
+            # Übrige Listeneinträge nach Artikel löschen
+            with ListEntryMapper() as mapper:
+                for article in articles:
+                    mapper.delete_by_article(article.get_id())
+
+            article_mapper.delete_by_group(group)
+
+        # Gruppe löschen
         with GroupMapper() as mapper:
             mapper.delete(group)
 
@@ -188,9 +207,18 @@ class Administration():
             return mapper.insert(article)
 
     def delete_article(self, article_id):
-        with ListEntryMapper() as mapper:
-            mapper.delete_by_article(article_id)
+        article = self.get_article_by_id(article_id)
 
+        # Standardartikel löschen
+        with ListEntryMapper() as mapper:
+            group = self.get_group_by_id(article.get_group())
+            mapper.delete_standardarticle_by_group(group)
+
+        # Listeneinträge mit Artikel löschen
+        with ListEntryMapper() as mapper:
+            mapper.delete_by_article(article)
+
+        # Artikel löschen
         with ArticleMapper() as mapper:
             mapper.delete(article_id)
 
@@ -233,8 +261,8 @@ class Administration():
         with ListEntryMapper() as mapper:
             return self.complete_list_entry(mapper.find_by_id(list_entry_id))
 
-    def create_list_entry(self, name, amount, article_id, unit, purchasing_user_id, 
-                          retailer_id, shopping_list_id):
+    def create_list_entry(self, name, amount, article_id, unit,
+                          purchasing_user_id, retailer_id, shopping_list_id):
         list_entry = ListEntry()
         list_entry.set_id(0),
         list_entry.set_name(name),
@@ -274,7 +302,7 @@ class Administration():
 
     def get_list_entries_checked_by_shopping_list_id(self, shopping_list_id):
         with ListEntryMapper() as mapper:
-            list_entries =  mapper.find_list_entries_checked_by_shopping_list_id(
+            list_entries = mapper.find_list_entries_checked_by_shopping_list_id(
                 shopping_list_id)
         return [self.complete_list_entry(le) for le in list_entries]
     
@@ -298,6 +326,8 @@ class Administration():
 
     def delete_shopping_list(self, shopping_list):
         with ListEntryMapper() as mapper:
+            group = self.get_group_by_id(shopping_list.get_group())
+            mapper.delete_standardarticle_by_group(group)
             mapper.delete_by_shopping_list(shopping_list)
 
         with ShoppingListMapper() as mapper:
@@ -308,15 +338,15 @@ class Administration():
         with ShoppingListMapper() as mapper:
             return mapper.update(shopping_list)
 
-    def add_standardarticle_to_shopping_list(self, group_id, shopping_list_id):
+    def add_standardarticle_to_shopping_list(self, group, shopping_list):
         with ListEntryMapper() as mapper:
-            standardarticles = mapper.find_standardarticles_by_group(group_id)
+            standardarticles = mapper.find_standardarticles_by_group_id(
+                group.get_id())
 
             for standardarticle in standardarticles:
                 standardarticle.set_id(0)
-                standardarticle.set_shopping_list(shopping_list_id)
+                standardarticle.set_shopping_list(shopping_list.get_id())
                 mapper.insert(standardarticle)
-
 
     """Retailer"""
 

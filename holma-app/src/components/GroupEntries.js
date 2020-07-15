@@ -105,6 +105,8 @@ class GroupEntries extends Component{
             openMember: false,
             groupName: "",
             memberId: "",
+            buttonDisabled: true,
+            minLength: 3
         }
     }
 
@@ -122,7 +124,16 @@ class GroupEntries extends Component{
     }
 
     handleChange = (e) => {
-      this.setState({groupName: e.target.value})
+      let groupName = e.target.value
+      let buttonDisabled = true
+      if (groupName.length >= this.state.minLength) {
+        buttonDisabled = false
+      }
+      this.setState({
+        groupName: groupName,
+        buttonDisabled: buttonDisabled
+      })
+      
     }
 
     handleClose = () => {
@@ -253,7 +264,7 @@ class GroupEntries extends Component{
     
 
     render() {
-        const {groupElements, memberElements} = this.state;
+        const {groupElements, memberElements, groupName,buttonDisabled, minLength} = this.state;
 
         return (
           <div>
@@ -261,12 +272,15 @@ class GroupEntries extends Component{
             <GroupAddDialog 
             addGroup={this.addGroup} 
             open={this.state.open}
-            groupName={this.state.groupName} 
+            groupName={groupName} 
             handleChange={this.handleChange} 
             handleClickOpen={this.handleClickOpen} 
             handleClose={this.handleClose} 
             user={this.props.user} 
-            loadGroups={this.loadGroups}/> 
+            loadGroups={this.loadGroups}
+            buttonDisabled={buttonDisabled}
+            minLength={minLength}
+            /> 
             <MemberAddDialog
             memberElements={memberElements}
             groupId={this.state.groupId} 
