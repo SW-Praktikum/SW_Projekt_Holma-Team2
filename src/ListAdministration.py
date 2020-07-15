@@ -201,15 +201,26 @@ class Administration():
 
     """Listentry"""
     def complete_list_entry(self, list_entry):
-        article = self.get_article_by_id(list_entry.get_article())
-        shopping_list = self.get_shopping_list_by_id(list_entry.get_shopping_list())
-        retailer = self.get_retailer_by_id(list_entry.get_retailer())
-        purchasing_user = self.get_user_by_id(list_entry.get_purchasing_user())
+        article_id = list_entry.get_article()
+        shopping_list_id = list_entry.get_shopping_list()
+        retailer_id = list_entry.get_retailer()
+        purchasing_user_id = list_entry.get_purchasing_user()
 
-        list_entry.set_article_name(article.get_name())
-        list_entry.set_shopping_list_name(shopping_list.get_name())
-        list_entry.set_retailer_name(retailer.get_name())
-        list_entry.set_purchasing_user_name(purchasing_user.get_name())
+        if article_id is not None:
+            article = self.get_article_by_id(article_id)
+            list_entry.set_article_name(article.get_name())
+
+        if shopping_list_id is not None:
+            shopping_list = self.get_shopping_list_by_id(shopping_list_id)
+            list_entry.set_shopping_list_name(shopping_list.get_name())
+
+        if retailer_id is not None:
+            retailer = self.get_retailer_by_id(retailer_id)
+            list_entry.set_retailer_name(retailer.get_name())
+
+        if purchasing_user_id is not None:
+            purchasing_user = self.get_user_by_id(purchasing_user_id)
+            list_entry.set_purchasing_user_name(purchasing_user.get_name())
 
         return list_entry
 
