@@ -273,7 +273,7 @@ class ListEntryMapper(Mapper):
 
     def delete_standardarticle_by_group(self, group):
         cursor = self._connection.cursor()
-        command = "DELETE FROM holma.standard_article_group_relations" \
+        command = "DELETE FROM holma.standard_article_group_relations " \
                   "WHERE group_id={}".format(group.get_id())
         cursor.execute(command)
 

@@ -314,8 +314,9 @@ handleClose = () => {
     }
 
     handleDeleteGroup = () => {
-      AppAPI.getAPI().deleteGroup(this.state.groupObject);
-      window.location.reload();
+      AppAPI.getAPI().deleteGroup(this.state.groupObject).then(() => 
+        window.location.reload()
+      );
     }
 
     render(){
