@@ -18,8 +18,8 @@ class Header extends React.Component {
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar >
-            <IconButton edge="false" className={classes.menuButton} color="inherit" aria-label="menu" component={RouterLink} to={`/groups`}>
-              <ShoppingBasket />  
+            <IconButton edge="false" className={classes.menuButton} color="inherit" aria-label="menu" component={RouterLink} to={`/home`}>
+              <ShoppingBasket />
               <div>&nbsp;Holma</div>
             </IconButton>
            <Typography style={{width: 960}} align="right">
