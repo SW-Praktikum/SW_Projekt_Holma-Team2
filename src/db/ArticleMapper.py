@@ -30,7 +30,9 @@ class ArticleMapper(Mapper):
         
         self._connection.commit()
         cursor.close()
-        return result
+        if len(result) == 0:
+            return None
+        return result[0]
 
     def find_by_name(self, name):
         cursor = self._connection.cursor()

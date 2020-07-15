@@ -95,7 +95,13 @@ export default class AppAPI {
     // default 'GET' wird überschrieben mit jeweiliger Methode
     #fetchAdv = (url, init) => fetch(url, init)
         .then(response => {
-            console.log("Fetching", url)
+            if (typeof init !== 'undefined' && "body" in init) {
+                console.log("[" + init.method + "]", url, JSON.parse(init.body))
+            }
+            else {
+                console.log("[GET]", url)
+
+            }
             if (!response.ok){
                 console.log(`${response.status} ${response.statusText}`);
                 //throw Error(`${response.status} ${response.statusText}`)

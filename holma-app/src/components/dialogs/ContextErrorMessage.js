@@ -10,7 +10,7 @@ class ContextErrorMessage extends Component {
     #defaultText = 'Das hätte nicht passieren sollen, entschuldige!';
 
     render() {
-        const {error, contextErrorMsg, onReload } =this.props;
+        const { error, contextErrorMsg, onReload } =this.props;
 
         return (
             (error !== null) ?

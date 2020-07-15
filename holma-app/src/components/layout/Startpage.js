@@ -86,7 +86,6 @@ class Startpage extends React.Component {
   })
 
   render() {
-    console.log(this.state.user)
     const {privatEntries} = this.state
     const classes = this.makeStyles
     return (

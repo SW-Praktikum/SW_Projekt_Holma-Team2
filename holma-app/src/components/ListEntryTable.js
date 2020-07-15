@@ -20,140 +20,35 @@ import EditIcon from '@material-ui/icons/Edit';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import EntryEditDialog from './dialogs/EntryEditDialog';
-import EntryAddDialog from './dialogs/EntryAddDialog';
+import ListEntryEditDialog from './dialogs/ListEntryEditDialog';
+import ListEntryAddDialog from './dialogs/ListEntryAddDialog';
+import ListEntry from './ListEntry';
 import { colors } from '@material-ui/core';
 
 // classes for styling need to be created
 
-class ListEntry extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            open: false,
-            openDialog: false,
-            checked: this.props.listEntry.getChecked(),
-            listEntry: this.props.listEntry,
-        }
-    }
-
-    setOpen(bool) {
-        this.setState({
-            open: bool
-        })
-    }
-
-    openDialog = () => {
-        this.setState({
-            openDialog: true})
-        }
-
-    handleClose = () => {
-        this.setState({
-            openDialog: false})
-        }
-    
-    handleChangeCheck = (e) => {
-        this.setState({
-            checked: e.target.checked
-        })
-        this.state.listEntry.setChecked(e.target.checked)
-        AppAPI.getAPI().updateListEntry(this.state.listEntry)
-    }
-
-    deleteEntry = (entry) => {
-        AppAPI.getAPI().deleteListEntry(entry).then(() => {
-            this.props.loadListEntries()
-        })
-    }
-
-    render() {
-        const { listEntry } = this.props;
-        const { open } = this.state
-        return (
-            <div >
-                <TableRow width="100%">
-                    <TableCell padding="checkbox" width="6%">
-                        <Checkbox
-                            color="primary"
-                            checked={this.state.checked}
-                            onChange={this.handleChangeCheck}
-                            inputProps={{ 'aria-label': 'primary checkbox' }}
-                        />
-                    </TableCell>
-                    <TableCell style={{paddingLeft: 5, paddingTop: 0, paddingBottom: 0, paddingRight: 10}} width="10%" align="right">{listEntry.getAmount()}</TableCell>
-                    <TableCell padding="none" width="15%" align="left">{listEntry.getUnit()}</TableCell>
-                    <TableCell padding="none" width="56%" align="left">{listEntry.getName()}</TableCell>
-                    <TableCell padding="none" width="6%">
-                        <IconButton aria-label="expand row" size="small" onClick={() => this.setOpen(!open)}>
-                            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                        </IconButton>
-                    </TableCell>
-                    <TableCell padding="none" width="6%" align='right'>
-                        <IconButton aria-label="expand row" size="small" onClick={() => this.openDialog()}>
-                            <EditIcon/>
-                        </IconButton>
-                    </TableCell>
-                    <TableCell style={{paddingLeft: 0, paddingTop: 0, paddingBottom: 0, paddingRight: 15}} width="6%" align='right'>
-                        <IconButton aria-label="expand row" size="small" onClick={() => this.deleteEntry(listEntry)}>
-                            <DeleteIcon/>
-                        </IconButton>
-                    </TableCell>
-                </TableRow>
-                <TableRow>
-                    <TableCell style={{ paddingBottom: 0, paddingTop: 0, backgroundColor: colors.grey[100]}} colSpan={10}>
-                    <Collapse in={this.state.open} timeout="auto" unmountOnExit>
-                        <Table size="small" aria-label="purchases">
-                            <TableHead >
-                                <TableRow>
-                                    <TableCell style={{borderBottom: "none"}} colSpan={3} padding="none" width="30%" align="left">Einkäufer</TableCell>
-                                    <TableCell colSpan={2} padding="none" width="20%" align="left">Händler</TableCell>
-                                    <TableCell colSpan={4} padding="none" width="40%" align="left">Geändert</TableCell>
-                                    <TableCell colSpan={1} padding="none" width="10%" align="left">STD</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                
-                                <TableCell colSpan={3} padding="none" width="30%" align="left">{listEntry.getPurchasingUserId()}</TableCell>
-                                <TableCell colSpan={2} padding="none" width="20%" align="left">{listEntry.getRetailerId()}</TableCell>
-                                <TableCell colSpan={4} padding="none" width="40%" align="left">{listEntry.getLastUpdated()}</TableCell>
-                                <TableCell colSpan={1} padding="none" width="10%" align='left'>
-                                    <IconButton aria-label="expand row" size="small" >
-                                        {listEntry.isStandardarticle() ?  <StarIcon /> : <StarBorderIcon />}
-                                    </IconButton>
-                                </TableCell>
-                                
-                            </TableBody>
-                        </Table>
-                    </Collapse>
-                    </TableCell>
-                </TableRow>
-                <EntryEditDialog 
-                    openDialog={this.openDialog}
-                    open={this.state.openDialog}
-                    handleClose={this.handleClose}
-                    listEntry={listEntry}
-                />
-            </div>
-        );
-    }
-}
 
 class ListEntryTable extends Component {
     constructor(props) {
         super(props);
         this.state = {
             listEntryTableElements: [],
+            retailers: [],
+            users: [],
+            articles: [],
+            articlesCount: 0,
             openDialog: false,
-
-            
         }
     }
 
     componentDidMount(){
-        if(this.props.shoppingListId){
-            this.loadListEntries();
-          }
+        if(this.props.shoppingListId) {
+            this.loadRetailers().then(() => {this.loadArticles()
+                .then(() => { this.loadUsers()
+                    .then(() => {this.loadListEntries()})
+                })
+            })
+        }
     }
 
     openDialog = () => {
@@ -163,19 +58,82 @@ class ListEntryTable extends Component {
   
     handleClose = () => {
         this.setState({
-          openDialog: false})
-      }
+        openDialog: false})
+    }
+
+    // Muss noch verschoben werden in GroupList.js!!
+    loadRetailers = () => {
+        return AppAPI.getAPI().getRetailers().then((retailers) => {
+            console.log("Loaded all retailers:", retailers)
+            this.setState({
+                retailers: retailers,
+                loadingInProgress: true, // loading indicator 
+                loadingError: null,
+            });
+            return new Promise(function (resolve) {resolve(retailers)})
+        }).catch(e =>
+            this.setState({ // Reset state with error from catch 
+                loadingInProgress: false,
+                loadingError: e
+            })
+        );  
+    } 
   
+    loadUsers = () => {
+        return AppAPI.getAPI().getUsersByGroupId(this.props.groupId).then((users) => {
+            console.log("Loaded users for group '" + this.props.groupId + "':", users)
+            this.setState({
+                users: users,
+                loadingInProgress: true, // loading indicator 
+                loadingError: null,
+            });
+            return new Promise(function (resolve) {resolve(users)})
+        }).catch(e =>
+            this.setState({ // Reset state with error from catch 
+              loadingInProgress: false,
+              loadingError: e
+            })
+        );  
+    } 
+
+    loadArticles = () => {
+        return AppAPI.getAPI().getArticlesByGroupId(this.props.groupId).then((articles) => {
+            console.log("Loaded articles for group '" + this.props.groupId + "':", articles)
+            this.setState({
+                articles: articles,
+                loadingInProgress: true, // loading indicator 
+                loadingError: null,
+            });
+            return new Promise(function (resolve) {resolve(articles)})
+        }).catch(e =>
+            this.setState({ // Reset state with error from catch 
+                loadingInProgress: false,
+                loadingError: e
+            })
+        );  
+    } 
+            
     loadListEntries = () => {
         AppAPI.getAPI().getListEntriesByShoppingListId(this.props.shoppingListId).then(listEntries => {
             console.log("Loaded list entries for shopping list '" + this.props.shoppingListId + "':", listEntries)
-            var listEntryTableElements = listEntries.map((listEntry) => <ListEntry listEntry={listEntry} loadListEntries={this.loadListEntries} />)
+            var listEntryTableElements = listEntries.map((listEntry) => 
+                <ListEntry 
+                    listEntry={listEntry} 
+                    loadListEntries={this.loadListEntries} 
+                    retailers={this.state.retailers}
+                    users={this.state.users}
+                    articles={this.state.articles}
+                    loadArticles={this.loadArticles}
+                    groupId={this.props.groupId}
+                />
+            )
 
             this.setState({
                 listEntryTableElements: listEntryTableElements,
                 loadingInProgress: true, // loading indicator 
                 loadingError: null
-                })
+            })
+            return new Promise(function (resolve) { resolve(1) })
             }).catch(e =>
                 this.setState({ // Reset state with error from catch 
                 loadingInProgress: false,
@@ -208,7 +166,8 @@ class ListEntryTable extends Component {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <EntryAddDialog 
+            <ListEntryAddDialog 
+                retailers={this.state.retailers}
                 openDialog={this.openDialog}
                 open={this.state.openDialog}
                 handleClose={this.handleClose}

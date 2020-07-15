@@ -21,7 +21,6 @@ import StarBorderIcon from '@material-ui/icons/StarBorder';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import ArticleEditDialog from './dialogs/ArticleEditDialog';
-import EntryAddDialog from './dialogs/EntryAddDialog';
 import { colors } from '@material-ui/core';
 
 class Article extends Component {

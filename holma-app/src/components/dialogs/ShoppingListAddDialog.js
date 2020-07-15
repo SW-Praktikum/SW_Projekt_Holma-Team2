@@ -16,7 +16,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 
 
-class AddListDialog extends Component {
+class ShoppingListAddDialog extends Component {
     constructor (props) {
         super(props)
         this.state = {
@@ -92,4 +92,4 @@ const styles = theme => ({
   }
 });
 
-export default withStyles(styles)(AddListDialog)
+export default withStyles(styles)(ShoppingListAddDialog)
