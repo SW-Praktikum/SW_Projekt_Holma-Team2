@@ -91,8 +91,9 @@ class Startpage extends React.Component {
     return (
         <Paper>
           <Grid>
-          <h2>Hallo {this.state.userName} schön, dass du unsere App verwendest!</h2>
-          <h2>Deine persönliche Einkaufsliste - besteht aus den Listeneinträgen deiner gesamten Gruppen:</h2>
+          <Box m={2}/>
+          <h2>Hallo {this.state.userName}</h2>
+          <h2>In deinen Gruppen sind noch folgende Artikel offen:</h2>
           </Grid>
       <Box m={2}/>
       <ListWithBoxes groupElements={privatEntries}/>

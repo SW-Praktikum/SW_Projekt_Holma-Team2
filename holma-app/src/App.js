@@ -17,7 +17,6 @@ import UserBO from './api/UserBO';
 import GroupList from './components/GroupList';
 import User from './components/User';
 import GroupInformation from './components/GroupEdit';
-import Groupmember from './components/GroupEditDialog';
 import MemberAddDialog from './components/dialogs/MemberAddDialog';
 import MemberDetails from './components/GroupEdit';
 import ArticleEdit from './components/ArticleEdit';
