@@ -24,7 +24,7 @@ class GroupAddDialog extends Component {
     };
 
     render() {
-      const { classes } = this.props;
+      const { classes, minLength } = this.props;
         return (
           <div>
             <Typography className={classes.container} align="right">
@@ -37,8 +37,8 @@ class GroupAddDialog extends Component {
               <DialogTitle id="form-dialog-title">Neue Gruppe erstellen</DialogTitle>
               <DialogContent>
                 <TextField
-                  error ={this.props.groupName.length >= this.props.minLength ? false : true }
-                  helperText =  {this.props.groupName.length >= this.props.minLength ? "" : "Mindestens 3 Zeichen" }
+                  error ={this.props.groupName.length >= minLength ? false : true }
+                  helperText =  {this.props.groupName.length >= minLength ? "" : "Mindestens " + minLength + " Zeichen" }
                   autoFocus
                   onChange={this.props.handleChange}
                   margin="dense"
