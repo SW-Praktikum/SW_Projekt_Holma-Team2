@@ -147,11 +147,24 @@ class Administration():
         with ListEntryMapper() as mapper:
             mapper.delete_standardarticle_by_group(group)
 
-        with ShoppingListMapper() as mapper:
-            mapper.delete_by_group(group)
 
-        with ArticleMapper() as mapper:
-            mapper.delete_by_group(group)
+        with ShoppingListMapper() as shopping_list_mapper:
+            shopping_lists = shopping_list_mapper.find_by_group(group)
+
+            with ListEntryMapper() as mapper:
+                for shopping_list in shopping_lists:
+                    mapper.delete_by_shopping_list(shopping_list)
+
+            shopping_list_mapper.delete_by_group(group)
+
+        with ArticleMapper() as article_mapper:
+            articles = article_mapper.find_by_group(group.get_id())
+
+            with ListEntryMapper() as mapper:
+                for article in articles:
+                    mapper.delete_by_article(article.get_id())
+
+            article_mapper.delete_by_group(group)
 
         with GroupMapper() as mapper:
             mapper.delete(group)
@@ -190,6 +203,8 @@ class Administration():
     def delete_article(self, article_id):
         with ListEntryMapper() as mapper:
             mapper.delete_by_article(article_id)
+
+
 
         with ArticleMapper() as mapper:
             mapper.delete(article_id)
