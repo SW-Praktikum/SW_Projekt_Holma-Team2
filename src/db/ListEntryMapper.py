@@ -191,6 +191,8 @@ class ListEntryMapper(Mapper):
         return list_entry
 
     def delete(self, list_entry):
+        self.delete_standardarticle_by_list_entry(list_entry)
+
         cursor = self._connection.cursor()
         command = "DELETE FROM holma.list_entry " \
                   "WHERE list_entry_id={}".format(list_entry.get_id())
@@ -208,11 +210,11 @@ class ListEntryMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
-    def delete_by_article(self, article_id):
+    def delete_by_article(self, article):
         cursor = self._connection.cursor()
 
         command = "DELETE FROM holma.list_entry " \
-                  "WHERE article={}".format(article_id)
+                  "WHERE article={}".format(article.get_id())
         cursor.execute(command)
 
         self._connection.commit()
@@ -295,9 +297,19 @@ class ListEntryMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
+    def delete_standardarticle_by_list_entry(self, list_entry):
+        cursor = self._connection.cursor()
+        command = "DELETE FROM holma.standard_article_group_relations " \
+                  "WHERE list_entry_id={}".format(list_entry.get_id())
+        cursor.execute(command)
+
+        self._connection.commit()
+        cursor.close()
+
 
 if __name__ == "__main__":
     with ListEntryMapper() as mapper:
-        result = mapper.find_list_entries_in_time_periode('2020-07-01', '2020-07-03')
+        result = mapper.find_list_entries_in_time_periode('2020-07-01',
+                                                          '2020-07-03')
         for entries in result:
             print(entries)
