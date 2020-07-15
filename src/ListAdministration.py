@@ -99,9 +99,9 @@ class Administration():
         with ShoppingListMapper() as mapper:
             return mapper.find_by_group(group_id)
 
-    def get_standardarticles_by_group_id(self, group):
+    def get_standardarticles_by_group_id(self, group_id):
         with ListEntryMapper() as mapper:
-            list_entries = mapper.find_standardarticles_by_group(group)
+            list_entries = mapper.find_standardarticles_by_group_id(group_id)
         return [self.complete_list_entry(le) for le in list_entries]
 
     def add_member_to_group(self, group, user):
@@ -337,9 +337,9 @@ class Administration():
     """Statistik Client"""
 
 
-class StatisticAdministration(object):
+class StatisticAdministration(Administration):
     def __init__(self):
-        pass
+        super().__init__()
 
     def get_all_shoppinlists(self):
         with ShoppingListMapper() as mapper:
@@ -354,6 +354,7 @@ class StatisticAdministration(object):
         with ListEntryMapper() as mapper:
             return mapper.find_all()
 
-    def get_list_entries_in_time_period(self, start_date, end_date):
-        pass
+    def get_list_entries_in_time_period(self, from_date, to_date):
+        with ListEntryMapper() as mapper:
+            return mapper.find_list_entries_in_time_periode(from_date, to_date)
 
