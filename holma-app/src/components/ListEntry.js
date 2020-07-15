@@ -69,8 +69,8 @@ class ListEntry extends Component {
     }
 
     render() {
-        const { listEntry, groupId, users, retailers } = this.props;
-        const { open, articles } = this.state
+        const { groupId, users, retailers } = this.props;
+        const { open, articles, listEntry } = this.state
 
         return (
             <div >
@@ -85,7 +85,7 @@ class ListEntry extends Component {
                     </TableCell>
                     <TableCell style={{paddingLeft: 5, paddingTop: 0, paddingBottom: 0, paddingRight: 10}} width="10%" align="right">{listEntry.getAmount()}</TableCell>
                     <TableCell padding="none" width="15%" align="left">{listEntry.getUnit()}</TableCell>
-                    <TableCell padding="none" width="56%" align="left">{listEntry.getName()}</TableCell>
+                    <TableCell padding="none" width="56%" align="left">{listEntry.getArticleName()}</TableCell>
                     <TableCell padding="none" width="6%">
                         <IconButton aria-label="expand row" size="small" onClick={() => this.setOpen(!open)}>
                             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
@@ -116,8 +116,8 @@ class ListEntry extends Component {
                             </TableHead>
                             <TableBody>
                                 
-                                <TableCell colSpan={3} padding="none" width="30%" align="left">{listEntry.getPurchasingUserId()}</TableCell>
-                                <TableCell colSpan={2} padding="none" width="20%" align="left">{listEntry.getRetailerId()}</TableCell>
+                                <TableCell colSpan={3} padding="none" width="30%" align="left">{listEntry.getPurchasingUserName()}</TableCell>
+                                <TableCell colSpan={2} padding="none" width="20%" align="left">{listEntry.getRetailerName()}</TableCell>
                                 <TableCell colSpan={4} padding="none" width="40%" align="left">{listEntry.getLastUpdated()}</TableCell>
                                 <TableCell colSpan={1} padding="none" width="10%" align='left'>
                                     <IconButton aria-label="expand row" size="small" >
@@ -133,20 +133,14 @@ class ListEntry extends Component {
                 <ListEntryEditDialog
                     listEntry={listEntry}
                     groupId={groupId}
-
                     users={users}
-                    purchasingUser={users[0]}
-
                     articles={articles}
-                    article={articles[0]}
-
                     retailers={retailers}
-                    retailer={retailers[0]}
-
                     loadArticles={this.props.loadArticles}
-                    openDialog={this.openDialog}
                     open={this.state.openDialog}
+                    openDialog={this.openDialog}
                     closeDialog={this.closeDialog}
+                    updateListEntry={this.updateListEntry}
                 />
             </div>
         );

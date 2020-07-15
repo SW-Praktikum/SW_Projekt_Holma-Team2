@@ -40,7 +40,8 @@ class Administration():
 
     def get_list_entries_by_user_id(self, user_id):
         with ListEntryMapper() as mapper:
-            return mapper.find_by_purchasing_user(user_id)
+            list_entries = mapper.find_by_purchasing_user(user_id)
+        return [self.complete_list_entry(le) for le in list_entries]
 
     def create_user(self, name, email, google_id):
         user = User()
@@ -100,7 +101,8 @@ class Administration():
 
     def get_standardarticles_by_group_id(self, group):
         with ListEntryMapper() as mapper:
-            return mapper.find_standardarticles_by_group(group)
+            list_entries = mapper.find_standardarticles_by_group(group)
+        return [self.complete_list_entry(le) for le in list_entries]
 
     def add_member_to_group(self, group, user):
         with UserGroupRelationsMapper() as mapper:
@@ -198,14 +200,27 @@ class Administration():
             return mapper.update(article)
 
     """Listentry"""
+    def complete_list_entry(self, list_entry):
+        article = self.get_article_by_id(list_entry.get_article())
+        shopping_list = self.get_shopping_list_by_id(list_entry.get_shopping_list())
+        retailer = self.get_retailer_by_id(list_entry.get_retailer())
+        purchasing_user = self.get_user_by_id(list_entry.get_purchasing_user())
+
+        list_entry.set_article_name(article.get_name())
+        list_entry.set_shopping_list_name(shopping_list.get_name())
+        list_entry.set_retailer_name(retailer.get_name())
+        list_entry.set_purchasing_user_name(purchasing_user.get_name())
+
+        return list_entry
 
     def get_all_list_entries(self):
         with ListEntryMapper() as mapper:
-            return mapper.find_all()
+            list_entries = mapper.find_all()
+        return [self.complete_list_entry(le) for le in list_entries]
 
     def get_list_entry_by_id(self, list_entry_id):
         with ListEntryMapper() as mapper:
-            return mapper.find_by_id(list_entry_id)
+            return self.complete_list_entry(mapper.find_by_id(list_entry_id))
 
     def create_list_entry(self, name, amount, article_id, unit, purchasing_user_id, 
                           retailer_id, shopping_list_id):
@@ -232,12 +247,26 @@ class Administration():
 
     def get_list_entries_by_retailer_id(self, retailer_id):
         with ListEntryMapper() as mapper:
-            return mapper.find_by_retailer(retailer_id)
+            list_entries = mapper.find_by_retailer(retailer_id)
+        return [self.complete_list_entry(le) for le in list_entries]
 
     def get_list_entries_by_article_id(self, article_id):
         with ListEntryMapper() as mapper:
-            return mapper.find_list_entries_by_article(article_id)
+            list_entries = mapper.find_list_entries_by_article(article_id)
+        return [self.complete_list_entry(le) for le in list_entries]
 
+    def get_list_entries_by_shopping_list_id(self, shopping_list_id):
+        with ListEntryMapper() as mapper:
+            list_entries =  mapper.find_list_entries_by_shopping_list_id(
+                shopping_list_id)
+        return [self.complete_list_entry(le) for le in list_entries]
+
+    def get_list_entries_checked_by_shopping_list_id(self, shopping_list_id):
+        with ListEntryMapper() as mapper:
+            list_entries =  mapper.find_list_entries_checked_by_shopping_list_id(
+                shopping_list_id)
+        return [self.complete_list_entry(le) for le in list_entries]
+    
     """Einkaufsliste"""
 
     def get_shopping_list_by_id(self, shopping_list_id):
@@ -247,16 +276,6 @@ class Administration():
     def get_shopping_list_by_name(self, name):
         with ShoppingListMapper() as mapper:
             return mapper.find_by_name(name)
-
-    def get_list_entries_by_shopping_list_id(self, shopping_list_id):
-        with ListEntryMapper() as mapper:
-            return mapper.find_list_entries_by_shopping_list_id(
-                shopping_list_id)
-
-    def get_list_entries_checked_by_shopping_list_id(self, shopping_list_id):
-        with ListEntryMapper() as mapper:
-            return mapper.find_list_entries_checked_by_shopping_list_id(
-                shopping_list_id)
 
     def create_shopping_list(self, name, group_id):
         shopping_list = ShoppingList()
@@ -320,6 +339,7 @@ class StatisticAdministration(object):
             return mapper.find_all()
 
     def get_all_list_entries(self):
+        # hier fehlt die complete_list_entry-Methode!
         with ListEntryMapper() as mapper:
             return mapper.find_all()
 

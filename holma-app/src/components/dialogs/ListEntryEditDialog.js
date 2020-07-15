@@ -17,6 +17,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import AppAPI from '../../api/AppAPI'
 import ArticleBO from '../../api/ArticleBO';
+import ListEntryBO from '../../api/ListEntryBO';
 
 import ArticleAddDialog from './ArticleAddDialog'
 
@@ -25,92 +26,119 @@ class ListEntryEditDialog extends Component {
     constructor (props) {
         super(props)
         this.state = {
-            open: this.props.open,
             listEntry: this.props.listEntry,
+            localListEntry: Object.assign( Object.create( Object.getPrototypeOf(this.props.listEntry)), this.props.listEntry),
             amount: this.props.listEntry.getAmount(),
             unit: {
-                label: this.props.listEntry.getUnit(),
-                value: this.props.listEntry.getUnit()
+                name: this.props.listEntry.getUnit(),
+                id: this.props.listEntry.getUnit()
             },
-            purchasingUser: this.props.purchasingUser,
-            users: this.props.users,
-            article: this.props.article,
-            articles: this.props.articles,
-            retailer: this.props.retailer,
-            retailers: this.props.retailers,
+            purchasingUser: {
+                "name": this.props.listEntry.getPurchasingUserName(),
+                "id": this.props.listEntry.getPurchasingUserId()
+            },
+            article: {
+                "name": this.props.listEntry.getArticleName(),
+                "id": this.props.listEntry.getArticleId()
+            },
+            retailer: {
+                "name": this.props.listEntry.getRetailerName(),
+                "id": this.props.listEntry.getRetailerId()
+            },
         }
     }
 
-    updateListEntry = (listEntry) => {
-        this.setState({
-            listEntry: listEntry
-        })
+    updateLocalListEntry(updatedListEntry) {
+        // this.setState({
+        //     localListEntry: updatedListEntry
+        // })
     }
 
-    setAmount = (e) => {
+    setAmount = async(amount) => {
         const re = /^[0-9\b]+$/;
-        if (e.target.value === '' || re.test(e.target.value)) {
-            this.setState({
-                amount: e.target.valueAsNumber
+        if (amount.target.value === '' || re.test(amount.target.value)) {
+            await this.setState({
+                amount: amount.target.valueAsNumber
             })
-            let updatedListEntry = this.state.listEntry
-            updatedListEntry.setAmount(this.state.amount)
-            this.updateListEntry(updatedListEntry)
+            let localListEntry = this.state.localListEntry
+            localListEntry.setAmount(this.state.amount)
+            this.updateLocalListEntry(localListEntry)
         }
     }
 
     setUnit = (unit) => {
-        this.setState({
-            unit: unit
-        })
-        let updatedListEntry = this.state.listEntry
-        updatedListEntry.setUnit(unit["value"])
-        this.updateListEntry(updatedListEntry)
+        if (unit !== null) {
+            this.setState({
+                unit: unit
+            })
+            let localListEntry = this.state.localListEntry
+            localListEntry.setUnit(unit.id)
+            this.updateLocalListEntry(localListEntry)
+        }
     }
 
     setPurchasingUser = (purchasingUser) => {
-        this.setState({
-            purchasingUser: purchasingUser
-        })
-        let updatedListEntry = this.state.listEntry
-        updatedListEntry.setPurchasingUserId(purchasingUser.getId())
-        this.updateListEntry(updatedListEntry)
+        if (purchasingUser !== null) {
+            this.setState({
+                purchasingUser: {
+                    "name": purchasingUser.name,
+                    "id": purchasingUser.id
+                }
+            })
+            let localListEntry = this.state.localListEntry
+            localListEntry.setPurchasingUserId(purchasingUser.id)
+            localListEntry.setPurchasingUserName(purchasingUser.name)
+            this.updateLocalListEntry(localListEntry)
+        }
     }
 
     setArticle = (article) => {
         if (article !== null) {
             this.setState({
-                article: article
+                article: {
+                    "name": article.name,
+                    "id": article.id
+                }
             })
-            let updatedListEntry = this.state.listEntry
-            updatedListEntry.setArticleId(article.getId())
-            updatedListEntry.setName(article.getName())
-            this.updateListEntry(updatedListEntry)
+            let localListEntry = this.state.localListEntry
+            localListEntry.setArticleId(article.id)
+            localListEntry.setArticleName(article.name)
+            this.updateLocalListEntry(localListEntry)
         }
     }
 
     createNewArticle = (articleName) => {
         let newArticle = new ArticleBO(articleName, this.props.groupId)
         AppAPI.getAPI().createArticle(newArticle).then((article) => {
-                this.setArticle(article)
+                let art = {
+                    "name": article.getName(),
+                    "id": article.getId()
+                }                
+                this.setArticle(art)
                 this.props.loadArticles()
             }
         )
     }
 
     setRetailer = (retailer) => {
-        this.setState({
-            retailer: retailer
-        })
-        let updatedListEntry = this.state.listEntry
-        updatedListEntry.setRetailerId(retailer.getId())
-        this.updateListEntry(updatedListEntry)
+        if (retailer !== null) {
+            this.setState({
+                retailer: {
+                    "name": retailer.name,
+                    "id": retailer.id
+                }
+            })
+            let localListEntry = this.state.localListEntry
+            localListEntry.setRetailerId(retailer.id)
+            localListEntry.setRetailerName(retailer.name)
+            this.updateLocalListEntry(localListEntry)
+        }
     }
 
-    articleAlreadyExists = (articleName) => {
+    objectExistsByName = (list, name) => {
         try {
-            this.state.articles.forEach( article => {
-                if (article.getName() == articleName){
+            list.forEach(element => {
+                if (element.name == name){
                     throw BreakException
                 }
             })
@@ -121,43 +149,69 @@ class ListEntryEditDialog extends Component {
     }
     
     saveChanges = () => {
-        AppAPI.getAPI().updateListEntry(this.state.listEntry)
+        let { localListEntry } = this.state
+        let { listEntry } = this.state
+
+        AppAPI.getAPI().updateListEntry(localListEntry)
+        
+        listEntry.setAmount(localListEntry.getAmount())
+        listEntry.setUnit(localListEntry.getUnit())
+        listEntry.setArticleId(localListEntry.getArticleId())
+        listEntry.setArticleName(localListEntry.getArticleName())
+        listEntry.setPurchasingUserId(localListEntry.getPurchasingUserId())
+        listEntry.setPurchasingUserName(localListEntry.getPurchasingUserName())
+        listEntry.setRetailerId(localListEntry.getRetailerId())
+        listEntry.setRetailerName(localListEntry.getRetailerName())
+
+        this.props.closeDialog()
+
+    }
+
+    undoChanges = () => {
+        this.setState({
+            localListEntry: Object.assign( Object.create( Object.getPrototypeOf(this.props.listEntry)), this.props.listEntry)
+        })
         this.props.closeDialog()
     }
 
     render() {
         const units = [
             {
-                label: 'Stück',
-                value: 'Stück',
+                name: 'Stück',
+                id: 'Stück',
             },
             {
-                label: 'g',
-                value: 'g',
+                name: 'g',
+                id: 'g',
             },
             {
-                label: 'mg',
-                value: 'mg',
+                name: 'mg',
+                id: 'mg',
             },
             {
-                label: 'kg',
-                value: 'kg',
+                name: 'kg',
+                id: 'kg',
             },
             {
-                label: 'ml',
-                value: 'ml',
+                name: 'ml',
+                id: 'ml',
             },
             {
-                label: 'l',
-                value: 'l',
+                name: 'l',
+                id: 'l',
             },
         ];
 
         const filter = createFilterOptions();
         const { classes, open } = this.props;
-        const { unit, amount, article, articles, purchasingUser, users, retailer, retailers } = this.state;
+        const { unit, amount, article, purchasingUser, retailer } = this.state;
+        
+        const retailers = this.props.retailers.map(retailer => ({"name": retailer.getName(), "id": retailer.getId()}))
+        const articles = this.props.articles.map(article => ({"name": article.getName(), "id": article.getId()}))
+        const users = this.props.users.map(user => ({"name": user.getName(), "id": user.getId()}))
 
         return (
+
           <div>
             <Typography className={classes.container} align="right">
             
@@ -182,7 +236,7 @@ class ListEntryEditDialog extends Component {
                     options={units} 
                     onChange={(event, unit) => {this.setUnit(unit);}}
                     defaultValue={unit}
-                    getOptionLabel={(option) => option.label}
+                    getOptionLabel={(option) => option.name}
                     renderInput={(params) => <TextField {...params} label="Einheit" variant="standard" placeholder="Einheit" />}
                 />
 
@@ -193,7 +247,7 @@ class ListEntryEditDialog extends Component {
                         if (typeof articleName === 'string') {
                             this.createNewArticle(articleName)
                         } else if (articleName && articleName.inputValue) {
-                          // Create a new value from the user input
+                            // Create a new value from the user input
                             this.createNewArticle(articleName.inputValue)
                         } else {
                             this.setArticle(articleName);
@@ -201,9 +255,8 @@ class ListEntryEditDialog extends Component {
                     }}
                     filterOptions={(options, params) => {
                         const filtered = filter(options, params);
-
                         // Suggest the creation of a new value
-                        if (params.inputValue !== '' && !this.articleAlreadyExists(params.inputValue)) {
+                        if (params.inputValue !== '' && !this.objectExistsByName(articles, params.inputValue)) {
                           filtered.push({
                             inputValue: params.inputValue,
                             name: `Erstelle "${params.inputValue}"`,
@@ -254,7 +307,7 @@ class ListEntryEditDialog extends Component {
               
               </DialogContent>
               <DialogActions>
-                <Button onClick={this.props.closeDialog} color="primary">
+                <Button onClick={this.undoChanges} color="primary">
                   abbrechen
                 </Button>
                 <Button onClick={this.saveChanges} color="primary">
