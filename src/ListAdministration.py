@@ -129,7 +129,6 @@ class Administration():
     def delete_standardarticle(self, list_entry, group):
         with ListEntryMapper() as mapper:
             mapper.delete_standardarticle(list_entry, group)
-
             mapper.delete(list_entry)
 
     def create_group(self, name, user_id):
