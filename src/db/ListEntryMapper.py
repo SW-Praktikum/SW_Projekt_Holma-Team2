@@ -220,18 +220,19 @@ class ListEntryMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
-    def delete_purchasing_user(self, user, group=None):
+    def delete_purchasing_user(self, user, shopping_list=None):
         """Hier muss unterschieden werden zwischen User gruppenübergreifend
         als purchasing_user löschen (group = None) oder nur in einer
         bestimmten Gruppe löschen (group_id = """
         cursor = self._connection.cursor()
-        if group is None:
+        if shopping_list is None:
             command = "UPDATE holma.list_entry SET purchasing_user= null " \
                       "WHERE purchasing_user = {}".format(user.get_id())
         else:
             command = "UPDATE holma.list_entry SET purchasing_user= null " \
                       "WHERE purchasing_user = {} " \
-                      "AND group_id={}".format(user.get_id(), group.get_id())
+                      "AND shopping_list={}".format(user.get_id(),
+                                                    shopping_list.get_id())
         cursor.execute(command)
 
         self._connection.commit()
