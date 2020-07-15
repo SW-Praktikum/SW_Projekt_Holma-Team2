@@ -326,7 +326,8 @@ class ListEntryAddDialog extends Component {
 
                 <IconButton 
                   aria-label="expand row" 
-                  size="small" 
+                  size="small"
+                  style={{paddingTop: 20}} 
                   onClick={() => this.setStandard(!isStandard)}
                   >
                   {isStandard ? <StarIcon /> : <StarBorderIcon />}
