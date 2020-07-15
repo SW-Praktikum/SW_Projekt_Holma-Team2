@@ -596,8 +596,6 @@ class ShoppingListsByNameOperations(Resource):
 @holmaApp.param('group_id', 'Die ID des Group-Objekts')
 @holmaApp.param('shopping_list_id', 'Die ID des Shoppinglist-Objekts')
 class GroupShoppingListStandardArticleRelationOperations(Resource):
-    @holmaApp.marshal_with(shoppingList)
-    @holmaApp.marshal_with(group)
     # @secured
     def post(self, group_id, shopping_list_id):
         adm = Administration()
@@ -738,7 +736,7 @@ class ShoppingListRelatedCheckedByListEntryOperations(Resource):
 @holmaApp.param('to_date', 'Datum bis wann die ListEntry-Objekte'
                              'ausgegeben werden sollen')
 class ListEntryDateTimeRelationOperations(Resource):
-    @holmaApp.marshal_with(listEntry)
+    @holmaApp.marshal_with(list_entry)
     # @secured
     def get(self, from_date, to_date):
         """Auslesen aller Listentry-Objekten die zwischen den zwei eingegebenen
