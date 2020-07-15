@@ -130,29 +130,26 @@ class ListEntryAddDialog extends Component {
     }
     
     saveChanges = () => {
-      var liEtry = new ListEntryBO(
+      var listEntry = new ListEntryBO(
         this.state.article.id,
         this.state.article.name,
         this.state.amount, 
         this.state.unit.name, 
         this.state.retailer.id, 
         this.state.retailer.name, 
-        1003, //this.state.purchasingUser.id, 
+        this.state.purchasingUser.id, 
         this.state.purchasingUser.name, 
-        3000, //this.props.shoppingListId, 
-        "a new list", 
+        this.props.shoppingListId, 
+        this.state.article.name,
         false, 
         null, //checkedTs
         false //standardarticle
         )
-      liEtry.setName(this.state.article.name)
-      console.log(liEtry)
-      AppAPI.getAPI().createListEntry(liEtry).then(() => {
-        this.props.loadListEntries()
-      })
-      this.props.handleClose()
-      
-
+        listEntry.setName(this.state.article.name)
+        AppAPI.getAPI().createListEntry(listEntry).then(() => {
+            this.props.loadListEntries()
+        })
+        this.props.handleClose()
     }
 
     undoChanges = () => {
