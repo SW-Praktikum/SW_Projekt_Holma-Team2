@@ -42,14 +42,14 @@ class GroupInformation extends Component {
     this.setState({
         open: bool
     })
-}
+  }
 
-openDialog = () => {
+  openDialog = () => {
     this.setState({
         openDialog: true})
     }
 
-handleClose = () => {
+  handleClose = () => {
     this.setState({
         openDialog: false})
     }
@@ -62,135 +62,141 @@ handleClose = () => {
     const {open} = this.state;
     const {groupName} = this.props;
     return (
-    <div>
-    <Grid style={{backgroundColor:'white'}}>
-      <Box m={5} />
-        <ListItem elevation={3} align='center' style={{width:"auto"}}>
-        <Typography  variant="h4" gutterBottom>
-          Gruppendetails
-        </Typography>
-      </ListItem>
-      <Box m={5} />
-      <Grid container spaching={1}>
-        <Grid item xs={6} sm={6}>
-        <ListItem align='center' style={{width:"auto"}}>
-        <Typography  variant="h6" style={{fontWeight: "bold"}} gutterBottom>
-          Gruppenname:   
-        </Typography>
-        <Typography  variant="h6" gutterBottom>
-          {groupName}
-        </Typography>
-        <IconButton aria-label="expand row" size="small" onClick={() => this.openDialog()}>
-          <EditIcon/>
-        </IconButton>
-        <GroupNameEditDialog
-          openDialog={this.openDialog}
-          open={this.state.openDialog}
-          handleClose={this.handleClose}
-          groupObject={this.props.groupObject}
-          groupId={this.props.groupId}
-          groupName={groupName}
-          getGroupDetails={this.props.getGroupDetails}
-        />
-        </ListItem>    
-      </Grid>
-      
-      <Grid item xs={6} sm={6}>
-        <ListItem  align='center' style={{width:"auto"}}>
-        <Typography  variant="h6" style={{fontWeight: "bold"}} gutterBottom>
-        Admin:
-        </Typography>
-        <Typography  variant="h6" gutterBottom>
-        {this.props.groupOwner}
-        </Typography>
-        </ListItem>
-      </Grid>
-      </Grid>
-      
-      <Box m={4}/>
-      
-      <Grid container spaching={1}>
-      <Grid item xs={6} sm={6}>
-        <ListItem align='center' style={{width:"auto"}}>
-        <Typography  variant="h6" style={{fontWeight: "bold"}} gutterBottom>
-        Erstellt am:
-        </Typography>
-        <Typography  variant="h6" gutterBottom>
-        {this.props.groupCreationDate}
-        </Typography>
-        </ListItem>
-      </Grid>
-      <Grid item xs={6} sm={6}>
-        <ListItem  align='center' style={{width:"auto"}}>
-        <Typography  variant="h6" style={{fontWeight: "bold"}} gutterBottom>
-        Letzte Änderung:
-        </Typography>
-        <Typography  variant="h6" gutterBottom>
-        {this.props.groupLastUpdated}
-        </Typography>
-        </ListItem>
-      </Grid>
-      </Grid>
-      <Box m={4} />
+      <div>
+      <Paper style={{paddingTop: 15, paddingLeft: 15, paddingRight: 15, paddingBottom: 15, marginTop: 15}} elevation={0}>
 
-      <Grid container spaching={1}>
-      <Grid item xs={6} sm={6}>
-      <ListItem elevation={3} align='center' style={{width:"auto"}}>
         <Typography  variant="h4" gutterBottom>
-          Mitglieder
+          Gruppendetails:
         </Typography>
-      </ListItem>
-      <Grid style={{marginLeft: 15, alignItems: 'center'}}>
-      <TextField
-          autoFocus
-          onChange={this.props.handleChangeMember}
-          margin="dense"
-          id="outlined-basic"
-          variant="outlined"
-          label="Mitglieds ID"
-          type="ID"
-          value={this.props.memberId} 
-          style={{width: 150, marginBottom: 15, marginRight: 15, alignItems: 'center'}}       
+        
+        <Grid container spaching={3}>
+          <Grid item xs={12} sm={6} style={{paddingTop: 10, paddingBottom: 10,}}>
+            <Typography style={{fontWeight: "bold"}} gutterBottom>
+              Gruppenname: 
+            </Typography>
+            <Typography gutterBottom>
+              {groupName}
+              <IconButton style={{paddingBottom: 10, paddingLeft: 10}} aria-label="expand row" size="small" onClick={() => this.openDialog()}>
+                <EditIcon/>
+              </IconButton>
+                <GroupNameEditDialog
+                  openDialog={this.openDialog}
+                  open={this.state.openDialog}
+                  handleClose={this.handleClose}
+                  groupObject={this.props.groupObject}
+                  groupId={this.props.groupId}
+                  groupName={groupName}
+                  getGroupDetails={this.props.getGroupDetails}
                 />
-      <Button 
-          style={{marginTop: 9, marginBottom: 15, alignItems: 'center'}}
-          onClick={this._handleClick}
-          color="primary" 
-          variant="contained"
-          >
-            hinzufügen
-      </Button>
-      </Grid>
-    </Grid>
+            </Typography>
+          </Grid>
+          
+          <Grid item xs={12} sm={6} style={{paddingTop: 10, paddingBottom: 10,}}>
+            <Typography style={{fontWeight: "bold"}} gutterBottom>
+              Admin: </Typography>
+            <Typography gutterBottom>
+              {this.props.groupOwner}
+            </Typography>
+          </Grid>
 
-    <Grid style={{marginLeft: 15, alignItems: 'center'}}>
-      <ListItem elevation={3} align='center' style={{width:"auto"}}>
-              <Typography  variant="h4" gutterBottom>
-                Artikel
-              </Typography>
-            </ListItem>
-          <Grid style={{marginLeft: 15, alignItems: 'center'}}>
+          <Grid item xs={12} sm={6} style={{paddingTop: 10, paddingBottom: 10,}}>
+            <Typography style={{fontWeight: "bold"}} gutterBottom>
+              Erstellt am: 
+            </Typography>
+            <Typography gutterBottom>
+              {this.props.groupCreationDate}
+            </Typography>
+          </Grid>
+
+          <Grid item xs={12} sm={6} style={{paddingTop: 10, paddingBottom: 10,}}>
+            <Typography style={{fontWeight: "bold"}} gutterBottom>
+              Letzte Änderung: 
+            </Typography>
+            <Typography gutterBottom>
+              {this.props.groupLastUpdated}
+            </Typography>
+          </Grid>
+
+        </Grid>
+      
+      </Paper>
+      
+      <Paper style={{paddingTop: 15, paddingLeft: 15, paddingRight: 15, paddingBottom: 15, marginTop: 15}} elevation={0}>
+
+        <Typography  variant="h4" gutterBottom>
+          Artikel bearbeiten:
+        </Typography>
+        
+        <Grid container spaching={3}>
+
+          <Grid item xs={12} sm={4}>
             <Link to={"/articleedit/" + this.props.groupId} style={{textDecoration: 'none'}}>
               <ArticleLink/>
             </Link>
+          </Grid>
+          
+          <Grid style={{paddingBottom: 20}} item xs={12} sm={4}></Grid>
+          
+          <Grid item xs={12} sm={4}>
             <Link to={"/standardarticleedit/" + this.props.groupId} style={{textDecoration: 'none'}}>
-            <StandardArticleLink/>
+              <StandardArticleLink/>
             </Link>
           </Grid>
+
         </Grid>
-    </Grid>
-    </Grid>
-    </div>
-    
+      
+      </Paper>
+     
+      <Paper style={{paddingTop: 15, paddingLeft: 15, paddingRight: 15, paddingBottom: 15, marginTop: 15}} elevation={0}>
+
+        <Typography  variant="h4" gutterBottom>
+          Mitglieder:
+        </Typography>
+        
+        <Grid container spaching={3}>
+
+          <Grid item xs={12} sm={4} style={{paddingRight: 20}}>
+            <TextField
+              autoFocus
+              onChange={this.props.handleChangeMember}
+              margin="dense"
+              id="outlined-basic"
+              variant="outlined"
+              label="Mitglieds ID"
+              type="ID"
+              fullWidth
+              value={this.props.memberId}        
+            />
+          </Grid>
+          
+          <Grid item xs={12} sm={4} style={{marginTop: 8}}>
+            <Button 
+              style={{marginBottom: 20}}
+              onClick={this._handleClick}
+              align="center" 
+              variant="contained" 
+              color='primary'>
+              hinzufügen
+            </Button>
+          </Grid>
+
+          <Grid item xs={12} sm={4}></Grid>
+
+        </Grid>
+      
+      </Paper>   
+  </div>
   );
 }}
 
 class ArticleLink extends Component{
   render(){
       return(
-          <Button style={{marginTop: 9, marginBottom: 15, alignItems: 'center'}}
-          color="primary" 
-          variant="contained">
+          <Button 
+            align="center" 
+            variant="contained" 
+            fullWidth 
+            color='primary'>
               Artikel anzeigen
           </Button>
       )
@@ -200,9 +206,11 @@ class ArticleLink extends Component{
 class StandardArticleLink extends Component{
   render(){
       return(
-          <Button style={{marginTop: 9, marginBottom: 15, marginLeft: 15, alignItems: 'center'}}
-          color="primary" 
-          variant="contained">
+          <Button 
+            align="center" 
+            variant="contained" 
+            fullWidth 
+            color='primary'>
               Standardartikel
           </Button>
       )
@@ -353,11 +361,25 @@ handleClose = () => {
             groupObject={this.state.groupObject}
             getGroupDetails={this.getGroupDetails}
             />
-          <Box m={1}></Box>
+          <Box m={2}></Box>
           <ListWithBoxes groupElements={memberElements}/>
           <MemberAddDialog members={memberElements} loadMembers={this.loadMembers}/> 
           <Box m={4} />
-          <Button className={classes.button} variant="contained" style={{marginBottom: 20, color: 'white', backgroundColor: 'red'}} onClick={this.handleDeleteGroup}>Gruppe löschen</Button>
+          
+          <Grid container spaching={3}>
+            <Grid item xs={12} sm={4}>
+              <Button 
+                className={classes.button}
+                variant="contained"
+                fullWidth 
+                style={{marginBottom: 20, color: 'white',backgroundColor: '#D0021B'}} 
+                onClick={this.handleDeleteGroup}>
+                  Gruppe löschen
+              </Button>
+            </Grid>
+            <Grid item xs={12} sm={8}></Grid>
+          </Grid>
+          
         </div>
       );
     }
