@@ -37,8 +37,8 @@ import CardMedia from '@material-ui/core/CardMedia';
 class Grouplink extends Component{
   render(){
       return(
-          <Button variant="contained" color="primary" style={{width:'100%'}}>
-              Gruppe anzeigen
+          <Button variant="contained" color="primary" >
+              Gruppendetails
           </Button>
       )
   }
@@ -109,6 +109,7 @@ class GroupList extends Component {
         // add standardarticles to new list
         // Liste mit Standardartikel erstellen
       }
+      this.handleClose()
     }
 
     createNewList = () => {
@@ -165,17 +166,25 @@ class GroupList extends Component {
       const {listElements} = this.state;
           return(
             <div>
-              <Box m={5} />
-              <Card className="root" style={{/* minHeight: 250 ,  */minWidth: '100%', marginBottom:10, marginTop:10, backgroundColor: colors.teal[600]}}>
+              <Box m={1} />
+              <Card className="root" style={{minWidth: '100%', marginBottom:10, marginTop:10, backgroundColor: "ffffff"}}>                
                 <CardActionArea>
                   <CardContent>
-                    <Typography className="title" style={{fontSize: 14, color: 'white'}}>Aktuelle Gruppe: {this.state.groupName} / {this.state.groupId}</Typography>
+                  <Grid container direction="row" justify="space-between" alignItems="center" spaching={2}>
+                    <Grid item xs={12} sm={6}>
+                      <Typography className="title" style={{fontSize: 16, color: colors.teal[600]}}><b>Gruppe: </b>{this.state.groupName}</Typography>
+                      <Typography className="title" style={{fontSize: 16, color: colors.teal[600]}}><b>Id: </b>{this.state.groupId}</Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <Link to={"/groupedit/" + this.props.match.params.groupId} style={{textDecoration: 'none'}}>
+                        <Grouplink/>
+                      </Link>
+                    </Grid>
+                  </Grid>
                   </CardContent>
                 </CardActionArea>     
               </Card>
-              <Link to={"/groupedit/" + this.props.match.params.groupId} style={{textDecoration: 'none'}}>
-                <Grouplink/>
-              </Link>
+              
                 <Box m={2} />
                 <Typography className="title" style={{fontSize: 14, color: 'black'}}>Shoppinglists: </Typography>
                 <ListWithBoxes groupElements={listElements}/>
