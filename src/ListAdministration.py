@@ -308,13 +308,13 @@ class Administration():
         with ShoppingListMapper() as mapper:
             return mapper.update(shopping_list)
 
-    def add_standardarticle_to_shopping_list(self, group_id, shopping_list_id):
+    def add_standardarticle_to_shopping_list(self, group, shopping_list):
         with ListEntryMapper() as mapper:
-            standardarticles = mapper.find_standardarticles_by_group(group_id)
+            standardarticles = mapper.find_standardarticles_by_group_id(group.get_id())
 
             for standardarticle in standardarticles:
                 standardarticle.set_id(0)
-                standardarticle.set_shopping_list(shopping_list_id)
+                standardarticle.set_shopping_list(shopping_list.get_id())
                 mapper.insert(standardarticle)
 
 
