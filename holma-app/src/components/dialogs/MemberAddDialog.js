@@ -25,7 +25,6 @@ class MemberAddDialog extends Component {
         super(props)
         this.state = {
             groupName: "",
-            members: []
         }        
     }
 

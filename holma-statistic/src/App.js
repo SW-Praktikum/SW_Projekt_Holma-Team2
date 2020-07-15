@@ -16,6 +16,9 @@ import AppAPI from './api/AppAPI';
 import UserBO from './api/UserBO';
 import User from './components/User';
 import MemberAddDialog from './components/dialogs/MemberAddDialog';
+import StartPage from './components/layout/Startpage';
+
+import ListEntryTable from './components/ListEntryTable';
 import UserStatistics from './components/UserStatistics';
 import OneGroupStat from './components/OneGroupStat';
 
@@ -132,7 +135,7 @@ class App extends React.Component {
                     <Navigation />
                     <Route path='/startpage' component={Startpage}/>
                     <Route path='/user-statistics'>
-                    <UserStatistics user={user}/>
+                      <ListEntryTable user={user}/>
                     </Route>
                     <Route path='/groups'>
                       <GroupEntries user={user}/>

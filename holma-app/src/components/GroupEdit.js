@@ -34,7 +34,7 @@ class GroupInformation extends Component {
     this.state= {
       open: false,
       openDialog: false,
-      groupObject: this.props.groupObject,     
+      groupObject: this.props.groupObject, 
     }
   }
 
@@ -60,6 +60,7 @@ handleClose = () => {
   };
   render(){
     const {open} = this.state;
+    const {groupName} = this.props;
     return (
     <div>
     <Grid style={{backgroundColor:'white'}}>
@@ -72,6 +73,7 @@ handleClose = () => {
         </ListItem>
       
       <Box m={5} />
+<<<<<<< HEAD
       <Grid container spaching={3}>
         <Grid item xs={12} sm={6} lg={4}>
           <ListItem align='center' style={{width:"auto"}}>
@@ -94,6 +96,30 @@ handleClose = () => {
               groupId={this.props.groupId}
               />
           </ListItem>    
+=======
+      <Grid container spaching={1}>
+        <Grid item xs={6} sm={6}>
+        <ListItem align='center' style={{width:"auto"}}>
+        <Typography  variant="h6" style={{fontWeight: "bold"}} gutterBottom>
+          Gruppenname:   
+        </Typography>
+        <Typography  variant="h6" gutterBottom>
+          {groupName}
+        </Typography>
+        <IconButton aria-label="expand row" size="small" onClick={() => this.openDialog()}>
+          <EditIcon/>
+        </IconButton>
+        <GroupNameEditDialog
+          openDialog={this.openDialog}
+          open={this.state.openDialog}
+          handleClose={this.handleClose}
+          groupObject={this.props.groupObject}
+          groupId={this.props.groupId}
+          groupName={groupName}
+          getGroupDetails={this.props.getGroupDetails}
+        />
+        </ListItem>    
+>>>>>>> master
       </Grid>
       
       <Grid item xs={12} sm={6} lg={4}>
@@ -212,6 +238,7 @@ class StandardArticleLink extends Component{
 class MemberDetails extends Component{
   constructor(props){
     super(props);
+    this.getGroupDetails = this.getGroupDetails.bind(this)
     this.addMember = this.addMember.bind(this)
     console.log("Props:", props)
     this.state ={
@@ -317,8 +344,9 @@ handleClose = () => {
     }
 
     handleDeleteGroup = () => {
-      AppAPI.getAPI().deleteGroup(this.state.groupObject);
-      window.location.reload();
+      AppAPI.getAPI().deleteGroup(this.state.groupObject).then(() => 
+        window.location.reload()
+      );
     }
 
     render(){
@@ -349,6 +377,7 @@ handleClose = () => {
             handleClose={this.handleClose}
             handleInputChange={this.handleInputChange}
             groupObject={this.state.groupObject}
+            getGroupDetails={this.getGroupDetails}
             />
           <Box m={1}></Box>
           <ListWithBoxes groupElements={memberElements}/>

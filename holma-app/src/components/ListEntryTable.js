@@ -32,17 +32,22 @@ class ListEntryTable extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            groupId: this.props.match.params.groupId,
+            shoppingListId: this.props.match.params.shoppingListId,
             listEntryTableElements: [],
             retailers: [],
             users: [],
             articles: [],
             articlesCount: 0,
             openDialog: false,
+            liseEntry: ""
         }
+
+        console.log(this.state)
     }
 
     componentDidMount(){
-        if(this.props.shoppingListId) {
+        if(this.state.shoppingListId) {
             this.loadRetailers().then(() => {this.loadArticles()
                 .then(() => { this.loadUsers()
                     .then(() => {this.loadListEntries()})
@@ -80,8 +85,8 @@ class ListEntryTable extends Component {
     } 
   
     loadUsers = () => {
-        return AppAPI.getAPI().getUsersByGroupId(this.props.groupId).then((users) => {
-            console.log("Loaded users for group '" + this.props.groupId + "':", users)
+        return AppAPI.getAPI().getUsersByGroupId(this.state.groupId).then((users) => {
+            console.log("Loaded users for group '" + this.state.groupId + "':", users)
             this.setState({
                 users: users,
                 loadingInProgress: true, // loading indicator 
@@ -97,8 +102,8 @@ class ListEntryTable extends Component {
     } 
 
     loadArticles = () => {
-        return AppAPI.getAPI().getArticlesByGroupId(this.props.groupId).then((articles) => {
-            console.log("Loaded articles for group '" + this.props.groupId + "':", articles)
+        return AppAPI.getAPI().getArticlesByGroupId(this.state.groupId).then((articles) => {
+            console.log("Loaded articles for group '" + this.state.groupId + "':", articles)
             this.setState({
                 articles: articles,
                 loadingInProgress: true, // loading indicator 
@@ -114,8 +119,8 @@ class ListEntryTable extends Component {
     } 
             
     loadListEntries = () => {
-        AppAPI.getAPI().getListEntriesByShoppingListId(this.props.shoppingListId).then(listEntries => {
-            console.log("Loaded list entries for shopping list '" + this.props.shoppingListId + "':", listEntries)
+        AppAPI.getAPI().getListEntriesByShoppingListId(this.state.shoppingListId).then(listEntries => {
+            console.log("Loaded list entries for shopping list '" + this.state.shoppingListId + "':", listEntries)
             var listEntryTableElements = listEntries.map((listEntry) => 
                 <ListEntry 
                     listEntry={listEntry} 
@@ -124,14 +129,14 @@ class ListEntryTable extends Component {
                     users={this.state.users}
                     articles={this.state.articles}
                     loadArticles={this.loadArticles}
-                    groupId={this.props.groupId}
+                    groupId={this.state.groupId}
                 />
             )
 
             this.setState({
                 listEntryTableElements: listEntryTableElements,
                 loadingInProgress: true, // loading indicator 
-                loadingError: null
+                loadingError: null,
             })
             return new Promise(function (resolve) { resolve(1) })
             }).catch(e =>
@@ -166,11 +171,17 @@ class ListEntryTable extends Component {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <ListEntryAddDialog 
+            <ListEntryAddDialog
+                loadListEntries={this.loadListEntries} 
                 retailers={this.state.retailers}
+                users={this.state.users}
+                articles={this.state.articles}
+                loadArticles={this.loadArticles}
+                groupId={this.state.groupId}
                 openDialog={this.openDialog}
                 open={this.state.openDialog}
                 handleClose={this.handleClose}
+                shoppingListId={this.state.shoppingListId}
             />
             
             </div>
