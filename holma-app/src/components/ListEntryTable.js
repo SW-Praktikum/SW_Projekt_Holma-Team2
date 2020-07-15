@@ -38,6 +38,7 @@ class ListEntryTable extends Component {
             articles: [],
             articlesCount: 0,
             openDialog: false,
+            liseEntry: ""
         }
     }
 
@@ -131,7 +132,7 @@ class ListEntryTable extends Component {
             this.setState({
                 listEntryTableElements: listEntryTableElements,
                 loadingInProgress: true, // loading indicator 
-                loadingError: null
+                loadingError: null,
             })
             return new Promise(function (resolve) { resolve(1) })
             }).catch(e =>
@@ -166,11 +167,17 @@ class ListEntryTable extends Component {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <ListEntryAddDialog 
+            <ListEntryAddDialog
+                loadListEntries={this.loadListEntries} 
                 retailers={this.state.retailers}
+                users={this.state.users}
+                articles={this.state.articles}
+                loadArticles={this.loadArticles}
+                groupId={this.props.groupId}
                 openDialog={this.openDialog}
                 open={this.state.openDialog}
                 handleClose={this.handleClose}
+                shoppingListId={this.props.shoppingListId}
             />
             
             </div>
