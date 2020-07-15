@@ -171,3 +171,98 @@ Daraus ergeben sich folgende Ressourcen:
 3. `ShoppingListsByNameOperations`mit der Operation D.3
 4. `GroupRelatedShoppingListOperations`mit der Operation D.4, D.7
 
+## E) Zugriff auf `Listentry`-Objekte
+1.  Alle Listentries auslesen:
+    ```
+    GET /app/listentries
+    ```
+2. Eine Listentry auslesen:
+    ```
+    GET /app/listentry/{list_entry_id}
+    ```
+3. Eine Listentries per Shoppinglist_id auslesen:
+    ```
+    GET /app/shoppinglist/{shopping_list_id}/listentries
+    ```
+4. Checked Listentries per Shoppinglist_id auslesen:
+    ```
+    GET /app/shoppinglist/{shopping_list_id}/listentries
+    ```
+5. Listentries per User_id auslesen:
+    ```
+    GET /app/user/{user_id}/listentries
+    ```
+6. Listentries per Group_id auslesen:
+    ```
+    GET /app/group/{group_id}/listentries
+    ```
+7. Listentries per Article_id auslesen:
+    ```
+    GET /app/article/{article_id}/listentries
+    ```
+8. Listentries per Retailer_id auslesen:
+    ```
+    GET /app/retailer/{retailer_id}/listentries
+    ```
+9. Listentries die in einem bestimmten Zeitraum geupdaten wurden auslesen:
+    ```
+    GET /app/listentries/by-date/{from_date}/{to_date}
+    ```
+10. Ein bereits bestehendes Listentry speichern:
+    ```
+    PUT /app/listentry/{int:list_entry_id}
+    ```
+11. Ein Listentry löschen:
+    ```
+    DELETE /app/listentry/{int:list_entry_id}
+    ```
+12. Ein Standardarticle einer Gruppe löschen
+    ```
+    DELETE app/group/{group_id}/listentry/{list_entry_id}
+    ```
+13. Ein Listentry erstellen:
+    ```
+    POST /app/shoppinglist/{int:shopping_list_id}/listentries
+    ```
+14. Ein Standardarticle einer Gruppe hinzufügen
+    ```
+    POST /app/group/{group_id}/listentry/{list_entry_id}
+    ```
+
+Daraus ergeben sich folgende Ressourcen:
+1. `ListEntryListOperations` mit den Operationen E.1
+2. `ListEntryOperations` mit den Operationen E.2, E.10, E.11
+3. `UserRelatedListEntryOperations` mit der Operation E.5
+4. `GroupRelatedListEntryOperations` mit der Operation E.6,
+5. `ArticleRelatedListEntryOperations` mit der Operation E.7
+6. `ShoppingListRelatedCheckedByListEntryOperations` mit der Operation E.4
+7. `ShoppingListRelatedListEntryListOperations` mit der Operation E.3, E.13
+8. `RetailerRelatedListEntryOperations` mit der Operation E.8
+9. `GroupListEntryStandardArticleRelationOperations` mit der Operation E.12, E.14
+10. `ListEntryDateTimeRelationOperations` mit der Operation E.9
+
+## F) Zugriff auf `Retailer`-Objekte
+
+1. Alle Retailer auslesen:
+    ```
+    GET /app​/retailers
+    ```
+2. Einen Retailer per ID auslesen:
+    ```
+    GET /app/retailer/{retailer_id}
+    ```
+3. Retailer per Name auslesen:
+    ```
+    GET /app/retailer/by-name/{name}
+    ```
+
+Daraus ergeben sich folgende Ressourcen:
+1. `RetailerListOperations` mit den Operationen F.1
+2. `RetailerOperations` mit den Operationen F.2
+3. `RetailerByNameOperations` mit der Operation F.3
+
+## Hinweise
+**POST** wird verwendet, wenn *neue* Objekte angelegt werden sollen.
+
+**PUT** wird für ein Update von *bereits bestehenden* Objekten verwendet.
+
