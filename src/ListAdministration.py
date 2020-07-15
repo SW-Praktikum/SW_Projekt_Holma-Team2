@@ -112,6 +112,13 @@ class Administration():
         with GroupMapper() as mapper:
             mapper.delete_owner(user, group)
 
+        with ShoppingListMapper() as mapper:
+            shopping_lists = mapper.find_by_group(group)
+
+            with ListEntryMapper() as mapper:
+                for shopping_list in shopping_lists:
+                    mapper.delete_purchasing_user(user, shopping_list)
+
         with UserGroupRelationsMapper() as mapper:
             mapper.remove_user_from_group(group, user)
 
