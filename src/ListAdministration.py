@@ -140,31 +140,38 @@ class Administration():
             return mapper.insert(group)
 
     def delete_group(self, group):
+
+        # User löschen
         with UserGroupRelationsMapper() as mapper:
             mapper.delete_group_relations(group)
 
+        # Standardartikel löschen
         with ListEntryMapper() as mapper:
             mapper.delete_standardarticle_by_group(group)
 
-
+        # Shoppinglists löschen
         with ShoppingListMapper() as shopping_list_mapper:
             shopping_lists = shopping_list_mapper.find_by_group(group)
 
+            # Listeineinträge anhand der ShoppingLists löschen
             with ListEntryMapper() as mapper:
                 for shopping_list in shopping_lists:
                     mapper.delete_by_shopping_list(shopping_list)
 
             shopping_list_mapper.delete_by_group(group)
 
+        # Artikel löschen
         with ArticleMapper() as article_mapper:
             articles = article_mapper.find_by_group(group.get_id())
 
+            # Übrige Listeneinträge nach Artikel löschen
             with ListEntryMapper() as mapper:
                 for article in articles:
                     mapper.delete_by_article(article.get_id())
 
             article_mapper.delete_by_group(group)
 
+        # Gruppe löschen
         with GroupMapper() as mapper:
             mapper.delete(group)
 
@@ -200,11 +207,17 @@ class Administration():
             return mapper.insert(article)
 
     def delete_article(self, article_id):
+        article = self.get_article_by_id(article_id)
+        # Standardartikel löschen
         with ListEntryMapper() as mapper:
-            mapper.delete_by_article(article_id)
+            group = self.get_group_by_id(article.get_group())
+            mapper.delete_standardarticle_by_group(group)
 
+        # Listeneinträge mit Artikel löschen
+        with ListEntryMapper() as mapper:
+            mapper.delete_by_article(article)
 
-
+        # Artikel löschen
         with ArticleMapper() as mapper:
             mapper.delete(article_id)
 
