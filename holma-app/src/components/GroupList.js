@@ -56,8 +56,8 @@ class ListCard extends Component {
           </CardContent>
           </CardActionArea>     
         </Card>
-  )
-}
+    )
+  }
 }
 
 class GroupList extends Component {
@@ -137,11 +137,13 @@ class GroupList extends Component {
         console.log(lists)
         var listElements = lists.map((list) =>
         <Grid key={list.getId()} item xs={6} item lg={4}>
-        <Paper className="paper" style ={{ textAlign:'center',}} >
-          <ListCard key={list.getId()} list={list}/>
-        </Paper>
-      </Grid>
-      )
+          <Link to={"/group/" + this.props.match.params.groupId + "/shoppinglist/" + list.getId()} style={{textDecoration: 'none'}}>
+              <Paper className="paper" style ={{ textAlign:'center',}} >
+                <ListCard key={list.getId()} list={list}/>
+              </Paper>
+            </Link>
+        </Grid>
+        )
         this.setState({
           listElements: listElements,
           loadingInProgress: true, // loading indicator 
@@ -159,6 +161,7 @@ class GroupList extends Component {
       } 
 
     render() {
+      console.log(this.state.shoppingListId)
       const {listElements} = this.state;
           return(
             <div>
@@ -174,10 +177,8 @@ class GroupList extends Component {
                 <Grouplink/>
               </Link>
                 <Box m={2} />
-                <Typography className="title" style={{fontSize: 14, color: 'black'}}>Shoppinglists:</Typography>
-                <Link to={"/shoppinglist/" + this.props.match.params.groupId} style={{textDecoration: 'none'}}>
-                  <ListWithBoxes groupElements={listElements}/>
-                </Link>
+                <Typography className="title" style={{fontSize: 14, color: 'black'}}>Shoppinglists: </Typography>
+                <ListWithBoxes groupElements={listElements}/>
                 <ShoppingListAddDialog 
                   openDialog={this.openDialog}
                   open={this.state.openDialog}

@@ -121,6 +121,21 @@ class ListEntryMapper(Mapper):
 
         return result
 
+    def find_list_entries_in_time_periode(self, from_date, to_date):
+        cursor = self._connection.cursor()
+        command = "SELECT * FROM holma.list_entry WHERE last_updated " \
+                  "BETWEEN '{}' AND '{}'".format(from_date, to_date)
+        cursor.execute(command)
+        print(command)
+        tuples = cursor.fetchall()
+
+        result = ListEntry.from_tuples(tuples)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
     def insert(self, list_entry):
         cursor = self._connection.cursor()
         command = "INSERT INTO holma.list_entry (list_entry_id, name, " \
@@ -176,6 +191,8 @@ class ListEntryMapper(Mapper):
         return list_entry
 
     def delete(self, list_entry):
+        self.delete_standardarticle_by_list_entry(list_entry)
+
         cursor = self._connection.cursor()
         command = "DELETE FROM holma.list_entry " \
                   "WHERE list_entry_id={}".format(list_entry.get_id())
@@ -193,11 +210,11 @@ class ListEntryMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
-    def delete_by_article(self, article_id):
+    def delete_by_article(self, article):
         cursor = self._connection.cursor()
 
         command = "DELETE FROM holma.list_entry " \
-                  "WHERE article={}".format(article_id)
+                  "WHERE article={}".format(article.get_id())
         cursor.execute(command)
 
         self._connection.commit()
@@ -222,7 +239,7 @@ class ListEntryMapper(Mapper):
 
     """Standardarticle"""
 
-    def find_standardarticles_by_group(self, group):
+    def find_standardarticles_by_group_id(self, group_id):
         cursor = self._connection.cursor()
         command = "SELECT standard_article_group_relations.list_entry_id," \
                   " holma.list_entry.name, holma.list_entry.creation_date, " \
@@ -237,7 +254,7 @@ class ListEntryMapper(Mapper):
                   " standard_article_group_relations.list_entry_id=" \
                   "holma.list_entry.list_entry_id WHERE " \
                   "standard_article_group_relations.group_id = {}".format(
-        group.get_id())
+        group_id)
         cursor.execute(command)
 
         tuples = cursor.fetchall()
@@ -280,9 +297,19 @@ class ListEntryMapper(Mapper):
         self._connection.commit()
         cursor.close()
 
+    def delete_standardarticle_by_list_entry(self, list_entry):
+        cursor = self._connection.cursor()
+        command = "DELETE FROM holma.standard_article_group_relations " \
+                  "WHERE list_entry_id={}".format(list_entry.get_id())
+        cursor.execute(command)
 
-"""if __name__ == "__main__":
+        self._connection.commit()
+        cursor.close()
+
+
+if __name__ == "__main__":
     with ListEntryMapper() as mapper:
-        result = mapper.find_standardarticles_by_group(gr)
+        result = mapper.find_list_entries_in_time_periode('2020-07-01',
+                                                          '2020-07-03')
         for entries in result:
-            print(entries)"""
+            print(entries)
