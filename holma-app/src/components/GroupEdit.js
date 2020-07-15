@@ -34,7 +34,23 @@ class GroupInformation extends Component {
     this.state= {
       open: false,
       openDialog: false,
-      groupObject: this.props.groupObject, 
+      groupObject: this.props.groupObject,
+      creationDate: this.props.groupCreationDate,
+      groupCreationDate: "",
+      groupLastUpdated: ""
+    }
+  }
+
+  componentDidMount() {
+    if (this.props.groupCreationDate) {
+      let lup = Date.parse(this.props.groupLastUpdated)
+      let lup_iso = lup.toISOString()
+      let gcd = Date.parse(this.props.groupCreationDate)
+      let gcd_iso = gcd.toISOString()
+      this.setState({
+        groupCreationDate: gcd_iso,
+        groupLastUpdated: lup_iso
+      })
     }
   }
 
@@ -58,9 +74,24 @@ handleClose = () => {
     this.props.addMember();
     this.props.loadMembers();
   };
+
+
   render(){
     const {open} = this.state;
     const {groupName} = this.props;
+     
+    var groupCreationDate = ""
+    var groupLastUpdated = ""
+
+    if (this.props.groupCreationDate != ""&& this.props.groupLastUpdated !="") {
+      let gcd = new Date(this.props.groupCreationDate)
+      let lup = new Date(this.props.groupLastUpdated)
+      groupCreationDate = gcd.toDateString()
+      groupLastUpdated = lup.toDateString()
+    }
+
+    //this.creationDate();
+    console.log("date", groupCreationDate)
     return (
     <div>
     <Grid style={{backgroundColor:'white'}}>
@@ -116,7 +147,7 @@ handleClose = () => {
         Erstellt am:
         </Typography>
         <Typography  variant="h6" gutterBottom>
-        {this.props.groupCreationDate}
+        {groupCreationDate}
         </Typography>
         </ListItem>
       </Grid>
@@ -126,7 +157,8 @@ handleClose = () => {
         Letzte Änderung:
         </Typography>
         <Typography  variant="h6" gutterBottom>
-        {this.props.groupLastUpdated}
+          
+        {groupLastUpdated}
         </Typography>
         </ListItem>
       </Grid>
@@ -237,7 +269,6 @@ class MemberDetails extends Component{
       this.loadMembers();
      }
   }
-
 
 openDialog = () => {
     this.setState({
