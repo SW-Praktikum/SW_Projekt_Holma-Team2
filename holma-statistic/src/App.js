@@ -16,15 +16,12 @@ import AppAPI from './api/AppAPI';
 import UserBO from './api/UserBO';
 import User from './components/User';
 import MemberAddDialog from './components/dialogs/MemberAddDialog';
-<<<<<<< HEAD
 import StartPage from './components/layout/Startpage';
-import GroupList from './components/GroupList';
+
 import ListEntryTable from './components/ListEntryTable';
-=======
 import UserStatistics from './components/UserStatistics';
 import OneGroupStat from './components/OneGroupStat';
 
->>>>>>> master
 
 class App extends React.Component {
   #firebaseConfig = {
@@ -138,9 +135,7 @@ class App extends React.Component {
                     <Navigation />
                     <Route path='/startpage' component={Startpage}/>
                     <Route path='/user-statistics'>
-                    <UserStatistics user={user}>
                       <ListEntryTable user={user}/>
-                    </UserStatistics>
                     </Route>
                     <Route path='/groups'>
                       <GroupEntries user={user}/>

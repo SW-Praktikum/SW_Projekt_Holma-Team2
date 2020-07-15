@@ -222,7 +222,7 @@ class ListEntryMapper(Mapper):
 
     """Standardarticle"""
 
-    def find_standardarticles_by_group(self, group):
+    def find_standardarticles_by_group(self, group_id):
         cursor = self._connection.cursor()
         command = "SELECT standard_article_group_relations.list_entry_id," \
                   " holma.list_entry.name, holma.list_entry.creation_date, " \
@@ -237,7 +237,7 @@ class ListEntryMapper(Mapper):
                   " standard_article_group_relations.list_entry_id=" \
                   "holma.list_entry.list_entry_id WHERE " \
                   "standard_article_group_relations.group_id = {}".format(
-        group.get_id())
+        group_id)
         cursor.execute(command)
 
         tuples = cursor.fetchall()
@@ -283,6 +283,7 @@ class ListEntryMapper(Mapper):
 
 """if __name__ == "__main__":
     with ListEntryMapper() as mapper:
+    
         result = mapper.find_standardarticles_by_group(gr)
         for entries in result:
             print(entries)"""
