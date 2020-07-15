@@ -63,36 +63,40 @@ handleClose = () => {
     return (
     <div>
     <Grid style={{backgroundColor:'white'}}>
+
       <Box m={5} />
         <ListItem elevation={3} align='center' style={{width:"auto"}}>
-        <Typography  variant="h4" gutterBottom>
+          <Typography  variant="h4" gutterBottom>
           Gruppendetails
-        </Typography>
-      </ListItem>
+          </Typography>
+        </ListItem>
+      
       <Box m={5} />
-      <Grid container spaching={1}>
-        <Grid item xs={6} sm={6}>
-        <ListItem align='center' style={{width:"auto"}}>
-        <Typography  variant="h6" style={{fontWeight: "bold"}} gutterBottom>
-          Gruppenname:   
-        </Typography>
-        <Typography  variant="h6" gutterBottom>
-          {this.props.groupName}
-        </Typography>
-        <IconButton aria-label="expand row" size="small" onClick={() => this.openDialog()}>
-          <EditIcon/>
-        </IconButton>
-        <GroupNameEditDialog
-        openDialog={this.openDialog}
-        open={this.state.openDialog}
-        handleClose={this.handleClose}
-        groupObject={this.props.groupObject}
-        groupId={this.props.groupId}
-        />
-        </ListItem>    
+      <Grid container spaching={3}>
+        <Grid item xs={12} sm={6} lg={4}>
+          <ListItem align='center' style={{width:"auto"}}>
+            
+            <Typography  variant="h6" style={{fontWeight: "bold"}} gutterBottom>
+              Gruppenname:
+            </Typography>
+            <Typography  variant="h6" gutterBottom>
+              {this.props.groupName}
+            </Typography>
+
+              <IconButton aria-label="expand row" size="small" onClick={() => this.openDialog()}>
+            <EditIcon/>
+            </IconButton>
+              <GroupNameEditDialog
+              openDialog={this.openDialog}
+              open={this.state.openDialog}
+              handleClose={this.handleClose}
+              groupObject={this.props.groupObject}
+              groupId={this.props.groupId}
+              />
+          </ListItem>    
       </Grid>
       
-      <Grid item xs={6} sm={6}>
+      <Grid item xs={12} sm={6} lg={4}>
         <ListItem  align='center' style={{width:"auto"}}>
         <Typography  variant="h6" style={{fontWeight: "bold"}} gutterBottom>
         Admin:
@@ -105,9 +109,8 @@ handleClose = () => {
       </Grid>
       
       <Box m={4}/>
-      
-      <Grid container spaching={1}>
-      <Grid item xs={6} sm={6}>
+      <Grid container spaching={3}>
+      <Grid item xs={12} sm={6} lg={4}>
         <ListItem align='center' style={{width:"auto"}}>
         <Typography  variant="h6" style={{fontWeight: "bold"}} gutterBottom>
         Erstellt am:
@@ -117,7 +120,7 @@ handleClose = () => {
         </Typography>
         </ListItem>
       </Grid>
-      <Grid item xs={6} sm={6}>
+      <Grid item xs={12} sm={6} lg={4}>
         <ListItem  align='center' style={{width:"auto"}}>
         <Typography  variant="h6" style={{fontWeight: "bold"}} gutterBottom>
         Letzte Änderung:
@@ -369,7 +372,6 @@ const styles = theme => ({
   },
   button: {
     color: theme.palette.delete.main,
-    
   }
 });
 
