@@ -825,7 +825,7 @@ class ArticleRelatedListEntryOperations(Resource):
             return "Article not found", 500
 
 
-@holmaApp.route('/group/<int:group_id>/listentries')
+@holmaApp.route('/group/<int:group_id>/standardarticles')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('group_id', 'Die ID des group-Objekts')
 class GroupRelatedListEntryOperations(Resource):
@@ -843,15 +843,14 @@ class GroupRelatedListEntryOperations(Resource):
             return "Group not found", 500
 
 
-@holmaApp.route('/group/<int:group_id>/shoppinglist/<int:shopping_list_id>')
+@holmaApp.route('/group/<int:group_id>/shoppinglist/<int:shopping_list_id>/standardarticles')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('group_id', 'Die ID des Group-Objekts')
 @holmaApp.param('shopping_list_id', 'Die ID des Shoppinglist-Objekts')
 class GroupShoppingListStandardArticleRelationOperations(Resource):
     # @secured
     def post(self, group_id, shopping_list_id):
-        """Füge eine bestimmtes Standardarticle
-        einer bestimmten Groupe hinzu"""
+        """Füge alle Standardartikel einer Gruppe zu einer Einkaufslite hinzu"""
         adm = Administration()
         grp = adm.get_group_by_id(group_id)
         sl = adm.get_shopping_list_by_id(shopping_list_id)
@@ -863,7 +862,7 @@ class GroupShoppingListStandardArticleRelationOperations(Resource):
             return "Group or ShoppingList not found", 500
 
 
-@holmaApp.route('/group/<int:group_id>/listentry/<int:list_entry_id>')
+@holmaApp.route('/group/<int:group_id>/standardarticle/<int:list_entry_id>')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('group_id', 'Die ID des Group-Objekts')
 @holmaApp.param('list_entry_id', 'Die ID des Listentry-Objekts')
@@ -871,8 +870,7 @@ class GroupListEntryStandardArticleRelationOperations(Resource):
     @holmaApp.marshal_with(list_entry)
     # @secured
     def post(self, group_id, list_entry_id):
-        """Füge ein bestimmten Listentry Objekt
-        einer bestimmten Groupe hinzu"""
+        """Füge einen Standardartikel zu einer einer Groupe hinzu"""
         adm = Administration()
         grp = adm.get_group_by_id(group_id)
         le = adm.get_list_entry_by_id(list_entry_id)
@@ -884,13 +882,13 @@ class GroupListEntryStandardArticleRelationOperations(Resource):
             return "Group or ListEntry not found", 500
 
     def delete(self, group_id, list_entry_id):
-        """Lösch ein bestimmten Listentry Objekt von einer bestimmten Groupe"""
+        """Lösch einen Standardartikel einer Gruppe"""
         adm = Administration()
         grp = adm.get_group_by_id(group_id)
         le = adm.get_list_entry_by_id(list_entry_id)
         if grp is not None and le is not None:
             result = adm.delete_standardarticle(le, grp)
-            return result
+            return "Deleted standardarticle!", 200 
         else:
             return "Group or Listentry not found", 500
 
