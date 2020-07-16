@@ -135,7 +135,7 @@ class GroupInformation extends Component {
               Erstellt am: 
             </Typography>
             <Typography gutterBottom>
-              {this.props.groupCreationDate}
+              {groupCreationDate}
             </Typography>
           </Grid>
 
@@ -144,7 +144,7 @@ class GroupInformation extends Component {
               Letzte Änderung: 
             </Typography>
             <Typography gutterBottom>
-              {this.props.groupLastUpdated}
+              {groupLastUpdated}
             </Typography>
           </Grid>
 

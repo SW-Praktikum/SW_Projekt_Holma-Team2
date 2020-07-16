@@ -42,6 +42,11 @@ class UserProfil extends Component {
   render() {
 
       const { classes, user } = this.props;
+      var groupCreationDate = ""
+      if (this.props.groupCreationDate != "") {
+        let gcd = new Date(user.getCreationDate())
+        groupCreationDate = gcd.toDateString()
+      }
       return (
           
         <Paper elevation={0} className={classes.root}>
@@ -64,7 +69,7 @@ class UserProfil extends Component {
 
               <Grid item xs={12} sm={6} lg={4} className={classes.gridItem}>
                 <Typography style={{fontWeight: "bold"}} gutterBottom>Benutzer seit: </Typography>
-                <Typography gutterBottom>{user.getCreationDate()}</Typography>
+                <Typography gutterBottom>{groupCreationDate}</Typography>
               </Grid>
             </Grid>
             
