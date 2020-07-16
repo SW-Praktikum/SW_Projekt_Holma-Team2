@@ -115,6 +115,8 @@ class ListEntryTable extends Component {
     // wir bei Button Click aufgerufen
     filterByTimePeriod = () => {
         AppAPI.getAPI().getUpdatedListEntriesByTimePeriod(this.state.startDate, this.state.endDate).then((filteredElements) => {
+            // filter Elements only for current user needs to be done here first
+            // otherwise all listEntries from the Database will be loaded
             this.loadFilteredElements(filteredElements)
         })
     }
