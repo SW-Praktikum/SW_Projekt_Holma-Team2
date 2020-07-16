@@ -17,7 +17,6 @@ import UserBO from './api/UserBO';
 import GroupList from './components/GroupList';
 import User from './components/User';
 import GroupInformation from './components/GroupEdit';
-import Groupmember from './components/GroupEditDialog';
 import MemberAddDialog from './components/dialogs/MemberAddDialog';
 import MemberDetails from './components/GroupEdit';
 import ArticleEdit from './components/ArticleEdit';
@@ -45,7 +44,7 @@ class App extends React.Component {
       appError: null,
       authError: null,
       authLoading: false,
-      user: null
+      user: null,
     };
   }
 
@@ -95,6 +94,11 @@ class App extends React.Component {
 
   checkIfUserInDatabase(name, email, googleId) {
     console.log("Checking if '" + name + "' is stored in database with google id '" + googleId + "'")
+    
+    // UserPhotoLink:
+    console.log(this.state.googleUserData.photoURL)
+    
+    
     var api = AppAPI.getAPI()
     api.getUserByGoogleId(googleId).then((user) => {
       if (!user.getGoogleId()) {

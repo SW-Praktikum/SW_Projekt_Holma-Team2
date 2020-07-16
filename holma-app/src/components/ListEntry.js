@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import AppAPI from '../api/AppAPI';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
@@ -70,7 +70,7 @@ class ListEntry extends Component {
     }
 
     render() {
-        const { groupId, users, retailers } = this.props;
+        const { classes, groupId, users, retailers } = this.props;
         const { open, articles, listEntry } = this.state
 
         return (
@@ -109,18 +109,18 @@ class ListEntry extends Component {
                         <Table size="small" aria-label="purchases">
                             <TableHead >
                                 <TableRow>
-                                    <TableCell style={{borderBottom: "none"}} colSpan={3} padding="none" width="30%" align="left">Einkäufer</TableCell>
-                                    <TableCell colSpan={2} padding="none" width="20%" align="left">Händler</TableCell>
-                                    <TableCell colSpan={4} padding="none" width="40%" align="left">Geändert</TableCell>
-                                    <TableCell colSpan={1} padding="none" width="10%" align="left">STD</TableCell>
+                                    <TableCell className={classes.tableCell} colSpan={3} padding="none" width="30%" align="left">Einkäufer</TableCell>
+                                    <TableCell className={classes.tableCell} colSpan={2} padding="none" width="20%" align="left">Händler</TableCell>
+                                    <TableCell className={classes.tableCell} colSpan={4} padding="none" width="40%" align="left">Geändert</TableCell>
+                                    <TableCell className={classes.tableCell} colSpan={1} padding="none" width="10%" align="left">STD</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 
-                                <TableCell colSpan={3} padding="none" width="30%" align="left">{listEntry.getPurchasingUserName()}</TableCell>
-                                <TableCell colSpan={2} padding="none" width="20%" align="left">{listEntry.getRetailerName()}</TableCell>
-                                <TableCell colSpan={4} padding="none" width="40%" align="left">{listEntry.getLastUpdated()}</TableCell>
-                                <TableCell colSpan={1} padding="none" width="10%" align='left'>
+                                <TableCell className={classes.tableCell} colSpan={3} padding="none" width="30%" align="left">{listEntry.getPurchasingUserName()}</TableCell>
+                                <TableCell className={classes.tableCell} colSpan={2} padding="none" width="20%" align="left">{listEntry.getRetailerName()}</TableCell>
+                                <TableCell className={classes.tableCell} colSpan={4} padding="none" width="40%" align="left">{listEntry.getLastUpdated()}</TableCell>
+                                <TableCell className={classes.tableCell} colSpan={1} padding="none" width="10%" align='left'>
                                     <IconButton aria-label="expand row" size="small" >
                                         {listEntry.isStandardarticle() ?  <StarIcon /> : <StarBorderIcon />}
                                     </IconButton>
@@ -148,4 +148,16 @@ class ListEntry extends Component {
     }
 }
 
-export default ListEntry;
+const styles = theme => ({
+    root: {
+      position: 'fixed',
+      bottom: theme.spacing(2),
+      //right: theme.spacing(1),
+      
+    },
+    tableCell: {
+        borderBottom: "none"
+    }
+})
+
+export default withStyles(styles)(ListEntry);

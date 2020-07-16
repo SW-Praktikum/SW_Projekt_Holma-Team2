@@ -37,7 +37,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 class Grouplink extends Component{
   render(){
       return(
-          <Button variant="contained" color="primary" >
+          <Button align="center" variant="contained" fullWidth  color="primary" >
               Gruppendetails
           </Button>
       )
@@ -46,13 +46,41 @@ class Grouplink extends Component{
 
 
 class ListCard extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+        entriesTotal: null,
+        entriesChecked: null,
+    }}
+
+  componentDidMount(){
+    if(this.props.list){
+        this.getEntries();
+      }
+  }
+
+  getEntries = () => {
+    AppAPI.getAPI().getListEntriesByShoppingListId(this.props.list.getId()).then((result) => {
+      this.setState({
+        entriesTotal: result.length
+      }) 
+    })
+    AppAPI.getAPI().getCheckedListEntriesByShoppingListId(this.props.list.getId()).then((result) => {
+      this.setState({
+        entriesChecked: result.length
+      }) 
+    })
+  }
   render() {
       return (
-        <Card className="root" style={{/* minHeight: 250 ,  */minWidth: '100%', marginBottom:10, marginTop:10, backgroundColor: colors.teal[600]}}>
-          <CardActionArea>
-          <CardContent>
-              <Typography className="title" style={{fontSize: 14, color: 'white'}}>{this.props.list.getName()}</Typography>
-              <Typography className="title" style={{fontSize: 14, color: 'white'}}>Id: {this.props.list.getId()}</Typography>
+        <Card className="root" style={{/* minHeight: 250 ,  */minWidth: '100%', marginBottom:10, marginTop:10, }}>
+          <CardActionArea >
+          <CardContent style={{backgroundColor: colors.teal[600]}}>
+              <Typography align="left" className="title" style={{fontSize: 14, color: 'white'}}>{this.props.list.getName()}</Typography>
+          </CardContent>
+          <CardContent style={{backgroundColor: "#ffffff"}}>
+              <Typography align="left" className="title" style={{fontSize: 14}}>Id: {this.props.list.getId()}</Typography>
+              <Typography align="left" className="title" style={{fontSize: 14}}>{this.state.entriesChecked} von {this.state.entriesTotal} Einträgen erledigt</Typography>
           </CardContent>
           </CardActionArea>     
         </Card>
@@ -171,11 +199,12 @@ class GroupList extends Component {
                 <CardActionArea>
                   <CardContent>
                   <Grid container direction="row" justify="space-between" alignItems="center" spaching={2}>
-                    <Grid item xs={12} sm={6}>
+                    <Grid item xs={12} sm={4}>
                       <Typography className="title" style={{fontSize: 16, color: colors.teal[600]}}><b>Gruppe: </b>{this.state.groupName}</Typography>
                       <Typography className="title" style={{fontSize: 16, color: colors.teal[600]}}><b>Id: </b>{this.state.groupId}</Typography>
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid style={{paddingBottom: 10}} item xs={12} sm={4}></Grid>
+                    <Grid item xs={12} sm={4}>
                       <Link to={"/groupedit/" + this.props.match.params.groupId} style={{textDecoration: 'none'}}>
                         <Grouplink/>
                       </Link>

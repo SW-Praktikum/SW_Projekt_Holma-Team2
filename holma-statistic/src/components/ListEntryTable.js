@@ -180,13 +180,17 @@ class ListEntryTable extends Component {
     // install: npm i date-fns
     
    handleStartDate = (date) => {
-        this.setState({startDate: date})
-        console.log(date)
+    var datum = new Date (date);
+    var convert = datum.toISOString();
+    this.setState({startDate: convert})
    }
+
    handleEndDate = (date) => {
-        this.setState({endDate: date})
-        console.log(date)
+    var datum = new Date (date);
+    var convert = datum.toISOString();
+    this.setState({endDate: convert})
    }
+
    // doku for the date library: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#Several_ways_to_create_a_Date_object
 
    filterByRetailer = (event, retailer) => {
@@ -225,8 +229,7 @@ class ListEntryTable extends Component {
     render() {
         const {retailers} = this.state;
         return (
-            <div display='flex'>
-            
+            <div display='flex'>            
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <Grid container direction="row" justify="space-between" alignItems="center" component={Paper} style={{marginTop: 10, marginBottom: 10}}>
                 <Grid item xs={12} sm={12} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10}}>
