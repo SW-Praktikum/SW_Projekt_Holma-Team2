@@ -122,7 +122,7 @@ class GroupInformation extends Component {
           
           <Grid item xs={12} sm={6} style={{paddingTop: 10, paddingBottom: 10,}}>
             <Typography style={{fontWeight: "bold"}} gutterBottom>
-              Admin: </Typography>
+              Erstellt von: </Typography>
             <Typography gutterBottom>
               {this.props.groupOwner}
             </Typography>

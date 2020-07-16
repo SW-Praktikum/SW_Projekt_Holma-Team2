@@ -56,7 +56,8 @@ class ListCard extends Component {
   componentDidMount(){
     if(this.props.list){
         this.getEntries();
-        console.log("card", this.props)
+        this.getCheckedEntries();
+        console.log("card", this.state)
       }
   }
 
@@ -65,14 +66,18 @@ class ListCard extends Component {
       this.setState({
         entriesTotal: result.length
       }) 
-    })
-    /**AppAPI.getAPI().getCheckedListEntriesByShoppingListId(this.props.list.getId()).then((result) => {
+    })  
+  }
+
+  getCheckedEntries = () => {
+    AppAPI.getAPI().getCheckedListEntriesByShoppingListId(this.props.list.getId()).then((result) => {
       this.setState({
         entriesChecked: result.length
       }) 
     })
-    */
   }
+
+
   render() {
       return (
         <Card className="root" style={{/* minHeight: 250 ,  */minWidth: '100%', marginBottom:10, marginTop:10, }}>
@@ -82,7 +87,8 @@ class ListCard extends Component {
           </CardContent>
           <CardContent style={{backgroundColor: "#ffffff"}}>
               <Typography align="left" className="title" style={{fontSize: 14}}>Id: {this.props.list.getId()}</Typography>
-              <Typography align="left" className="title" style={{fontSize: 14}}>{this.state.entriesChecked} von {this.state.entriesTotal} Einträgen erledigt</Typography>
+              <Typography align="left" className="title" style={{fontSize: 14}}>
+                {this.state.entriesChecked} von {this.state.entriesTotal} Einträgen erledigt</Typography>
           </CardContent>
           </CardActionArea>     
         </Card>
@@ -143,7 +149,7 @@ class GroupList extends Component {
     }
 
     createNewList = () => {
-      var lst = new ShoppingListBO(this.state.shoppingListName, this.state.groupId);
+      var lst = new ShoppingListBO(this.state.shoppingListName, this.state.groupId, "");
       AppAPI.getAPI().createShoppingList(lst).then(() => {
         this.loadShoppingLists()
       })
@@ -154,7 +160,7 @@ class GroupList extends Component {
     }
 
     loadGroupName = () => {
-      AppAPI.getAPI().getGroupById(this.state.groupId).then((group) =>{
+      AppAPI.getAPI().getGroupById(this.state.groupId).then((group) => {
         this.setState({
           group: group,
           groupName: group.name,
@@ -164,6 +170,7 @@ class GroupList extends Component {
       }
 
     loadShoppingLists = () => {
+      console.log(this.props)
       AppAPI.getAPI().getShoppingListsByGroupId(this.props.match.params.groupId).then((lists) => {
         var listElements = lists.map((list) =>
         <Grid key={list.getId()} item xs={6} item lg={4}>
