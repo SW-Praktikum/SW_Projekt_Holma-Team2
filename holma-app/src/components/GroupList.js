@@ -56,6 +56,7 @@ class ListCard extends Component {
   componentDidMount(){
     if(this.props.list){
         this.getEntries();
+        console.log("card", this.props)
       }
   }
 
@@ -164,7 +165,6 @@ class GroupList extends Component {
 
     loadShoppingLists = () => {
       AppAPI.getAPI().getShoppingListsByGroupId(this.props.match.params.groupId).then((lists) => {
-        console.log(lists)
         var listElements = lists.map((list) =>
         <Grid key={list.getId()} item xs={6} item lg={4}>
           <Link to={"/group/" + this.props.match.params.groupId + "/shoppinglist/" + list.getId()} style={{textDecoration: 'none'}}>
@@ -180,8 +180,6 @@ class GroupList extends Component {
           loadingError: null,
           shoppingListId: lists.id,
       });
-         console.log("Save in state", listElements)
-         console.log(this.state.shoppingListId)
       }).catch(e =>
           this.setState({ // Reset state with error from catch 
             loadingInProgress: false,
@@ -191,7 +189,6 @@ class GroupList extends Component {
       } 
 
     render() {
-      console.log(this.state.shoppingListId)
       const {listElements} = this.state;
           return(
             <div>
@@ -206,7 +203,7 @@ class GroupList extends Component {
                     </Grid>
                     <Grid style={{paddingBottom: 10}} item xs={12} sm={4}></Grid>
                     <Grid item xs={12} sm={4}>
-                      <Link to={"/groupedit/" + this.props.match.params.groupId} style={{textDecoration: 'none'}}>
+                      <Link to={"/groupedit/" + this.props.match.params.groupId + "/" + this.props.match.params.userId} style={{textDecoration: 'none'}}>
                         <Grouplink/>
                       </Link>
                     </Grid>
