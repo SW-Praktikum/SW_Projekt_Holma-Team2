@@ -66,12 +66,12 @@ class ListCard extends Component {
         entriesTotal: result.length
       }) 
     })
-    /**AppAPI.getAPI().getCheckedListEntriesByShoppingListId(this.props.list.getId()).then((result) => {
+    AppAPI.getAPI().getCheckedListEntriesByShoppingListId(this.props.list.getId()).then((result) => {
       this.setState({
         entriesChecked: result.length
       }) 
     })
-    */
+    
   }
   render() {
       return (
@@ -82,7 +82,8 @@ class ListCard extends Component {
           </CardContent>
           <CardContent style={{backgroundColor: "#ffffff"}}>
               <Typography align="left" className="title" style={{fontSize: 14}}>Id: {this.props.list.getId()}</Typography>
-              <Typography align="left" className="title" style={{fontSize: 14}}>{this.state.entriesChecked} von {this.state.entriesTotal} Einträgen erledigt</Typography>
+              <Typography align="left" className="title" style={{fontSize: 14}}>
+                {this.state.entriesChecked} von {this.state.entriesTotal} Einträgen erledigt</Typography>
           </CardContent>
           </CardActionArea>     
         </Card>
