@@ -46,7 +46,7 @@ export default class AppAPI {
     #deleteArticleURL = (articleId) => `${this.#appServerBaseURL}/article/${articleId}` ;
     #getArticleByIdURL = (articleId) => `${this.#appServerBaseURL}/article/${articleId}`;
     #getArticlesByNameURL = (name) => `${this.#appServerBaseURL}/by-name/${name}`;
-
+    #getArticlesFrequencyByGroupIdURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/articles/most-frequent`;
 
 
     // Shoppinglist related
@@ -298,6 +298,15 @@ export default class AppAPI {
             let responseUsers = UserBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
                 resolve(responseUsers)
+            })
+        })
+    }
+
+    getArticlesFrequencyByGroupId(groupId) {
+        return this.#fetchAdv(this.#getArticlesFrequencyByGroupIdURL(groupId)).then((responseJSON) => {
+            let responseArticle = ArticleBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+                resolve(responseArticle)
             })
         })
     }
