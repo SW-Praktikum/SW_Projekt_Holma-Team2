@@ -9,6 +9,7 @@ export default class AppAPI {
 
     static #api = null;
 
+    //Local Python Backend
     #appServerBaseURL = 'http://localhost:5000/app';
     
     // Remote Backend:
@@ -48,8 +49,6 @@ export default class AppAPI {
     #getArticleByIdURL = (articleId) => `${this.#appServerBaseURL}/article/${articleId}`;
     #getArticlesByNameURL = (name) => `${this.#appServerBaseURL}/by-name/${name}`;
 
-
-
     // Shoppinglist related
     #getShoppingListsByGroupIdURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/shoppinglists`;
     #createShoppingListURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/shoppinglists`;
@@ -67,6 +66,7 @@ export default class AppAPI {
     #getListEntriesByRetailerIdURL = (retailerId) => `${this.#appServerBaseURL}/retailer/${retailerId}/listentries`; 
     #getCheckedListEntriesByShoppingListIdURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglist/${shoppingListId}/listentries/Checked`; 
 
+    #getUpdatedListEntriesByTimePeriodURL = (fromDate, toDate) => `${this.#appServerBaseURL}/listentries/by-date/${fromDate}/${toDate}`; 
 
     #createListEntryURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglist/${shoppingListId}/listentries`;
     #updateListEntryURL = (listEntryId) => `${this.#appServerBaseURL}/listentry/${listEntryId}`;
@@ -109,6 +109,7 @@ export default class AppAPI {
             return response.json();
         });
 
+        // Gibt eine Promise zurück mit einer Liste von UserBOs
     getUsers() {
         return this.#fetchAdv(this.#getUsersURL()).then((responseJSON) => {
             let responseUsers = UserBO.fromJSON(responseJSON);
@@ -118,6 +119,9 @@ export default class AppAPI {
         })
     };
 
+        // Gibt ein Promise zurück mit ein bestimmten UserBO
+        /* Adds a User and returns a Promise, 
+        which resolves to a new User object with the Name, Email and google_id of the parameter UserBO object. */
     createUser(user) {
         return this.#fetchAdv(this.#createUserURL(), {
             method: 'POST',
@@ -485,6 +489,15 @@ export default class AppAPI {
 
      getListEntriesByShoppingListId(shoppingListId) {
         return this.#fetchAdv(this.#getListEntriesByShoppingListIdURL(shoppingListId)).then((responseJSON) => {
+            let responseListEntry = ListEntryBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+                resolve(responseListEntry)
+            })
+        })
+    }  
+
+    getUpdatedListEntriesByTimePeriod(fromDate, toDate) {
+        return this.#fetchAdv(this.#getUpdatedListEntriesByTimePeriodURL(fromDate, toDate)).then((responseJSON) => {
             let responseListEntry = ListEntryBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
                 resolve(responseListEntry)

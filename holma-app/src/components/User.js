@@ -40,7 +40,6 @@ class UserProfil extends Component {
 
 
   render() {
-
       const { classes, user } = this.props;
       var groupCreationDate = ""
       if (this.props.groupCreationDate != "") {
