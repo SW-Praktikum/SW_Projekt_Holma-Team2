@@ -33,7 +33,6 @@ class ListEntry extends Component {
             open: false,
             openDialog: false,
             checked: this.props.listEntry.getChecked(),
-            listEntry: this.props.listEntry,
             articles: this.props.articles
         }
     }
@@ -63,15 +62,14 @@ class ListEntry extends Component {
     }
 
     deleteEntry = (entry) => {
-        console.log("hier")
         AppAPI.getAPI().deleteListEntry(entry).then(() => {
             this.props.loadListEntries()
         })
     }
 
     render() {
-        const { classes, groupId, users, retailers } = this.props;
-        const { open, articles, listEntry } = this.state;
+        const { classes, groupId, users, retailers, listEntry } = this.props;
+        const { open, articles } = this.state;
         var groupCreationDate = ""
         var groupLastUpdated = ""
 
