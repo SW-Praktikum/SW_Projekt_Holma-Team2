@@ -3,11 +3,17 @@ from db.Mapper import Mapper
 
 
 class ListEntryMapper(Mapper):
-
+    """Mapper-Klasse, die Listeneintrag-Objekte auf der relationalen DB abbildet.
+    Das Mapping ist bidirektional. D.h., Objekte können
+    in DB-Strukturen und DB-Strukturen in Objekte umgewandelt werden.
+    """
     def __init__(self):
         super().__init__()
 
     def find_all(self):
+        """Auslesen aller vorhandenen Listeneinträge
+        :return
+        """
         cursor = self._connection.cursor()
         command = "SELECT * FROM holma.list_entry"
         cursor.execute(command)
@@ -21,6 +27,9 @@ class ListEntryMapper(Mapper):
         return result
 
     def find_by_id(self, list_entry_id):
+        """Eindeutiges Auslesen eines Listeneintrags durch ID
+        :return
+        """
         cursor = self._connection.cursor()
         command = "SELECT * FROM holma.list_entry " \
                   "WHERE list_entry_id={}".format(list_entry_id)
@@ -37,6 +46,10 @@ class ListEntryMapper(Mapper):
         return result[0]
 
     def find_by_name(self, name):
+        """Auslesen von Listeneinträgen durch Name
+        :param
+        :return
+        """
         cursor = self._connection.cursor()
         command = "SELECT * FROM holma.list_entry WHERE name LIKE '{}' " \
                   "ORDER BY name".format(name)
@@ -51,6 +64,11 @@ class ListEntryMapper(Mapper):
         return result
 
     def find_by_retailer(self, retailer_id):
+        """Auslesen von Listeneinträgen durch Fremdschlüssel (retailer_id)
+        geg. Einzelhändler
+        :param
+        :return
+        """
         cursor = self._connection.cursor()
         command = "SELECT * FROM holma.list_entry " \
                   "WHERE retailer={}".format(retailer_id)
@@ -65,6 +83,11 @@ class ListEntryMapper(Mapper):
         return result
 
     def find_by_purchasing_user(self, user_id):
+        """Auslesen von Listeneinträgen durch Fremdschlüssel (user_id)
+        geg. Einkaufender User
+        :param
+        :return
+        """
         cursor = self._connection.cursor()
         command = "SELECT * FROM holma.list_entry " \
                   "WHERE purchasing_user={}".format(user_id)
@@ -79,6 +102,11 @@ class ListEntryMapper(Mapper):
         return result
 
     def find_list_entries_by_article(self, article_id):
+        """Auslesen von Listeneinträgen durch Fremdschlüssel (article_id)
+        geg. Artikel
+        :param
+        :return
+        """
         cursor = self._connection.cursor()
         command = "SELECT * FROM holma.list_entry " \
                   "WHERE article={}".format(article_id)
@@ -93,6 +121,11 @@ class ListEntryMapper(Mapper):
         return result
 
     def find_list_entries_by_shopping_list_id(self, shopping_list):
+        """Auslesen von Listeneinträgen durch Fremdschlüssel (shopping_list_id)
+        geg. Shoppingliste
+        :param
+        :return
+        """
         cursor = self._connection.cursor()
         command = "SELECT * FROM holma.list_entry " \
                   "WHERE shopping_list={}".format(shopping_list.get_id())
@@ -106,7 +139,12 @@ class ListEntryMapper(Mapper):
 
         return result
 
-    def find_list_entries_checked_by_shopping_list_id(self, shopping_list_id):
+    def find_checked_list_entries_by_shopping_list_id(self, shopping_list_id):
+        """Auslesen von abgehakten Listeneinträgen durch Fremdschlüssel
+        (shopping_list_id) geg. Shoppingliste
+        :param
+        :return
+        """
         cursor = self._connection.cursor()
         command = "SELECT * FROM holma.list_entry " \
                   "WHERE checked=1 AND shopping_list={}".format(
@@ -122,6 +160,10 @@ class ListEntryMapper(Mapper):
         return result
 
     def find_list_entries_in_time_periode(self, from_date, to_date):
+        """Auslesen von Listeneinträgen in einer bestimmten Zeitperiode
+        :param
+        :return
+        """
         cursor = self._connection.cursor()
         command = "SELECT * FROM holma.list_entry WHERE last_updated " \
                   "BETWEEN '{}' AND '{}'".format(from_date, to_date)
@@ -137,6 +179,13 @@ class ListEntryMapper(Mapper):
         return result
 
     def insert(self, list_entry):
+        """Einfügen eines Listeneintrag-Objekts
+
+        lastrowid returns the value generated for an AUTO_INCREMENT
+        column by the previous INSERT
+        :param
+        :return
+        """
         cursor = self._connection.cursor()
         command = "INSERT INTO holma.list_entry (list_entry_id, name, " \
                   "creation_date, purchasing_user, amount,  article, unit, " \
@@ -165,6 +214,11 @@ class ListEntryMapper(Mapper):
         return list_entry
 
     def update(self, list_entry):
+        """Wiederholtes Schreiben / Aktualisieren eines
+        Listeneintrag-Objekts
+        :param
+        :return
+        """
         cursor = self._connection.cursor()
         command = "UPDATE holma.list_entry SET name=%s, purchasing_user=%s, " \
                   "amount=%s, article=%s, unit=%s, retailer=%s, " \
@@ -241,6 +295,9 @@ class ListEntryMapper(Mapper):
     """Standardarticle"""
 
     def find_standardarticles_by_group_id(self, group_id):
+        """Auslesen von als Standard-Artikel markierten
+        Listeneinträgen durch Fremdschlüssel (group_id)
+        geg. Gruppe"""
         cursor = self._connection.cursor()
         command = "SELECT standard_article_group_relations.list_entry_id," \
                   " holma.list_entry.name, holma.list_entry.creation_date, " \
