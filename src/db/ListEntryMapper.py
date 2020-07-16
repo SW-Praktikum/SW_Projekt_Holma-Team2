@@ -168,7 +168,6 @@ class ListEntryMapper(Mapper):
         command = "SELECT * FROM holma.list_entry WHERE last_updated " \
                   "BETWEEN '{}' AND '{}'".format(from_date, to_date)
         cursor.execute(command)
-        print(command)
         tuples = cursor.fetchall()
 
         result = ListEntry.from_tuples(tuples)

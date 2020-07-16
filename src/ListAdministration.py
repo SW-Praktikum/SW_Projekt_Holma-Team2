@@ -54,18 +54,15 @@ class Administration():
 
     def delete_user(self, user):
         with UserGroupRelationsMapper() as mapper:
-            print("delete relation")
             mapper.delete_user_relations(user)
 
         with ListEntryMapper() as mapper:
             mapper.delete_purchasing_user(user)
 
         with GroupMapper() as mapper:
-            print("delete group")
             mapper.delete_owner(user)
 
         with UserMapper() as mapper:
-            print("delete user")
             mapper.delete(user)
 
     def save_user(self, user):
@@ -271,7 +268,8 @@ class Administration():
             return self.complete_list_entry(mapper.find_by_id(list_entry_id))
 
     def create_list_entry(self, name, amount, article_id, unit,
-                          purchasing_user_id, retailer_id, shopping_list_id):
+                          purchasing_user_id, retailer_id, shopping_list_id,
+                          is_standardarticle):
         list_entry = ListEntry()
         list_entry.set_id(0),
         list_entry.set_name(name),
@@ -281,6 +279,7 @@ class Administration():
         list_entry.set_unit(unit),
         list_entry.set_retailer(retailer_id),
         list_entry.set_shopping_list(shopping_list_id)
+        list_entry.set_standardarticle(is_standardarticle)
         with ListEntryMapper() as mapper:
             return mapper.insert(list_entry)
 
