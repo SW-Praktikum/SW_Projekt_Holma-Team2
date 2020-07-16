@@ -265,7 +265,7 @@ class GroupOperations(Resource):
         grp = adm.get_group_by_id(group_id)
         return grp
 
-    # @secured
+
     def delete(self, group_id):
         """Löschen eines bestimmten Group-Objekts.
 
@@ -755,7 +755,7 @@ class ShoppingListRelatedCheckedByListEntryOperations(Resource):
         adm = Administration()
         sl = adm.get_shopping_list_by_id(shopping_list_id)
         if sl is not None:
-            result = adm.get_list_entries_by_user_id(shopping_list_id)
+            result = adm.get_checked_list_entries_by_shopping_list_id(shopping_list_id)
             return result
         else:
             return "Shopping List not found", 500
