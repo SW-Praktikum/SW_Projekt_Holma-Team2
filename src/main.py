@@ -287,12 +287,12 @@ class GroupOperations(Resource):
         else:
             return '', 500
 
+
 @holmaApp.route('/group/<int:group_id>/articles/most-frequent')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('group_id', 'Die ID des Group-Objekts')
 class GroupRelatedArticleFrequencyOperations(Resource):
     @holmaApp.marshal_list_with(article)
-
     def get(self, group_id):
 
         adm = StatisticAdministration()
@@ -302,6 +302,7 @@ class GroupRelatedArticleFrequencyOperations(Resource):
             return result, 200
         else:
             return "Gruppe nicht gefunden", 500
+
 
 @holmaApp.route('/groups/by-name/<string:name>')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
