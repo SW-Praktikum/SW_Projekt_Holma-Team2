@@ -310,7 +310,13 @@ handleClose = () => {
   
   removeUser = (userId) => {
     AppAPI.getAPI().deleteUsersFromGroup(this.state.groupId, userId).then(() => {
-      this.loadMembers()
+
+      if(userId != this.props.match.params.userId) {
+        this.loadMembers()
+      }
+      else {
+        window.location.reload()
+      }
     })
   }
 
