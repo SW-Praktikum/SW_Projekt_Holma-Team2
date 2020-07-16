@@ -113,8 +113,8 @@ class ListEntryTable extends Component {
         this.state = {
             listEntryTableElements: [],
             openDialog: false,
-            //userId : this.props.user.getId(),
-            userId: "1003",
+            userId : this.props.user.getId(),
+            //userId: "1003",
             startDate: null,
             endDate: null,
             retailers: [],
@@ -140,7 +140,7 @@ class ListEntryTable extends Component {
       }
   
     loadListEntries = () => {
-        console.log("Current user id:", this.state.userId)
+        console.log("hier")
         // get listentries by user ID
         AppAPI.getAPI().getListEntriesByUserId(this.state.userId).then(listEntries => {
             console.log("Loaded list entries for user '" + this.state.userId + "':", listEntries)

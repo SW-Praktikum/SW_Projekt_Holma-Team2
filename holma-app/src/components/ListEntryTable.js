@@ -119,6 +119,7 @@ class ListEntryTable extends Component {
     } 
             
     loadListEntries = () => {
+        console.log("Hier")
         AppAPI.getAPI().getListEntriesByShoppingListId(this.state.shoppingListId).then(listEntries => {
             console.log("Loaded list entries for shopping list '" + this.state.shoppingListId + "':", listEntries)
             var listEntryTableElements = listEntries.map((listEntry) => 
