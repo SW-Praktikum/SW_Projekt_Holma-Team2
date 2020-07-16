@@ -179,9 +179,6 @@ class ListEntryAddDialog extends Component {
         this.props.loadListEntries())
       })
       this.props.handleClose()
-      console.log(this.state.isStandard)
-      
-
     }
 
     undoChanges = () => {
