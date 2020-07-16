@@ -9,6 +9,7 @@ export default class AppAPI {
 
     static #api = null;
 
+    //Local Python Backend
     #appServerBaseURL = 'http://localhost:5000/app';
     
     // Remote Backend:
@@ -31,7 +32,7 @@ export default class AppAPI {
     #deleteUsersFromGroupURL =(groupId, userId) => `${this.#appServerBaseURL}/group/${groupId}/user/${userId}`;
 
     // Group Related
-    #getGroupsURL = () => `${this.#appServerBaseURL}/group`;
+    #getGroupsURL = () => `${this.#appServerBaseURL}/groups`;
     #getGroupByIdURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}`;
     #getGroupsByNameURL = (name) => `${this.#appServerBaseURL}/by-name/${name}`;
     #updateGroupURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}`;
@@ -41,13 +42,17 @@ export default class AppAPI {
   
     // Article Related
     #getArticlesURL = () => `${this.#appServerBaseURL}/articles`;
+    #getArticlesByGroupIdURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/articles`;
     #createArticleURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/articles`;
     #updateArticleURL = (articleId) =>  `${this.#appServerBaseURL}/article/${articleId}`;
     #deleteArticleURL = (articleId) => `${this.#appServerBaseURL}/article/${articleId}` ;
     #getArticleByIdURL = (articleId) => `${this.#appServerBaseURL}/article/${articleId}`;
     #getArticlesByNameURL = (name) => `${this.#appServerBaseURL}/by-name/${name}`;
+<<<<<<< HEAD
     #getArticlesFrequencyByGroupIdURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/articles/most-frequent`;
 
+=======
+>>>>>>> origin
 
     // Shoppinglist related
     #getShoppingListsByGroupIdURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/shoppinglists`;
@@ -64,16 +69,19 @@ export default class AppAPI {
     #getListEntriesByArticleIdURL = (articleId) => `${this.#appServerBaseURL}/article/${articleId}/listentries`;
     #getListEntriesByShoppingListIdURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglist/${shoppingListId}/listentries`; 
     #getListEntriesByRetailerIdURL = (retailerId) => `${this.#appServerBaseURL}/retailer/${retailerId}/listentries`; 
+    #getCheckedListEntriesByShoppingListIdURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglist/${shoppingListId}/listentries/checked`; 
+
+    #getUpdatedListEntriesByTimePeriodURL = (fromDate, toDate) => `${this.#appServerBaseURL}/listentries/by-date/${fromDate}/${toDate}`; 
 
     #createListEntryURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglist/${shoppingListId}/listentries`;
     #updateListEntryURL = (listEntryId) => `${this.#appServerBaseURL}/listentry/${listEntryId}`;
     #deleteListEntryURL = (listEntryId) => `${this.#appServerBaseURL}/listentry/${listEntryId}`;
 
     // Standardarticle related
-    #getListEntriesByGroupIdURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/listentries`; 
-    #addStandardArticleToGroupURL = (groupId, listEntryId) => `${this.#appServerBaseURL}/group/${groupId}/listentry/${listEntryId}`;
-    #addStandardArticlesToShoppingListURL = (groupId, shoppingListId) => `${this.#appServerBaseURL}/group/${groupId}/shoppinglist/${shoppingListId}`;
-    #deleteStandardArticleFromGroupURL =(groupId, listEntryId) => `${this.#appServerBaseURL}/group/${groupId}/listentry/${listEntryId}`;
+    #getStandardArticlesByGroupIdURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/standardarticles`; 
+    #addStandardArticleToGroupURL = (groupId, listEntryId) => `${this.#appServerBaseURL}/group/${groupId}/standardarticle/${listEntryId}`;
+    #addStandardArticlesToShoppingListURL = (groupId, shoppingListId) => `${this.#appServerBaseURL}/group/${groupId}/shoppinglist/${shoppingListId}/standardarticles`;
+    #deleteStandardArticleFromGroupURL =(groupId, listEntryId) => `${this.#appServerBaseURL}/group/${groupId}/standardarticle/${listEntryId}`;
 
     // Retailer related
     #getRetailersURL = () => `${this.#appServerBaseURL}/retailers`;
@@ -92,7 +100,13 @@ export default class AppAPI {
     // default 'GET' wird überschrieben mit jeweiliger Methode
     #fetchAdv = (url, init) => fetch(url, init)
         .then(response => {
-            console.log("Fetching", url)
+            if (typeof init !== 'undefined' && "body" in init) {
+                console.log("[" + init.method + "]", url, JSON.parse(init.body))
+            }
+            else {
+                console.log("[GET]", url)
+
+            }
             if (!response.ok){
                 console.log(`${response.status} ${response.statusText}`);
                 //throw Error(`${response.status} ${response.statusText}`)
@@ -100,6 +114,7 @@ export default class AppAPI {
             return response.json();
         });
 
+        // Gibt eine Promise zurück mit einer Liste von UserBOs
     getUsers() {
         return this.#fetchAdv(this.#getUsersURL()).then((responseJSON) => {
             let responseUsers = UserBO.fromJSON(responseJSON);
@@ -109,6 +124,9 @@ export default class AppAPI {
         })
     };
 
+        // Gibt ein Promise zurück mit ein bestimmten UserBO
+        /* Adds a User and returns a Promise, 
+        which resolves to a new User object with the Name, Email and google_id of the parameter UserBO object. */
     createUser(user) {
         return this.#fetchAdv(this.#createUserURL(), {
             method: 'POST',
@@ -329,51 +347,51 @@ export default class AppAPI {
         })
     }
 
-    createShoppingList(shoppingLists) {
-        console.log("Creating ShoppingList:", shoppingLists)
-        return this.#fetchAdv(this.#createShoppingListURL(shoppingLists.getGroupId()), {
+    createShoppingList(shoppingList) {
+        console.log("Creating ShoppingList:", shoppingList)
+        return this.#fetchAdv(this.#createShoppingListURL(shoppingList.getGroupId()), {
         method: 'POST',
             headers: {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
-            body: JSON.stringify(shoppingLists)
+            body: JSON.stringify(shoppingList)
         }).then((responseJSON) => {
-            let responseShoppingLists = ShoppingListBO.fromJSON(responseJSON)[0];
+            let responseShoppingList = ShoppingListBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
-                resolve(responseShoppingLists)
+                resolve(responseShoppingList)
             })
         })
     }
 
-    updateShoppingList(shoppingLists) {
-        return this.#fetchAdv(this.#updateShoppingListURL(shoppingLists.getId()), {
+    updateShoppingList(shoppingList) {
+        return this.#fetchAdv(this.#updateShoppingListURL(shoppingList.getId()), {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
-            body: JSON.stringify(shoppingLists)
+            body: JSON.stringify(shoppingList)
         }).then((responseJSON) => {
-            let responseShoppingLists = ShoppingListBO.fromJSON(responseJSON)[0];
+            let responseShoppingList = ShoppingListBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
-                resolve(responseShoppingLists)
+                resolve(responseShoppingList)
             })
         })
     }
 
-    deleteShoppingList(shoppingLists) {
-        return this.#fetchAdv(this.#deleteShoppingListURL(shoppingLists.getId()), {
+    deleteShoppingList(shoppingList) {
+        return this.#fetchAdv(this.#deleteShoppingListURL(shoppingList.getId()), {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
-            body: JSON.stringify(shoppingLists)
+            body: JSON.stringify(shoppingList)
         }).then((responseJSON) => {
-            let responseShoppingLists = ShoppingListBO.fromJSON(responseJSON)[0];
+            let responseShoppingList = ShoppingListBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
-                resolve(responseShoppingLists)
+                resolve(responseShoppingList)
             })
         })
     }
@@ -387,6 +405,15 @@ export default class AppAPI {
             })
         })
     };
+
+    getArticlesByGroupId(groupId) {
+        return this.#fetchAdv(this.#getArticlesByGroupIdURL(groupId)).then((responseJSON) => {
+            let responseArticles = ArticleBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+                resolve(responseArticles)
+            })
+        })
+    }
 
     createArticle(article) {
         console.log("Creating Article:", article)
@@ -483,6 +510,24 @@ export default class AppAPI {
         })
     }  
 
+    getUpdatedListEntriesByTimePeriod(fromDate, toDate) {
+        return this.#fetchAdv(this.#getUpdatedListEntriesByTimePeriodURL(fromDate, toDate)).then((responseJSON) => {
+            let responseListEntry = ListEntryBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+                resolve(responseListEntry)
+            })
+        })
+    }  
+
+    getCheckedListEntriesByShoppingListId(shoppingListId) {
+        return this.#fetchAdv(this.#getCheckedListEntriesByShoppingListIdURL(shoppingListId)).then((responseJSON) => {
+            let responseListEntry = ListEntryBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+                resolve(responseListEntry)
+            })
+        })
+    }  
+
      getListEntriesByRetailerId(retailerId) {
         return this.#fetchAdv(this.#getListEntriesByRetailerIdURL(retailerId)).then((responseJSON) => {
             let responseListEntry = ListEntryBO.fromJSON(responseJSON);
@@ -510,7 +555,7 @@ export default class AppAPI {
         })
     };
 
-    createListentries(listentry) {
+    createListEntry(listentry) {
         console.log("Creating a ListEntry:", listentry)
         return this.#fetchAdv(this.#createListEntryURL(listentry.getShoppingListId()), {
         method: 'POST',
@@ -586,8 +631,8 @@ export default class AppAPI {
         })
     };
 
-    getListEntryByGroupId(groupId) {
-        return this.#fetchAdv(this.#getListEntriesByGroupIdURL(groupId)).then((responseJSON) => {
+    getStandardArticlesByGroupId(groupId) {
+        return this.#fetchAdv(this.#getStandardArticlesByGroupIdURL(groupId)).then((responseJSON) => {
             let responseListEntry = ListEntryBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
                 resolve(responseListEntry)
