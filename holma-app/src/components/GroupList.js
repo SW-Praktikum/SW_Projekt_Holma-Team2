@@ -65,11 +65,12 @@ class ListCard extends Component {
         entriesTotal: result.length
       }) 
     })
-    AppAPI.getAPI().getCheckedListEntriesByShoppingListId(this.props.list.getId()).then((result) => {
+    /**AppAPI.getAPI().getCheckedListEntriesByShoppingListId(this.props.list.getId()).then((result) => {
       this.setState({
         entriesChecked: result.length
       }) 
     })
+    */
   }
   render() {
       return (
