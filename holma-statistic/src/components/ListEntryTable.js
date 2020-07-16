@@ -113,8 +113,8 @@ class ListEntryTable extends Component {
         this.state = {
             listEntryTableElements: [],
             openDialog: false,
-            //userId : this.props.user.getId(),
-            userId: "1003",
+            userId : this.props.user.getId(),
+            //userId: "1003",
             startDate: null,
             endDate: null,
             retailers: [],
