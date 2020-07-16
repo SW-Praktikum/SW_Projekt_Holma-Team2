@@ -56,7 +56,8 @@ class ListCard extends Component {
   componentDidMount(){
     if(this.props.list){
         this.getEntries();
-        console.log("card", this.props)
+        this.getCheckedEntries();
+        console.log("card", this.state)
       }
   }
 
@@ -65,14 +66,18 @@ class ListCard extends Component {
       this.setState({
         entriesTotal: result.length
       }) 
-    })
+    })  
+  }
+
+  getCheckedEntries = () => {
     AppAPI.getAPI().getCheckedListEntriesByShoppingListId(this.props.list.getId()).then((result) => {
       this.setState({
         entriesChecked: result.length
       }) 
     })
-    
   }
+
+
   render() {
       return (
         <Card className="root" style={{/* minHeight: 250 ,  */minWidth: '100%', marginBottom:10, marginTop:10, }}>
