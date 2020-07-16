@@ -31,6 +31,7 @@ class StandardArticle extends Component {
             open: false,
             openDialog: false,
             standardArticle: this.props.standardArticle,
+            groupId: this.props.groupId,
         }
     }
 
@@ -52,7 +53,7 @@ class StandardArticle extends Component {
     
 
     deleteStandardArticle = (standard) => {
-        var group = AppAPI.getAPI().getGroupById(this.props.match.params.groupId);
+        var group = AppAPI.getAPI().getGroupById(this.state.groupId);
         AppAPI.getAPI().deleteStandardArticleFromGroup(group,standard).then(() => {
             this.props.loadStandardArticles()
         })
@@ -62,6 +63,7 @@ class StandardArticle extends Component {
     render() {
         const {standardArticle} = this.props;
         const { open } = this.state;
+        console.log("Props:",this.props)
         return (
             <div >
                 <TableContainer style={{marginTop: 20}}component={Paper}>
@@ -70,7 +72,6 @@ class StandardArticle extends Component {
                                 <TableCell width="10%"/>
                                 <TableCell width="30%" align="left">{standardArticle.getId()}</TableCell>
                                 <TableCell width="30%" align="left">{standardArticle.getName()}</TableCell>
-                                <TableCell width="10%" align="left">x</TableCell>
                                 <TableCell width="10%" align='right'>
                                     <IconButton aria-label="expand row" size="small" onClick={() => this.openDialog()}>
                                         <EditIcon/>
@@ -123,11 +124,9 @@ class StandardArticleEdit extends Component {
   
 
     loadStandardArticles = () => {
-        console.log("xDDDDDD")
-        console.log(this.props.match.params.groupId)
         AppAPI.getAPI().getStandardArticlesByGroupId(this.props.match.params.groupId).then(articles => {
-            console.log("Articles:", articles)
-            var StandardElements = articles.map((standardArticle) => <StandardArticle standardArticle={standardArticle} loadStandardArticles={this.loadStandardArticles} />)
+            console.log("StandardArticles:", articles)
+            var StandardElements = articles.map((standard) => <StandardArticle groupId = {this.state.groupId} standardArticle={standard} loadStandardArticles={this.loadStandardArticles} />)
             //hier noch ListEntrys ergänzen
             this.setState({
                 StandardElements: StandardElements,

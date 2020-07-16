@@ -661,6 +661,12 @@ export default class AppAPI {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
+            body: JSON.stringify(listentry)
+        }).then((responseJSON) => {
+            let responseListEntry = ListEntryBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseListEntry)
+            })
         })
     };
 }
