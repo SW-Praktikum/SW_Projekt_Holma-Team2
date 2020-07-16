@@ -34,7 +34,7 @@ const theme = createMuiTheme({
         light: colors.blue['A400']
       },
       delete:{
-        main: '#fa340c'
+        main: '#D0021B'
       },
       success: {
         contrastText: white,

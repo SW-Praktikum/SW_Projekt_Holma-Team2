@@ -44,7 +44,7 @@ class App extends React.Component {
       appError: null,
       authError: null,
       authLoading: false,
-      user: null
+      user: null,
     };
   }
 
@@ -94,6 +94,11 @@ class App extends React.Component {
 
   checkIfUserInDatabase(name, email, googleId) {
     console.log("Checking if '" + name + "' is stored in database with google id '" + googleId + "'")
+    
+    // UserPhotoLink:
+    console.log(this.state.googleUserData.photoURL)
+    
+    
     var api = AppAPI.getAPI()
     api.getUserByGoogleId(googleId).then((user) => {
       if (!user.getGoogleId()) {

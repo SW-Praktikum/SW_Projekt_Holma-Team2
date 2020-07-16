@@ -46,13 +46,41 @@ class Grouplink extends Component{
 
 
 class ListCard extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+        entriesTotal: null,
+        entriesChecked: null,
+    }}
+
+  componentDidMount(){
+    if(this.props.list){
+        this.getEntries();
+      }
+  }
+
+  getEntries = () => {
+    AppAPI.getAPI().getListEntriesByShoppingListId(this.props.list.getId()).then((result) => {
+      this.setState({
+        entriesTotal: result.length
+      }) 
+    })
+    AppAPI.getAPI().getCheckedListEntriesByShoppingListId(this.props.list.getId()).then((result) => {
+      this.setState({
+        entriesChecked: result.length
+      }) 
+    })
+  }
   render() {
       return (
-        <Card className="root" style={{/* minHeight: 250 ,  */minWidth: '100%', marginBottom:10, marginTop:10, backgroundColor: colors.teal[600]}}>
-          <CardActionArea>
-          <CardContent>
-              <Typography className="title" style={{fontSize: 14, color: 'white'}}>{this.props.list.getName()}</Typography>
-              <Typography className="title" style={{fontSize: 14, color: 'white'}}>Id: {this.props.list.getId()}</Typography>
+        <Card className="root" style={{/* minHeight: 250 ,  */minWidth: '100%', marginBottom:10, marginTop:10, }}>
+          <CardActionArea >
+          <CardContent style={{backgroundColor: colors.teal[600]}}>
+              <Typography align="left" className="title" style={{fontSize: 14, color: 'white'}}>{this.props.list.getName()}</Typography>
+          </CardContent>
+          <CardContent style={{backgroundColor: "#ffffff"}}>
+              <Typography align="left" className="title" style={{fontSize: 14}}>Id: {this.props.list.getId()}</Typography>
+              <Typography align="left" className="title" style={{fontSize: 14}}>{this.state.entriesChecked} von {this.state.entriesTotal} Einträgen erledigt</Typography>
           </CardContent>
           </CardActionArea>     
         </Card>

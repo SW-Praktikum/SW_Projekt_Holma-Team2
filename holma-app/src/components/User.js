@@ -42,43 +42,45 @@ class UserProfil extends Component {
   render() {
 
       const { classes, user } = this.props;
-      var groupCreationDate = ""
-      if (this.props.groupCreationDate != "") {
-        let gcd = new Date(user.getCreationDate())
-        groupCreationDate = gcd.toDateString()
-      }
       return (
           
         <Paper elevation={0} className={classes.root}>
           <div className={classes.content}>
-            <Box m={2} />
+            
                 <Typography  variant="h4" gutterBottom>
-                Nutzerdetails:
+                Benutzerdetails:
                 </Typography>
-            <Box m={5} />
+            
             <Grid container spaching={3}>
-              <Grid item xs={8} sm={2}>
-                <Typography variant="h6" style={{fontWeight: "bold"}} gutterBottom>Nutzername: </Typography>
-                <Typography variant="h6" gutterBottom>{user.getName()}</Typography>
+              <Grid item xs={12} sm={6} lg={4} className={classes.gridItem}>
+                <Typography style={{fontWeight: "bold"}} gutterBottom>Benutzername: </Typography>
+                <Typography gutterBottom>{user.getName()}</Typography>
               </Grid>
-              <Grid item xs={8} sm={2}/>
-              <Grid item xs={8} sm={4}>
-                <Typography variant="h6" style={{fontWeight: "bold"}} gutterBottom>Nutzer-Id: </Typography>
-                <Typography variant="h6" gutterBottom>{user.getId()}</Typography>
+              
+              <Grid item xs={12} sm={6} lg={4} className={classes.gridItem}>
+                <Typography style={{fontWeight: "bold"}} gutterBottom>Benutzer-Id: </Typography>
+                <Typography gutterBottom>{user.getId()}</Typography>
+              </Grid>
+
+              <Grid item xs={12} sm={6} lg={4} className={classes.gridItem}>
+                <Typography style={{fontWeight: "bold"}} gutterBottom>Benutzer seit: </Typography>
+                <Typography gutterBottom>{user.getCreationDate()}</Typography>
               </Grid>
             </Grid>
-            <Box m={4} />
-              <Grid container spacing={3}>
-                  <Grid item xs={8} sm={4}>
-                      <Typography variant="h6" style={{fontWeight: "bold"}} gutterBottom>Nutzer seit: </Typography>
-                      <Typography variant="h6" gutterBottom>{groupCreationDate}</Typography>
-                  </Grid>
+            
+            <Grid style={{paddingTop: 50}} container direction="row" justify="space-between" alignItems="center" spaching={2}>
+              <Grid item xs={12} sm={4}>
+                <Button className={classes.button} align="center" variant="contained" fullWidth color='primary' onClick={this.handleSignOutButtonClicked}>
+                  Ausloggen
+                </Button>
               </Grid>
-            <Box m={4} />
-            <Grid container spaching={2}>
-              <Button variant="contained" color='primary' onClick={this.handleSignOutButtonClicked}>Ausloggen</Button>
-              <Grid item xs={2} sm={2}/>
-              <Button variant="contained" style={{color: 'white', backgroundColor: 'red'}}className={classes.button} onClick={this.handleDeleteUser}>Nutzer löschen</Button>
+              <Grid item xs={12} sm={4}>
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <Button className={classes.button} align="center" variant="contained" fullWidth style={{color: 'white', backgroundColor: '#D0021B'}} onClick={this.handleDeleteUser}>
+                  Konto löschen
+                  </Button>
+              </Grid>
             </Grid>
           </div>
         </Paper>
@@ -97,8 +99,13 @@ const styles = theme => ({
     margin: theme.spacing(1),
   },
   button: {
-    color: theme.palette.delete.main,
+    marginBottom : 10,
     
+  },
+  gridItem: {
+    paddingTop: 10,
+    paddingBottom: 10,
+
   }
 });
 
