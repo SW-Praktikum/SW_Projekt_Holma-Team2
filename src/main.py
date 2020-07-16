@@ -59,7 +59,9 @@ group = api.inherit('Group', bo, {
 shopping_list = api.inherit('ShoppingList', bo, {
 
     'groupId': fields.Integer(attribute='_group',
-                              description='ID der Gruppe zu der diese Liste gehört')
+                              description='ID der Gruppe zu der diese Liste gehört'),
+    'groupName': fields.String(attribute='_group_name',
+                               description='Name der Gruppe zu der diese Liste gehört')
 })
 
 list_entry = api.inherit('ListEntry', bo, {
