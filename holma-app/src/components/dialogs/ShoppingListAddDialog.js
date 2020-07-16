@@ -52,7 +52,7 @@ class ShoppingListAddDialog extends Component {
                   inputProps = {{maxlength:60}}
                 />
                 <FormControlLabel
-                  control={<Checkbox checked={this.props.checked} onChange={this.props.addStandardArticles} name="" />}
+                  control={<Checkbox color="primary" checked={this.props.checked} onChange={this.props.addStandardArticles} name="" />}
                   label="Standardartikel übernehmen"
                 />
               </DialogContent>
