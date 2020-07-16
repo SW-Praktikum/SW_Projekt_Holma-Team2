@@ -496,7 +496,7 @@ class GroupRelatedArticleOperations(Resource):
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('group_id', 'Die ID des group-Objekts')
 class GroupRelatedShoppingListOperations(Resource):
-    @holmaApp.marshal_with(shopping_list)
+    @holmaApp.marshal_list_with(shopping_list)
     # @ secured
     def get(self, group_id):
         """Auslesen eines neuen Shoppinglist-Objekts die zu einer bestimmten
@@ -630,6 +630,7 @@ class ShoppingListRelatedListEntryListOperations(Resource):
         adm = Administration()
         sl = adm.get_shopping_list_by_id(shopping_list_id)
         proposal = ListEntry.from_dict(api.payload)
+
         if sl is not None and proposal is not None:
             result = adm.create_list_entry(
                 proposal.get_name(),
@@ -638,8 +639,15 @@ class ShoppingListRelatedListEntryListOperations(Resource):
                 proposal.get_unit(),
                 proposal.get_purchasing_user(),
                 proposal.get_retailer(),
-                proposal.get_shopping_list()
+                proposal.get_shopping_list(),
+                proposal.is_standardarticle()
             )
+
+            if proposal.is_standardarticle():
+                shopping_list = adm.get_shopping_list_by_id(proposal.get_shopping_list())
+                group = adm.get_group_by_id(shopping_list.get_group())
+                adm.add_standardarticle_to_group(result, group)
+
             return result, 200
         else:
             return 'ShoppingList unknown or payload not valid', 500
