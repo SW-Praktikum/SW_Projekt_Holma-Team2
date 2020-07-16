@@ -574,6 +574,10 @@ class ShoppingListListOperations(Resource):
     @holmaApp.marshal_list_with(shopping_list)
     # @secured
     def get(self):
+        """Auslesen aller Shoppinglist-Objekte.
+
+                        Sollten keine Shoppinglist-Objekte verfügbar sein,
+                        so wird eine leere Sequenz zurückgegeben."""
         adm = StatisticAdministration()
         sl_list = adm.get_all_shoppinlists()
         return sl_list
@@ -586,6 +590,11 @@ class ShoppingListsByNameOperations(Resource):
     @holmaApp.marshal_list_with(shopping_list)
     # @secured
     def get(self, name):
+        """Auslesen von Shoppinglist-Objekten, die durch den Namen
+        bestimmt wurden.
+
+        Die auszulesenden Objekte werden durch name in dem URI bestimmt.
+                       """
         adm = Administration()
         le = adm.get_shopping_list_by_name(name)
         return le
@@ -598,6 +607,8 @@ class ShoppingListsByNameOperations(Resource):
 class GroupShoppingListStandardArticleRelationOperations(Resource):
     # @secured
     def post(self, group_id, shopping_list_id):
+        """Füge ein bestimmte Shoppinglist-Objekt
+        einer bestimmten Groupe hinzu"""
         adm = Administration()
         grp = adm.get_group_by_id(group_id)
         sl = adm.get_shopping_list_by_id(shopping_list_id)
@@ -615,6 +626,8 @@ class ShoppingListRelatedListEntryListOperations(Resource):
     @holmaApp.marshal_list_with(list_entry)
     # @secured
     def get(self, shopping_list_id):
+        """Auslesen aller Listentry-Objekts einer bestimmten Shoppingliste
+                              """
         adm = Administration()
         le = adm.get_shopping_list_by_id(shopping_list_id)
         if le is not None:
@@ -624,9 +637,15 @@ class ShoppingListRelatedListEntryListOperations(Resource):
             return "ShoppingList not found", 500
 
     @holmaApp.marshal_with(list_entry, code=200)
-    @holmaApp.expect(list_entry)  # Wir erwarten ein User-Objekt von Client-Seite.
+    @holmaApp.expect(list_entry)
+    # Wir erwarten ein User-Objekt von Client-Seite.
     # @secured
     def post(self, shopping_list_id):
+        """ Wir verwenden Namen, amount, article, Unit, Purchasing_user,
+         retailer und shoppinglist des Proposals für die Erzeugung
+        eines Group-Objekts. Das serverseitig erzeugte
+        Objekt ist das maßgebliche und
+        wird auch dem Client zurückgegeben. """
         adm = Administration()
         sl = adm.get_shopping_list_by_id(shopping_list_id)
         proposal = ListEntry.from_dict(api.payload)
@@ -651,6 +670,10 @@ class ListEntryListOperations(Resource):
     @holmaApp.marshal_list_with(list_entry)
     # @secured
     def get(self):
+        """Auslesen aller Listentry-Objekte.
+
+            Sollten keine Listentry-Objekte verfügbar sein, so wird eine
+            leere Sequenz zurückgegeben."""
         adm = StatisticAdministration()
         le_list = adm.get_all_list_entries()
         return le_list
@@ -663,14 +686,22 @@ class ListEntryOperations(Resource):
     @holmaApp.marshal_with(list_entry)
     # @secured
     def get(self, list_entry_id):
+        """Auslesen eines bestimmten Listentry-Objekts.
 
+        Das auszulesende Objekt wird durch die list_entry_id
+        in dem URI bestimmt.
+                       """
         adm = Administration()
         le = adm.get_list_entry_by_id(list_entry_id)
         return le
 
     # @secured
     def delete(self, list_entry_id):
+        """Löschen eines bestimmten Listentry-Objekts.
 
+         Das auszulesende Objekt wird durch die list_entry_id
+         in dem URI bestimmt.
+                       """
         adm = Administration()
         le = adm.get_list_entry_by_id(list_entry_id)
         if le is not None:
@@ -683,6 +714,7 @@ class ListEntryOperations(Resource):
     @holmaApp.expect(list_entry)#, validate=True)
     # @secured
     def put(self, list_entry_id):
+        """Update eines bestimmten Listentry-Objekts."""
         adm = Administration()
         le = ListEntry.from_dict(api.payload)
 
@@ -714,7 +746,7 @@ class UserRelatedListEntryOperations(Resource):
 
 @holmaApp.route('/shoppinglist/<int:shopping_list_id>/listentries/checked')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@holmaApp.param('shoppinglist_id', 'Die ID des Shopping-Lis-Objekts')
+@holmaApp.param('shoppinglist_id', 'Die ID des Shopping-List-Objekts')
 class ShoppingListRelatedCheckedByListEntryOperations(Resource):
     @holmaApp.marshal_with(list_entry)
     # @ secured
@@ -808,6 +840,8 @@ class GroupRelatedListEntryOperations(Resource):
 class GroupShoppingListStandardArticleRelationOperations(Resource):
     # @secured
     def post(self, group_id, shopping_list_id):
+        """Füge eine bestimmtes Standardarticle
+        einer bestimmten Groupe hinzu"""
         adm = Administration()
         grp = adm.get_group_by_id(group_id)
         sl = adm.get_shopping_list_by_id(shopping_list_id)
@@ -857,6 +891,10 @@ class RetailerListOperations(Resource):
     @holmaApp.marshal_list_with(retailer)
     # @secured
     def get(self):
+        """Auslesen aller Retailer-Objekte.
+
+            Sollten keine Retailer-Objekte verfügbar sein, so wird eine
+            leere Sequenz zurückgegeben."""
         adm = Administration()
         ret_list = adm.get_all_retailers()
         return ret_list
@@ -869,6 +907,10 @@ class RetailerOperations(Resource):
     @holmaApp.marshal_list_with(retailer)
     # @secured
     def get(self, retailer_id):
+        """Auslesen eines bestimmten Retailer-Objekts.
+         Das auszulesende Objekt wird durch die retailer_id
+         in dem URI bestimmt.
+                    """
         adm = Administration()
         rtl = adm.get_retailer_by_id(retailer_id)
         return rtl
@@ -881,6 +923,10 @@ class RetailerByNameOperations(Resource):
     @holmaApp.marshal_list_with(retailer)
     # @secured
     def get(self, name):
+        """ Auslesen von Retailer-Objekten, die durch den Namen bestimmt werden
+
+             Die auszulesenden Objekte werden durch name in dem URI bestimmt.
+                        """
         adm = Administration()
         rtl = adm.get_retailers_by_name(name)
         return rtl
