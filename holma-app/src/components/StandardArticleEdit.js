@@ -14,15 +14,16 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
 import Paper from '@material-ui/core/Paper';
-import StarIcon from '@material-ui/icons/Star';
-import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import ClearRoundedIcon from '@material-ui/icons/ClearRounded';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import ArticleEditDialog from './dialogs/ArticleEditDialog';
 import { colors } from '@material-ui/core';
 import ListEntry from './ListEntry';
+import StandardArticleEditDialog from './dialogs/StandardArticleEditDialog';
+import ListEntryAddDialog from './dialogs/ListEntryAddDialog';
 
 
 
@@ -34,6 +35,12 @@ class StandardArticle extends Component {
             openDialog: false,
             standardArticle: this.props.standardArticle,
             groupId: this.props.groupId,
+            retailers: this.props.retailers,
+            StandardElements: [],
+            retailers: [],
+            users: [],
+            articles: [],
+            articlesCount: 0,
         }
     }
 
@@ -52,6 +59,11 @@ class StandardArticle extends Component {
         this.setState({
             openDialog: false})
         }
+
+    closeDialog = () => {
+        this.setState({
+            openDialog: false})
+        }
     
 
     deleteStandardArticle = (standard) => {
@@ -60,39 +72,68 @@ class StandardArticle extends Component {
         })
     }
 
+render(){
+    const {standardArticle} = this.props;
+    const { groupId, users, retailers} = this.props;
+    const { open, articles } = this.state;
 
-    render() {
-        const {standardArticle} = this.props;
-        const { open } = this.state;
-        console.log("Props:",this.props)
-        return (
-            <div >
-                <TableContainer style={{marginTop: 20}}component={Paper}>
-                    <Table aria-label="collapsible table">
-                            <TableRow>
-                                <TableCell width="10%"/>
-                                <TableCell width="30%" align="left">{standardArticle.getId()}</TableCell>
-                                <TableCell width="30%" align="left">{standardArticle.getName()}</TableCell>
-                                <TableCell width="10%" align='right'>
-                                    <IconButton aria-label="expand row" size="small" onClick={() => this.openDialog()}>
-                                        <EditIcon/>
-                                    </IconButton>
-                                </TableCell>
-                                <TableCell width="10%" align='right'>
-                                    <IconButton aria-label="expand row" size="small" onClick={() => this.deleteStandardArticle(standardArticle)}>
-                                        <DeleteIcon/>
-                                    </IconButton>
-                                </TableCell>
-                            </TableRow>
-                        </Table>
-                    </TableContainer>
-                    <ArticleEditDialog 
-                    openDialog={this.openDialog}
-                    open={this.state.openDialog}
-                    handleClose={this.handleClose}
-                    article={standardArticle}
-                />
-                </div>
+return (
+    <div >
+        <TableRow width="100%">
+            <TableCell style={{paddingLeft: 5, paddingTop: 0, paddingBottom: 0, paddingRight: 10}} width="10%" align="right">{standardArticle.getArticleName()}</TableCell>
+            <TableCell padding="none" width="15%" align="left">{standardArticle.getAmount()}</TableCell>
+            <TableCell padding="none" width="15%" align="left">{standardArticle.getUnit()}</TableCell>
+            <TableCell padding="none" width="56%" align="left">{standardArticle.getArticleId()}</TableCell>
+            <TableCell padding="none" width="6%">
+                <IconButton aria-label="expand row" size="small" onClick={() => this.setOpen(!open)}>
+                    {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                </IconButton>
+            </TableCell>
+            <TableCell padding="none" width="6%" align='right'>
+                <IconButton aria-label="expand row" size="small" onClick={() => this.openDialog()}>
+                     <EditIcon/>
+                </IconButton>
+            </TableCell>
+            <TableCell style={{paddingLeft: 0, paddingTop: 0, paddingBottom: 0, paddingRight: 15}} width="6%" align='right'>
+                <IconButton aria-label="expand row" size="small" onClick={() => this.deleteEntry(standardArticle)}>
+                    <ClearRoundedIcon/>
+                </IconButton>
+            </TableCell>
+        </TableRow>
+        <TableRow>
+            <TableCell style={{ paddingBottom: 0, paddingTop: 0, backgroundColor: colors.grey[100]}} colSpan={10}>
+            <Collapse in={this.state.open} timeout="auto" unmountOnExit>
+                <Table size="small" aria-label="purchases">
+                    <TableHead >
+                        <TableRow>
+                            <TableCell colSpan={3} padding="none" width="30%" align="left"><b>Einkäufer</b></TableCell>
+                            <TableCell colSpan={2} padding="none" width="20%" align="left"><b>Händler</b></TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        
+                        <TableCell colSpan={3} padding="none" width="30%" align="left">{standardArticle.getPurchasingUserName()}</TableCell>
+                        <TableCell colSpan={2} padding="none" width="20%" align="left">{standardArticle.getRetailerName()}</TableCell>
+                        <TableCell colSpan={1} padding="none" width="10%" align='left'>
+                        </TableCell>
+                        
+                    </TableBody>
+                </Table>
+            </Collapse>
+            </TableCell>
+        </TableRow>
+        <StandardArticleEditDialog
+            standardArticle={standardArticle}
+            groupId={groupId}
+            users={users}
+            articles={articles}
+            retailers={retailers}
+            loadArticles={this.props.loadArticles}
+            open={this.state.openDialog}
+            openDialog={this.openDialog}
+            closeDialog={this.closeDialog}
+        />
+    </div>
         );
     }
 }
@@ -119,9 +160,7 @@ class StandardArticleEdit extends Component {
         if(this.state.groupId) {
             this.loadRetailers();
             this.loadStandardArticles();
-            console.log("Standardarticlessssss:",this.state.StandardElements);
             this.loadUsers();
-            this.loadListEntries()
         }
     }
 
@@ -139,14 +178,21 @@ class StandardArticleEdit extends Component {
     loadStandardArticles = () => {
         AppAPI.getAPI().getStandardArticlesByGroupId(this.state.groupId).then((articles) => {
         var StandardElements = articles.map((standard) => 
-        <StandardArticle groupId={this.state.groupId} standardArticle={standard} loadStandardArticles={this.loadStandardArticles} />)
+        <StandardArticle 
+        groupId={this.state.groupId} 
+        standardArticle={standard} 
+        retailers={this.state.retailers}
+        articles = {this.state.articles}
+        users = {this.state.users} 
+        loadStandardArticles={this.loadStandardArticles} 
+        />)
             this.setState({
                 StandardElements: StandardElements,
                 loadingInProgress: true,
                 loadingError: null,
                 });
-                return new Promise(function (resolve) { resolve(1) })
-                }).catch(e =>
+                return new Promise(function (resolve) { resolve(1) });
+            }).catch(e =>
                     this.setState({ // Reset state with error from catch 
                     loadingInProgress: false,
                     loadingError: e
@@ -169,36 +215,6 @@ class StandardArticleEdit extends Component {
             })
         );  
     } 
-
-    loadListEntries = () => {
-        console.log(this.state.shoppingListId)
-        AppAPI.getAPI().getListEntriesByShoppingListId(this.state.shoppingListId).then(listEntries => {
-            console.log("Loaded list entries for shopping list '" + this.state.shoppingListId + "':", listEntries)
-            var listEntryTableElements = listEntries.map((listEntry) => 
-                <ListEntry 
-                    listEntry={listEntry} 
-                    loadListEntries={this.loadListEntries} 
-                    retailers={this.state.retailers}
-                    users={this.state.users}
-                    articles={this.state.articles}
-                    loadArticles={this.loadArticles}
-                    groupId={this.state.groupId}
-                />
-            )
-
-            this.setState({
-                listEntryTableElements: listEntryTableElements,
-                loadingInProgress: true, // loading indicator 
-                loadingError: null,
-            })
-            return new Promise(function (resolve) { resolve(1) })
-            }).catch(e =>
-                this.setState({ // Reset state with error from catch 
-                loadingInProgress: false,
-                loadingError: e
-            })
-        );  
-    }
 
     loadRetailers = () => {
         return AppAPI.getAPI().getRetailers().then((retailers) => {
@@ -227,7 +243,6 @@ class StandardArticleEdit extends Component {
                             <TableCell width="20%" align="left "><b style={{ color: '#ffffff'}}>Name</b></TableCell>
                             <TableCell width="15%" align="center"><b style={{ color: '#ffffff'}}>Menge</b></TableCell>
                             <TableCell width="15%" align="center"><b style={{ color: '#ffffff'}}>Einheit</b></TableCell>
-                            <TableCell width="20%" align="center"><b style={{ color: '#ffffff'}}>Retailer</b></TableCell>
                             <TableCell width="15%" align="center"><b style={{ color: '#ffffff'}}>Artikel-ID</b></TableCell>
                             <TableCell width="15%" align="center"><b style={{ color: '#ffffff'}}>Edit</b></TableCell>
                         </TableRow>
