@@ -97,7 +97,9 @@ class Administration():
 
     def get_shopping_lists_by_group_id(self, group_id):
         with ShoppingListMapper() as mapper:
-            return mapper.find_by_group(group_id)
+            shopping_lists = mapper.find_by_group(group_id)
+        return [self.complete_shopping_list(le) for le in shopping_lists]
+
 
     def get_standardarticles_by_group_id(self, group_id):
         with ListEntryMapper() as mapper:
@@ -303,7 +305,7 @@ class Administration():
 
     def get_list_entries_by_shopping_list_id(self, shopping_list_id):
         with ListEntryMapper() as mapper:
-            list_entries =  mapper.find_list_entries_by_shopping_list_id(
+            list_entries = mapper.find_list_entries_by_shopping_list_id(
                 shopping_list_id)
         return [self.complete_list_entry(le) for le in list_entries]
 
@@ -329,7 +331,8 @@ class Administration():
 
     def get_shopping_list_by_name(self, name):
         with ShoppingListMapper() as mapper:
-            return self.complete_shopping_list(mapper.find_by_name(name))
+            shopping_lists = mapper.find_by_name(name)
+        return [self.complete_shopping_list(le) for le in shopping_lists]
 
     def create_shopping_list(self, name, group_id):
         shopping_list = ShoppingList()
@@ -388,7 +391,8 @@ class StatisticAdministration(Administration):
 
     def get_all_shoppinlists(self):
         with ShoppingListMapper() as mapper:
-            return mapper.find_all()
+            shopping_lists = mapper.find_all()
+        return [self.complete_shopping_list(le) for le in shopping_lists]
 
     def get_all_articles(self):
         with ArticleMapper() as mapper:
