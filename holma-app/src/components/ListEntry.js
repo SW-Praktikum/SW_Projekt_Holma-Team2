@@ -32,6 +32,7 @@ class ListEntry extends Component {
         this.state = {
             open: false,
             openDialog: false,
+            listEntry: this.props.listEntry,
             checked: this.props.listEntry.getChecked(),
             articles: this.props.articles
         }
