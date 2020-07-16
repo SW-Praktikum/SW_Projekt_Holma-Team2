@@ -83,7 +83,10 @@ class ListEntryTable extends Component {
             retailers: [],
             retailerName: null,
             filterInput: "",
-            filteredElements: []
+            filteredElements: [],
+            filterObject: "articleName",
+            textField: "block",
+            timeFilter: "none"
         }
     }
 
@@ -94,31 +97,110 @@ class ListEntryTable extends Component {
           }
     }
 
+    // dropdown selector for what fo filter
     filterInput = (inputValue) => {
-        var filteredElements =  this.state.listEntryTableElements.filter(function(item) {
-            return item.props.listEntry.articleName == inputValue;
-        });
-        
+        const filterObject = this.state.filterObject
+        if (filterObject == "articleName") {
+            var filteredElements =  this.state.listEntryTableElements.filter(function(item) {
+                return item.props.listEntry.articleName.toLocaleLowerCase().includes(inputValue.toLocaleLowerCase());
+            });
+        }
+        if (filterObject == "retailerName") {
+            var filteredElements =  this.state.listEntryTableElements.filter(function(item) {
+                return item.props.listEntry.retailerName.toLocaleLowerCase().includes(inputValue.toLocaleLowerCase());
+            });
+        }
+        if (filterObject == "purchasingUserName") {
+            var filteredElements =  this.state.listEntryTableElements.filter(function(item) {
+                return item.props.listEntry.purchasingUserName.toLocaleLowerCase().includes(inputValue.toLocaleLowerCase());
+            });
+        }
+        if (inputValue == "checked") {
+            var filteredElements =  this.state.listEntryTableElements.filter(function(item) {
+                return item.props.listEntry.checked == true;
+            });
+        }
+        if (inputValue == "unchecked") {
+            var filteredElements =  this.state.listEntryTableElements.filter(function(item) {
+                return item.props.listEntry.checked == false;
+            });
+        }
         this.loadFilteredElements(filteredElements)
     }
 
+    // rendering the filtered elements
     loadFilteredElements = (filteredElements) => {
         console.log(filteredElements)
         // Hier die gefilterten Objekte Rendern/Mappen, auch die von filterByTimePeriod
+        // Tim insert your magic here
     }
 
+
+
+
+    // passing the input search value to the filter function
     handleInputChange = (e) => {
         this.setState({filterInput: e.target.value})
         this.filterInput(e.target.value)
     }
 
+    filterSelector = (event, filter) => {
+        if (filter == null) {
+            // loading all articles on filter clear
+            this.setState({
+                filterObject: ""
+            })
+            this.loadFilteredElements(this.state.listEntryTableElements) //loading all elements
+        }
+        else {
+        this.setState({
+            filterObject: filter.label,
+            textField: "block",
+            timeFilter: "none"
+        })
+        if (filter.label == "checked") {
+            this.setState({
+                textField: "none"
+            })
+            this.filterInput("checked")
+        }
+        if (filter.label == "unchecked") {
+            this.filterInput("unchecked")
+            this.setState({
+                textField: "none"
+            })
+        }
+        if (filter.label == "timePeriod") {
+            //this.filterInput("timePeriod")
+            this.setState({
+                textField: "none",
+                timeFilter: ""
+            })
+        }
+        
+    }}
+
+
     // wir bei Button Click aufgerufen
     filterByTimePeriod = () => {
+        // logic needs to be defined:
+        // filter checkedTS or lastUpdated etc...
+        const startDate = this.state.startDate
+        const endDate = this.state.endDate
+        var filteredElements =  this.state.listEntryTableElements.filter(function(item) {
+            const parsedTime = Date.parse(item.props.listEntry.lastUpdated)
+            return startDate < parsedTime && parsedTime < endDate;
+        });
+        this.loadFilteredElements(filteredElements)
+        
+        // No longer Needed
+        /** 
         AppAPI.getAPI().getUpdatedListEntriesByTimePeriod(this.state.startDate, this.state.endDate).then((filteredElements) => {
             // filter Elements only for current user needs to be done here first
             // otherwise all listEntries from the Database will be loaded
             this.loadFilteredElements(filteredElements)
         })
+        */
     }
 
 
@@ -163,30 +245,17 @@ class ListEntryTable extends Component {
     // install: npm i @material-ui/pickers
     // install: npm i date-fns
     
-   handleStartDate = (date) => {
-    var datum = new Date (date);
-    var convert = datum.toISOString();
-    this.setState({startDate: convert})
-   }
-
-   handleEndDate = (date) => {
-    var datum = new Date (date);
-    var convert = datum.toISOString();
-    this.setState({endDate: convert})
-   }
-
-   // doku for the date library: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#Several_ways_to_create_a_Date_object
-
-   filterByRetailer = (event, retailer) => {
-    if (retailer === null) {
-        this.loadListEntries()
+    handleStartDate = (date) => {
+        var datum = new Date (date);
+        var convert = datum.getTime();
+        this.setState({startDate: convert})
     }
-    else {
-        console.log(retailer)
-        console.log("Die Id des Händlers:", retailer.id)
-        this.setState({retailerName: retailer.name})
-        this.loadListEntriesByRetailer(retailer.id) 
-   }}
+
+    handleEndDate = (date) => {
+        var datum = new Date (date);
+        var convert = datum.getTime();
+        this.setState({endDate: convert})
+    }
 
    loadListEntriesByRetailer = (retailerId) => {
     console.log("Current Retailer id:", retailerId)
@@ -211,78 +280,115 @@ class ListEntryTable extends Component {
 
 
     render() {
+        const filters = [
+            {
+                name: "Artikel",
+                label: "articleName"
+            },
+            {
+                name: "Einzelhändler",
+                label: "retailerName"
+            },
+            {
+                name: "Einkäufer",
+                label: "purchasingUserName"
+            },
+            {
+                name: "erledigt",
+                label: "checked"
+            },
+            {
+                name: "nicht erledigt",
+                label: "unchecked"
+            },
+            {
+                name: "Zeitraum",
+                label: "timePeriod"
+            }
+
+        ]
         const {retailers} = this.state;
         return (
             <div display='flex'>
-            <Button onClick={this.filterByTimePeriod}>Filter nach Zeit</Button>
-            <TextField
-              autoFocus
-              onChange={this.handleInputChange}
-              margin="dense"
-              id="outlined-basic"
-              variant="outlined"
-              label="Arikel Name"
-              type="ID"
-              fullWidth
-              value={this.state.filterInput}        
-            />            
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <Grid container direction="row" justify="space-between" alignItems="center" component={Paper} style={{marginTop: 10, marginBottom: 10}}>
-                <Grid item xs={12} sm={12} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10}}>
+                                 
+            <Grid container direction="row" justify="space-between" alignItems="center" component={Paper} style={{marginTop: 15}}>
+                <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
                     <Typography color="primary" style={{fontSize: 18}}>
-                        Nach Zeitaum filtern
+                        Filter nach:
                     </Typography>
                 </Grid>
-                <Grid item xs={12} sm={6} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
-                    <KeyboardDatePicker
-                    disableToolbar
-                    variant="inline"
-                    format="dd/MM/yyyy"
-                    margin="normal"
-                    id="date-picker-start"
-                    label="Startdatum"
-                    value={this.state.startDate}
-                    onChange={(date) => this.handleStartDate(date)}
-                    KeyboardButtonProps={{
-                        'aria-label': 'change date',
-                    }}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
-                    <KeyboardDatePicker
-                    disableToolbar
-                    variant="inline"
-                    format="dd/MM/yyyy"
-                    margin="normal"
-                    id="date-picker-end"
-                    label="Enddatum"
-                    value={this.state.endDate}
-                    onChange={(date) => this.handleEndDate(date)}
-                    KeyboardButtonProps={{
-                        'aria-label': 'change date',
-                    }}
-                    />
-                </Grid>
-                </Grid>
-            </MuiPickersUtilsProvider>
-            <Grid container direction="row" justify="space-between" alignItems="center" component={Paper}>
-                <Grid item xs={12} sm={6} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
-                    <Typography color="primary" style={{fontSize: 18}}>
-                        Nach Einzelhändler filtern
-                    </Typography>
-                </Grid>
-                <Grid item xs={12} sm={6} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
+                <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
                     <Autocomplete
                         id="combo-retailer"
-                        onChange={this.filterByRetailer}
-                        options={retailers} //liste der retailer laden
+                        onChange={this.filterSelector}
+                        defaultValue={filters[0]}
+                        options={filters} //liste der retailer laden
                         getOptionLabel={(option) => option.name}
-                        getOptionSelected={(option) => option.name}
+                        getOptionSelected={(option) => option.label}
                         renderInput={(params) => (
-                            <TextField {...params} variant="standard" label="Händler" placeholder="Händler" />
+                            <TextField {...params} variant="standard" label="Filter" placeholder="Händler" />
                         )}                
                     />
                 </Grid>
+                <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
+                    <TextField
+                        autoFocus
+                        style={{display: this.state.textField}}
+                        onChange={this.handleInputChange}
+                        margin="dense"
+                        id="outlined-basic"
+                        //variant="outlined"
+                        label="Eingabe"
+                        type="ID"
+                        fullWidth
+                        value={this.state.filterInput}        
+                    /> 
+                </Grid>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <Grid container direction="row" justify="space-between" alignItems="center" style={{display: this.state.timeFilter, marginTop: 10, marginBottom: 10}}>
+                        <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
+                            <KeyboardDatePicker
+                            disableToolbar
+                            fullWidth
+                            variant="inline"
+                            format="dd/MM/yyyy"
+                            margin="normal"
+                            id="date-picker-start"
+                            label="Startdatum"
+                            value={this.state.startDate}
+                            onChange={(date) => this.handleStartDate(date)}
+                            KeyboardButtonProps={{
+                                'aria-label': 'change date',
+                            }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
+                            <KeyboardDatePicker
+                            disableToolbar
+                            fullWidth
+                            variant="inline"
+                            format="dd/MM/yyyy"
+                            margin="normal"
+                            id="date-picker-end"
+                            label="Enddatum"
+                            value={this.state.endDate}
+                            onChange={(date) => this.handleEndDate(date)}
+                            KeyboardButtonProps={{
+                                'aria-label': 'change date',
+                            }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
+                            <Button 
+                                onClick={this.filterByTimePeriod}
+                                fullWidth
+                                color="primary"
+                                variant="contained">
+                                filtern
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </MuiPickersUtilsProvider>
             </Grid>
             <TableContainer style={{marginTop: 20}} component={Paper}>
                 <Table aria-label="collapsible table">
