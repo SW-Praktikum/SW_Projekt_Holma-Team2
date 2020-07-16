@@ -73,7 +73,8 @@ const randomImages = [
 
 class GroupEntry extends Component {
     render() {
-        const path = "/grouplist/" + this.props.group.getId()
+        
+        const path = "/grouplist/" + this.props.group.getId() + "/" + this.props.user.getId()
         return (
         <Link to={path} style={{textDecoration: 'none'}}>
           <Card className="root" style={{/* minHeight: 250 ,  */minWidth: '100%', marginBottom:10, marginTop:10, backgroundColor: colors.teal[600]}}>
@@ -244,7 +245,7 @@ class GroupEntries extends Component{
           //wie kann die einzelne Gruppe im nächsten Schritt angesprochen werden?
           <Grid key={group.getId()} item xs={6} item lg={4}>
             <Paper className="paper" style ={{ textAlign:'center',}} >
-              <GroupEntry key={group.getId()} group={group} setPath={this.setPath}/>
+              <GroupEntry key={group.getId()} user={user} group={group} setPath={this.setPath}/>
             </Paper>
           </Grid>
           )

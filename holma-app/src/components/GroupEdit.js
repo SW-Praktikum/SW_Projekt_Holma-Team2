@@ -90,8 +90,6 @@ class GroupInformation extends Component {
       groupLastUpdated = lup.toDateString()
     }
 
-    //this.creationDate();
-    console.log("date", groupCreationDate)
     return (
       <div>
       <Paper style={{paddingTop: 15, paddingLeft: 15, paddingRight: 15, paddingBottom: 15, marginTop: 15}} elevation={0}>
@@ -253,7 +251,6 @@ class MemberDetails extends Component{
     super(props);
     this.getGroupDetails = this.getGroupDetails.bind(this)
     this.addMember = this.addMember.bind(this)
-    console.log("Props:", props)
     this.state ={
       memberElements: [],
       groupObject:"",
@@ -265,6 +262,7 @@ class MemberDetails extends Component{
       loadingInProgress: false,
       loadingError: null,
       memberId: "",
+      userId: this.props.match.params.userId,
       open: false,
       openDialog: false,
     }
@@ -312,7 +310,13 @@ handleClose = () => {
   
   removeUser = (userId) => {
     AppAPI.getAPI().deleteUsersFromGroup(this.state.groupId, userId).then(() => {
-      this.loadMembers()
+
+      if(userId != this.props.match.params.userId) {
+        this.loadMembers()
+      }
+      else {
+        window.location.reload()
+      }
     })
   }
 
@@ -427,7 +431,6 @@ const styles = theme => ({
   },
   button: {
     color: theme.palette.delete.main,
-    
   }
 });
 
