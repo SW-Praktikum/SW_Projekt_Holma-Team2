@@ -388,7 +388,7 @@ class StatisticAdministration(Administration):
     def __init__(self):
         super().__init__()
 
-    def get_all_shoppinlists(self):
+    def get_all_shopping_lists(self):
         with ShoppingListMapper() as mapper:
             shopping_lists = mapper.find_all()
         return [self.complete_shopping_list(le) for le in shopping_lists]
@@ -406,3 +406,6 @@ class StatisticAdministration(Administration):
         with ListEntryMapper() as mapper:
             return mapper.find_list_entries_in_time_periode(from_date, to_date)
 
+    def get_article_count_by_group(self, group):
+        with ArticleMapper() as mapper:
+            return mapper.find_most_frequent_articles_by_group(group)
