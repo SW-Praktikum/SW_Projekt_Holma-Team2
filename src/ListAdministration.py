@@ -314,14 +314,22 @@ class Administration():
         return [self.complete_list_entry(le) for le in list_entries]
     
     """Einkaufsliste"""
+    def complete_shopping_list(self, shopping_list):
+        group_id = shopping_list.get_group()
+
+        if group_id is not None:
+            group = self.get_group_by_id(group_id)
+            shopping_list.set_group_name(group.get_name())
+
+        return shopping_list
 
     def get_shopping_list_by_id(self, shopping_list_id):
         with ShoppingListMapper() as mapper:
-            return mapper.find_by_id(shopping_list_id)
+            return self.complete_shopping_list(mapper.find_by_id(shopping_list_id))
 
     def get_shopping_list_by_name(self, name):
         with ShoppingListMapper() as mapper:
-            return mapper.find_by_name(name)
+            return self.complete_shopping_list(mapper.find_by_name(name))
 
     def create_shopping_list(self, name, group_id):
         shopping_list = ShoppingList()
