@@ -53,7 +53,10 @@ class StandardArticle extends Component {
     
 
     deleteStandardArticle = (standard) => {
+        console.log("hfeohfe",this.state.groupId)
         var group = AppAPI.getAPI().getGroupById(this.state.groupId);
+        console.log("jfrirojfrpmrp", group)
+        console.log("standard:", standard)
         AppAPI.getAPI().deleteStandardArticleFromGroup(group,standard).then(() => {
             this.props.loadStandardArticles()
         })
