@@ -48,11 +48,7 @@ export default class AppAPI {
     #deleteArticleURL = (articleId) => `${this.#appServerBaseURL}/article/${articleId}` ;
     #getArticleByIdURL = (articleId) => `${this.#appServerBaseURL}/article/${articleId}`;
     #getArticlesByNameURL = (name) => `${this.#appServerBaseURL}/by-name/${name}`;
-<<<<<<< HEAD
     #getArticlesFrequencyByGroupIdURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/articles/most-frequent`;
-
-=======
->>>>>>> origin
 
     // Shoppinglist related
     #getShoppingListsByGroupIdURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/shoppinglists`;
