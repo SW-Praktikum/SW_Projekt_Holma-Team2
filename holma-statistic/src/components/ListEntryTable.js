@@ -25,55 +25,19 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns'; // choose your lib
 import {
-  DatePicker,
   KeyboardDatePicker,
-  DateTimePicker,
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
 
-
-// classes for styling need to be created
 
 class ListEntry extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            open: false,
-            openDialog: false,
             listEntry: this.props.listEntry,
         }
     }
-
-    setOpen(bool) {
-        this.setState({
-            open: bool
-        })
-    }
-
-    openDialog = () => {
-        this.setState({
-            openDialog: true})
-        }
-
-    handleClose = () => {
-        this.setState({
-            openDialog: false})
-        }
     
-
-    deleteEntry = (entry) => {
-        AppAPI.getAPI().deleteListEntry(entry).then(() => {
-            this.props.loadListEntries()
-        })
-    }
-/** 
-    getRetailerName () {
-        var retailerId = this.state.listEntry.getRetailerId()
-        AppAPI.getAPI().getRetailerById(retailerId).then((retailer) => {
-            this.setState({retailerName: retailer.getName()}) 
-        })
-    }
-*/
     render() {
         const { listEntry } = this.props;
         const { open } = this.state
@@ -114,11 +78,12 @@ class ListEntryTable extends Component {
             listEntryTableElements: [],
             openDialog: false,
             userId : this.props.user.getId(),
-            //userId: "1003",
             startDate: null,
             endDate: null,
             retailers: [],
             retailerName: null,
+            filterInput: "",
+            filteredElements: []
         }
     }
 
@@ -129,15 +94,32 @@ class ListEntryTable extends Component {
           }
     }
 
-    openDialog = () => {
-        this.setState({
-          openDialog: true})
-      }
-  
-    handleClose = () => {
-        this.setState({
-          openDialog: false})
-      }
+    filterInput = (inputValue) => {
+        var filteredElements =  this.state.listEntryTableElements.filter(function(item) {
+            return item.props.listEntry.articleName == inputValue;
+        });
+        
+        this.loadFilteredElements(filteredElements)
+    }
+
+    loadFilteredElements = (filteredElements) => {
+        console.log(filteredElements)
+        // Hier die gefilterten Objekte Rendern/Mappen, auch die von filterByTimePeriod
+    }
+
+    handleInputChange = (e) => {
+        this.setState({filterInput: e.target.value})
+        this.filterInput(e.target.value)
+    }
+
+    // wir bei Button Click aufgerufen
+    filterByTimePeriod = () => {
+        AppAPI.getAPI().getUpdatedListEntriesByTimePeriod(this.state.startDate, this.state.endDate).then((filteredElements) => {
+            this.loadFilteredElements(filteredElements)
+        })
+    }
+
+
   
     loadListEntries = () => {
         console.log("hier")
@@ -229,7 +211,19 @@ class ListEntryTable extends Component {
     render() {
         const {retailers} = this.state;
         return (
-            <div display='flex'>            
+            <div display='flex'>
+            <Button onClick={this.filterByTimePeriod}>Filter nach Zeit</Button>
+            <TextField
+              autoFocus
+              onChange={this.handleInputChange}
+              margin="dense"
+              id="outlined-basic"
+              variant="outlined"
+              label="Arikel Name"
+              type="ID"
+              fullWidth
+              value={this.state.filterInput}        
+            />            
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <Grid container direction="row" justify="space-between" alignItems="center" component={Paper} style={{marginTop: 10, marginBottom: 10}}>
                 <Grid item xs={12} sm={12} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10}}>
