@@ -143,7 +143,7 @@ class GroupList extends Component {
     }
 
     createNewList = () => {
-      var lst = new ShoppingListBO(this.state.shoppingListName, this.state.groupId);
+      var lst = new ShoppingListBO(this.state.shoppingListName, this.state.groupId, "");
       AppAPI.getAPI().createShoppingList(lst).then(() => {
         this.loadShoppingLists()
       })
@@ -154,7 +154,7 @@ class GroupList extends Component {
     }
 
     loadGroupName = () => {
-      AppAPI.getAPI().getGroupById(this.state.groupId).then((group) =>{
+      AppAPI.getAPI().getGroupById(this.state.groupId).then((group) => {
         this.setState({
           group: group,
           groupName: group.name,
@@ -164,6 +164,7 @@ class GroupList extends Component {
       }
 
     loadShoppingLists = () => {
+      console.log(this.props)
       AppAPI.getAPI().getShoppingListsByGroupId(this.props.match.params.groupId).then((lists) => {
         var listElements = lists.map((list) =>
         <Grid key={list.getId()} item xs={6} item lg={4}>

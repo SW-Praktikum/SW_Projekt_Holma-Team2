@@ -329,51 +329,51 @@ export default class AppAPI {
         })
     }
 
-    createShoppingList(shoppingLists) {
-        console.log("Creating ShoppingList:", shoppingLists)
-        return this.#fetchAdv(this.#createShoppingListURL(shoppingLists.getGroupId()), {
+    createShoppingList(shoppingList) {
+        console.log("Creating ShoppingList:", shoppingList)
+        return this.#fetchAdv(this.#createShoppingListURL(shoppingList.getGroupId()), {
         method: 'POST',
             headers: {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
-            body: JSON.stringify(shoppingLists)
+            body: JSON.stringify(shoppingList)
         }).then((responseJSON) => {
-            let responseShoppingLists = ShoppingListBO.fromJSON(responseJSON)[0];
+            let responseShoppingList = ShoppingListBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
-                resolve(responseShoppingLists)
+                resolve(responseShoppingList)
             })
         })
     }
 
-    updateShoppingList(shoppingLists) {
-        return this.#fetchAdv(this.#updateShoppingListURL(shoppingLists.getId()), {
+    updateShoppingList(shoppingList) {
+        return this.#fetchAdv(this.#updateShoppingListURL(shoppingList.getId()), {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
-            body: JSON.stringify(shoppingLists)
+            body: JSON.stringify(shoppingList)
         }).then((responseJSON) => {
-            let responseShoppingLists = ShoppingListBO.fromJSON(responseJSON)[0];
+            let responseShoppingList = ShoppingListBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
-                resolve(responseShoppingLists)
+                resolve(responseShoppingList)
             })
         })
     }
 
-    deleteShoppingList(shoppingLists) {
-        return this.#fetchAdv(this.#deleteShoppingListURL(shoppingLists.getId()), {
+    deleteShoppingList(shoppingList) {
+        return this.#fetchAdv(this.#deleteShoppingListURL(shoppingList.getId()), {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
-            body: JSON.stringify(shoppingLists)
+            body: JSON.stringify(shoppingList)
         }).then((responseJSON) => {
-            let responseShoppingLists = ShoppingListBO.fromJSON(responseJSON)[0];
+            let responseShoppingList = ShoppingListBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
-                resolve(responseShoppingLists)
+                resolve(responseShoppingList)
             })
         })
     }
