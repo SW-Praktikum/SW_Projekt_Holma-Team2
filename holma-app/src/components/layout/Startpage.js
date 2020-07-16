@@ -43,8 +43,6 @@ class ListEntry extends Component {
     render() {
         const { listEntry } = this.props;
         const { open } = this.state;
-        console.log("Scheiße:",this.state.userId)
-        console.log("KaKE:", this.state.listEntryTableElements)
         return (
             <div >
                 <colgroup>

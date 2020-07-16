@@ -654,13 +654,19 @@ export default class AppAPI {
         })
     };
 
-    deleteStandardArticleFromGroup(group, listentry) {
-        return this.#fetchAdv(this.#deleteStandardArticleFromGroupURL(group, listentry), {
+    deleteStandardArticleFromGroup(groupId, listentry) {
+        return this.#fetchAdv(this.#deleteStandardArticleFromGroupURL(groupId, listentry.getId()), {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
+            body: JSON.stringify(listentry)
+        }).then((responseJSON) => {
+            let responseListEntry = ListEntryBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseListEntry)
+            })
         })
     };
 }
