@@ -96,9 +96,9 @@ class OneGroupStat extends React.Component {
 render(){
   return(
     <div>
-      <Typography>{console.log(this.state.groupId)}</Typography>
-      <Typography>{console.log(this.state.group)}</Typography>
-      <Typography>{console.log(this.state.listElements)}</Typography>
+      <Typography>{this.state.groupId}</Typography>
+      <Typography>{this.state.group}</Typography>
+      <Typography>{this.state.listElements}</Typography>
     </div>
   );
 }
