@@ -71,7 +71,14 @@ class ListEntry extends Component {
 
     render() {
         const { classes, groupId, users, retailers } = this.props;
-        const { open, articles, listEntry } = this.state
+        const { open, articles, listEntry } = this.state;
+        var groupCreationDate = ""
+        var groupLastUpdated = ""
+
+        if (listEntry.getLastUpdated() !="") {
+            let lup = new Date(listEntry.getLastUpdated())
+            groupLastUpdated = lup.toDateString()
+          }
 
         return (
             <div >
@@ -119,7 +126,7 @@ class ListEntry extends Component {
                                 
                                 <TableCell className={classes.tableCell} colSpan={3} padding="none" width="30%" align="left">{listEntry.getPurchasingUserName()}</TableCell>
                                 <TableCell className={classes.tableCell} colSpan={2} padding="none" width="20%" align="left">{listEntry.getRetailerName()}</TableCell>
-                                <TableCell className={classes.tableCell} colSpan={4} padding="none" width="40%" align="left">{listEntry.getLastUpdated()}</TableCell>
+                                <TableCell className={classes.tableCell} colSpan={4} padding="none" width="40%" align="left">{groupLastUpdated}</TableCell>
                                 <TableCell className={classes.tableCell} colSpan={1} padding="none" width="10%" align='left'>
                                     <IconButton aria-label="expand row" size="small" >
                                         {listEntry.isStandardarticle() ?  <StarIcon /> : <StarBorderIcon />}
