@@ -307,9 +307,9 @@ class Administration():
                 shopping_list_id)
         return [self.complete_list_entry(le) for le in list_entries]
 
-    def get_list_entries_checked_by_shopping_list_id(self, shopping_list_id):
+    def get_checked_list_entries_by_shopping_list_id(self, shopping_list_id):
         with ListEntryMapper() as mapper:
-            list_entries = mapper.find_list_entries_checked_by_shopping_list_id(
+            list_entries = mapper.find_checked_list_entries_by_shopping_list_id(
                 shopping_list_id)
         return [self.complete_list_entry(le) for le in list_entries]
     
