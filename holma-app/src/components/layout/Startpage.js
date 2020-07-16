@@ -20,7 +20,8 @@ class ListEntry extends Component {
         super(props);
         this.state = {
             listEntry: this.props.listEntry,
-            checked: this.props.listEntry.getChecked()
+            userId : this.props.userId,
+            checked: this.props.listEntry.getChecked(),
         }
     }
 
@@ -37,9 +38,13 @@ class ListEntry extends Component {
       //AppAPI.getAPI().getRetailer
     }
 
+
+
     render() {
         const { listEntry } = this.props;
-        const { open } = this.state
+        const { open } = this.state;
+        console.log("Scheiße:",this.state.userId)
+        console.log("KaKE:", this.state.listEntryTableElements)
         return (
             <div >
                 <colgroup>
@@ -63,6 +68,7 @@ class ListEntry extends Component {
                     <TableCell padding="dense" align="left">{listEntry.getUnit()}</TableCell>
                     <TableCell padding="dense" align="left">{listEntry.getName()}</TableCell>
                     <TableCell padding="dense" align="left">{this.getGroupName()}</TableCell>
+                    <TableCell padding="dense" align="left">{listEntry.getShoppingListName()}</TableCell>
                     <TableCell padding="dense" align="right">{listEntry.getRetailerName()}</TableCell> 
                 </TableRow>
                 
@@ -78,6 +84,7 @@ class Startpage extends Component {
         this.state = {
             listEntryTableElements: [],
             userId : this.props.user.getId(),
+            userName: this.props.user.name,
         }
     }
 
@@ -86,12 +93,22 @@ class Startpage extends Component {
             this.loadListEntries();
           }
     }
+
+    getName(){
+        AppAPI.getAPI().getUserById(this.state.userId).then(usr => {
+            this.setState({
+                user: usr
+            })
+        })
+    }
+
     loadListEntries = () => {
         console.log("Current user id:", this.state.userId)
+
         // get listentries by user ID
         AppAPI.getAPI().getListEntriesByUserId(this.state.userId).then(listEntries => {
             console.log("Loaded list entries for user '" + this.state.userId + "':", listEntries)
-            var listEntryTableElements = listEntries.map((listEntry) => <ListEntry listEntry={listEntry} loadListEntries={this.loadListEntries} />)
+            var listEntryTableElements = listEntries.map((listEntry) => <ListEntry userId = {this.state.userId} listEntry={listEntry} loadListEntries={this.loadListEntries} />)
 
             this.setState({
                 listEntryTableElements: listEntryTableElements,
@@ -105,16 +122,20 @@ class Startpage extends Component {
             })
         );  
     }
-    
+
     render() {
         const {retailers} = this.state;
+        console.log("ListElements:", this.state.listEntryTableElements)
         return (
             <div display='flex'>            
               
               <Card style={{minWidth: '100%', marginBottom:15, marginTop:15, }}>
                 <CardActionArea >
                 <CardContent>
-                    <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>Deine persönliche Einkaufsliste</Typography>
+                <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>
+                    Hallo {this.state.userName},
+                </Typography>
+                    <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>Deine persönliche Einkaufsliste:</Typography>
                 </CardContent>
                 </CardActionArea>     
               </Card>
@@ -134,8 +155,9 @@ class Startpage extends Component {
                         <TableRow>
                             <TableCell align="left"></TableCell>
                             <TableCell align="right"><b style={{ color: '#ffffff'}}>Menge</b></TableCell>
+                            <TableCell align="right"><b style={{ color: '#ffffff'}}>Einheit</b></TableCell>
                             <TableCell align="left"><b style={{ color: '#ffffff'}}>Artikel</b></TableCell>
-                            <TableCell align="left"><b style={{ color: '#ffffff'}}>Gruppe</b></TableCell>
+                            <TableCell align="left"><b style={{ color: '#ffffff'}}>Shoppinglist</b></TableCell>
                             <TableCell align="left"><b style={{ color: '#ffffff'}}>Händler</b></TableCell>
                             
                         </TableRow>
