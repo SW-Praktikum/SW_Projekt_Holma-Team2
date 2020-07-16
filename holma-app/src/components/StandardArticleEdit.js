@@ -22,6 +22,8 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import ArticleEditDialog from './dialogs/ArticleEditDialog';
 import { colors } from '@material-ui/core';
+import ListEntry from './ListEntry';
+
 
 
 class StandardArticle extends Component {
@@ -102,13 +104,25 @@ class StandardArticleEdit extends Component {
             StandardElements: [],
             openDialog: false,
             groupId: this.props.match.params.groupId,
+            shoppingListId: this.props.match.params.shoppingListId,
+            listEntryTableElements: [],
+            retailers: [],
+            users: [],
+            articles: [],
+            articlesCount: 0,
+            openDialog: false,
+            liseEntry: ""
         }
     }
 
     componentDidMount(){
-        if(this.props.match.params.groupId){
+        if(this.state.groupId) {
+            this.loadRetailers();
             this.loadStandardArticles();
-          }
+            console.log("Standardarticlessssss:",this.state.StandardElements);
+            this.loadUsers();
+            this.loadListEntries()
+        }
     }
 
     openDialog = () => {
@@ -123,15 +137,61 @@ class StandardArticleEdit extends Component {
   
 
     loadStandardArticles = () => {
-        AppAPI.getAPI().getStandardArticlesByGroupId(this.props.match.params.groupId).then(articles => {
-            console.log("StandardArticles:", articles)
-            var StandardElements = articles.map((standard) => <StandardArticle groupId = {this.state.groupId} standardArticle={standard} loadStandardArticles={this.loadStandardArticles} />)
-            //hier noch ListEntrys ergänzen
+        AppAPI.getAPI().getStandardArticlesByGroupId(this.state.groupId).then((articles) => {
+        var StandardElements = articles.map((standard) => 
+        <StandardArticle groupId={this.state.groupId} standardArticle={standard} loadStandardArticles={this.loadStandardArticles} />)
             this.setState({
                 StandardElements: StandardElements,
-                loadingInProgress: true, // loading indicator 
-                loadingError: null
+                loadingInProgress: true,
+                loadingError: null,
+                });
+                return new Promise(function (resolve) { resolve(1) })
+                }).catch(e =>
+                    this.setState({ // Reset state with error from catch 
+                    loadingInProgress: false,
+                    loadingError: e
                 })
+        );  
+    }
+
+    loadUsers = () => {
+        AppAPI.getAPI().getUsersByGroupId(this.state.groupId).then((users) => {
+            console.log("Loaded users for group '" + this.state.groupId + "':", users)
+            this.setState({
+                users: users,
+                loadingInProgress: true, // loading indicator 
+                loadingError: null,
+            });
+        }).catch(e =>
+            this.setState({ // Reset state with error from catch 
+              loadingInProgress: false,
+              loadingError: e
+            })
+        );  
+    } 
+
+    loadListEntries = () => {
+        console.log(this.state.shoppingListId)
+        AppAPI.getAPI().getListEntriesByShoppingListId(this.state.shoppingListId).then(listEntries => {
+            console.log("Loaded list entries for shopping list '" + this.state.shoppingListId + "':", listEntries)
+            var listEntryTableElements = listEntries.map((listEntry) => 
+                <ListEntry 
+                    listEntry={listEntry} 
+                    loadListEntries={this.loadListEntries} 
+                    retailers={this.state.retailers}
+                    users={this.state.users}
+                    articles={this.state.articles}
+                    loadArticles={this.loadArticles}
+                    groupId={this.state.groupId}
+                />
+            )
+
+            this.setState({
+                listEntryTableElements: listEntryTableElements,
+                loadingInProgress: true, // loading indicator 
+                loadingError: null,
+            })
+            return new Promise(function (resolve) { resolve(1) })
             }).catch(e =>
                 this.setState({ // Reset state with error from catch 
                 loadingInProgress: false,
@@ -139,6 +199,23 @@ class StandardArticleEdit extends Component {
             })
         );  
     }
+
+    loadRetailers = () => {
+        return AppAPI.getAPI().getRetailers().then((retailers) => {
+            console.log("Loaded all retailers:", retailers)
+            this.setState({
+                retailers: retailers,
+                loadingInProgress: true, // loading indicator 
+                loadingError: null,
+            });
+            return new Promise(function (resolve) {resolve(retailers)})
+        }).catch(e =>
+            this.setState({ // Reset state with error from catch 
+                loadingInProgress: false,
+                loadingError: e
+            })
+        );  
+    } 
     
     render() {
         return (
@@ -147,11 +224,12 @@ class StandardArticleEdit extends Component {
                 <Table aria-label="collapsible table">
                     <TableHead style={{backgroundColor: colors.teal[600]}}>
                         <TableRow>
-                            <TableCell width="10%"/>
-                            <TableCell width="30%" align="left"><b style={{ color: '#ffffff'}}>Id</b></TableCell>
-                            <TableCell width="30%" align="left "><b style={{ color: '#ffffff'}}>Name</b></TableCell>
-                            <TableCell width="10%" align="center"><b style={{ color: '#ffffff'}}>Standardartikel</b></TableCell>
-                            <TableCell width="20%" align="center"><b style={{ color: '#ffffff'}}>Edit</b></TableCell>
+                            <TableCell width="20%" align="left "><b style={{ color: '#ffffff'}}>Name</b></TableCell>
+                            <TableCell width="15%" align="center"><b style={{ color: '#ffffff'}}>Menge</b></TableCell>
+                            <TableCell width="15%" align="center"><b style={{ color: '#ffffff'}}>Einheit</b></TableCell>
+                            <TableCell width="20%" align="center"><b style={{ color: '#ffffff'}}>Retailer</b></TableCell>
+                            <TableCell width="15%" align="center"><b style={{ color: '#ffffff'}}>Artikel-ID</b></TableCell>
+                            <TableCell width="15%" align="center"><b style={{ color: '#ffffff'}}>Edit</b></TableCell>
                         </TableRow>
                     </TableHead>
                 </Table>
