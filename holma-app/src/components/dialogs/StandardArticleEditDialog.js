@@ -18,41 +18,37 @@ import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete
 import AppAPI from '../../api/AppAPI'
 import ArticleBO from '../../api/ArticleBO';
 import ListEntryBO from '../../api/ListEntryBO';
-import StandardArticle from '../StandardArticles';
+import StandardArticles from '../StandardArticles';
 import ArticleAddDialog from './ArticleAddDialog'
 
 
-class ListEntryEditDialog extends Component {
+class StandardArticleEditDialog extends Component {
     constructor (props) {
         super(props)
         this.state = {
-            listEntry: this.props.listEntry,
-            localListEntry: Object.assign( Object.create( Object.getPrototypeOf(this.props.listEntry)), this.props.listEntry),
-            amount: this.props.listEntry.getAmount(),
+            standardArticle: this.props.standardArticle,
+            localStandardArticle: Object.assign( Object.create( Object.getPrototypeOf(this.props.standardArticle)), this.props.standardArticle),
+            amount: this.props.standardArticle.getAmount(),
             unit: {
-                name: this.props.listEntry.getUnit(),
-                id: this.props.listEntry.getUnit()
+                name: this.props.standardArticle.getUnit(),
+                id: this.props.standardArticle.getUnit()
             },
             purchasingUser: {
-                "name": this.props.listEntry.getPurchasingUserName(),
-                "id": this.props.listEntry.getPurchasingUserId()
+                "name": this.props.standardArticle.getPurchasingUserName(),
+                "id": this.props.standardArticle.getPurchasingUserId()
             },
             article: {
-                "name": this.props.listEntry.getArticleName(),
-                "id": this.props.listEntry.getArticleId()
+                "name": this.props.standardArticle.getArticleName(),
+                "id": this.props.standardArticle.getArticleId()
             },
             retailer: {
-                "name": this.props.listEntry.getRetailerName(),
-                "id": this.props.listEntry.getRetailerId()
+                "name": this.props.standardArticle.getRetailerName(),
+                "id": this.props.standardArticle.getRetailerId()
             },
         }
     }
 
-    updateLocalListEntry(updatedListEntry) {
-        // this.setState({
-        //     localListEntry: updatedListEntry
-        // })
-    }
+
 
     setAmount = async(amount) => {
         const re = /^[0-9\b]+$/;
@@ -60,20 +56,20 @@ class ListEntryEditDialog extends Component {
             await this.setState({
                 amount: amount.target.valueAsNumber
             })
-            let localListEntry = this.state.localListEntry
-            localListEntry.setAmount(this.state.amount)
-            this.updateLocalListEntry(localListEntry)
+            let localStandardArticle = this.state.localStandardArticle
+            localStandardArticle.setAmount(this.state.amount)
         }
     }
+    
 
     setUnit = (unit) => {
         if (unit !== null) {
             this.setState({
                 unit: unit
             })
-            let localListEntry = this.state.localListEntry
-            localListEntry.setUnit(unit.id)
-            this.updateLocalListEntry(localListEntry)
+            let localStandardArticle = this.state.localStandardArticle
+            localStandardArticle.setUnit(unit)
+
         }
     }
 
@@ -85,10 +81,10 @@ class ListEntryEditDialog extends Component {
                     "id": purchasingUser.id
                 }
             })
-            let localListEntry = this.state.localListEntry
-            localListEntry.setPurchasingUserId(purchasingUser.id)
-            localListEntry.setPurchasingUserName(purchasingUser.name)
-            this.updateLocalListEntry(localListEntry)
+            let localStandardArticle = this.state.localStandardArticle
+            localStandardArticle.setPurchasingUserId(purchasingUser.id)
+            localStandardArticle.setPurchasingUserName(purchasingUser.name)
+
         }
     }
 
@@ -100,11 +96,43 @@ class ListEntryEditDialog extends Component {
                     "id": article.id
                 }
             })
-            let localListEntry = this.state.localListEntry
-            localListEntry.setArticleId(article.id)
-            localListEntry.setArticleName(article.name)
-            this.updateLocalListEntry(localListEntry)
+            let localStandardArticle = this.state.localStandardArticle
+            localStandardArticle.setArticleId(article.id)
+            localStandardArticle.setArticleName(article.name)
+
         }
+    }
+
+
+    setRetailer = (retailer) => {
+        if (retailer !== null) {
+            this.setState({
+                retailer: {
+                    "name": retailer.name,
+                    "id": retailer.id
+                }
+            })
+            
+            let localStandardArticle = this.state.localStandardArticle
+            localStandardArticle.setRetailerId(retailer.id)
+            localStandardArticle.setRetailerName(retailer.name)
+
+        }
+    }
+
+    
+    objectExistsByName = (list, name) => {
+        var BreakException = {}
+        try {
+            list.forEach(element => {
+                if (element.name == name){
+                    throw BreakException
+                }
+            })
+            return false
+        } catch (e) {
+            return true
+        };
     }
 
     createNewArticle = (articleName) => {
@@ -119,50 +147,21 @@ class ListEntryEditDialog extends Component {
             }
         )
     }
-
-    setRetailer = (retailer) => {
-        if (retailer !== null) {
-            this.setState({
-                retailer: {
-                    "name": retailer.name,
-                    "id": retailer.id
-                }
-            })
-            let localListEntry = this.state.localListEntry
-            localListEntry.setRetailerId(retailer.id)
-            localListEntry.setRetailerName(retailer.name)
-            this.updateLocalListEntry(localListEntry)
-        }
-    }
-
-    objectExistsByName = (list, name) => {
-        var BreakException = {}
-        try {
-            list.forEach(element => {
-                if (element.name == name){
-                    throw BreakException
-                }
-            })
-            return false
-        } catch (e) {
-            return true
-        };
-    }
     
     saveChanges = () => {
-        let { localListEntry } = this.state
-        let { listEntry } = this.state
-        localListEntry.setName(localListEntry.articleName)
-        AppAPI.getAPI().updateListEntry(localListEntry)
+        let { localStandardArticle } = this.state
+        let { standardArticle } = this.state
+        localStandardArticle.setName(localStandardArticle.articleName)
+        AppAPI.getAPI().updateListEntry(localStandardArticle)
         
-        listEntry.setAmount(localListEntry.getAmount())
-        listEntry.setUnit(localListEntry.getUnit())
-        listEntry.setArticleId(localListEntry.getArticleId())
-        listEntry.setArticleName(localListEntry.getArticleName())
-        listEntry.setPurchasingUserId(localListEntry.getPurchasingUserId())
-        listEntry.setPurchasingUserName(localListEntry.getPurchasingUserName())
-        listEntry.setRetailerId(localListEntry.getRetailerId())
-        listEntry.setRetailerName(localListEntry.getRetailerName())
+        standardArticle.setAmount(localStandardArticle.getAmount())
+        standardArticle.setUnit(localStandardArticle.getUnit())
+        standardArticle.setArticleId(localStandardArticle.getArticleId())
+        standardArticle.setArticleName(localStandardArticle.getArticleName())
+        standardArticle.setPurchasingUserId(localStandardArticle.getPurchasingUserId())
+        standardArticle.setPurchasingUserName(localStandardArticle.getPurchasingUserName())
+        standardArticle.setRetailerId(localStandardArticle.getRetailerId())
+        standardArticle.setRetailerName(localStandardArticle.getRetailerName())
 
         this.props.closeDialog()
 
@@ -170,7 +169,7 @@ class ListEntryEditDialog extends Component {
 
     undoChanges = () => {
         this.setState({
-            localListEntry: Object.assign( Object.create( Object.getPrototypeOf(this.props.listEntry)), this.props.listEntry)
+            localStandardArticle: Object.assign( Object.create( Object.getPrototypeOf(this.props.standardArticle)), this.props.standardArticle)
         })
         this.props.closeDialog()
     }
@@ -206,11 +205,12 @@ class ListEntryEditDialog extends Component {
         const filter = createFilterOptions();
         const { classes, open } = this.props;
         const { unit, amount, article, purchasingUser, retailer } = this.state;
-        
         const retailers = this.props.retailers.map(retailer => ({"name": retailer.getName(), "id": retailer.getId()}))
         const articles = this.props.articles.map(article => ({"name": article.getName(), "id": article.getId()}))
         const users = this.props.users.map(user => ({"name": user.getName(), "id": user.getId()}))
-
+        console.log(articles)
+        console.log(this.props.articles)
+        
         return (
 
           <div>
@@ -304,7 +304,6 @@ class ListEntryEditDialog extends Component {
                     getOptionLabel={(option) => option.name}
                     renderInput={(params) => <TextField {...params} label="Retailer" variant="standard" placeholder="Retailer" />}
                 />
-
               
               </DialogContent>
               <DialogActions>
@@ -343,4 +342,4 @@ const styles = theme => ({
   }
 });
 
-export default withStyles(styles)(ListEntryEditDialog)
+export default withStyles(styles)(StandardArticleEditDialog)

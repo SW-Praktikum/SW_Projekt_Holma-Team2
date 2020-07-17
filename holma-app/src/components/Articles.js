@@ -23,7 +23,7 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import ArticleEditDialog from './dialogs/ArticleEditDialog';
 import { colors } from '@material-ui/core';
 
-class Article extends Component {
+class Articles extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -124,7 +124,7 @@ class ArticleEdit extends Component {
     loadArticles = () => { //Hier muss eine neue Methode - getArticlesByGroupId hinzugefügt werden
         AppAPI.getAPI().getArticlesByGroupId(this.props.match.params.groupId).then(articles => {
             console.log("Loaded articles for group '" + this.props.match.params.groupId + "':", articles)
-            var ArticleElements = articles.map((article) => <Article article={article} loadArticles={this.loadArticles} />)
+            var ArticleElements = articles.map((article) => <Articles article={article} loadArticles={this.loadArticles} />)
             //hier noch ListEntrys ergänzen
             this.setState({
                 ArticleElements: ArticleElements,
