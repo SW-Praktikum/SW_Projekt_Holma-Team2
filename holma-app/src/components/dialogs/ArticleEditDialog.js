@@ -29,11 +29,12 @@ class ArticleEditDialog extends Component {
 
     handleChangeArticle = (e) => {
         this.setState({articleName: e.target.value})
-        this.state.article.setName(this.state.articleName);
+        
     }
 
 
     saveChanges = () => {
+      this.state.article.setName(this.state.articleName);
         AppAPI.getAPI().updateArticle(this.state.article);
     }
 

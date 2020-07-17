@@ -27,7 +27,7 @@ import ListEntryAddDialog from './dialogs/ListEntryAddDialog';
 
 
 
-class StandardArticle extends Component {
+class StandardArticles extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -73,9 +73,8 @@ class StandardArticle extends Component {
     }
 
 render(){
-    const {standardArticle} = this.props;
-    const { groupId, users, retailers} = this.props;
-    const { open, articles } = this.state;
+    const {standardArticle, articles, groupId, users, retailers} = this.props;
+    const { open} = this.state;
 
 return (
     <div >
@@ -158,9 +157,11 @@ class StandardArticleEdit extends Component {
 
     componentDidMount(){
         if(this.state.groupId) {
-            this.loadRetailers();
-            this.loadStandardArticles();
-            this.loadUsers();
+            this.loadRetailers().then(() => {this.loadArticles()
+                .then(() => { this.loadUsers()
+                    .then(() => {this.loadStandardArticles()})
+                })
+            })
         }
     }
 
@@ -173,18 +174,36 @@ class StandardArticleEdit extends Component {
         this.setState({
           openDialog: false})
       }
-  
+      
+      
+      loadArticles = () => {
+        return AppAPI.getAPI().getArticlesByGroupId(this.state.groupId).then((articles) => {
+            console.log("Loaded articles for group '" + this.state.groupId + "':", articles)
+            this.setState({
+                articles: articles,
+                loadingInProgress: true, // loading indicator 
+                loadingError: null,
+            });
+            return new Promise(function (resolve) {resolve(articles)})
+        }).catch(e =>
+            this.setState({ // Reset state with error from catch 
+                loadingInProgress: false,
+                loadingError: e
+            })
+        );  
+    } 
 
     loadStandardArticles = () => {
         AppAPI.getAPI().getStandardArticlesByGroupId(this.state.groupId).then((articles) => {
         var StandardElements = articles.map((standard) => 
-        <StandardArticle 
+        <StandardArticles 
         groupId={this.state.groupId} 
         standardArticle={standard} 
         retailers={this.state.retailers}
         articles = {this.state.articles}
         users = {this.state.users} 
         loadStandardArticles={this.loadStandardArticles} 
+        loadArticles={this.loadArticles}
         />)
             this.setState({
                 StandardElements: StandardElements,
@@ -201,13 +220,14 @@ class StandardArticleEdit extends Component {
     }
 
     loadUsers = () => {
-        AppAPI.getAPI().getUsersByGroupId(this.state.groupId).then((users) => {
+        return AppAPI.getAPI().getUsersByGroupId(this.state.groupId).then((users) => {
             console.log("Loaded users for group '" + this.state.groupId + "':", users)
             this.setState({
                 users: users,
                 loadingInProgress: true, // loading indicator 
                 loadingError: null,
             });
+            return new Promise(function (resolve) {resolve(users)})
         }).catch(e =>
             this.setState({ // Reset state with error from catch 
               loadingInProgress: false,

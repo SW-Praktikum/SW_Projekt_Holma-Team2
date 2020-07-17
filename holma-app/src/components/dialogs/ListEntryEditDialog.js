@@ -18,7 +18,7 @@ import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete
 import AppAPI from '../../api/AppAPI'
 import ArticleBO from '../../api/ArticleBO';
 import ListEntryBO from '../../api/ListEntryBO';
-import StandardArticleEdit from '../../components/StandardArticleEdit';
+import StandardArticle from '../StandardArticles';
 import ArticleAddDialog from './ArticleAddDialog'
 
 

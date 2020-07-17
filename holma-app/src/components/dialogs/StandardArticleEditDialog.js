@@ -18,7 +18,7 @@ import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete
 import AppAPI from '../../api/AppAPI'
 import ArticleBO from '../../api/ArticleBO';
 import ListEntryBO from '../../api/ListEntryBO';
-import StandardArticleEdit from '../../components/StandardArticleEdit';
+import StandardArticles from '../StandardArticles';
 import ArticleAddDialog from './ArticleAddDialog'
 
 
@@ -48,22 +48,18 @@ class StandardArticleEditDialog extends Component {
         }
     }
 
-    updateLocalStandardArticle(updatedStandardArticle) {
-        this.setState({
-             localStandardArticle: updatedStandardArticle
-        })
-    }
 
-    setAmount = (amount) => {
-       // const re = /^[0-9\b]+$/;
-        //if (amount.target.value === '' || re.test(amount.target.value)) {
-            this.setState({
-                amount: amount
+
+    setAmount = async(amount) => {
+        const re = /^[0-9\b]+$/;
+        if (amount.target.value === '' || re.test(amount.target.value)) {
+            await this.setState({
+                amount: amount.target.valueAsNumber
             })
             let localStandardArticle = this.state.localStandardArticle
             localStandardArticle.setAmount(this.state.amount)
-            this.updateLocalStandardArticle(localStandardArticle)
         }
+    }
     
 
     setUnit = (unit) => {
@@ -73,7 +69,7 @@ class StandardArticleEditDialog extends Component {
             })
             let localStandardArticle = this.state.localStandardArticle
             localStandardArticle.setUnit(unit)
-            this.updateLocalStandardArticle(localStandardArticle)
+
         }
     }
 
@@ -88,7 +84,7 @@ class StandardArticleEditDialog extends Component {
             let localStandardArticle = this.state.localStandardArticle
             localStandardArticle.setPurchasingUserId(purchasingUser.id)
             localStandardArticle.setPurchasingUserName(purchasingUser.name)
-            this.updateLocalStandardArticle(localStandardArticle)
+
         }
     }
 
@@ -103,7 +99,7 @@ class StandardArticleEditDialog extends Component {
             let localStandardArticle = this.state.localStandardArticle
             localStandardArticle.setArticleId(article.id)
             localStandardArticle.setArticleName(article.name)
-            this.updateLocalStandardArticle(localStandardArticle)
+
         }
     }
 
@@ -120,16 +116,43 @@ class StandardArticleEditDialog extends Component {
             let localStandardArticle = this.state.localStandardArticle
             localStandardArticle.setRetailerId(retailer.id)
             localStandardArticle.setRetailerName(retailer.name)
-            this.updateLocalStandardArticle(localStandardArticle)
+
         }
     }
 
+    
+    objectExistsByName = (list, name) => {
+        var BreakException = {}
+        try {
+            list.forEach(element => {
+                if (element.name == name){
+                    throw BreakException
+                }
+            })
+            return false
+        } catch (e) {
+            return true
+        };
+    }
+
+    createNewArticle = (articleName) => {
+        let newArticle = new ArticleBO(articleName, this.props.groupId)
+        AppAPI.getAPI().createArticle(newArticle).then((article) => {
+                let art = {
+                    "name": article.getName(),
+                    "id": article.getId()
+                }                
+                this.setArticle(art)
+                this.props.loadArticles()
+            }
+        )
+    }
     
     saveChanges = () => {
         let { localStandardArticle } = this.state
         let { standardArticle } = this.state
         localStandardArticle.setName(localStandardArticle.articleName)
-        AppAPI.getAPI().updatedStandardArticle(localStandardArticle)
+        AppAPI.getAPI().updateListEntry(localStandardArticle)
         
         standardArticle.setAmount(localStandardArticle.getAmount())
         standardArticle.setUnit(localStandardArticle.getUnit())
@@ -182,10 +205,12 @@ class StandardArticleEditDialog extends Component {
         const filter = createFilterOptions();
         const { classes, open } = this.props;
         const { unit, amount, article, purchasingUser, retailer } = this.state;
-        const {retailers} = this.props.retailers.map(retailer => ({"name": retailer.getName(), "id": retailer.getId()}))
+        const retailers = this.props.retailers.map(retailer => ({"name": retailer.getName(), "id": retailer.getId()}))
         const articles = this.props.articles.map(article => ({"name": article.getName(), "id": article.getId()}))
         const users = this.props.users.map(user => ({"name": user.getName(), "id": user.getId()}))
-
+        console.log(articles)
+        console.log(this.props.articles)
+        
         return (
 
           <div>
@@ -200,30 +225,26 @@ class StandardArticleEditDialog extends Component {
                 <TextField
                     type="number"
                     value={amount}
-                    onChange={this.setAmount(amount)}
+                    onChange={this.setAmount}
                     margin="dense"
                     id="combo-amount"
                     variant="standard"
                     label="Menge"
                 /> 
-                
+
                 {/* Einheit */}
-                <TextField
-                    type="string"
-                    value={unit}
-                    onChange={this.setUnit(unit)}
+<               Autocomplete
+                    options={units} 
+                    onChange={(event, unit) => {this.setUnit(unit);}}
                     defaultValue={unit}
-                    margin="dense"
-                    id="combo-amount"
-                    variant="standard"
-                    label="Einheit"
-                /> 
+                    getOptionLabel={(option) => option.name}
+                    renderInput={(params) => <TextField {...params} label="Einheit" variant="standard" placeholder="Einheit" />}
+                />
 
                 {/* Artikel */}
-                <TextField
-                    type="string"
-                    value={article}
-                    onChange={(articleName) => {
+                <Autocomplete
+                    defaultValue={article}
+                    onChange={(event, articleName) => {
                         if (typeof articleName === 'string') {
                             this.createNewArticle(articleName)
                         } else if (articleName && articleName.inputValue) {
@@ -233,36 +254,56 @@ class StandardArticleEditDialog extends Component {
                             this.setArticle(articleName);
                         }
                     }}
-                    defaultValue={article}
-                    margin="dense"
-                    id="combo-amount"
-                    variant="standard"
-                    label="Artikel"
-                /> 
+                    filterOptions={(options, params) => {
+                        const filtered = filter(options, params);
+                        // Suggest the creation of a new value
+                        if (params.inputValue !== '' && !this.objectExistsByName(articles, params.inputValue)) {
+                          filtered.push({
+                            inputValue: params.inputValue,
+                            name: `Erstelle "${params.inputValue}"`,
+                          });
+                        }
+                
+                        return filtered;
+                    }}
+                    selectOnFocus
+                    clearOnBlur
+                    handleHomeEndKeys
+                    options={articles} 
+                    getOptionLabel={(option) => {
+                        // Value selected with enter, right from the input
+                        if (typeof option === 'string') {
+                          return option;
+                        }
+                        // Add "xxx" option created dynamically
+                        if (option.inputValue) {
+                          return option.inputValue;
+                        }
+                        // Regular option
+                        return option.name;
+                      }}                    
+                    renderOption={(option) => option.name}
+                    freeSolo
+                    renderInput={(params) => <TextField {...params} label="Artikel" variant="standard" placeholder="Artikel" />}
+                />
 
                 {/* Einkäufer */}
-                <TextField
-                    type="string"
-                    value={purchasingUser}
-                    onChange={(purchasingUser) => {this.setPurchasingUser(purchasingUser);}}
+                <Autocomplete
+                    options={users} 
+                    onChange={(event, purchasingUser) => {this.setPurchasingUser(purchasingUser);}}
                     defaultValue={purchasingUser}
-                    margin="dense"
-                    id="combo-amount"
-                    variant="standard"
-                    label="Einkäufer"
-                /> 
+                    getOptionLabel={(option) => option.name}
+                    renderInput={(params) => <TextField {...params} label="Einkäufer" variant="standard" placeholder="Einkäufer" />}
+                />
 
                 {/* Retailer */}
-                <TextField
-                    type="string"
-                    value={retailer}
-                    onChange={(retailer) => {this.setRetailer(retailer);}}
+                <Autocomplete
+                    options={retailers} 
+                    onChange={(event, retailer) => {this.setRetailer(retailer);}}
                     defaultValue={retailer}
-                    margin="dense"
-                    id="combo-amount"
-                    variant="standard"
-                    label="Händler"
-                /> */
+                    getOptionLabel={(option) => option.name}
+                    renderInput={(params) => <TextField {...params} label="Retailer" variant="standard" placeholder="Retailer" />}
+                />
               
               </DialogContent>
               <DialogActions>
