@@ -12,7 +12,7 @@ class ArticleMapper(Mapper):
 
     def find_all(self):
         """Auslesen aller vorhandenen Artikel
-        :return
+        :return Eine Sammlung aller Artikel-Objekten.
         """
         cursor = self._connection.cursor()
         command = "SELECT * FROM holma.article"
@@ -27,8 +27,9 @@ class ArticleMapper(Mapper):
 
     def find_by_id(self, article_id):
         """Eindeutiges Auslesen eines Artikels durch ID
-        :param
-        :return
+        :param article_id:
+        :return Artikel-Objekt, das der übergebenen ID entspricht oder None
+                wenn DB-Tupel nicht vorhanden ist.
         """
         cursor = self._connection.cursor()
         command = "SELECT * FROM holma.article " \
@@ -46,8 +47,8 @@ class ArticleMapper(Mapper):
 
     def find_by_name(self, name):
         """Auslesen von Artikeln durch Name
-        :param
-        :return
+        :param name:
+        :return Eine Sammlung mit Artikel-Objekten.
         """
         cursor = self._connection.cursor()
         command = "SELECT * FROM holma.article WHERE name LIKE '{}' " \
@@ -64,8 +65,8 @@ class ArticleMapper(Mapper):
 
     def find_by_group(self, group_id):
         """Auslesen von Artikeln durch Fremdschlüssel (group_id) geg. Gruppe
-        :param
-        :return
+        :param group_id:
+        :return: Eine Sammlung mit Artikel-Objekten.
         """
         cursor = self._connection.cursor()
         command = "SELECT * FROM holma.article " \
@@ -81,6 +82,11 @@ class ArticleMapper(Mapper):
         return result
 
     def find_most_frequent_articles_by_group(self, group):
+        """Auslesen der Artikel-Häufigkeit innerhalb einer Gruppe
+        :param group:
+        :return: Eine Sammlung mit Artikel-Objekten und die dazugehörige
+                 Häufigkeit
+        """
         articles = self.find_by_group(group.get_id())
         article_ids = ", ".join([str(article.get_id()) for article in articles])
         cursor = self._connection.cursor()
@@ -89,7 +95,7 @@ class ArticleMapper(Mapper):
                   "WHERE article in ({}) " \
                   "GROUP BY article " \
                   "ORDER BY COUNT(article) DESC".format(article_ids)
-        print(command)
+
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -114,8 +120,8 @@ class ArticleMapper(Mapper):
 
         lastrowid returns the value generated for an AUTO_INCREMENT
         column by the previous INSERT
-        :param
-        :return
+        :param article:
+        :return das bereits übergebene Article-Objekt, jedoch mit korrekter ID
         """
         cursor = self._connection.cursor()
         command = "INSERT INTO holma.article (article_id, creation_date, " \
@@ -137,8 +143,8 @@ class ArticleMapper(Mapper):
 
     def update(self, article):
         """Wiederholtes Schreiben / Aktualisieren eines Artikel-Objekts
-        :param
-        :return
+        :param article:
+        :return aktualisiertes Artikel-Objekt
         """
         cursor = self._connection.cursor()
         command = "UPDATE holma.article SET name=%s, group_id=%s, " \
@@ -155,9 +161,9 @@ class ArticleMapper(Mapper):
         return article
 
     def delete(self, article_id):
-        """Löschen der Daten eines Artikel-Objekts aus der Datenbank
-        :param
-        :return
+        """Löschen der Daten eines Artikel-Objekts aus der Datenbank anhand der
+        article_id
+        :param article_id:
         """
         cursor = self._connection.cursor()
 
@@ -170,9 +176,8 @@ class ArticleMapper(Mapper):
 
     def delete_by_group(self, group):
         """Löschen der Daten eines Artikel-Objekts aus der Datenbank anhand der
-        group_id
-        :param
-        :return
+        group
+        :param group:
         """
         cursor = self._connection.cursor()
 
