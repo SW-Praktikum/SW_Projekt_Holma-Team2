@@ -69,6 +69,8 @@ class Startpage extends Component {
             listEntryTableElements: [],
             userId : this.props.user.getId(),
             userName: this.props.user.name,
+            displayTable: "none",
+            displayEmptyTable: ""
         }
     }
 
@@ -91,6 +93,18 @@ class Startpage extends Component {
 
         // get listentries by user ID
         AppAPI.getAPI().getListEntriesByUserId(this.state.userId).then(listEntries => {
+            if (listEntries.length !== 0) {
+                this.setState({
+                    displayTable: "",
+                    displayEmptyTable: "none"
+                })
+            }
+            else {
+                this.setState({
+                    displayTable: "none",
+                    displayEmptyTable: ""
+                })
+            }
             console.log("Loaded list entries for user '" + this.state.userId + "':", listEntries)
             var listEntryTableElements = listEntries.map((listEntry) => <ListEntry userId = {this.state.userId} listEntry={listEntry} loadListEntries={this.loadListEntries} />)
 
@@ -112,7 +126,7 @@ class Startpage extends Component {
         console.log("ListElements:", this.state.listEntryTableElements)
         return (
             <React.Fragment>             
-                <Card style={{minWidth: '100%', marginBottom:15, marginTop:15, }}>
+                <Card style={{display: this.state.displayTable, minWidth: '100%', marginBottom:15, marginTop:15, }}>
                     <CardActionArea >
                     <CardContent>
                     <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>
@@ -122,8 +136,18 @@ class Startpage extends Component {
                     </CardContent>
                     </CardActionArea>     
                 </Card>
+                <Card style={{display: this.state.displayEmptyTable, minWidth: '100%', marginBottom:15, marginTop:15, }}>
+                    <CardActionArea >
+                    <CardContent>
+                    <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>
+                        Hallo {this.state.userName},
+                    </Typography>
+                        <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>Du hast noch keine Listeneinträge die dir zugeordnet sind.</Typography>
+                    </CardContent>
+                    </CardActionArea>     
+                </Card>
 
-                <TableContainer component={Paper}>
+                <TableContainer component={Paper} style={{display: this.state.displayTable}}>
                     <Table aria-label="collapsible table">                   
                         <TableHead style={{backgroundColor: colors.teal[600]}}>
                             <TableRow>

@@ -22,6 +22,7 @@ import MemberDetails from './components/GroupEdit';
 import Articles from './components/Articles';
 import StandardArticles from './components/StandardArticles';
 import ListEntryTable from './components/ListEntryTable';
+import ShoppingListEdit from './components/ShoppingListEdit';
 import Startpage from './components/layout/Startpage';
 
 
@@ -162,6 +163,8 @@ class App extends React.Component {
                       <User user={user}/>
                     </Route>  
                     <Route path='/group/:groupId/shoppinglist/:shoppingListId' component={ListEntryTable}>
+                    </Route>
+                    <Route path='/group/:groupId/shoppinglist/:shoppingListId/edit' component={ShoppingListEdit}>
                     </Route>
                   </>
                   :

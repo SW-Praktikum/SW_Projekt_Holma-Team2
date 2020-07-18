@@ -23,10 +23,28 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import ListEntryEditDialog from './dialogs/ListEntryEditDialog';
 import ListEntryAddDialog from './dialogs/ListEntryAddDialog';
 import ListEntry from './ListEntry';
-import { colors } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
+import ListWithBoxes from './ListWithBoxes';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import { Link } from 'react-router-dom';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardMedia from '@material-ui/core/CardMedia';
+import { colors, Button } from '@material-ui/core';
 
 // classes for styling need to be created
 
+class ShoppingListLink extends Component{
+    render(){
+        return(
+            <Button align="center" variant="contained" fullWidth  color="primary" >
+                Shoppinglistdetails
+            </Button>
+        )
+    }
+  }
 
 class ListEntryTable extends Component {
     constructor(props) {
@@ -149,8 +167,36 @@ class ListEntryTable extends Component {
     }
     
     render() {
+        console.log("Props", this.props)
         return (
             <React.Fragment>
+                <Box m={1} />
+                <Card className="root" style={{minWidth: '100%', marginBottom:10, marginTop:10, backgroundColor: "ffffff"}}>                
+                    <CardActionArea>
+                    <CardContent>
+                    <Grid container direction="row" justify="space-between" alignItems="center" spaching={2}>
+                        <Grid item xs={12} sm={4}>
+                        <Typography className="title" style={{fontSize: 16, color: colors.teal[600]}}><b>Shoppingliste: </b></Typography>
+                        <Typography className="title" style={{fontSize: 16, color: colors.teal[600]}}><b>Id: {this.props.match.params.shoppingListId}</b></Typography>
+                        </Grid>
+                        <Grid style={{paddingBottom: 10}} item xs={12} sm={4}></Grid>
+                        <Grid item xs={12} sm={4}>
+                       
+                       
+                       <Link 
+                       //geben wir den namen der Liste irgendwie weiter
+                       //hier richtig auf die neue Komponente verlinklen
+                       //hab in der app.js schonmal was versucht, kp ob das der richtige weg ist
+                       to={"/group/" + this.props.match.params.groupId + "/shoppinglist/" + this.props.match.params.shoppingListId + "/edit"} style={{textDecoration: 'none'}}>
+                            <ShoppingListLink/>
+                        
+                        </Link>
+                        </Grid>
+                    </Grid>
+                    </CardContent>
+                    </CardActionArea>     
+                </Card>
+                <Box m={1} />
                 <TableContainer  component={Paper} style={{marginTop: 15}}>
                     <Table>
                         <TableHead style={{backgroundColor: colors.teal[600]}}>

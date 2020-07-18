@@ -201,7 +201,7 @@ class GroupList extends Component {
     render() {
       const {listElements} = this.state;
           return(
-            <div>
+            <React.Fragment>
               <Box m={1} />
               <Card className="root" style={{minWidth: '100%', marginBottom:10, marginTop:10, backgroundColor: "ffffff"}}>                
                 <CardActionArea>
@@ -223,7 +223,13 @@ class GroupList extends Component {
               </Card>
               
                 <Box m={2} />
-                <Typography className="title" style={{fontSize: 14, color: 'black'}}>Shoppinglists: </Typography>
+                <Card className="root" style={{minWidth: '100%', marginBottom:10, marginTop:10, backgroundColor: "ffffff"}}>                
+                  <CardActionArea>
+                    <CardContent>
+                      <Typography className="title" style={{fontSize: 16, color: colors.teal[600]}}><b>Shoppinglisten:</b></Typography>
+                    </CardContent>
+                  </CardActionArea>     
+                </Card>
                 <ListWithBoxes groupElements={listElements}/>
                 <ShoppingListAddDialog 
                   openDialog={this.openDialog}
@@ -234,7 +240,7 @@ class GroupList extends Component {
                   checkStandard={this.checkStandard}
                   handleInputChange={this.handleInputChange}
                 />
-            </div>        
+            </React.Fragment>        
     );
 }}
 
