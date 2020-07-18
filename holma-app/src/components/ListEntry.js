@@ -80,63 +80,7 @@ class ListEntry extends Component {
           }
 
         return (
-            <div >
-                <TableRow width="100%">
-                    <TableCell padding="checkbox" width="6%">
-                        <Checkbox
-                            color="primary"
-                            checked={this.state.checked}
-                            onChange={this.handleChangeCheck}
-                            inputProps={{ 'aria-label': 'primary checkbox' }}
-                        />
-                    </TableCell>
-                    <TableCell style={{paddingLeft: 5, paddingTop: 0, paddingBottom: 0, paddingRight: 10}} width="10%" align="right">{listEntry.getAmount()}</TableCell>
-                    <TableCell padding="none" width="15%" align="left">{listEntry.getUnit()}</TableCell>
-                    <TableCell padding="none" width="56%" align="left">{listEntry.getArticleName()}</TableCell>
-                    <TableCell padding="none" width="6%">
-                        <IconButton aria-label="expand row" size="small" onClick={() => this.setOpen(!open)}>
-                            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                        </IconButton>
-                    </TableCell>
-                    <TableCell padding="none" width="6%" align='right'>
-                        <IconButton aria-label="expand row" size="small" onClick={() => this.openDialog()}>
-                            <EditIcon/>
-                        </IconButton>
-                    </TableCell>
-                    <TableCell style={{paddingLeft: 0, paddingTop: 0, paddingBottom: 0, paddingRight: 15}} width="6%" align='right'>
-                        <IconButton aria-label="expand row" size="small" onClick={() => this.deleteEntry(listEntry)}>
-                            <DeleteIcon/>
-                        </IconButton>
-                    </TableCell>
-                </TableRow>
-                <TableRow>
-                    <TableCell style={{ paddingBottom: 0, paddingTop: 0, backgroundColor: colors.grey[100]}} colSpan={10}>
-                    <Collapse in={this.state.open} timeout="auto" unmountOnExit>
-                        <Table size="small" aria-label="purchases">
-                            <TableHead >
-                                <TableRow>
-                                    <TableCell className={classes.tableCell} colSpan={3} padding="none" width="30%" align="left">Einkäufer</TableCell>
-                                    <TableCell className={classes.tableCell} colSpan={2} padding="none" width="20%" align="left">Händler</TableCell>
-                                    <TableCell className={classes.tableCell} colSpan={4} padding="none" width="40%" align="left">Geändert</TableCell>
-                                    <TableCell className={classes.tableCell} colSpan={1} padding="none" width="10%" align="left">STD</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                
-                                <TableCell className={classes.tableCell} colSpan={3} padding="none" width="30%" align="left">{listEntry.getPurchasingUserName()}</TableCell>
-                                <TableCell className={classes.tableCell} colSpan={2} padding="none" width="20%" align="left">{listEntry.getRetailerName()}</TableCell>
-                                <TableCell className={classes.tableCell} colSpan={4} padding="none" width="40%" align="left">{groupLastUpdated}</TableCell>
-                                <TableCell className={classes.tableCell} colSpan={1} padding="none" width="10%" align='left'>
-                                    <IconButton aria-label="expand row" size="small" >
-                                        {listEntry.isStandardarticle() ?  <StarIcon /> : <StarBorderIcon />}
-                                    </IconButton>
-                                </TableCell>
-                                
-                            </TableBody>
-                        </Table>
-                    </Collapse>
-                    </TableCell>
-                </TableRow>
+            <React.Fragment>
                 <ListEntryEditDialog
                     listEntry={listEntry}
                     groupId={groupId}
@@ -149,7 +93,63 @@ class ListEntry extends Component {
                     closeDialog={this.closeDialog}
                     updateListEntry={this.updateListEntry}
                 />
-            </div>
+                <TableRow width="100%">
+                    <TableCell padding="checkbox" width="5%" align="left" style={{backgroundColor:"#ffffff"}}>
+                        <Checkbox
+                            color="primary"
+                            checked={this.state.checked}
+                            onChange={this.handleChangeCheck}
+                            inputProps={{ 'aria-label': 'primary checkbox' }}
+                        />
+                    </TableCell>
+                    <TableCell style={{paddingLeft: 5, paddingTop: 0, paddingBottom: 0, paddingRight: 10}} width="10%" align="right">{listEntry.getAmount()}</TableCell>
+                    <TableCell width="10%" align="left">{listEntry.getUnit()}</TableCell>
+                    <TableCell padding="default" width="50%" align="left">{listEntry.getArticleName()}</TableCell>
+                    <TableCell padding="none" width="5%">
+                        <IconButton aria-label="expand row" size="small" onClick={() => this.setOpen(!open)}>
+                            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                        </IconButton>
+                    </TableCell>
+                    <TableCell padding="none" width="10%" align='right'>
+                        <IconButton aria-label="expand row" size="small" onClick={() => this.openDialog()}>
+                            <EditIcon/>
+                        </IconButton>
+                    </TableCell>
+                    <TableCell style={{paddingLeft: 0, paddingTop: 0, paddingBottom: 0, paddingRight: 15}} width="10%" align='center'>
+                        <IconButton aria-label="expand row" size="small" onClick={() => this.deleteEntry(listEntry)}>
+                            <DeleteIcon/>
+                        </IconButton>
+                    </TableCell>
+                </TableRow>
+                <TableRow>
+                    <TableCell style={{ paddingBottom: 0, paddingTop: 0, backgroundColor: colors.grey[100]}} colSpan={10}>
+                        <Collapse in={this.state.open} timeout="auto" unmountOnExit>
+                            <Box margin={1}>
+                                <Table size="small" aria-label="purchases">
+                                    <TableHead >
+                                        <TableRow>
+                                            <TableCell className={classes.tableCell} colSpan={3} padding="none" width="30%" align="left">Einkäufer</TableCell>
+                                            <TableCell className={classes.tableCell} colSpan={2} padding="none" width="20%" align="left">Händler</TableCell>
+                                            <TableCell className={classes.tableCell} colSpan={4} padding="none" width="30%" align="left">Geändert</TableCell>
+                                            <TableCell className={classes.tableCell} colSpan={1} padding="none" width="20%" align="center"></TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        <TableCell className={classes.tableCell} colSpan={3} padding="none" width="30%" align="left">{listEntry.getPurchasingUserName()}</TableCell>
+                                        <TableCell className={classes.tableCell} colSpan={2} padding="none" width="20%" align="left">{listEntry.getRetailerName()}</TableCell>
+                                        <TableCell className={classes.tableCell} colSpan={4} padding="none" width="30%" align="left">{groupLastUpdated}</TableCell>
+                                        <TableCell className={classes.tableCell} colSpan={1} padding="none" width="20%" align='center'>
+                                            <IconButton aria-label="expand row" size="small" >
+                                                {listEntry.isStandardarticle() ?  <StarIcon /> : <StarBorderIcon />}
+                                            </IconButton>
+                                        </TableCell>
+                                    </TableBody>
+                                </Table>
+                            </Box>
+                        </Collapse>
+                    </TableCell>    
+                </TableRow>
+        </React.Fragment>
         );
     }
 }

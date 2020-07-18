@@ -150,42 +150,39 @@ class ListEntryTable extends Component {
     
     render() {
         return (
-            <div display='flex'>
-            <TableContainer style={{marginTop: 20}}component={Paper}>
-                <Table aria-label="collapsible table">
-                    <TableHead style={{backgroundColor: colors.teal[600]}}>
-                        <TableRow>
-                            <TableCell width="10%"/>
-                            <TableCell width="16%" align="left"><b style={{ color: '#ffffff'}}>Menge</b></TableCell>
-                            <TableCell width="56%" align="left"><b style={{ color: '#ffffff'}}>Artikel</b></TableCell>
-                            <TableCell width="6%"/>
-                            <TableCell width="6%"/>
-                        </TableRow>
-                    </TableHead>
-                    
-                </Table>
-            </TableContainer>
-            <TableContainer  component={Paper}>
-                <Table>
-                    <TableBody>
-                    {this.state.listEntryTableElements}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            <ListEntryAddDialog
-                loadListEntries={this.loadListEntries} 
-                retailers={this.state.retailers}
-                users={this.state.users}
-                articles={this.state.articles}
-                loadArticles={this.loadArticles}
-                groupId={this.state.groupId}
-                openDialog={this.openDialog}
-                open={this.state.openDialog}
-                handleClose={this.handleClose}
-                shoppingListId={this.state.shoppingListId}
-            />
+            <React.Fragment>
+                <TableContainer  component={Paper}>
+                    <Table>
+                        <TableHead style={{backgroundColor: colors.teal[600]}}>
+                            <TableRow>
+                                <TableCell width="5%" align="left"/>
+                                <TableCell width="10%" align="right"><b style={{ color: '#ffffff'}}></b></TableCell>
+                                <TableCell width="10%" align="left"><b style={{ color: '#ffffff'}}></b></TableCell>
+                                <TableCell width="50%" align="left"><b style={{ color: '#ffffff'}}>Artikel</b></TableCell>
+                                <TableCell width="5%"/>
+                                <TableCell width="10%"/>
+                                <TableCell width="10%"/>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                        {this.state.listEntryTableElements}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                <ListEntryAddDialog
+                    loadListEntries={this.loadListEntries} 
+                    retailers={this.state.retailers}
+                    users={this.state.users}
+                    articles={this.state.articles}
+                    loadArticles={this.loadArticles}
+                    groupId={this.state.groupId}
+                    openDialog={this.openDialog}
+                    open={this.state.openDialog}
+                    handleClose={this.handleClose}
+                    shoppingListId={this.state.shoppingListId}
+                />
+            </React.Fragment>
             
-            </div>
         )
     }
 }

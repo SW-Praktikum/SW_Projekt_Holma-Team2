@@ -213,10 +213,7 @@ class ListEntryEditDialog extends Component {
 
         return (
 
-          <div>
-            <Typography className={classes.container} align="right">
-            
-            </Typography>
+          
             <Dialog className={classes.dialog} open={open} onClose={this.props.closeDialog} aria-labelledby="form-dialog-title">
               <DialogTitle id="form-dialog-editEntry">Eintrag bearbeiten</DialogTitle>
               <DialogContent>
@@ -316,7 +313,6 @@ class ListEntryEditDialog extends Component {
                 </Button>
               </DialogActions>
             </Dialog>
-          </div>
           );
     }
 }
