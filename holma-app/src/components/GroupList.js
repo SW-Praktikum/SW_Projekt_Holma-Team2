@@ -122,7 +122,8 @@ class GroupList extends Component {
 
     handleClose = () => {
       this.setState({
-        openDialog: false})
+        openDialog: false
+      })
     }
 
     addStandardArticles = () => {
@@ -145,6 +146,9 @@ class GroupList extends Component {
             const liste  = result[result.length - 1]
             AppAPI.getAPI().addStandardArticlesToShoppingList(this.state.groupId, liste.id).then (() => {
               this.loadShoppingLists()
+            })
+            this.setState({
+              checked: false
             })
         });         
         }
