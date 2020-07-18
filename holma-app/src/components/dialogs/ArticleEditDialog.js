@@ -42,10 +42,6 @@ class ArticleEditDialog extends Component {
     render() {
       const { classes } = this.props;
         return (
-          <div>
-            <Typography className={classes.container} align="right">
-            
-            </Typography>
             <Dialog className={classes.dialog} open={this.props.open} onClose={this.props.handleClose} aria-labelledby="form-dialog-title">
               <DialogTitle id="form-dialog-editEntry">Artikel bearbeiten</DialogTitle>
               <DialogContent>
@@ -67,7 +63,6 @@ class ArticleEditDialog extends Component {
                 </Button>
               </DialogActions>
             </Dialog>
-          </div>
           );
     }
 }

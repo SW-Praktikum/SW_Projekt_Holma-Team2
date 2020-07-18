@@ -44,7 +44,6 @@ class Grouplink extends Component{
   }
 }
 
-
 class ListCard extends Component {
   constructor(props) {
     super(props);
@@ -77,7 +76,6 @@ class ListCard extends Component {
     })
   }
 
-
   render() {
       return (
         <Card className="root" style={{/* minHeight: 250 ,  */minWidth: '100%', marginBottom:10, marginTop:10, }}>
@@ -99,7 +97,6 @@ class ListCard extends Component {
 class GroupList extends Component {
     constructor(props) {
         super(props);
-        //console.log(this.props.match.params.groupId)
         this.state = {
             group: null,
             groupId: this.props.match.params.groupId,
@@ -107,6 +104,8 @@ class GroupList extends Component {
             listElements:[],
             shoppingListName: "",
             shoppingListId:"",
+            newListId: "",
+            checked: false
         }}
       
     componentDidMount(){
@@ -131,27 +130,27 @@ class GroupList extends Component {
         this.setState({checked: true})
       else
         this.setState({checked: false})
-      
     }
+
     checkStandard = () => {
-      if (this.state.checked === false) {
-        // Liste ohne Standardartikel erstellen
-        console.log("Ohne standard")
-        this.createNewList()
-      }
-      else {
-        console.log("Mit standard")
-        this.createNewList()
-        // add standardarticles to new list
-        // Liste mit Standardartikel erstellen
-      }
+      this.createNewList()
       this.handleClose()
     }
 
     createNewList = () => {
       var lst = new ShoppingListBO(this.state.shoppingListName, this.state.groupId, "");
       AppAPI.getAPI().createShoppingList(lst).then(() => {
-        this.loadShoppingLists()
+        if (this.state.checked === true) {
+          AppAPI.getAPI().getShoppingListsByGroupId(this.state.groupId).then((result) => {
+            const liste  = result[result.length - 1]
+            AppAPI.getAPI().addStandardArticlesToShoppingList(this.state.groupId, liste.id).then (() => {
+              this.loadShoppingLists()
+            })
+        });         
+        }
+        else {
+          this.loadShoppingLists()
+        }
       })
     }
 

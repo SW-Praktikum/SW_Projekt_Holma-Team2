@@ -212,110 +212,106 @@ class StandardArticleEditDialog extends Component {
         console.log(this.props.articles)
         
         return (
+            <React.Fragment>
+                <Dialog className={classes.dialog} open={open} onClose={this.props.closeDialog} aria-labelledby="form-dialog-title">
+                <DialogTitle id="form-dialog-editEntry">Eintrag bearbeiten</DialogTitle>
+                <DialogContent>
 
-          <div>
-            <Typography className={classes.container} align="right">
-            
-            </Typography>
-            <Dialog className={classes.dialog} open={open} onClose={this.props.closeDialog} aria-labelledby="form-dialog-title">
-              <DialogTitle id="form-dialog-editEntry">Eintrag bearbeiten</DialogTitle>
-              <DialogContent>
+                    {/* Anzahl */}
+                    <TextField
+                        type="number"
+                        value={amount}
+                        onChange={this.setAmount}
+                        margin="dense"
+                        id="combo-amount"
+                        variant="standard"
+                        label="Menge"
+                    /> 
 
-                {/* Anzahl */}
-                <TextField
-                    type="number"
-                    value={amount}
-                    onChange={this.setAmount}
-                    margin="dense"
-                    id="combo-amount"
-                    variant="standard"
-                    label="Menge"
-                /> 
+                    {/* Einheit */}
+    <               Autocomplete
+                        options={units} 
+                        onChange={(event, unit) => {this.setUnit(unit);}}
+                        defaultValue={unit}
+                        getOptionLabel={(option) => option.name}
+                        renderInput={(params) => <TextField {...params} label="Einheit" variant="standard" placeholder="Einheit" />}
+                    />
 
-                {/* Einheit */}
-<               Autocomplete
-                    options={units} 
-                    onChange={(event, unit) => {this.setUnit(unit);}}
-                    defaultValue={unit}
-                    getOptionLabel={(option) => option.name}
-                    renderInput={(params) => <TextField {...params} label="Einheit" variant="standard" placeholder="Einheit" />}
-                />
+                    {/* Artikel */}
+                    <Autocomplete
+                        defaultValue={article}
+                        onChange={(event, articleName) => {
+                            if (typeof articleName === 'string') {
+                                this.createNewArticle(articleName)
+                            } else if (articleName && articleName.inputValue) {
+                                // Create a new value from the user input
+                                this.createNewArticle(articleName.inputValue)
+                            } else {
+                                this.setArticle(articleName);
+                            }
+                        }}
+                        filterOptions={(options, params) => {
+                            const filtered = filter(options, params);
+                            // Suggest the creation of a new value
+                            if (params.inputValue !== '' && !this.objectExistsByName(articles, params.inputValue)) {
+                            filtered.push({
+                                inputValue: params.inputValue,
+                                name: `Erstelle "${params.inputValue}"`,
+                            });
+                            }
+                    
+                            return filtered;
+                        }}
+                        selectOnFocus
+                        clearOnBlur
+                        handleHomeEndKeys
+                        options={articles} 
+                        getOptionLabel={(option) => {
+                            // Value selected with enter, right from the input
+                            if (typeof option === 'string') {
+                            return option;
+                            }
+                            // Add "xxx" option created dynamically
+                            if (option.inputValue) {
+                            return option.inputValue;
+                            }
+                            // Regular option
+                            return option.name;
+                        }}                    
+                        renderOption={(option) => option.name}
+                        freeSolo
+                        renderInput={(params) => <TextField {...params} label="Artikel" variant="standard" placeholder="Artikel" />}
+                    />
 
-                {/* Artikel */}
-                <Autocomplete
-                    defaultValue={article}
-                    onChange={(event, articleName) => {
-                        if (typeof articleName === 'string') {
-                            this.createNewArticle(articleName)
-                        } else if (articleName && articleName.inputValue) {
-                            // Create a new value from the user input
-                            this.createNewArticle(articleName.inputValue)
-                        } else {
-                            this.setArticle(articleName);
-                        }
-                    }}
-                    filterOptions={(options, params) => {
-                        const filtered = filter(options, params);
-                        // Suggest the creation of a new value
-                        if (params.inputValue !== '' && !this.objectExistsByName(articles, params.inputValue)) {
-                          filtered.push({
-                            inputValue: params.inputValue,
-                            name: `Erstelle "${params.inputValue}"`,
-                          });
-                        }
+                    {/* Einkäufer */}
+                    <Autocomplete
+                        options={users} 
+                        onChange={(event, purchasingUser) => {this.setPurchasingUser(purchasingUser);}}
+                        defaultValue={purchasingUser}
+                        getOptionLabel={(option) => option.name}
+                        renderInput={(params) => <TextField {...params} label="Einkäufer" variant="standard" placeholder="Einkäufer" />}
+                    />
+
+                    {/* Retailer */}
+                    <Autocomplete
+                        options={retailers} 
+                        onChange={(event, retailer) => {this.setRetailer(retailer);}}
+                        defaultValue={retailer}
+                        getOptionLabel={(option) => option.name}
+                        renderInput={(params) => <TextField {...params} label="Retailer" variant="standard" placeholder="Retailer" />}
+                    />
                 
-                        return filtered;
-                    }}
-                    selectOnFocus
-                    clearOnBlur
-                    handleHomeEndKeys
-                    options={articles} 
-                    getOptionLabel={(option) => {
-                        // Value selected with enter, right from the input
-                        if (typeof option === 'string') {
-                          return option;
-                        }
-                        // Add "xxx" option created dynamically
-                        if (option.inputValue) {
-                          return option.inputValue;
-                        }
-                        // Regular option
-                        return option.name;
-                      }}                    
-                    renderOption={(option) => option.name}
-                    freeSolo
-                    renderInput={(params) => <TextField {...params} label="Artikel" variant="standard" placeholder="Artikel" />}
-                />
-
-                {/* Einkäufer */}
-                <Autocomplete
-                    options={users} 
-                    onChange={(event, purchasingUser) => {this.setPurchasingUser(purchasingUser);}}
-                    defaultValue={purchasingUser}
-                    getOptionLabel={(option) => option.name}
-                    renderInput={(params) => <TextField {...params} label="Einkäufer" variant="standard" placeholder="Einkäufer" />}
-                />
-
-                {/* Retailer */}
-                <Autocomplete
-                    options={retailers} 
-                    onChange={(event, retailer) => {this.setRetailer(retailer);}}
-                    defaultValue={retailer}
-                    getOptionLabel={(option) => option.name}
-                    renderInput={(params) => <TextField {...params} label="Retailer" variant="standard" placeholder="Retailer" />}
-                />
-              
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={this.undoChanges} color="primary">
-                  abbrechen
-                </Button>
-                <Button onClick={this.saveChanges} color="primary">
-                  speichern
-                </Button>
-              </DialogActions>
-            </Dialog>
-          </div>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={this.undoChanges} color="primary">
+                    abbrechen
+                    </Button>
+                    <Button onClick={this.saveChanges} color="primary">
+                    speichern
+                    </Button>
+                </DialogActions>
+                </Dialog>
+            </React.Fragment>
           );
     }
 }

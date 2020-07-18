@@ -43,7 +43,7 @@ class ListEntry extends Component {
         return (
             <React.Fragment>
                 <TableRow>
-                    <TableCell padding="checkbox" >
+                    <TableCell padding="checkbox">
                       <Checkbox
                             color="primary"
                             checked={this.state.checked}
@@ -51,11 +51,11 @@ class ListEntry extends Component {
                             inputProps={{ 'aria-label': 'primary checkbox' }}
                         />
                     </TableCell>
-                    <TableCell style={{paddingLeft: 5, paddingTop: 0, paddingBottom: 0, paddingRight: 10}} align="right">{listEntry.getAmount()}</TableCell>
-                    <TableCell padding="dense" align="left">{listEntry.getUnit()}</TableCell>
-                    <TableCell padding="dense" align="left">{listEntry.getName()}</TableCell>
-                    <TableCell padding="dense" align="left">{listEntry.getRetailerName()}</TableCell> 
-                    <TableCell padding="dense" align="left">{listEntry.getShoppingListName()}</TableCell>
+                    <TableCell padding="none" style={{paddingLeft: 0, paddingTop: 0, paddingBottom: 0, paddingRight: 5}} align="right">{listEntry.getAmount()}</TableCell>
+                    <TableCell padding="none" align="left">{listEntry.getUnit()}</TableCell>
+                    <TableCell padding="none" align="left">{listEntry.getName()}</TableCell>
+                    <TableCell padding="none" align="left">{listEntry.getRetailerName()}</TableCell> 
+                    <TableCell padding="none" align="left">{listEntry.getShoppingListName()}</TableCell>
                 </TableRow>
             </React.Fragment>
         );
@@ -127,12 +127,22 @@ class Startpage extends Component {
                     <Table aria-label="collapsible table">                   
                         <TableHead style={{backgroundColor: colors.teal[600]}}>
                             <TableRow>
-                                <TableCell/>
-                                <TableCell/>
-                                <TableCell align="left"><b style={{ color: '#ffffff'}}>Menge</b></TableCell>
-                                <TableCell align="left"><b style={{ color: '#ffffff'}}>Artikel</b></TableCell>
-                                <TableCell align="left"><b style={{ color: '#ffffff'}}>Händler</b></TableCell>
-                                <TableCell align="left"><b style={{ color: '#ffffff'}}>Liste</b></TableCell>
+                                <TableCell 
+                                    style={{paddingLeft: 0, paddingTop: 15, paddingBottom: 15, paddingRight: 0}}/>
+                                <TableCell 
+                                    style={{paddingLeft: 0, paddingTop: 15, paddingBottom: 15, paddingRight: 0}}/>
+                                <TableCell 
+                                    style={{paddingLeft: 0, paddingTop: 15, paddingBottom: 15, paddingRight: 0}} 
+                                    align="left"><b style={{ color: '#ffffff'}}>Menge</b></TableCell>
+                                <TableCell 
+                                    style={{paddingLeft: 0, paddingTop: 15, paddingBottom: 15, paddingRight: 0}} 
+                                    align="left"><b style={{ color: '#ffffff'}}>Artikel</b></TableCell>
+                                <TableCell 
+                                    style={{paddingLeft: 0, paddingTop: 15, paddingBottom: 15, paddingRight: 0}} 
+                                    align="left"><b style={{ color: '#ffffff'}}>Händler</b></TableCell>
+                                <TableCell 
+                                    style={{paddingLeft: 0, paddingTop: 15, paddingBottom: 15, paddingRight: 0}} 
+                                    align="left"><b style={{ color: '#ffffff'}}>Liste</b></TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>

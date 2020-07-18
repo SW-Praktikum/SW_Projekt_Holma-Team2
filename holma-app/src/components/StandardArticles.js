@@ -77,50 +77,7 @@ render(){
     const { open} = this.state;
 
 return (
-    <div >
-        <TableRow width="100%">
-            <TableCell style={{paddingLeft: 5, paddingTop: 0, paddingBottom: 0, paddingRight: 10}} width="10%" align="right">{standardArticle.getArticleName()}</TableCell>
-            <TableCell padding="none" width="15%" align="left">{standardArticle.getAmount()}</TableCell>
-            <TableCell padding="none" width="15%" align="left">{standardArticle.getUnit()}</TableCell>
-            <TableCell padding="none" width="56%" align="left">{standardArticle.getArticleId()}</TableCell>
-            <TableCell padding="none" width="6%">
-                <IconButton aria-label="expand row" size="small" onClick={() => this.setOpen(!open)}>
-                    {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                </IconButton>
-            </TableCell>
-            <TableCell padding="none" width="6%" align='right'>
-                <IconButton aria-label="expand row" size="small" onClick={() => this.openDialog()}>
-                     <EditIcon/>
-                </IconButton>
-            </TableCell>
-            <TableCell style={{paddingLeft: 0, paddingTop: 0, paddingBottom: 0, paddingRight: 15}} width="6%" align='right'>
-                <IconButton aria-label="expand row" size="small" onClick={() => this.deleteEntry(standardArticle)}>
-                    <ClearRoundedIcon/>
-                </IconButton>
-            </TableCell>
-        </TableRow>
-        <TableRow>
-            <TableCell style={{ paddingBottom: 0, paddingTop: 0, backgroundColor: colors.grey[100]}} colSpan={10}>
-            <Collapse in={this.state.open} timeout="auto" unmountOnExit>
-                <Table size="small" aria-label="purchases">
-                    <TableHead >
-                        <TableRow>
-                            <TableCell colSpan={3} padding="none" width="30%" align="left"><b>Einkäufer</b></TableCell>
-                            <TableCell colSpan={2} padding="none" width="20%" align="left"><b>Händler</b></TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        
-                        <TableCell colSpan={3} padding="none" width="30%" align="left">{standardArticle.getPurchasingUserName()}</TableCell>
-                        <TableCell colSpan={2} padding="none" width="20%" align="left">{standardArticle.getRetailerName()}</TableCell>
-                        <TableCell colSpan={1} padding="none" width="10%" align='left'>
-                        </TableCell>
-                        
-                    </TableBody>
-                </Table>
-            </Collapse>
-            </TableCell>
-        </TableRow>
+    <React.Fragment>
         <StandardArticleEditDialog
             standardArticle={standardArticle}
             groupId={groupId}
@@ -132,8 +89,50 @@ return (
             openDialog={this.openDialog}
             closeDialog={this.closeDialog}
         />
-    </div>
-        );
+        <TableRow>
+            <TableCell padding="dense" align="right">{standardArticle.getAmount()}</TableCell>
+            <TableCell padding="dense" align="left">{standardArticle.getUnit()}</TableCell>
+            <TableCell padding="dense" style={{paddingLeft: 0, paddingTop: 0, paddingBottom: 0, paddingRight: 0}} align="left">{standardArticle.getArticleName()}</TableCell>
+            <TableCell padding="dense">
+                <IconButton aria-label="expand row" size="small" onClick={() => this.setOpen(!open)}>
+                    {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                </IconButton>
+            </TableCell>
+            <TableCell padding="dense" align='right'>
+                <IconButton aria-label="expand row" size="small" onClick={() => this.openDialog()}>
+                     <EditIcon/>
+                </IconButton>
+            </TableCell>
+            <TableCell padding="dense" style={{paddingLeft: 0, paddingTop: 0, paddingBottom: 0, paddingRight: 10}} align='right'>
+                <IconButton aria-label="expand row" size="small" onClick={() => this.deleteEntry(standardArticle)}>
+                    <ClearRoundedIcon/>
+                </IconButton>
+            </TableCell>
+        </TableRow>
+        <TableRow>
+            <TableCell style={{paddingBottom: 0, paddingTop: 0, backgroundColor: colors.grey[100]}} colSpan={12}>
+                <Collapse in={this.state.open} timeout="auto" unmountOnExit>
+                    <Box margin={1}>
+                        <Table size="small" aria-label="purchases">
+                            <TableHead >
+                                <TableRow>
+                                    <TableCell style={{borderBottom: "none"}} colSpan={4} padding="none" align="left"><b>Einkäufer</b></TableCell>
+                                    <TableCell style={{borderBottom: "none"}} colSpan={4} padding="none" align="left"><b>Händler</b></TableCell>
+                                    <TableCell style={{borderBottom: "none"}} colSpan={4} padding="none" align="left"><b>Artikel-ID</b></TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                <TableCell style={{borderBottom: "none"}} colSpan={4} padding="none" align="left">{standardArticle.getPurchasingUserName()}</TableCell>
+                                <TableCell style={{borderBottom: "none"}} colSpan={4} padding="none" align="left">{standardArticle.getRetailerName()}</TableCell>
+                                <TableCell style={{borderBottom: "none"}} colSpan={4} padding="none" align="left">{standardArticle.getArticleId()}</TableCell>
+                            </TableBody>
+                        </Table>
+                    </Box>
+                </Collapse>
+            </TableCell>
+        </TableRow>
+    </React.Fragment>
+    );
     }
 }
 
@@ -197,13 +196,13 @@ class StandardArticleEdit extends Component {
         AppAPI.getAPI().getStandardArticlesByGroupId(this.state.groupId).then((articles) => {
         var StandardElements = articles.map((standard) => 
         <StandardArticles 
-        groupId={this.state.groupId} 
-        standardArticle={standard} 
-        retailers={this.state.retailers}
-        articles = {this.state.articles}
-        users = {this.state.users} 
-        loadStandardArticles={this.loadStandardArticles} 
-        loadArticles={this.loadArticles}
+            groupId={this.state.groupId} 
+            standardArticle={standard} 
+            retailers={this.state.retailers}
+            articles = {this.state.articles}
+            users = {this.state.users} 
+            loadStandardArticles={this.loadStandardArticles} 
+            loadArticles={this.loadArticles}
         />)
             this.setState({
                 StandardElements: StandardElements,
@@ -255,28 +254,25 @@ class StandardArticleEdit extends Component {
     
     render() {
         return (
-            <div display='flex'>
-            <TableContainer style={{marginTop: 20}}component={Paper}>
-                <Table aria-label="collapsible table">
-                    <TableHead style={{backgroundColor: colors.teal[600]}}>
-                        <TableRow>
-                            <TableCell width="20%" align="left "><b style={{ color: '#ffffff'}}>Name</b></TableCell>
-                            <TableCell width="15%" align="center"><b style={{ color: '#ffffff'}}>Menge</b></TableCell>
-                            <TableCell width="15%" align="center"><b style={{ color: '#ffffff'}}>Einheit</b></TableCell>
-                            <TableCell width="15%" align="center"><b style={{ color: '#ffffff'}}>Artikel-ID</b></TableCell>
-                            <TableCell width="15%" align="center"><b style={{ color: '#ffffff'}}>Edit</b></TableCell>
-                        </TableRow>
-                    </TableHead>
-                </Table>
-            </TableContainer>
-            <TableContainer  component={Paper}>
-                <Table>
-                    <TableBody>
-                        {this.state.StandardElements}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            </div>
+            <React.Fragment>
+                <TableContainer style={{marginTop: 15}}component={Paper}>
+                    <Table aria-label="collapsible table">
+                        <TableHead style={{backgroundColor: colors.teal[600]}}>
+                            <TableRow>
+                                <TableCell/>
+                                <TableCell align="left"><b style={{color: '#ffffff'}}>Menge</b></TableCell>
+                                <TableCell padding="none" align="left "><b style={{color: '#ffffff'}}>Name</b></TableCell>
+                                <TableCell/>
+                                <TableCell align="right"><b style={{color: '#ffffff'}}>Edit</b></TableCell>
+                                <TableCell/>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {this.state.StandardElements}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </React.Fragment>
         )
     }
 }

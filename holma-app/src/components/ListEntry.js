@@ -94,7 +94,6 @@ class ListEntry extends Component {
                     updateListEntry={this.updateListEntry}
                 />
                 <TableRow >
-                
                     <TableCell padding="checkbox" align="left" style={{backgroundColor:"#ffffff"}}>
                         <Checkbox
                             color="primary"
