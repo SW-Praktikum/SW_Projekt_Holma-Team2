@@ -33,10 +33,7 @@ class ListEntry extends Component {
       AppAPI.getAPI().updateListEntry(this.state.listEntry)
     }
 
-    getGroupName = () => {
-      console.log(this.props.listEntry.getShoppingListId())
-      //AppAPI.getAPI().getRetailer
-    }
+    
 
 
 
@@ -44,16 +41,8 @@ class ListEntry extends Component {
         const { listEntry } = this.props;
         const { open } = this.state;
         return (
-            <div >
-                <colgroup>
-                    <col style={{width:'10%'}}/>
-                    <col style={{width:'20%'}}/>
-                    <col style={{width:'20%'}}/>
-                    <col style={{width:'50%'}}/>
-                    <col style={{width:'40%'}}/>
-                    <col style={{width:'40%'}}/>
-                </colgroup>
-                <TableRow width="100%">
+            <React.Fragment>
+                <TableRow>
                     <TableCell padding="checkbox" >
                       <Checkbox
                             color="primary"
@@ -65,13 +54,10 @@ class ListEntry extends Component {
                     <TableCell style={{paddingLeft: 5, paddingTop: 0, paddingBottom: 0, paddingRight: 10}} align="right">{listEntry.getAmount()}</TableCell>
                     <TableCell padding="dense" align="left">{listEntry.getUnit()}</TableCell>
                     <TableCell padding="dense" align="left">{listEntry.getName()}</TableCell>
-                    <TableCell padding="dense" align="left">{this.getGroupName()}</TableCell>
+                    <TableCell padding="dense" align="left">{listEntry.getRetailerName()}</TableCell> 
                     <TableCell padding="dense" align="left">{listEntry.getShoppingListName()}</TableCell>
-                    <TableCell padding="dense" align="right">{listEntry.getRetailerName()}</TableCell> 
                 </TableRow>
-                
-                
-            </div>
+            </React.Fragment>
         );
     }
 }
@@ -125,54 +111,36 @@ class Startpage extends Component {
         const {retailers} = this.state;
         console.log("ListElements:", this.state.listEntryTableElements)
         return (
-            <div display='flex'>            
-              
-              <Card style={{minWidth: '100%', marginBottom:15, marginTop:15, }}>
-                <CardActionArea >
-                <CardContent>
-                <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>
-                    Hallo {this.state.userName},
-                </Typography>
-                    <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>Deine persönliche Einkaufsliste:</Typography>
-                </CardContent>
-                </CardActionArea>     
-              </Card>
+            <React.Fragment>             
+                <Card style={{minWidth: '100%', marginBottom:15, marginTop:15, }}>
+                    <CardActionArea >
+                    <CardContent>
+                    <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>
+                        Hallo {this.state.userName},
+                    </Typography>
+                        <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>Deine persönliche Einkaufsliste:</Typography>
+                    </CardContent>
+                    </CardActionArea>     
+                </Card>
 
-            <TableContainer component={Paper}>
-                <Table aria-label="collapsible table">
-                <colgroup>
-                    <col style={{width:'10%'}}/>
-                    <col style={{width:'10%'}}/>
-                    <col style={{width:'20%'}}/>
-                    <col style={{width:'30%'}}/>
-                    <col style={{width:'30%'}}/>
-                </colgroup>
-                    
-                    <TableHead style={{backgroundColor: colors.teal[600]}}>
-                        
-                        <TableRow>
-                            <TableCell align="left"></TableCell>
-                            <TableCell align="right"><b style={{ color: '#ffffff'}}>Menge</b></TableCell>
-                            <TableCell align="right"><b style={{ color: '#ffffff'}}>Einheit</b></TableCell>
-                            <TableCell align="left"><b style={{ color: '#ffffff'}}>Artikel</b></TableCell>
-                            <TableCell align="left"><b style={{ color: '#ffffff'}}>Shoppinglist</b></TableCell>
-                            <TableCell align="left"><b style={{ color: '#ffffff'}}>Händler</b></TableCell>
-                            
-                        </TableRow>
-                    </TableHead>
-                    
-                </Table>
-            </TableContainer>
-            <TableContainer  component={Paper}>
-                <Table>
-                    <TableBody>
-                    {this.state.listEntryTableElements}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            
-            
-            </div>
+                <TableContainer component={Paper}>
+                    <Table aria-label="collapsible table">                   
+                        <TableHead style={{backgroundColor: colors.teal[600]}}>
+                            <TableRow>
+                                <TableCell/>
+                                <TableCell/>
+                                <TableCell align="left"><b style={{ color: '#ffffff'}}>Menge</b></TableCell>
+                                <TableCell align="left"><b style={{ color: '#ffffff'}}>Artikel</b></TableCell>
+                                <TableCell align="left"><b style={{ color: '#ffffff'}}>Händler</b></TableCell>
+                                <TableCell align="left"><b style={{ color: '#ffffff'}}>Liste</b></TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {this.state.listEntryTableElements}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </React.Fragment>
         )
     }
 }

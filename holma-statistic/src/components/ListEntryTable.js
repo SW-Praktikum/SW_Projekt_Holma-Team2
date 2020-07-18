@@ -42,16 +42,9 @@ class ListEntry extends Component {
         const { listEntry } = this.props;
         const { open } = this.state
         return (
-            <div >
-                <colgroup>
-                    <col style={{width:'10%'}}/>
-                    <col style={{width:'20%'}}/>
-                    <col style={{width:'20%'}}/>
-                    <col style={{width:'50%'}}/>
-                    <col style={{width:'40%'}}/>
-                    <col style={{width:'40%'}}/>
-                </colgroup>
-                <TableRow width="100%">
+            <React.Fragment>
+                
+                <TableRow >
                     <TableCell padding="checkbox" >
                         <Checkbox
                             color="primary"
@@ -62,11 +55,11 @@ class ListEntry extends Component {
                     <TableCell style={{paddingLeft: 5, paddingTop: 0, paddingBottom: 0, paddingRight: 10}} align="right">{listEntry.getAmount()}</TableCell>
                     <TableCell padding="dense" align="left">{listEntry.getUnit()}</TableCell>
                     <TableCell padding="dense" align="left">{listEntry.getName()}</TableCell>
-                    <TableCell padding="dense" align="right">{listEntry.getRetailerName()}</TableCell> 
+                    <TableCell padding="dense" align="left">{listEntry.getRetailerName()}</TableCell> 
                 </TableRow>
                 
                 
-            </div>
+            </React.Fragment>
         );
     }
 }
@@ -309,120 +302,104 @@ class ListEntryTable extends Component {
         ]
         const {retailers} = this.state;
         return (
-            <div display='flex'>
+            <React.Fragment>
                                  
-            <Grid container direction="row" justify="space-between" alignItems="center" component={Paper} style={{marginTop: 15}}>
-                <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
-                    <Typography color="primary" style={{fontSize: 18}}>
-                        Filter nach:
-                    </Typography>
-                </Grid>
-                <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
-                    <Autocomplete
-                        id="combo-retailer"
-                        onChange={this.filterSelector}
-                        defaultValue={filters[0]}
-                        options={filters} //liste der retailer laden
-                        getOptionLabel={(option) => option.name}
-                        getOptionSelected={(option) => option.label}
-                        renderInput={(params) => (
-                            <TextField {...params} variant="standard" label="Filter" placeholder="Händler" />
-                        )}                
-                    />
-                </Grid>
-                <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
-                    <TextField
-                        autoFocus
-                        style={{display: this.state.textField}}
-                        onChange={this.handleInputChange}
-                        margin="dense"
-                        id="outlined-basic"
-                        //variant="outlined"
-                        label="Eingabe"
-                        type="ID"
-                        fullWidth
-                        value={this.state.filterInput}        
-                    /> 
-                </Grid>
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <Grid container direction="row" justify="space-between" alignItems="center" style={{display: this.state.timeFilter, marginTop: 10, marginBottom: 10}}>
-                        <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
-                            <KeyboardDatePicker
-                            disableToolbar
-                            fullWidth
-                            variant="inline"
-                            format="dd/MM/yyyy"
-                            margin="normal"
-                            id="date-picker-start"
-                            label="Startdatum"
-                            value={this.state.startDate}
-                            onChange={(date) => this.handleStartDate(date)}
-                            KeyboardButtonProps={{
-                                'aria-label': 'change date',
-                            }}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
-                            <KeyboardDatePicker
-                            disableToolbar
-                            fullWidth
-                            variant="inline"
-                            format="dd/MM/yyyy"
-                            margin="normal"
-                            id="date-picker-end"
-                            label="Enddatum"
-                            value={this.state.endDate}
-                            onChange={(date) => this.handleEndDate(date)}
-                            KeyboardButtonProps={{
-                                'aria-label': 'change date',
-                            }}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
-                            <Button 
-                                onClick={this.filterByTimePeriod}
-                                fullWidth
-                                color="primary"
-                                variant="contained">
-                                filtern
-                            </Button>
-                        </Grid>
+                <Grid container direction="row" justify="space-between" alignItems="center" component={Paper} style={{marginTop: 15}}>
+                    <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
+                        <Typography color="primary" style={{fontSize: 18}}>
+                            Filter nach:
+                        </Typography>
                     </Grid>
-                </MuiPickersUtilsProvider>
-            </Grid>
-            <TableContainer style={{marginTop: 20}} component={Paper}>
-                <Table aria-label="collapsible table">
-                <colgroup>
-                    <col style={{width:'10%'}}/>
-                    <col style={{width:'10%'}}/>
-                    <col style={{width:'20%'}}/>
-                    <col style={{width:'30%'}}/>
-                    <col style={{width:'30%'}}/>
-                </colgroup>
-                    
-                    <TableHead style={{backgroundColor: colors.teal[600]}}>
-                        
-                        <TableRow>
-                            <TableCell align="left"></TableCell>
-                            <TableCell align="right"><b style={{ color: '#ffffff'}}>Menge</b></TableCell>
-                            <TableCell align="left"><b style={{ color: '#ffffff'}}>Artikel</b></TableCell>
-                            <TableCell align="left"><b style={{ color: '#ffffff'}}>Händler</b></TableCell>
-                            
-                        </TableRow>
-                    </TableHead>
-                    
-                </Table>
-            </TableContainer>
-            <TableContainer  component={Paper}>
-                <Table>
-                    <TableBody>
-                    {this.state.listEntryTableElements}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            
-            
-            </div>
+                    <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
+                        <Autocomplete
+                            id="combo-retailer"
+                            onChange={this.filterSelector}
+                            defaultValue={filters[0]}
+                            options={filters} //liste der retailer laden
+                            getOptionLabel={(option) => option.name}
+                            getOptionSelected={(option) => option.label}
+                            renderInput={(params) => (
+                                <TextField {...params} variant="standard" label="Filter" placeholder="Händler" />
+                            )}                
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
+                        <TextField
+                            autoFocus
+                            style={{display: this.state.textField}}
+                            onChange={this.handleInputChange}
+                            margin="dense"
+                            id="outlined-basic"
+                            //variant="outlined"
+                            label="Eingabe"
+                            type="ID"
+                            fullWidth
+                            value={this.state.filterInput}        
+                        /> 
+                    </Grid>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <Grid container direction="row" justify="space-between" alignItems="center" style={{display: this.state.timeFilter, marginTop: 10, marginBottom: 10}}>
+                            <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
+                                <KeyboardDatePicker
+                                disableToolbar
+                                fullWidth
+                                variant="inline"
+                                format="dd/MM/yyyy"
+                                margin="normal"
+                                id="date-picker-start"
+                                label="Startdatum"
+                                value={this.state.startDate}
+                                onChange={(date) => this.handleStartDate(date)}
+                                KeyboardButtonProps={{
+                                    'aria-label': 'change date',
+                                }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
+                                <KeyboardDatePicker
+                                disableToolbar
+                                fullWidth
+                                variant="inline"
+                                format="dd/MM/yyyy"
+                                margin="normal"
+                                id="date-picker-end"
+                                label="Enddatum"
+                                value={this.state.endDate}
+                                onChange={(date) => this.handleEndDate(date)}
+                                KeyboardButtonProps={{
+                                    'aria-label': 'change date',
+                                }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
+                                <Button 
+                                    onClick={this.filterByTimePeriod}
+                                    fullWidth
+                                    color="primary"
+                                    variant="contained">
+                                    filtern
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </MuiPickersUtilsProvider>
+                </Grid>
+                <TableContainer style={{marginTop: 15}} component={Paper}>
+                    <Table aria-label="collapsible table">
+                        <TableHead style={{backgroundColor: colors.teal[600]}}>
+                            <TableRow>
+                                <TableCell/>
+                                <TableCell/>
+                                <TableCell align="left"><b style={{ color: '#ffffff'}}>Menge</b></TableCell>
+                                <TableCell align="left"><b style={{ color: '#ffffff'}}>Artikel</b></TableCell>
+                                <TableCell align="left"><b style={{ color: '#ffffff'}}>Händler</b></TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {this.state.listEntryTableElements}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </React.Fragment>
         )
     }
 }

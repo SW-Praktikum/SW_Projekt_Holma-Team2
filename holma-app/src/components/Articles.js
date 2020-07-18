@@ -61,34 +61,34 @@ class Articles extends Component {
         const { article } = this.props;
         const { open } = this.state;
         return (
-            <div >
-                <TableContainer style={{marginTop: 20}}component={Paper}>
+            <React.Fragment>
+                <TableContainer style={{marginTop: 15}}component={Paper}>
                     <Table aria-label="collapsible table">
-                            <TableRow>
-                                <TableCell width="10%"/>
-                                <TableCell width="30%" align="left">{article.getId()}</TableCell>
-                                <TableCell width="30%" align="left">{article.getName()}</TableCell>
-                                <TableCell width="10%" align="left"></TableCell>
-                                <TableCell width="10%" align='right'>
-                                    <IconButton aria-label="expand row" size="small" onClick={() => this.openDialog()}>
-                                        <EditIcon/>
-                                    </IconButton>
-                                </TableCell>
-                                <TableCell width="10%" align='right'>
-                                    <IconButton aria-label="expand row" size="small" onClick={() => this.deleteArticle(article)}>
-                                        <DeleteIcon/>
-                                    </IconButton>
-                                </TableCell>
-                            </TableRow>
-                        </Table>
-                    </TableContainer>
-                    <ArticleEditDialog 
+                        <TableRow>
+                            <TableCell/>
+                            <TableCell align="left">{article.getId()}</TableCell>
+                            <TableCell align="left">{article.getName()}</TableCell>
+                            <TableCell align="left"></TableCell>
+                            <TableCell align='right'>
+                                <IconButton aria-label="expand row" size="small" onClick={() => this.openDialog()}>
+                                    <EditIcon/>
+                                </IconButton>
+                            </TableCell>
+                            <TableCell align='right'>
+                                <IconButton aria-label="expand row" size="small" onClick={() => this.deleteArticle(article)}>
+                                    <DeleteIcon/>
+                                </IconButton>
+                            </TableCell>
+                        </TableRow>
+                    </Table>
+                </TableContainer>
+                <ArticleEditDialog 
                     openDialog={this.openDialog}
                     open={this.state.openDialog}
                     handleClose={this.handleClose}
                     article={article}
                 />
-                </div>
+            </React.Fragment>
         );
     }
 }

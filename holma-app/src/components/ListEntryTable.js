@@ -151,17 +151,17 @@ class ListEntryTable extends Component {
     render() {
         return (
             <React.Fragment>
-                <TableContainer  component={Paper}>
+                <TableContainer  component={Paper} style={{marginTop: 15}}>
                     <Table>
                         <TableHead style={{backgroundColor: colors.teal[600]}}>
                             <TableRow>
-                                <TableCell width="5%" align="left"/>
-                                <TableCell width="10%" align="right"><b style={{ color: '#ffffff'}}></b></TableCell>
-                                <TableCell width="10%" align="left"><b style={{ color: '#ffffff'}}></b></TableCell>
-                                <TableCell width="50%" align="left"><b style={{ color: '#ffffff'}}>Artikel</b></TableCell>
-                                <TableCell width="5%"/>
-                                <TableCell width="10%"/>
-                                <TableCell width="10%"/>
+                                <TableCell align="left"/>
+                                <TableCell align="right"><b style={{ color: '#ffffff'}}></b></TableCell>
+                                <TableCell align="left"><b style={{ color: '#ffffff'}}>Menge</b></TableCell>
+                                <TableCell align="left"><b style={{ color: '#ffffff'}}>Artikel</b></TableCell>
+                                <TableCell/>
+                                <TableCell/>
+                                <TableCell/>
                             </TableRow>
                         </TableHead>
                         <TableBody>

@@ -93,8 +93,9 @@ class ListEntry extends Component {
                     closeDialog={this.closeDialog}
                     updateListEntry={this.updateListEntry}
                 />
-                <TableRow width="100%">
-                    <TableCell padding="checkbox" width="5%" align="left" style={{backgroundColor:"#ffffff"}}>
+                <TableRow >
+                
+                    <TableCell padding="checkbox" align="left" style={{backgroundColor:"#ffffff"}}>
                         <Checkbox
                             color="primary"
                             checked={this.state.checked}
@@ -102,20 +103,20 @@ class ListEntry extends Component {
                             inputProps={{ 'aria-label': 'primary checkbox' }}
                         />
                     </TableCell>
-                    <TableCell style={{paddingLeft: 5, paddingTop: 0, paddingBottom: 0, paddingRight: 10}} width="10%" align="right">{listEntry.getAmount()}</TableCell>
-                    <TableCell width="10%" align="left">{listEntry.getUnit()}</TableCell>
-                    <TableCell padding="default" width="50%" align="left">{listEntry.getArticleName()}</TableCell>
-                    <TableCell padding="none" width="5%">
+                    <TableCell style={{paddingLeft: 0, paddingTop: 0, paddingBottom: 0, paddingRight: 0}} align="right">{listEntry.getAmount()}</TableCell>
+                    <TableCell align="left">{listEntry.getUnit()}</TableCell>
+                    <TableCell padding="default" align="left">{listEntry.getArticleName()}</TableCell>
+                    <TableCell padding="none" >
                         <IconButton aria-label="expand row" size="small" onClick={() => this.setOpen(!open)}>
                             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                         </IconButton>
                     </TableCell>
-                    <TableCell padding="none" width="10%" align='right'>
+                    <TableCell padding="none" align='right'>
                         <IconButton aria-label="expand row" size="small" onClick={() => this.openDialog()}>
                             <EditIcon/>
                         </IconButton>
                     </TableCell>
-                    <TableCell style={{paddingLeft: 0, paddingTop: 0, paddingBottom: 0, paddingRight: 15}} width="10%" align='center'>
+                    <TableCell style={{paddingLeft: 0, paddingTop: 0, paddingBottom: 0, paddingRight: 10}} align='center'>
                         <IconButton aria-label="expand row" size="small" onClick={() => this.deleteEntry(listEntry)}>
                             <DeleteIcon/>
                         </IconButton>
@@ -128,17 +129,17 @@ class ListEntry extends Component {
                                 <Table size="small" aria-label="purchases">
                                     <TableHead >
                                         <TableRow>
-                                            <TableCell className={classes.tableCell} colSpan={3} padding="none" width="30%" align="left">Einkäufer</TableCell>
-                                            <TableCell className={classes.tableCell} colSpan={2} padding="none" width="20%" align="left">Händler</TableCell>
-                                            <TableCell className={classes.tableCell} colSpan={4} padding="none" width="30%" align="left">Geändert</TableCell>
-                                            <TableCell className={classes.tableCell} colSpan={1} padding="none" width="20%" align="center"></TableCell>
+                                            <TableCell className={classes.tableCell} colSpan={3} padding="none" align="left">Einkäufer</TableCell>
+                                            <TableCell className={classes.tableCell} colSpan={2} padding="none" align="left">Händler</TableCell>
+                                            <TableCell className={classes.tableCell} colSpan={4} padding="none" align="left">Geändert</TableCell>
+                                            <TableCell className={classes.tableCell} colSpan={1} padding="none" align="center">STD</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        <TableCell className={classes.tableCell} colSpan={3} padding="none" width="30%" align="left">{listEntry.getPurchasingUserName()}</TableCell>
-                                        <TableCell className={classes.tableCell} colSpan={2} padding="none" width="20%" align="left">{listEntry.getRetailerName()}</TableCell>
-                                        <TableCell className={classes.tableCell} colSpan={4} padding="none" width="30%" align="left">{groupLastUpdated}</TableCell>
-                                        <TableCell className={classes.tableCell} colSpan={1} padding="none" width="20%" align='center'>
+                                        <TableCell className={classes.tableCell} colSpan={3} padding="none" align="left">{listEntry.getPurchasingUserName()}</TableCell>
+                                        <TableCell className={classes.tableCell} colSpan={2} padding="none" align="left">{listEntry.getRetailerName()}</TableCell>
+                                        <TableCell className={classes.tableCell} colSpan={4} padding="none" align="left">{groupLastUpdated}</TableCell>
+                                        <TableCell className={classes.tableCell} colSpan={1} padding="none" align='center'>
                                             <IconButton aria-label="expand row" size="small" >
                                                 {listEntry.isStandardarticle() ?  <StarIcon /> : <StarBorderIcon />}
                                             </IconButton>
@@ -158,8 +159,6 @@ const styles = theme => ({
     root: {
       position: 'fixed',
       bottom: theme.spacing(2),
-      //right: theme.spacing(1),
-      
     },
     tableCell: {
         borderBottom: "none"
