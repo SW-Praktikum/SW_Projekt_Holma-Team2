@@ -187,7 +187,7 @@ class ListEntryTable extends Component {
                        //geben wir den namen der Liste irgendwie weiter
                        //hier richtig auf die neue Komponente verlinklen
                        //hab in der app.js schonmal was versucht, kp ob das der richtige weg ist
-                       to={"/group/" + this.props.match.params.groupId + "/shoppinglist/" + this.props.match.params.shoppingListId + "/edit"} style={{textDecoration: 'none'}}>
+                       to={"/shoppinglistedit/" + this.props.match.params.shoppingListId} style={{textDecoration: 'none'}}>
                             <ShoppingListLink/>
                         
                         </Link>

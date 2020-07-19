@@ -164,7 +164,7 @@ class App extends React.Component {
                     </Route>  
                     <Route path='/group/:groupId/shoppinglist/:shoppingListId' component={ListEntryTable}>
                     </Route>
-                    <Route path='/group/:groupId/shoppinglist/:shoppingListId/edit' component={ShoppingListEdit}>
+                    <Route path='/shoppinglistedit/:shoppingListId/' component={ShoppingListEdit}>
                     </Route>
                   </>
                   :
