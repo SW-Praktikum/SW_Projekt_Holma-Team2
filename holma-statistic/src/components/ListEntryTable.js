@@ -349,7 +349,7 @@ class ListEntryTable extends Component {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {ilteredListEntryTableElements}
+                            {filteredListEntryTableElements}
                         </TableBody>
                     </Table>
                 </TableContainer>
