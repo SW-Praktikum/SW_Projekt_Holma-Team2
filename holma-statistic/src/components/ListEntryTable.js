@@ -23,7 +23,12 @@ import EntryAddDialog from './dialogs/EntryAddDialog';
 import { colors, Button, TextField, Checkbox, FormControlLabel } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import Grid from '@material-ui/core/Grid';
-import DateFnsUtils from '@date-io/date-fns'; // choose your lib
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import DateFnsUtils from '@date-io/date-fns';
+import IconButton from '@material-ui/core/IconButton';
+import ClearIcon from '@material-ui/icons/Clear';
 import {
   KeyboardDatePicker,
   MuiPickersUtilsProvider,
@@ -79,7 +84,7 @@ class ListEntryTable extends Component {
             filteredListEntryTableElements: [],
             openDialog: false,
             userId : this.props.user.getId(),
-
+            userName: this.props.user.getName(),
             retailers: [],
             retailerName: null,
             filterInput: "",
@@ -92,7 +97,9 @@ class ListEntryTable extends Component {
             filterPurchasingUserName: "",
             filterChecked: false,
             filterStartDate: null,
-            filterEndDate: null
+            filterEndDate: null,
+            filterOpen: "none",
+            filterText: "Filter anzeigen"
         }
     }
 
@@ -242,12 +249,68 @@ class ListEntryTable extends Component {
         this.filterInput()
     }
     
+    handleFilterOpen = () => {
+        if (this.state.filterOpen === "none") {
+            this.setState({
+                filterOpen: "",
+                filterText: "Filter ausblenden"
+            })
+        }
+
+        else {
+            this.setState({
+                filterOpen: "none",
+                filterText: "Filter anzeigen"
+            })
+        }
+    }
+
+    clearEndDateInput = () => {
+        this.setState({
+            filterEndDate: null
+        })
+        this.loadListEntries()
+    }
+
+    clearStartDateInput = () => {
+        this.setState({
+            filterStartDate: null,
+        })
+        this.loadListEntries()
+    }
 
     render() {
         const {retailers, filterArticleName, filterRetailerName, filterChecked, filterStartDate, filterEndDate, filteredListEntryTableElements} = this.state;
         return (
-            <React.Fragment>
-                <Grid container direction="row" justify="space-between" alignItems="center" component={Paper} style={{marginTop: 15}}>
+            <React.Fragment>  
+                <Grid 
+                    container 
+                    direction="row" 
+                    justify="space-between" 
+                    alignItems="center" 
+                    component={Paper} 
+                    style={{display: this.state.displayTable, minWidth: '100%', marginBottom:15, marginTop:15, }}
+                    >
+                    <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
+                        <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>
+                            Hallo {this.state.userName},
+                        </Typography>
+                        <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>Deine persönliche Statistik:</Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
+                        <Button 
+                            variant="contained"
+                            fullWidth 
+                            color="primary"
+                            onClick={this.handleFilterOpen}>
+                            {this.state.filterText}
+                        </Button>
+                    </Grid>
+                    <Grid item xs={12} sm={4}></Grid>
+                </Grid>
+                
+                
+                <Grid container direction="row" justify="space-between" alignItems="center" component={Paper} style={{marginTop: 15, display: this.state.filterOpen}}>
                     <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
                         <Typography color="primary" style={{fontSize: 18}}>
                             Filter nach:
@@ -291,28 +354,8 @@ class ListEntryTable extends Component {
                             }
                             label="Gekauft"
                         />
-                    </Grid>
-                    <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
-                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                            <KeyboardDatePicker
-                                disableToolbar
-                                fullWidth
-                                variant="inline"
-                                format="dd/MM/yyyy"
-                                margin="normal"
-                                id="date-picker-start"
-                                label="Startdatum"
-                                value={filterStartDate}
-                                onChange={(date) => this.handleInputChangeDate("filterStartDate", date)}
-                                KeyboardButtonProps={{
-                                    'aria-label': 'change date',
-                                }}
-                                defaultDate={null}
-
-                            />
-                        </MuiPickersUtilsProvider>
-                    </Grid>
-                    <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
+                    </Grid>                   
+                    <Grid item xs={10} sm={3} style={{paddingLeft: 20, paddingRight: 0, paddingTop: 10, paddingBottom: 10}}>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <KeyboardDatePicker
                                 disableToolbar
@@ -321,7 +364,31 @@ class ListEntryTable extends Component {
                                 format="dd/MM/yyyy"
                                 margin="normal"
                                 id="date-picker-start"
-                                label="Enddatum"
+                                label="Kauf Startdatum"
+                                value={filterStartDate}
+                                onChange={(date) => this.handleInputChangeDate("filterStartDate", date)}
+                                KeyboardButtonProps={{
+                                    'aria-label': 'change date',
+                                }}
+                                defaultDate={null}
+                            />
+                        </MuiPickersUtilsProvider>
+                    </Grid>
+                    <Grid item xs={2} sm={1} align="right" style={{paddingLeft: 0, paddingRight: 15, paddingTop: 18, paddingBottom: 0}}>
+                        <IconButton padding="none" aria-label="expand row" size="small" onClick={this.clearStartDateInput}>
+                                <ClearIcon/>
+                        </IconButton>
+                    </Grid>
+                    <Grid item xs={10} sm={3} style={{paddingLeft: 20, paddingRight: 0, paddingTop: 10, paddingBottom: 10}}>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <KeyboardDatePicker
+                                disableToolbar
+                                fullWidth
+                                variant="inline"
+                                format="dd/MM/yyyy"
+                                margin="normal"
+                                id="date-picker-start"
+                                label=" Kauf Enddatum"
                                 value={filterEndDate}
                                 onChange={(date) => this.handleInputChangeDate("filterEndDate", date)}
                                 KeyboardButtonProps={{
@@ -329,8 +396,12 @@ class ListEntryTable extends Component {
                                 }}
                                 defaultDate={null}
                             />
-                        
                         </MuiPickersUtilsProvider>
+                    </Grid>
+                    <Grid item xs={2} sm={1} align="right" style={{paddingLeft: 0, paddingRight: 15, paddingTop: 18, paddingBottom: 0}}>
+                        <IconButton padding="none" aria-label="expand row" size="small" onClick={this.clearEndDateInput}>
+                                <ClearIcon/>
+                        </IconButton>
                     </Grid>
                 </Grid>
                 <TableContainer style={{marginTop: 15}} component={Paper}>
