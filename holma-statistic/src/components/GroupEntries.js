@@ -15,7 +15,8 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import ListWithBoxes from './ListWithBoxes'
-import MemberAddDialog from './dialogs/MemberAddDialog';
+import ListEntryTable from './ListEntryTable'
+
 import GroupBO from '../api/GroupBO';
 import UserBO from '../api/UserBO';
 import List from '@material-ui/core/List';
@@ -58,20 +59,13 @@ const useStyles = makeStyles({
 
 
 const randomImages = [
-  "https://www.bahn-tickets.com/wp-content/uploads/2016/07/Gruppenreise_Personen-1000x683px.jpg",
-  "https://www.br.de/telekolleg/faecher/psychologie/gruppe-kreis-maenner100~_v-img__16__9__xl_-d31c35f8186ebeb80b0cd843a7c267a0e0c81647.jpg?version=c8dde",
-  "https://www.verenathiem.com/wp-content/uploads/2016/01/Blog_pic_650_380_machtdergruppe.png",
-  "https://teamworks-gmbh.de/wp-content/uploads/2015/02/gruppedummFotolia_72297488_XS_copyright.jpg",
-  "https://s3-eu-central-1.amazonaws.com/vodafone-featured/wp-content/uploads/2019/01/18104102/erstelleeinesnapchatgruppemitdeinenfreunden-640x360.jpg",
-  "https://www.schule-bw.de/faecher-und-schularten/gesellschaftswissenschaftliche-und-philosophische-faecher/gemeinschaftskunde/materialien-und-medien/soziologie/zusammenleben-soziale-gruppen/gruppe.jpg",
-  "https://www.schulbilder.org/bild-in-der-gruppe-sprechen-dl14849.jpg",
-  "https://blog.pasch-net.de/klick/uploads/Sport5.PNG",
-  "https://cdn.businessinsider.de/wp-content/uploads/2020/03/Joggen-Fru%CC%88hling-600x400.jpg"
+  "https://portfolio.iuk.hdm-stuttgart.de/dk108/wp-content/uploads/sites/793/2020/07/1234-1.jpg"
 ]
 
 class GroupEntry extends Component {
     render() {
-        const path = "/onegroupstat/" + this.props.group.getId()
+        
+        const path = "/grouplist/" + this.props.group.getId() + "/" + this.props.user.getId()
         return (
         <Link to={path} style={{textDecoration: 'none'}}>
           <Card className="root" style={{/* minHeight: 250 ,  */minWidth: '100%', marginBottom:10, marginTop:10, backgroundColor: colors.teal[600]}}>
@@ -80,7 +74,7 @@ class GroupEntry extends Component {
             <CardContent>
                 <Typography className="title" style={{fontSize: 14, color: 'white'}}>{this.props.group.getName()}</Typography>
             </CardContent>
-            </CardActionArea>     
+            </CardActionArea>
           </Card>
         </Link> 
     )
@@ -91,17 +85,14 @@ class GroupEntry extends Component {
 class GroupEntries extends Component{
     constructor(props) {
         super(props);
-        this.addMember = this.addMember.bind(this)
         this.state = {
             groupElements: [],
-            memberElements: [],
             loadingInProgress: false,
             loadingError: null,
             groupId: "",
             open: false,
-            openMember: false,
             groupName: "",
-            memberId: "",
+            buttonDisabled: true,
         }
     }
 
@@ -118,81 +109,14 @@ class GroupEntries extends Component{
       }
     }
 
-    handleChange = (e) => {
-      this.setState({groupName: e.target.value})
-    }
-
-
-    addMember = () => {
-      // es muss gecheckt werden bei input ob der user existiert und ob er schon in der Gruppe ist,
-      // checken ob user id vorhanden und ob user schon in group
-      AppAPI.getAPI().addUserToGroup(this.state.groupId, this.state.memberId).then(() => {
-        this.loadMembers()
-      })
-      this.setState({memberId: ""})
-    }
-
-    handleChangeMember = (e) => {
-      this.setState({memberId: e.target.value}, () => {
-        this.loadMembers()
-      })
-    }
-
-    deleteUser = (userId) => {
-      AppAPI.getAPI().deleteUsersFromGroup(this.state.groupId, userId).then(() => {
-        this.loadMembers()
-      })
-
-      //this.setState({memberElements})
-    }
-
-    loadMembers = () => {
-      AppAPI.getAPI().getUsersByGroupId(this.state.groupId).then(users => {
-        //console.log("Loaded users from database for group '" + this.state.groupId + "'")
-        //console.log("Loaded users:", users)
-        var memberElements = users.map((user) => 
-              <ListItem key={user.getId()} item xs={4}>
-                <ListItemAvatar>
-                  <Avatar>
-                    <FaceIcon />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText
-                  primary={user.getName()}
-                  secondary={"ID: " + user.getId()}
-                />
-                <ListItemSecondaryAction onClick={() => this.deleteUser(user.getId())}>
-                  <IconButton >
-                    <DeleteIcon />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              </ListItem>
-          
-          )
-
-          this.setState({
-              memberElements: memberElements,
-              loadingInProgress: true, // loading indicator 
-              loadingError: null
-            })
-          }).catch(e =>
-              this.setState({ // Reset state with error from catch 
-                loadingInProgress: false,
-                loadingError: e
-          })
-        );  
-      }
-
+    
     loadGroups = () => {
       const {user} = this.props
         AppAPI.getAPI().getGroupsByUserId(user.getId()).then(groups => {
-          //console.log("Loaded groups from database for user '" + user.getName() + "'")
-          //console.log("Loaded groups:", groups)
           var groupElements = groups.map((group) => 
-          //wie kann die einzelne Gruppe im nächsten Schritt angesprochen werden?
           <Grid key={group.getId()} item xs={6} item lg={4}>
             <Paper className="paper" style ={{ textAlign:'center',}} >
-              <GroupEntry key={group.getId()} group={group} setPath={this.setPath}/>
+              <GroupEntry key={group.getId()} user={user} group={group} setPath={this.setPath}/>
             </Paper>
           </Grid>
           )
@@ -212,12 +136,11 @@ class GroupEntries extends Component{
     
 
     render() {
-        const {groupElements, memberElements} = this.state;
+        const {groupElements, memberElements, groupName,buttonDisabled, minLength} = this.state;
 
         return (
           <div>
             <ListWithBoxes groupElements={groupElements}/>
-
             
           </div>
         );

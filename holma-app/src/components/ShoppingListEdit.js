@@ -78,6 +78,7 @@ class ShoppingListNameEditDialog extends Component {
 class ShoppingListEdit extends Component {
     constructor(props) {
       super(props)
+      this.handleChangeName = this.handleChangeName.bind(this)
       this.state= {
         shoppingListId: this.props.match.params.shoppingListId,
         shoppingListName: "",
@@ -122,14 +123,15 @@ class ShoppingListEdit extends Component {
         }
   
     saveChanges = () => {
-        AppAPI.getAPI().updateShoppingList(this.state.shoppingListObject).then(()=>
+        AppAPI.getAPI().updateShoppingList(this.state.shoppingListObject[0]).then(()=>
+        this.componentDidMount(),
         this.handleClose()
         )
     }
 
     handleDeleteShoppingList = () => {
-        console.log(this.state.shoppingListObject)
-        AppAPI.getAPI().deleteShoppingList(this.state.shoppingListObject).then(() => 
+        console.log(this.state.shoppingListObject[0])
+        AppAPI.getAPI().deleteShoppingList(this.state.shoppingListObject[0]).then(() => 
         window.location.reload()
         );
     }
