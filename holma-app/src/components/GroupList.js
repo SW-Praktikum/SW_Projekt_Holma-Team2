@@ -56,7 +56,6 @@ class ListCard extends Component {
     if(this.props.list){
         this.getEntries();
         this.getCheckedEntries();
-        console.log("card", this.state)
       }
   }
 

@@ -58,7 +58,8 @@ class ListEntryTable extends Component {
             articles: [],
             articlesCount: 0,
             openDialog: false,
-            liseEntry: ""
+            liseEntry: "",
+            shoppingListName: "",
         }
 
         console.log(this.state)
@@ -68,9 +69,12 @@ class ListEntryTable extends Component {
         if(this.state.shoppingListId) {
             this.loadRetailers().then(() => {this.loadArticles()
                 .then(() => { this.loadUsers()
-                    .then(() => {this.loadListEntries()})
+                    .then(() => {
+                        this.loadListEntries()
+                        this.loadShoppingListName()})
                 })
-            })
+            });
+           
         }
     }
 
@@ -101,7 +105,15 @@ class ListEntryTable extends Component {
             })
         );  
     } 
-  
+    
+    loadShoppingListName = () => {
+        AppAPI.getAPI().getShoppingListById(this.props.match.params.shoppingListId).then((shoppingList) => {
+            this.setState({
+                shoppingListName: shoppingList[0].name,
+            })
+        })
+    }
+
     loadUsers = () => {
         return AppAPI.getAPI().getUsersByGroupId(this.state.groupId).then((users) => {
             console.log("Loaded users for group '" + this.state.groupId + "':", users)
@@ -167,7 +179,6 @@ class ListEntryTable extends Component {
     }
     
     render() {
-        console.log("Props", this.props)
         return (
             <React.Fragment>
                 <Box m={1} />
@@ -176,8 +187,8 @@ class ListEntryTable extends Component {
                     <CardContent>
                     <Grid container direction="row" justify="space-between" alignItems="center" spaching={2}>
                         <Grid item xs={12} sm={4}>
-                        <Typography className="title" style={{fontSize: 16, color: colors.teal[600]}}><b>Shoppingliste: </b></Typography>
-                        <Typography className="title" style={{fontSize: 16, color: colors.teal[600]}}><b>Id: {this.props.match.params.shoppingListId}</b></Typography>
+                        <Typography className="title" style={{fontSize: 16, color: colors.teal[600]}}><b>Shoppingliste: </b>{this.state.shoppingListName}</Typography>
+                        <Typography className="title" style={{fontSize: 16, color: colors.teal[600]}}><b>Id: </b>{this.props.match.params.shoppingListId}</Typography>
                         </Grid>
                         <Grid style={{paddingBottom: 10}} item xs={12} sm={4}></Grid>
                         <Grid item xs={12} sm={4}>
