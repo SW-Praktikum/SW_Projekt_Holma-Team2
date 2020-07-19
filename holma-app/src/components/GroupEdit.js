@@ -159,7 +159,7 @@ class GroupInformation extends Component {
         <Grid container spaching={3}>
 
           <Grid item xs={12} sm={4}>
-            <Link to={"/articleedit/" + this.props.groupId} style={{textDecoration: 'none'}}>
+            <Link to={"/articles/" + this.props.groupId} style={{textDecoration: 'none'}}>
               <ArticleLink/>
             </Link>
           </Grid>
@@ -167,7 +167,7 @@ class GroupInformation extends Component {
           <Grid style={{paddingBottom: 20}} item xs={12} sm={4}></Grid>
           
           <Grid item xs={12} sm={4}>
-            <Link to={"/standardarticleedit/" + this.props.groupId} style={{textDecoration: 'none'}}>
+            <Link to={"/standardarticles/" + this.props.groupId} style={{textDecoration: 'none'}}>
               <StandardArticleLink/>
             </Link>
           </Grid>

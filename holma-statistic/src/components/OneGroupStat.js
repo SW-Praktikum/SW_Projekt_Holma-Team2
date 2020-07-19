@@ -68,17 +68,17 @@ class OneGroupStat extends React.Component {
   }
 
   loadGroup(){
-    AppAPI.getAPI().getGroupById(this.state.groupId).then(group =>{
+    AppAPI.getAPI().getGroupById(this.state.groupId).then(g =>{
       this.setState({
-        group:group,
+        group: g,
       })
     })
   }
   
   loadUsers(){
-    AppAPI.getAPI().getUsersByGroupId(this.state.groupId).then(users =>{
+    AppAPI.getAPI().getUsersByGroupId(this.state.groupId).then(u =>{
       this.setState({
-        users:users,
+        users: u,
       })
     })
   }
@@ -87,7 +87,7 @@ class OneGroupStat extends React.Component {
   loadShoppingLists(){
     AppAPI.getAPI().getShoppingListsByGroupId(this.state.groupId).then(list =>{
       this.setState({
-        listElements:list,
+        listElements: list,
       })
     })
   }

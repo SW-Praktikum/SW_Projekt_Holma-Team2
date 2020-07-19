@@ -44,7 +44,6 @@ class Grouplink extends Component{
   }
 }
 
-
 class ListCard extends Component {
   constructor(props) {
     super(props);
@@ -57,7 +56,6 @@ class ListCard extends Component {
     if(this.props.list){
         this.getEntries();
         this.getCheckedEntries();
-        console.log("card", this.state)
       }
   }
 
@@ -76,7 +74,6 @@ class ListCard extends Component {
       }) 
     })
   }
-
 
   render() {
       return (
@@ -99,7 +96,6 @@ class ListCard extends Component {
 class GroupList extends Component {
     constructor(props) {
         super(props);
-        //console.log(this.props.match.params.groupId)
         this.state = {
             group: null,
             groupId: this.props.match.params.groupId,
@@ -107,6 +103,8 @@ class GroupList extends Component {
             listElements:[],
             shoppingListName: "",
             shoppingListId:"",
+            newListId: "",
+            checked: false
         }}
       
     componentDidMount(){
@@ -123,7 +121,8 @@ class GroupList extends Component {
 
     handleClose = () => {
       this.setState({
-        openDialog: false})
+        openDialog: false
+      })
     }
 
     addStandardArticles = () => {
@@ -131,27 +130,30 @@ class GroupList extends Component {
         this.setState({checked: true})
       else
         this.setState({checked: false})
-      
     }
+
     checkStandard = () => {
-      if (this.state.checked === false) {
-        // Liste ohne Standardartikel erstellen
-        console.log("Ohne standard")
-        this.createNewList()
-      }
-      else {
-        console.log("Mit standard")
-        this.createNewList()
-        // add standardarticles to new list
-        // Liste mit Standardartikel erstellen
-      }
+      this.createNewList()
       this.handleClose()
     }
 
     createNewList = () => {
       var lst = new ShoppingListBO(this.state.shoppingListName, this.state.groupId, "");
       AppAPI.getAPI().createShoppingList(lst).then(() => {
-        this.loadShoppingLists()
+        if (this.state.checked === true) {
+          AppAPI.getAPI().getShoppingListsByGroupId(this.state.groupId).then((result) => {
+            const liste  = result[result.length - 1]
+            AppAPI.getAPI().addStandardArticlesToShoppingList(this.state.groupId, liste.id).then (() => {
+              this.loadShoppingLists()
+            })
+            this.setState({
+              checked: false
+            })
+        });         
+        }
+        else {
+          this.loadShoppingLists()
+        }
       })
     }
 
@@ -198,10 +200,9 @@ class GroupList extends Component {
     render() {
       const {listElements} = this.state;
           return(
-            <div>
+            <React.Fragment>
               <Box m={1} />
               <Card className="root" style={{minWidth: '100%', marginBottom:10, marginTop:10, backgroundColor: "ffffff"}}>                
-                <CardActionArea>
                   <CardContent>
                   <Grid container direction="row" justify="space-between" alignItems="center" spaching={2}>
                     <Grid item xs={12} sm={4}>
@@ -215,12 +216,15 @@ class GroupList extends Component {
                       </Link>
                     </Grid>
                   </Grid>
-                  </CardContent>
-                </CardActionArea>     
+                  </CardContent>    
               </Card>
               
                 <Box m={2} />
-                <Typography className="title" style={{fontSize: 14, color: 'black'}}>Shoppinglists: </Typography>
+                <Card className="root" style={{minWidth: '100%', marginBottom:10, marginTop:10, backgroundColor: "ffffff"}}>                
+                    <CardContent>
+                      <Typography className="title" style={{fontSize: 16, color: colors.teal[600]}}><b>Shoppinglisten:</b></Typography>
+                    </CardContent>
+                </Card>
                 <ListWithBoxes groupElements={listElements}/>
                 <ShoppingListAddDialog 
                   openDialog={this.openDialog}
@@ -231,7 +235,7 @@ class GroupList extends Component {
                   checkStandard={this.checkStandard}
                   handleInputChange={this.handleInputChange}
                 />
-            </div>        
+            </React.Fragment>        
     );
 }}
 

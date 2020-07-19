@@ -33,10 +33,7 @@ class ListEntry extends Component {
       AppAPI.getAPI().updateListEntry(this.state.listEntry)
     }
 
-    getGroupName = () => {
-      console.log(this.props.listEntry.getShoppingListId())
-      //AppAPI.getAPI().getRetailer
-    }
+    
 
 
 
@@ -44,17 +41,9 @@ class ListEntry extends Component {
         const { listEntry } = this.props;
         const { open } = this.state;
         return (
-            <div >
-                <colgroup>
-                    <col style={{width:'10%'}}/>
-                    <col style={{width:'20%'}}/>
-                    <col style={{width:'20%'}}/>
-                    <col style={{width:'50%'}}/>
-                    <col style={{width:'40%'}}/>
-                    <col style={{width:'40%'}}/>
-                </colgroup>
-                <TableRow width="100%">
-                    <TableCell padding="checkbox" >
+            <React.Fragment>
+                <TableRow>
+                    <TableCell padding="checkbox">
                       <Checkbox
                             color="primary"
                             checked={this.state.checked}
@@ -62,16 +51,13 @@ class ListEntry extends Component {
                             inputProps={{ 'aria-label': 'primary checkbox' }}
                         />
                     </TableCell>
-                    <TableCell style={{paddingLeft: 5, paddingTop: 0, paddingBottom: 0, paddingRight: 10}} align="right">{listEntry.getAmount()}</TableCell>
-                    <TableCell padding="dense" align="left">{listEntry.getUnit()}</TableCell>
-                    <TableCell padding="dense" align="left">{listEntry.getName()}</TableCell>
-                    <TableCell padding="dense" align="left">{this.getGroupName()}</TableCell>
-                    <TableCell padding="dense" align="left">{listEntry.getShoppingListName()}</TableCell>
-                    <TableCell padding="dense" align="right">{listEntry.getRetailerName()}</TableCell> 
+                    <TableCell padding="none" style={{paddingLeft: 0, paddingTop: 0, paddingBottom: 0, paddingRight: 5}} align="right">{listEntry.getAmount()}</TableCell>
+                    <TableCell padding="none" align="left">{listEntry.getUnit()}</TableCell>
+                    <TableCell padding="none" align="left">{listEntry.getName()}</TableCell>
+                    <TableCell padding="none" align="left">{listEntry.getRetailerName()}</TableCell> 
+                    <TableCell padding="none" align="left">{listEntry.getShoppingListName()}</TableCell>
                 </TableRow>
-                
-                
-            </div>
+            </React.Fragment>
         );
     }
 }
@@ -83,6 +69,8 @@ class Startpage extends Component {
             listEntryTableElements: [],
             userId : this.props.user.getId(),
             userName: this.props.user.name,
+            displayTable: "none",
+            displayEmptyTable: ""
         }
     }
 
@@ -105,6 +93,18 @@ class Startpage extends Component {
 
         // get listentries by user ID
         AppAPI.getAPI().getListEntriesByUserId(this.state.userId).then(listEntries => {
+            if (listEntries.length !== 0) {
+                this.setState({
+                    displayTable: "",
+                    displayEmptyTable: "none"
+                })
+            }
+            else {
+                this.setState({
+                    displayTable: "none",
+                    displayEmptyTable: ""
+                })
+            }
             console.log("Loaded list entries for user '" + this.state.userId + "':", listEntries)
             var listEntryTableElements = listEntries.map((listEntry) => <ListEntry userId = {this.state.userId} listEntry={listEntry} loadListEntries={this.loadListEntries} />)
 
@@ -125,54 +125,52 @@ class Startpage extends Component {
         const {retailers} = this.state;
         console.log("ListElements:", this.state.listEntryTableElements)
         return (
-            <div display='flex'>            
-              
-              <Card style={{minWidth: '100%', marginBottom:15, marginTop:15, }}>
-                <CardActionArea >
-                <CardContent>
-                <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>
-                    Hallo {this.state.userName},
-                </Typography>
-                    <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>Deine persönliche Einkaufsliste:</Typography>
-                </CardContent>
-                </CardActionArea>     
-              </Card>
+            <React.Fragment>             
+                <Card style={{display: this.state.displayTable, minWidth: '100%', marginBottom:15, marginTop:15, }}>
+                    <CardContent>
+                    <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>
+                        Hallo {this.state.userName},
+                    </Typography>
+                        <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>Deine persönliche Einkaufsliste:</Typography>
+                    </CardContent> 
+                </Card>
+                <Card style={{display: this.state.displayEmptyTable, minWidth: '100%', marginBottom:15, marginTop:15, }}>
+                    <CardContent>
+                    <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>
+                        Hallo {this.state.userName},
+                    </Typography>
+                        <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>Du hast noch keine Listeneinträge die dir zugeordnet sind.</Typography>
+                    </CardContent>
+                </Card>
 
-            <TableContainer component={Paper}>
-                <Table aria-label="collapsible table">
-                <colgroup>
-                    <col style={{width:'10%'}}/>
-                    <col style={{width:'10%'}}/>
-                    <col style={{width:'20%'}}/>
-                    <col style={{width:'30%'}}/>
-                    <col style={{width:'30%'}}/>
-                </colgroup>
-                    
-                    <TableHead style={{backgroundColor: colors.teal[600]}}>
-                        
-                        <TableRow>
-                            <TableCell align="left"></TableCell>
-                            <TableCell align="right"><b style={{ color: '#ffffff'}}>Menge</b></TableCell>
-                            <TableCell align="right"><b style={{ color: '#ffffff'}}>Einheit</b></TableCell>
-                            <TableCell align="left"><b style={{ color: '#ffffff'}}>Artikel</b></TableCell>
-                            <TableCell align="left"><b style={{ color: '#ffffff'}}>Shoppinglist</b></TableCell>
-                            <TableCell align="left"><b style={{ color: '#ffffff'}}>Händler</b></TableCell>
-                            
-                        </TableRow>
-                    </TableHead>
-                    
-                </Table>
-            </TableContainer>
-            <TableContainer  component={Paper}>
-                <Table>
-                    <TableBody>
-                    {this.state.listEntryTableElements}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            
-            
-            </div>
+                <TableContainer component={Paper} style={{display: this.state.displayTable}}>
+                    <Table aria-label="collapsible table">                   
+                        <TableHead style={{backgroundColor: colors.teal[600]}}>
+                            <TableRow>
+                                <TableCell 
+                                    style={{paddingLeft: 0, paddingTop: 15, paddingBottom: 15, paddingRight: 0}}/>
+                                <TableCell 
+                                    style={{paddingLeft: 0, paddingTop: 15, paddingBottom: 15, paddingRight: 0}}/>
+                                <TableCell 
+                                    style={{paddingLeft: 0, paddingTop: 15, paddingBottom: 15, paddingRight: 0}} 
+                                    align="left"><b style={{ color: '#ffffff'}}>Menge</b></TableCell>
+                                <TableCell 
+                                    style={{paddingLeft: 0, paddingTop: 15, paddingBottom: 15, paddingRight: 0}} 
+                                    align="left"><b style={{ color: '#ffffff'}}>Artikel</b></TableCell>
+                                <TableCell 
+                                    style={{paddingLeft: 0, paddingTop: 15, paddingBottom: 15, paddingRight: 0}} 
+                                    align="left"><b style={{ color: '#ffffff'}}>Händler</b></TableCell>
+                                <TableCell 
+                                    style={{paddingLeft: 0, paddingTop: 15, paddingBottom: 15, paddingRight: 0}} 
+                                    align="left"><b style={{ color: '#ffffff'}}>Liste</b></TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {this.state.listEntryTableElements}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </React.Fragment>
         )
     }
 }

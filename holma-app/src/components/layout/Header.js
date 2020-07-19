@@ -20,7 +20,7 @@ class Header extends React.Component {
           <Toolbar >
             <IconButton edge="false" className={classes.menuButton} color="inherit" aria-label="menu" component={RouterLink} to={`/home`}>
               <ShoppingBasket />
-              <div>&nbsp;Holma</div>
+              <div>&nbsp;Holma App</div>
             </IconButton>
            <Typography style={{width: 960}} align="right">
             {

@@ -19,9 +19,10 @@ import User from './components/User';
 import GroupInformation from './components/GroupEdit';
 import MemberAddDialog from './components/dialogs/MemberAddDialog';
 import MemberDetails from './components/GroupEdit';
-import ArticleEdit from './components/ArticleEdit';
-import StandardArticleEdit from './components/StandardArticleEdit';
+import Articles from './components/Articles';
+import StandardArticles from './components/StandardArticles';
 import ListEntryTable from './components/ListEntryTable';
+import ShoppingListEdit from './components/ShoppingListEdit';
 import Startpage from './components/layout/Startpage';
 
 
@@ -154,14 +155,16 @@ class App extends React.Component {
                     </Route>
                     <Route path='/groupedit/:groupId/:userId' component={MemberDetails}>
                     </Route>
-                    <Route path='/articleedit/:groupId' component={ArticleEdit}>
+                    <Route path='/articles/:groupId' component={Articles}>
                     </Route>
-                    <Route path='/standardarticleedit/:groupId' component={StandardArticleEdit}>
+                    <Route path='/standardarticles/:groupId' component={StandardArticles}>
                     </Route>
                     <Route path='/user'>
                       <User user={user}/>
                     </Route>  
                     <Route path='/group/:groupId/shoppinglist/:shoppingListId' component={ListEntryTable}>
+                    </Route>
+                    <Route path='/shoppinglistedit/:shoppingListId/' component={ShoppingListEdit}>
                     </Route>
                   </>
                   :

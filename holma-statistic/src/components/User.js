@@ -77,9 +77,6 @@ class UserProfil extends Component {
               <Grid item xs={12} sm={4}>
               </Grid>
               <Grid item xs={12} sm={4}>
-                <Button className={classes.button} align="center" variant="contained" fullWidth style={{color: 'white', backgroundColor: '#D0021B'}} onClick={this.handleDeleteUser}>
-                  Konto löschen
-                  </Button>
               </Grid>
             </Grid>
           </div>

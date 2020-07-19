@@ -23,7 +23,7 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import ArticleEditDialog from './dialogs/ArticleEditDialog';
 import { colors } from '@material-ui/core';
 
-class Article extends Component {
+class Articles extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -61,34 +61,28 @@ class Article extends Component {
         const { article } = this.props;
         const { open } = this.state;
         return (
-            <div >
-                <TableContainer style={{marginTop: 20}}component={Paper}>
-                    <Table aria-label="collapsible table">
-                            <TableRow>
-                                <TableCell width="10%"/>
-                                <TableCell width="30%" align="left">{article.getId()}</TableCell>
-                                <TableCell width="30%" align="left">{article.getName()}</TableCell>
-                                <TableCell width="10%" align="left"></TableCell>
-                                <TableCell width="10%" align='right'>
-                                    <IconButton aria-label="expand row" size="small" onClick={() => this.openDialog()}>
-                                        <EditIcon/>
-                                    </IconButton>
-                                </TableCell>
-                                <TableCell width="10%" align='right'>
-                                    <IconButton aria-label="expand row" size="small" onClick={() => this.deleteArticle(article)}>
-                                        <DeleteIcon/>
-                                    </IconButton>
-                                </TableCell>
-                            </TableRow>
-                        </Table>
-                    </TableContainer>
-                    <ArticleEditDialog 
+            <React.Fragment>
+                <ArticleEditDialog
                     openDialog={this.openDialog}
                     open={this.state.openDialog}
                     handleClose={this.handleClose}
                     article={article}
                 />
-                </div>
+                <TableRow>
+                    <TableCell padding="dense" align="left">{article.getId()}</TableCell>
+                    <TableCell padding="dense" align="left">{article.getName()}</TableCell>
+                    <TableCell padding="dense" align='right'>
+                        <IconButton aria-label="expand row" size="small" onClick={() => this.openDialog()}>
+                            <EditIcon/>
+                        </IconButton>
+                    </TableCell>
+                    <TableCell padding="dense" align='right'>
+                        <IconButton aria-label="expand row" size="small" onClick={() => this.deleteArticle(article)}>
+                            <DeleteIcon/>
+                        </IconButton>
+                    </TableCell>
+                </TableRow>
+            </React.Fragment>
         );
     }
 }
@@ -124,7 +118,7 @@ class ArticleEdit extends Component {
     loadArticles = () => { //Hier muss eine neue Methode - getArticlesByGroupId hinzugefügt werden
         AppAPI.getAPI().getArticlesByGroupId(this.props.match.params.groupId).then(articles => {
             console.log("Loaded articles for group '" + this.props.match.params.groupId + "':", articles)
-            var ArticleElements = articles.map((article) => <Article article={article} loadArticles={this.loadArticles} />)
+            var ArticleElements = articles.map((article) => <Articles article={article} loadArticles={this.loadArticles} />)
             //hier noch ListEntrys ergänzen
             this.setState({
                 ArticleElements: ArticleElements,
@@ -142,28 +136,23 @@ class ArticleEdit extends Component {
     
     render() {
         return (
-            <div display='flex'>
-            <TableContainer style={{marginTop: 20}}component={Paper}>
-                <Table aria-label="collapsible table">
-                    <TableHead style={{backgroundColor: colors.teal[600]}}>
-                        <TableRow>
-                            <TableCell width="10%"/>
-                            <TableCell width="30%" align="left"><b style={{ color: '#ffffff'}}>Id</b></TableCell>
-                            <TableCell width="30%" align="left "><b style={{ color: '#ffffff'}}>Name</b></TableCell>
-                            <TableCell width="10%" align="center"></TableCell>
-                            <TableCell width="20%" align="center"><b style={{ color: '#ffffff'}}>Edit</b></TableCell>
-                        </TableRow>
-                    </TableHead>
-                </Table>
-            </TableContainer>
-            <TableContainer  component={Paper}>
-                <Table>
-                    <TableBody>
-                    {this.state.ArticleElements}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            </div>
+            <React.Fragment>
+                <TableContainer style={{marginTop: 15}} component={Paper}>
+                    <Table aria-label="collapsible table">
+                        <TableHead style={{backgroundColor: colors.teal[600]}}>
+                            <TableRow>
+                                <TableCell align="left"><b style={{color: '#ffffff'}}>Id</b></TableCell>
+                                <TableCell align="left "><b style={{color: '#ffffff'}}>Name</b></TableCell>
+                                <TableCell/>
+                                <TableCell align="left"><b style={{color: '#ffffff'}}>Edit</b></TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {this.state.ArticleElements}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </React.Fragment>
         )
     }
 }
