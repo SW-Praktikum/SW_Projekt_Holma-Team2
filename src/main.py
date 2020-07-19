@@ -212,10 +212,11 @@ class UserByNameOperations(Resource):
         us = adm.get_user_by_name(name)
         return us
 
+
 @holmaApp.route('/user/<int:user_id>/retailers/most-frequent')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('user_id', 'Die ID des Group-Objekts')
-class GroupRelatedArticleFrequencyOperations(Resource):
+class UserRelatedRetailerFrequencyOperations(Resource):
     @holmaApp.marshal_list_with(retailer)
     def get(self, user_id):
 
