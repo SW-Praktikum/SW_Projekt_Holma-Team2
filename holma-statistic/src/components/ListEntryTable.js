@@ -20,7 +20,7 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import EntryEditDialog from './dialogs/EntryEditDialog';
 import EntryAddDialog from './dialogs/EntryAddDialog';
-import { colors, Button, TextField, Checkbox } from '@material-ui/core';
+import { colors, Button, TextField, Checkbox, FormControlLabel } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns'; // choose your lib
@@ -40,7 +40,12 @@ class ListEntry extends Component {
     
     render() {
         const { listEntry } = this.props;
-        const { open } = this.state
+        var checkedTimestamp = ""
+
+        if (listEntry.getCheckedTs() !== null) {
+            let checkedTs = new Date(listEntry.getCheckedTs())
+            checkedTimestamp = checkedTs.toDateString()
+          }
         return (
             <React.Fragment>
                 
@@ -56,6 +61,8 @@ class ListEntry extends Component {
                     <TableCell padding="dense" align="left">{listEntry.getUnit()}</TableCell>
                     <TableCell padding="dense" align="left">{listEntry.getName()}</TableCell>
                     <TableCell padding="dense" align="left">{listEntry.getRetailerName()}</TableCell> 
+                    <TableCell padding="dense" align="left">{checkedTimestamp}</TableCell> 
+
                 </TableRow>
                 
                 
@@ -69,17 +76,23 @@ class ListEntryTable extends Component {
         super(props);
         this.state = {
             listEntryTableElements: [],
+            filteredListEntryTableElements: [],
             openDialog: false,
             userId : this.props.user.getId(),
-            startDate: null,
-            endDate: null,
+
             retailers: [],
             retailerName: null,
             filterInput: "",
             filteredElements: [],
             filterObject: "articleName",
             textField: "block",
-            timeFilter: "none"
+            timeFilter: "none",
+            filterArticleName: "",
+            filterRetailerName: "",
+            filterPurchasingUserName: "",
+            filterChecked: false,
+            filterStartDate: null,
+            filterEndDate: null
         }
     }
 
@@ -91,112 +104,48 @@ class ListEntryTable extends Component {
     }
 
     // dropdown selector for what fo filter
-    filterInput = (inputValue) => {
-        const filterObject = this.state.filterObject
-        if (filterObject == "articleName") {
-            var filteredElements =  this.state.listEntryTableElements.filter(function(item) {
-                return item.props.listEntry.articleName.toLocaleLowerCase().includes(inputValue.toLocaleLowerCase());
+    filterInput = () => {
+        const { filterArticleName,  filterRetailerName, filterPurchasingUserName, filterChecked, 
+                filterStartDate, filterEndDate, listEntryTableElements} = this.state
+        
+        var filteredElements = listEntryTableElements
+
+        if (filterArticleName !== "") {
+            filteredElements =  filteredElements.filter(function(item) {
+                return item.props.listEntry.articleName.toLocaleLowerCase().includes(filterArticleName.toLocaleLowerCase());
             });
         }
-        if (filterObject == "retailerName") {
-            var filteredElements =  this.state.listEntryTableElements.filter(function(item) {
-                return item.props.listEntry.retailerName.toLocaleLowerCase().includes(inputValue.toLocaleLowerCase());
+
+        if (filterRetailerName !== "") {
+            filteredElements =  filteredElements.filter(function(item) {
+                return item.props.listEntry.retailerName.toLocaleLowerCase().includes(filterRetailerName.toLocaleLowerCase());
             });
         }
-        if (filterObject == "purchasingUserName") {
-            var filteredElements =  this.state.listEntryTableElements.filter(function(item) {
-                return item.props.listEntry.purchasingUserName.toLocaleLowerCase().includes(inputValue.toLocaleLowerCase());
-            });
-        }
-        if (inputValue == "checked") {
-            var filteredElements =  this.state.listEntryTableElements.filter(function(item) {
+
+        if (filterChecked == true) {
+            filteredElements =  filteredElements.filter(function(item) {
                 return item.props.listEntry.checked == true;
             });
         }
-        if (inputValue == "unchecked") {
-            var filteredElements =  this.state.listEntryTableElements.filter(function(item) {
-                return item.props.listEntry.checked == false;
-            });
-        }
-        this.loadFilteredElements(filteredElements)
-    }
 
-    // rendering the filtered elements
-    loadFilteredElements = (filteredElements) => {
-        console.log(filteredElements)
-        // Hier die gefilterten Objekte Rendern/Mappen, auch die von filterByTimePeriod
-        // Tim insert your magic here
-    }
-
-
-
-
-    // passing the input search value to the filter function
-    handleInputChange = (e) => {
-        this.setState({filterInput: e.target.value})
-        this.filterInput(e.target.value)
-    }
-
-    filterSelector = (event, filter) => {
-        if (filter == null) {
-            // loading all articles on filter clear
-            this.setState({
-                filterObject: ""
+        if ((filterStartDate != null) && (filterStartDate != 0)) {
+            var filteredElements =  filteredElements.filter(function(item) {
+                const parsedTime = Date.parse(item.props.listEntry.checkedTs)
+                return filterStartDate < parsedTime
             })
-            this.loadFilteredElements(this.state.listEntryTableElements) //loading all elements
         }
-        else {
+
+        if ((filterEndDate != null) && (filterEndDate != 0)) {
+            var filteredElements =  filteredElements.filter(function(item) {
+                const parsedTime = Date.parse(item.props.listEntry.checkedTs)
+                return parsedTime < filterEndDate;
+            })
+        }
+
         this.setState({
-            filterObject: filter.label,
-            textField: "block",
-            timeFilter: "none"
+            filteredListEntryTableElements: filteredElements
         })
-        if (filter.label == "checked") {
-            this.setState({
-                textField: "none"
-            })
-            this.filterInput("checked")
-        }
-        if (filter.label == "unchecked") {
-            this.filterInput("unchecked")
-            this.setState({
-                textField: "none"
-            })
-        }
-        if (filter.label == "timePeriod") {
-            //this.filterInput("timePeriod")
-            this.setState({
-                textField: "none",
-                timeFilter: ""
-            })
-        }
-        
-    }}
-
-
-    // wir bei Button Click aufgerufen
-    filterByTimePeriod = () => {
-        // logic needs to be defined:
-        // filter checkedTS or lastUpdated etc...
-        const startDate = this.state.startDate
-        const endDate = this.state.endDate
-        var filteredElements =  this.state.listEntryTableElements.filter(function(item) {
-            const parsedTime = Date.parse(item.props.listEntry.lastUpdated)
-            return startDate < parsedTime && parsedTime < endDate;
-        });
-        this.loadFilteredElements(filteredElements)
-        
-        // No longer Needed
-        /** 
-        AppAPI.getAPI().getUpdatedListEntriesByTimePeriod(this.state.startDate, this.state.endDate).then((filteredElements) => {
-            // filter Elements only for current user needs to be done here first
-            // otherwise all listEntries from the Database will be loaded
-            this.loadFilteredElements(filteredElements)
-        })
-        */
     }
-
-
   
     loadListEntries = () => {
         console.log("hier")
@@ -207,6 +156,7 @@ class ListEntryTable extends Component {
 
             this.setState({
                 listEntryTableElements: listEntryTableElements,
+                filteredListEntryTableElements: listEntryTableElements,
                 loadingInProgress: true, // loading indicator 
                 loadingError: null
                 })
@@ -237,18 +187,6 @@ class ListEntryTable extends Component {
     // install: npm i @date-io/date-fns
     // install: npm i @material-ui/pickers
     // install: npm i date-fns
-    
-    handleStartDate = (date) => {
-        var datum = new Date (date);
-        var convert = datum.getTime();
-        this.setState({startDate: convert})
-    }
-
-    handleEndDate = (date) => {
-        var datum = new Date (date);
-        var convert = datum.getTime();
-        this.setState({endDate: convert})
-    }
 
    loadListEntriesByRetailer = (retailerId) => {
     console.log("Current Retailer id:", retailerId)
@@ -269,78 +207,97 @@ class ListEntryTable extends Component {
         })
     );  
 }
-   
+    
+    handleInputChangeDate = async (key, date) => {
+        let datum = new Date (date);
+        let convert = datum.getTime();
 
+        if (convert == 0) {
+            convert = null
+        }
+        await this.setState({[key]: convert})
+        this.filterInput()
+
+    }
+
+    handleInputChangeTextField = async (e) => {
+        let key = e.target.id
+        let val = e.target.value
+
+        await this.setState({[key] : val})
+        await this.filterInput()
+    }
+
+    handleInputChangeCheckbox = async (e) => {
+        let key = e.target.id
+        let val = e.target.checked
+
+        await this.setState({[key] : val})
+        await this.filterInput()
+    }
+
+    handleInputChangeAutoComplete = async (key, obj) => {
+        let val = ""
+        if (obj !== null) {
+            val = obj.getName()
+        }
+        
+        await this.setState({[key] : val})
+        this.filterInput()
+    }
+    
 
     render() {
-        const filters = [
-            {
-                name: "Artikel",
-                label: "articleName"
-            },
-            {
-                name: "Einzelhändler",
-                label: "retailerName"
-            },
-            {
-                name: "Einkäufer",
-                label: "purchasingUserName"
-            },
-            {
-                name: "erledigt",
-                label: "checked"
-            },
-            {
-                name: "nicht erledigt",
-                label: "unchecked"
-            },
-            {
-                name: "Zeitraum",
-                label: "timePeriod"
-            }
-
-        ]
-        const {retailers} = this.state;
+        const {retailers, filterArticleName, filterRetailerName, filterChecked, filterStartDate, filterEndDate, filteredListEntryTableElements} = this.state;
         return (
             <React.Fragment>
-                                 
                 <Grid container direction="row" justify="space-between" alignItems="center" component={Paper} style={{marginTop: 15}}>
                     <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
                         <Typography color="primary" style={{fontSize: 18}}>
                             Filter nach:
-                        </Typography>
+                        </Typography> 
                     </Grid>
                     <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
+                        <TextField
+                                autoFocus
+                                onChange={this.handleInputChangeTextField}
+                                margin="dense"
+                                id="filterArticleName"
+                                label="Artikel"
+                                type="ID"
+                                fullWidth
+                                value={filterArticleName}
+                            /> 
+                        </Grid>
+                    <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
+
                         <Autocomplete
-                            id="combo-retailer"
-                            onChange={this.filterSelector}
-                            defaultValue={filters[0]}
-                            options={filters} //liste der retailer laden
+                            id="filterRetailerName"
+                            onChange={(event, value) => this.handleInputChangeAutoComplete("filterRetailerName", value)}
+                            options={retailers} //liste der retailer laden
+                            defaultValue={filterRetailerName}
                             getOptionLabel={(option) => option.name}
-                            getOptionSelected={(option) => option.label}
                             renderInput={(params) => (
-                                <TextField {...params} variant="standard" label="Filter" placeholder="Händler" />
+                                <TextField {...params} variant="standard" label="Händler" placeholder="Händler" />
                             )}                
                         />
                     </Grid>
                     <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
-                        <TextField
-                            autoFocus
-                            style={{display: this.state.textField}}
-                            onChange={this.handleInputChange}
-                            margin="dense"
-                            id="outlined-basic"
-                            //variant="outlined"
-                            label="Eingabe"
-                            type="ID"
-                            fullWidth
-                            value={this.state.filterInput}        
-                        /> 
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    id="filterChecked"
+                                    checked={filterChecked}
+                                    onChange={this.handleInputChangeCheckbox}
+                                    inputProps={{ 'aria-label': 'primary checkbox' }}
+                                />
+                            }
+                            label="Gekauft"
+                        />
                     </Grid>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <Grid container direction="row" justify="space-between" alignItems="center" style={{display: this.state.timeFilter, marginTop: 10, marginBottom: 10}}>
-                            <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
-                                <KeyboardDatePicker
+                    <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <KeyboardDatePicker
                                 disableToolbar
                                 fullWidth
                                 variant="inline"
@@ -348,40 +305,36 @@ class ListEntryTable extends Component {
                                 margin="normal"
                                 id="date-picker-start"
                                 label="Startdatum"
-                                value={this.state.startDate}
-                                onChange={(date) => this.handleStartDate(date)}
+                                value={filterStartDate}
+                                onChange={(date) => this.handleInputChangeDate("filterStartDate", date)}
                                 KeyboardButtonProps={{
                                     'aria-label': 'change date',
                                 }}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
-                                <KeyboardDatePicker
+                                defaultDate={null}
+
+                            />
+                        </MuiPickersUtilsProvider>
+                    </Grid>
+                    <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <KeyboardDatePicker
                                 disableToolbar
                                 fullWidth
                                 variant="inline"
                                 format="dd/MM/yyyy"
                                 margin="normal"
-                                id="date-picker-end"
+                                id="date-picker-start"
                                 label="Enddatum"
-                                value={this.state.endDate}
-                                onChange={(date) => this.handleEndDate(date)}
+                                value={filterEndDate}
+                                onChange={(date) => this.handleInputChangeDate("filterEndDate", date)}
                                 KeyboardButtonProps={{
                                     'aria-label': 'change date',
                                 }}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
-                                <Button 
-                                    onClick={this.filterByTimePeriod}
-                                    fullWidth
-                                    color="primary"
-                                    variant="contained">
-                                    filtern
-                                </Button>
-                            </Grid>
-                        </Grid>
-                    </MuiPickersUtilsProvider>
+                                defaultDate={null}
+                            />
+                        
+                        </MuiPickersUtilsProvider>
+                    </Grid>
                 </Grid>
                 <TableContainer style={{marginTop: 15}} component={Paper}>
                     <Table aria-label="collapsible table">
@@ -392,10 +345,11 @@ class ListEntryTable extends Component {
                                 <TableCell align="left"><b style={{ color: '#ffffff'}}>Menge</b></TableCell>
                                 <TableCell align="left"><b style={{ color: '#ffffff'}}>Artikel</b></TableCell>
                                 <TableCell align="left"><b style={{ color: '#ffffff'}}>Händler</b></TableCell>
+                                <TableCell align="left"><b style={{ color: '#ffffff'}}>Gekauft</b></TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {this.state.listEntryTableElements}
+                            {filteredListEntryTableElements}
                         </TableBody>
                     </Table>
                 </TableContainer>
