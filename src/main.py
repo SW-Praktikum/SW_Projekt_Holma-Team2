@@ -102,7 +102,10 @@ article = api.inherit('Article', bo, {
 
 })
 
-retailer = api.inherit('Retailer', bo)
+retailer = api.inherit('Retailer', bo, {
+    'count': fields.Integer(attribute='_count',
+                            description='Vorkommen in Listeneinträgen')
+})
 
 
 @holmaApp.route('/users')
@@ -209,6 +212,20 @@ class UserByNameOperations(Resource):
         us = adm.get_user_by_name(name)
         return us
 
+@holmaApp.route('/user/<int:user_id>/retailers/most-frequent')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@holmaApp.param('user_id', 'Die ID des Group-Objekts')
+class GroupRelatedArticleFrequencyOperations(Resource):
+    @holmaApp.marshal_list_with(retailer)
+    def get(self, user_id):
+
+        adm = StatisticAdministration()
+        us = adm.get_user_by_id(user_id)
+        if us is not None:
+            result = adm.get_retailer_count_by_user(us)
+            return result, 200
+        else:
+            return "User nicht gefunden", 500
 
 @holmaApp.route('/group/<int:group_id>/users')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -572,7 +589,7 @@ class ShoppingListListOperations(Resource):
                         Sollten keine Shoppinglist-Objekte verfügbar sein,
                         so wird eine leere Sequenz zurückgegeben."""
         adm = StatisticAdministration()
-        sl_list = adm.get_all_shoppinlists()
+        sl_list = adm.get_all_shopping_lists()
         return sl_list
 
 

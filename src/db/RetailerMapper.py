@@ -63,6 +63,40 @@ class RetailerMapper(Mapper):
 
         return result
 
+    def find_most_frequent_retailers(self, user):
+        """Auslesen der Einzelhändler-Häufigkeit innerhalb einer Gruppe
+        :param group:
+        :return: Eine Sammlung mit Artikel-Objekten und die dazugehörige
+                 Häufigkeit
+        """
+        retailers = self.find_all()
+        retailer_ids = ", ".join([str(retailer.get_id()) for retailer in retailers])
+        cursor = self._connection.cursor()
+        command = "SELECT retailer, COUNT(retailer) AS MOST_FREQUENT " \
+                  "FROM holma.list_entry " \
+                  "WHERE retailer in ({}) AND purchasing_user = {} " \
+                  "GROUP BY retailer " \
+                  "ORDER BY COUNT(retailer) DESC".format(retailer_ids, user.get_id())
+
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        most_frequent = {}
+        for (retailer_id,count) in tuples:
+            most_frequent[retailer_id] = count
+
+        result = []
+        for retailer in retailers:
+            if retailer.get_id() in most_frequent:
+                retailer.set_count(most_frequent[retailer.get_id()])
+                result.append(retailer)
+
+        self._connection.commit()
+        cursor.close()
+
+        result.sort(key=lambda retailer: retailer.get_count(), reverse=True)
+        return result
+
     def insert(self, retailer):
         """Einfügen eines Einzelhändler-Objekts
 
