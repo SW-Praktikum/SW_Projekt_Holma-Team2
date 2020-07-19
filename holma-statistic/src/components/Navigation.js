@@ -85,7 +85,7 @@ export default function ScrollableTabsButtonForce() {
           </IconButton>
           <Tab label="User" icon={<PersonIcon />} {...a11yProps(0)} component={RouterLink} to={`/user-statistics`} />
           <Tab label="Gruppen" icon={<GroupIcon />} {...a11yProps(1)} component={RouterLink} to={`/groups`}/>
-          <Tab label="Back to App" icon={<ShoppingCartIcon />} {...a11yProps(1)} component={RouterLink} to={`/`}/>
+          <Tab label="App" icon={<ShoppingCartIcon />} {...a11yProps(1)} component={RouterLink} to={`/`}/>
           <Tab label="Konto" icon={<AccountCircleIcon />} {...a11yProps(4)} component={RouterLink} to={`/user`}/>
         </Tabs>
       </AppBar>

@@ -183,7 +183,6 @@ class ListEntryTable extends Component {
             <React.Fragment>
                 <Box m={1} />
                 <Card className="root" style={{minWidth: '100%', marginBottom:10, marginTop:10, backgroundColor: "ffffff"}}>                
-                    <CardActionArea>
                     <CardContent>
                     <Grid container direction="row" justify="space-between" alignItems="center" spaching={2}>
                         <Grid item xs={12} sm={4}>
@@ -204,8 +203,7 @@ class ListEntryTable extends Component {
                         </Link>
                         </Grid>
                     </Grid>
-                    </CardContent>
-                    </CardActionArea>     
+                    </CardContent>   
                 </Card>
                 <Box m={1} />
                 <TableContainer  component={Paper} style={{marginTop: 15}}>

@@ -183,10 +183,6 @@ class ListEntryTable extends Component {
             })
             );  
         } 
-    
-    // install: npm i @date-io/date-fns
-    // install: npm i @material-ui/pickers
-    // install: npm i date-fns
 
    loadListEntriesByRetailer = (retailerId) => {
     console.log("Current Retailer id:", retailerId)
@@ -287,6 +283,7 @@ class ListEntryTable extends Component {
                             control={
                                 <Checkbox
                                     id="filterChecked"
+                                    color="primary"
                                     checked={filterChecked}
                                     onChange={this.handleInputChangeCheckbox}
                                     inputProps={{ 'aria-label': 'primary checkbox' }}

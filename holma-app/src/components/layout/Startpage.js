@@ -127,24 +127,20 @@ class Startpage extends Component {
         return (
             <React.Fragment>             
                 <Card style={{display: this.state.displayTable, minWidth: '100%', marginBottom:15, marginTop:15, }}>
-                    <CardActionArea >
                     <CardContent>
                     <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>
                         Hallo {this.state.userName},
                     </Typography>
                         <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>Deine persönliche Einkaufsliste:</Typography>
-                    </CardContent>
-                    </CardActionArea>     
+                    </CardContent> 
                 </Card>
                 <Card style={{display: this.state.displayEmptyTable, minWidth: '100%', marginBottom:15, marginTop:15, }}>
-                    <CardActionArea >
                     <CardContent>
                     <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>
                         Hallo {this.state.userName},
                     </Typography>
                         <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>Du hast noch keine Listeneinträge die dir zugeordnet sind.</Typography>
                     </CardContent>
-                    </CardActionArea>     
                 </Card>
 
                 <TableContainer component={Paper} style={{display: this.state.displayTable}}>

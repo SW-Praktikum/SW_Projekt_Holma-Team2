@@ -203,7 +203,6 @@ class GroupList extends Component {
             <React.Fragment>
               <Box m={1} />
               <Card className="root" style={{minWidth: '100%', marginBottom:10, marginTop:10, backgroundColor: "ffffff"}}>                
-                <CardActionArea>
                   <CardContent>
                   <Grid container direction="row" justify="space-between" alignItems="center" spaching={2}>
                     <Grid item xs={12} sm={4}>
@@ -217,17 +216,14 @@ class GroupList extends Component {
                       </Link>
                     </Grid>
                   </Grid>
-                  </CardContent>
-                </CardActionArea>     
+                  </CardContent>    
               </Card>
               
                 <Box m={2} />
                 <Card className="root" style={{minWidth: '100%', marginBottom:10, marginTop:10, backgroundColor: "ffffff"}}>                
-                  <CardActionArea>
                     <CardContent>
                       <Typography className="title" style={{fontSize: 16, color: colors.teal[600]}}><b>Shoppinglisten:</b></Typography>
                     </CardContent>
-                  </CardActionArea>     
                 </Card>
                 <ListWithBoxes groupElements={listElements}/>
                 <ShoppingListAddDialog 
