@@ -145,7 +145,7 @@ class ListEntryTable extends Component {
                 loadingInProgress: true, // loading indicator 
                 loadingError: null
                 })
-            return new Promise(function (resolve) {resolve(articles)})
+            return new Promise(function (resolve) {resolve(listEntries)})
             }).catch(e =>
                 this.setState({ // Reset state with error from catch 
                 loadingInProgress: false,
