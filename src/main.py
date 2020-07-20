@@ -73,9 +73,9 @@ list_entry = api.inherit('ListEntry', bo, {
     'unit': fields.String(attribute='_unit',
                           description='Einheit des Entries '),
     'purchasingUserId': fields.Integer(attribute='_purchasing_user',
-                                    description='Wer das Artikle kaufen muss '),
+                                    description='Wer den Artikel kaufen muss '),
     'purchasingUserName': fields.String(attribute='_purchasing_user_name',
-                                    description='Wer das Artikle kaufen muss '),
+                                    description='Wer den Artikel kaufen muss '),
     'shoppingListId': fields.Integer(attribute='_shopping_list',
                                    description='zu welcher Liste diese Entry gehört?'),
     'shoppingListName': fields.String(attribute='_shopping_list_name',
@@ -826,8 +826,8 @@ class ArticleRelatedListEntryOperations(Resource):
 class GroupRelatedListEntryOperations(Resource):
     @holmaApp.marshal_with(list_entry)
     def get(self, group_id):
-        """Auslesen von Listentry-Objekten die zu einer bestimmten
-        Groupe gehören."""
+        """Auslesen von Listentry-Objekten (Markiert als Standardartikel)
+        die zu einer bestimmten Gruppe gehören."""
         adm = Administration()
         grp = adm.get_group_by_id(group_id)
         if grp is not None:
@@ -836,6 +836,22 @@ class GroupRelatedListEntryOperations(Resource):
         else:
             return "Group not found", 500
 
+
+@holmaApp.route('/group/<int:group_id>/listentries')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@holmaApp.param('group_id', 'Die ID des group-Objekts')
+class GroupRelatedListEntryOperations(Resource):
+    @holmaApp.marshal_with(list_entry)
+    def get(self, group_id):
+        """Auslesen von Listentry-Objekten, die Teil einer Shoppingliste der
+        angegebenen Gruppe sind"""
+        adm = StatisticAdministration()
+        grp = adm.get_group_by_id(group_id)
+        if grp is not None:
+            result = adm.get_list_entries_by_group(grp)
+            return result
+        else:
+            return "Group not found", 500
 
 @holmaApp.route('/group/<int:group_id>/shoppinglist/<int:shopping_list_id>/standardarticles')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
