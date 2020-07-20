@@ -1,25 +1,22 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
-import { Container, ThemeProvider, CssBaseline } from '@material-ui/core';
-import theme from './components/Theme';
+import { Container, CssBaseline, ThemeProvider } from '@material-ui/core';
 import firebase from "firebase/app";
 import "firebase/auth";
-import Header from './components/layout/Header';
-import Startpage from './components/layout/Startpage';
-import Navigation from './components/Navigation'
-import SignIn from './components/pages/SignIn';
-import LoadingProgress from './components/dialogs/LoadingProgress';
-import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
-import About from './components/pages/About';
-import GroupEntries from './components/GroupEntries';
+import React from 'react';
+import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom';
 import AppAPI from './api/AppAPI';
 import UserBO from './api/UserBO';
-import User from './components/User';
-import MemberAddDialog from './components/dialogs/MemberAddDialog';
-import StartPage from './components/layout/Startpage';
+import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
+import LoadingProgress from './components/dialogs/LoadingProgress';
+import GroupEntries from './components/GroupEntries';
+import Header from './components/layout/Header';
+import Startpage from './components/layout/Startpage';
 import ListEntryTable from './components/ListEntryTable';
-import UserStatistics from './components/UserStatistics';
+import Navigation from './components/Navigation';
 import OneGroupStat from './components/OneGroupStat';
+import About from './components/pages/About';
+import SignIn from './components/pages/SignIn';
+import theme from './components/Theme';
+import User from './components/User';
 
 
 class App extends React.Component {

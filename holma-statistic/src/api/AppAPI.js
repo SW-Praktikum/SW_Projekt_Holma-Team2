@@ -1,9 +1,9 @@
+import ArticleBO from './ArticleBO';
 import GroupBO from './GroupBO';
-import UserBO from './UserBO';
+import ListEntryBO from './ListEntryBO';
+import RetailerBO from './RetailerBO';
 import ShoppingListBO from './ShoppingListBO';
-import ArticleBO from './ArticleBO'
-import ListEntryBO from './ListEntryBO'
-import RetailerBO from './RetailerBO'
+import UserBO from './UserBO';
 
 export default class AppAPI {
 

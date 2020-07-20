@@ -1,21 +1,15 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import GroupIcon from '@material-ui/icons/Group';
 import IconButton from '@material-ui/core/IconButton';
-import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
-import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import AssessmentIcon from '@material-ui/icons/Assessment';
-import ShoppingBasket from "@material-ui/icons/ShoppingBasket";
+import { makeStyles } from "@material-ui/core/styles";
+import Tab from "@material-ui/core/Tab";
+import Tabs from "@material-ui/core/Tabs";
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import ThumbUp from "@material-ui/icons/ThumbUp";
-import Typography from "@material-ui/core/Typography";
+import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
+import GroupIcon from '@material-ui/icons/Group';
 import PersonIcon from '@material-ui/icons/Person';
-import Box from "@material-ui/core/Box";
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import PropTypes from "prop-types";
+import React from "react";
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 
 //Navigation für Desktop 

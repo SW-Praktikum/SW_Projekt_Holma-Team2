@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
+import { Button, colors, Paper, withStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import { Button, Paper, withStyles, colors } from '@material-ui/core';
-import createPalette from '@material-ui/core/styles/createPalette';
+import React, { Component } from 'react';
 
 class SignIn extends Component{
     

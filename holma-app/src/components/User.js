@@ -1,12 +1,7 @@
+import { Button, Grid, Paper, Typography, withStyles } from '@material-ui/core';
+import firebase from 'firebase/app';
 import React, { Component, createRef } from 'react';
 import AppAPI from '../api/AppAPI';
-import { Grid, Box, Button, withStyles, Paper, Typography, Avatar} from '@material-ui/core';
-import {Link} from 'react-router-dom';
-import User from '../api/UserBO';
-import ListWithBoxes from './ListWithBoxes';
-import firebase from 'firebase/app'
-import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
-import Navigation from '../components/Navigation';
 
 class UserProfil extends Component {
 

@@ -1,32 +1,26 @@
-import React, { Component } from 'react';
-import AppAPI from '../api/AppAPI';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
+import { withStyles } from '@material-ui/core';
+import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
-import Fab from '@material-ui/core/Fab';
-import EditIcon from '@material-ui/icons/Edit';
-import {withStyles} from '@material-ui/core';
-import MemberAddDialog from '../components/dialogs/MemberAddDialog';
-import GroupBO from '../api/GroupBO';
-import ListWithBoxes from './ListWithBoxes'
-import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
-import { Link } from 'react-router-dom';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItem from '@material-ui/core/ListItem';
+import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
-import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
 import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import FaceIcon from '@material-ui/icons/Face';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import AppAPI from '../api/AppAPI';
 import GroupNameEditDialog from '../components/dialogs/GroupNameEditDialog';
-
-
-
-
+import MemberAddDialog from '../components/dialogs/MemberAddDialog';
+import ListWithBoxes from './ListWithBoxes';
 
 class GroupInformation extends Component {
   constructor(props) {

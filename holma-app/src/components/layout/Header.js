@@ -1,10 +1,8 @@
-import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import { AppBar, Toolbar, Typography, IconButton, Grid } from '@material-ui/core';
+import { AppBar, IconButton, Toolbar, Typography } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
+import { withStyles } from '@material-ui/core/styles';
 import ShoppingBasket from '@material-ui/icons/ShoppingBasket';
-import PersonPin from '@material-ui/icons/PersonPin';
-import DropDown from '../dialogs/Dropdown';
+import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
 class Header extends React.Component {

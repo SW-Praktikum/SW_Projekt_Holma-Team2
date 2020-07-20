@@ -1,5 +1,7 @@
-import React, { Component } from 'react';
-import AppAPI from '../../api/AppAPI';
+import { Checkbox, colors } from '@material-ui/core';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -7,12 +9,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import { colors, Button, TextField, Checkbox } from '@material-ui/core';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardActionArea from '@material-ui/core/CardActionArea';
+import React, { Component } from 'react';
+import AppAPI from '../../api/AppAPI';
 
 
 class ListEntry extends Component {
@@ -32,9 +30,6 @@ class ListEntry extends Component {
       this.state.listEntry.setChecked(e.target.checked)
       AppAPI.getAPI().updateListEntry(this.state.listEntry)
     }
-
-    
-
 
 
     render() {

@@ -1,29 +1,26 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
-import { Container, ThemeProvider, CssBaseline } from '@material-ui/core';
-import theme from './components/Theme';
+import { Container, CssBaseline, ThemeProvider } from '@material-ui/core';
 import firebase from "firebase/app";
 import "firebase/auth";
-import Header from './components/layout/Header';
-import Navigation from './components/Navigation';
-import SignIn from './components/pages/SignIn';
-import LoadingProgress from './components/dialogs/LoadingProgress';
-import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
-import About from './components/pages/About';
-import GroupEntries from './components/GroupEntries';
-import GroupEdit from './components/GroupEdit';
+import React from 'react';
+import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom';
 import AppAPI from './api/AppAPI';
 import UserBO from './api/UserBO';
-import GroupList from './components/GroupList';
-import User from './components/User';
-import GroupInformation from './components/GroupEdit';
-import MemberAddDialog from './components/dialogs/MemberAddDialog';
-import MemberDetails from './components/GroupEdit';
 import Articles from './components/Articles';
-import StandardArticles from './components/StandardArticles';
-import ListEntryTable from './components/ListEntryTable';
-import ShoppingListEdit from './components/ShoppingListEdit';
+import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
+import LoadingProgress from './components/dialogs/LoadingProgress';
+import { default as GroupEdit, default as MemberDetails } from './components/GroupEdit';
+import GroupEntries from './components/GroupEntries';
+import GroupList from './components/GroupList';
+import Header from './components/layout/Header';
 import Startpage from './components/layout/Startpage';
+import ListEntryTable from './components/ListEntryTable';
+import Navigation from './components/Navigation';
+import About from './components/pages/About';
+import SignIn from './components/pages/SignIn';
+import ShoppingListEdit from './components/ShoppingListEdit';
+import StandardArticles from './components/StandardArticles';
+import theme from './components/Theme';
+import User from './components/User';
 
 
 class App extends React.Component {

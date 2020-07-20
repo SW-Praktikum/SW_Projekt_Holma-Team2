@@ -1,38 +1,23 @@
-  import React, { Component } from 'react';
-  import AppAPI from '../api/AppAPI';
-  import PropTypes from 'prop-types';
-  import { makeStyles } from '@material-ui/core/styles';
-  import Box from '@material-ui/core/Box';
-  import Collapse from '@material-ui/core/Collapse';
-  import Table from '@material-ui/core/Table';
-  import TableBody from '@material-ui/core/TableBody';
-  import TableCell from '@material-ui/core/TableCell';
-  import TableContainer from '@material-ui/core/TableContainer';
-  import TableHead from '@material-ui/core/TableHead';
-  import TableRow from '@material-ui/core/TableRow';
-  import Typography from '@material-ui/core/Typography';
-  import Paper from '@material-ui/core/Paper';
-  import StarIcon from '@material-ui/icons/Star';
-  import DeleteIcon from '@material-ui/icons/Delete';
-  import EditIcon from '@material-ui/icons/Edit';
-  import StarBorderIcon from '@material-ui/icons/StarBorder';
-  import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-  import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-  import EntryEditDialog from './dialogs/EntryEditDialog';
-  import EntryAddDialog from './dialogs/EntryAddDialog';
-  import { colors, Button, TextField, Checkbox, FormControlLabel } from '@material-ui/core';
-  import Autocomplete from '@material-ui/lab/Autocomplete';
-  import Grid from '@material-ui/core/Grid';
-  import Card from '@material-ui/core/Card';
-  import CardActions from '@material-ui/core/CardActions';
-  import CardContent from '@material-ui/core/CardContent';
   import DateFnsUtils from '@date-io/date-fns';
-  import IconButton from '@material-ui/core/IconButton';
-  import ClearIcon from '@material-ui/icons/Clear';
-  import {
+import { Button, Checkbox, colors, FormControlLabel, TextField } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
+import Paper from '@material-ui/core/Paper';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
+import ClearIcon from '@material-ui/icons/Clear';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import {
     KeyboardDatePicker,
-    MuiPickersUtilsProvider,
-  } from '@material-ui/pickers';
+    MuiPickersUtilsProvider
+} from '@material-ui/pickers';
+import React, { Component } from 'react';
+import AppAPI from '../api/AppAPI';
   
   
   class ListEntry extends Component {

@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import { Button } from '@material-ui/core';
+import AutorenewIcon from '@material-ui/icons/Autorenew';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
-import AutorenewIcon from '@material-ui/icons/Autorenew';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 //Hier müssen verschiedene Elemente von Material-UI importiert werden
 
 class ContextErrorMessage extends Component {

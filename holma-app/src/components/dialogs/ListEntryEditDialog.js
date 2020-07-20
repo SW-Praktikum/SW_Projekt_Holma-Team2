@@ -1,25 +1,14 @@
-import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
-import PropTypes from 'prop-types';
-import Container from '@material-ui/core/Container'
-import { withStyles } from '@material-ui/styles';
-import { Typography } from '@material-ui/core';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import TextField from '@material-ui/core/TextField';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
-import AppAPI from '../../api/AppAPI'
+import { withStyles } from '@material-ui/styles';
+import React, { Component } from 'react';
+import AppAPI from '../../api/AppAPI';
 import ArticleBO from '../../api/ArticleBO';
-import ListEntryBO from '../../api/ListEntryBO';
-import StandardArticle from '../StandardArticles';
-import ArticleAddDialog from './ArticleAddDialog'
 
 
 class ListEntryEditDialog extends Component {
