@@ -139,7 +139,7 @@ class ListEntry extends Component {
                                         <TableCell className={classes.tableCell} colSpan={2} padding="none" align="left">{listEntry.getRetailerName()}</TableCell>
                                         <TableCell className={classes.tableCell} colSpan={4} padding="none" align="left">{groupLastUpdated}</TableCell>
                                         <TableCell className={classes.tableCell} colSpan={1} padding="none" align='center'>
-                                            <IconButton aria-label="expand row" size="small" >
+                                            <IconButton disabled="true" aria-label="expand row" size="small" >
                                                 {listEntry.isStandardarticle() ?  <StarIcon /> : <StarBorderIcon />}
                                             </IconButton>
                                         </TableCell>

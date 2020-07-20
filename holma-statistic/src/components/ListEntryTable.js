@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
-import AppAPI from '../api/AppAPI';
-import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import Box from '@material-ui/core/Box';
-import Collapse from '@material-ui/core/Collapse';
+import DateFnsUtils from '@date-io/date-fns';
+import { Button, Checkbox, colors, FormControlLabel, TextField } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
+import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -11,28 +10,14 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import StarIcon from '@material-ui/icons/Star';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-import StarBorderIcon from '@material-ui/icons/StarBorder';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import EntryEditDialog from './dialogs/EntryEditDialog';
-import EntryAddDialog from './dialogs/EntryAddDialog';
-import { colors, Button, TextField, Checkbox, FormControlLabel } from '@material-ui/core';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import DateFnsUtils from '@date-io/date-fns';
-import IconButton from '@material-ui/core/IconButton';
 import ClearIcon from '@material-ui/icons/Clear';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import {
-  KeyboardDatePicker,
-  MuiPickersUtilsProvider,
+    KeyboardDatePicker,
+    MuiPickersUtilsProvider
 } from '@material-ui/pickers';
+import React, { Component } from 'react';
+import AppAPI from '../api/AppAPI';
 
 
 class ListEntry extends Component {
@@ -82,20 +67,13 @@ class ListEntryTable extends Component {
         this.state = {
             listEntryTableElements: [],
             filteredListEntryTableElements: [],
-            openDialog: false,
             userId : this.props.user.getId(),
             userName: this.props.user.getName(),
             retailers: [],
-            retailerName: null,
-            filterInput: "",
-            filteredElements: [],
-            filterObject: "articleName",
-            textField: "block",
-            timeFilter: "none",
             filterArticleName: "",
             filterRetailerName: "",
             filterPurchasingUserName: "",
-            filterChecked: false,
+            filterChecked: true,
             filterStartDate: null,
             filterEndDate: null,
             filterOpen: "none",
@@ -105,15 +83,16 @@ class ListEntryTable extends Component {
 
     componentDidMount(){
         if(this.state.userId){
-            this.loadListEntries();
             this.loadRetailers()
+            this.loadListEntries().then(() => {
+                this.filterInput();
+            })
           }
     }
 
     // dropdown selector for what fo filter
     filterInput = () => {
-        const { filterArticleName,  filterRetailerName, filterPurchasingUserName, filterChecked, 
-                filterStartDate, filterEndDate, listEntryTableElements} = this.state
+        const { filterArticleName,  filterRetailerName, filterChecked, filterStartDate, filterEndDate, listEntryTableElements} = this.state
         
         var filteredElements = listEntryTableElements
 
@@ -155,18 +134,17 @@ class ListEntryTable extends Component {
     }
   
     loadListEntries = () => {
-        console.log("hier")
         // get listentries by user ID
-        AppAPI.getAPI().getListEntriesByUserId(this.state.userId).then(listEntries => {
+        return AppAPI.getAPI().getListEntriesByUserId(this.state.userId).then(listEntries => {
             console.log("Loaded list entries for user '" + this.state.userId + "':", listEntries)
             var listEntryTableElements = listEntries.map((listEntry) => <ListEntry listEntry={listEntry} loadListEntries={this.loadListEntries} />)
-
             this.setState({
                 listEntryTableElements: listEntryTableElements,
                 filteredListEntryTableElements: listEntryTableElements,
                 loadingInProgress: true, // loading indicator 
                 loadingError: null
                 })
+            return new Promise(function (resolve) {resolve(listEntries)})
             }).catch(e =>
                 this.setState({ // Reset state with error from catch 
                 loadingInProgress: false,
@@ -192,24 +170,23 @@ class ListEntryTable extends Component {
         } 
 
    loadListEntriesByRetailer = (retailerId) => {
-    console.log("Current Retailer id:", retailerId)
-    // get listentries by Retailer ID
-    AppAPI.getAPI().getListEntriesByRetailerId(retailerId).then(listEntries => {
-        console.log("Loaded list entries for retailer '" + retailerId + "':", listEntries)
-        var listEntryTableElements = listEntries.map((listEntry) => <ListEntry listEntry={listEntry} loadListEntries={this.loadListEntries} />)
-
-        this.setState({
-            listEntryTableElements: listEntryTableElements,
-            loadingInProgress: true, // loading indicator 
-            loadingError: null
+        console.log("Current Retailer id:", retailerId)
+        // get listentries by Retailer ID
+        AppAPI.getAPI().getListEntriesByRetailerId(retailerId).then(listEntries => {
+            console.log("Loaded list entries for retailer '" + retailerId + "':", listEntries)
+            var listEntryTableElements = listEntries.map((listEntry) => <ListEntry listEntry={listEntry} loadListEntries={this.loadListEntries} />)
+            this.setState({
+                listEntryTableElements: listEntryTableElements,
+                loadingInProgress: true, // loading indicator 
+                loadingError: null
+                })
+            }).catch(e =>
+                this.setState({ // Reset state with error from catch 
+                loadingInProgress: false,
+                loadingError: e
             })
-        }).catch(e =>
-            this.setState({ // Reset state with error from catch 
-            loadingInProgress: false,
-            loadingError: e
-        })
-    );  
-}
+        );  
+    }
     
     handleInputChangeDate = async (key, date) => {
         let datum = new Date (date);
@@ -280,7 +257,7 @@ class ListEntryTable extends Component {
     }
 
     render() {
-        const {retailers, filterArticleName, filterRetailerName, filterChecked, filterStartDate, filterEndDate, filteredListEntryTableElements} = this.state;
+        const {retailers, filterArticleName, filterRetailerName, filterChecked, filterStartDate, filterEndDate, filteredListEntryTableElements, userName} = this.state;
         return (
             <React.Fragment>  
                 <Grid 
@@ -293,7 +270,7 @@ class ListEntryTable extends Component {
                     >
                     <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
                         <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>
-                            Hallo {this.state.userName},
+                            Hallo {userName},
                         </Typography>
                         <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>Deine persönliche Statistik:</Typography>
                     </Grid>
