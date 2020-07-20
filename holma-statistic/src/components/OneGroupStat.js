@@ -278,12 +278,6 @@ import AppAPI from '../api/AppAPI';
                       style={{display: this.state.displayTable, minWidth: '100%', marginBottom:15, marginTop:15, }}
                       >
                       <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
-                          <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>
-                              Hallo {this.state.userName},
-                          </Typography>
-                          <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>Deine persönliche Statistik:</Typography>
-                      </Grid>
-                      <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
                           <Button 
                               variant="contained"
                               fullWidth 

@@ -11,13 +11,50 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import ClearIcon from '@material-ui/icons/Clear';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import Collapse from '@material-ui/core/Collapse';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import {
     KeyboardDatePicker,
     MuiPickersUtilsProvider
 } from '@material-ui/pickers';
 import React, { Component } from 'react';
 import AppAPI from '../api/AppAPI';
+
+class RetailerEntry extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            retailerEntry: this.props.retailerEntry,
+        }
+    }
+
+
+    
+    render() {
+        const { retailerEntry} = this.props;
+        console.log(retailerEntry)
+        return (
+            <React.Fragment>
+                <Grid item xs={12} sm={6} style={{paddingLeft: 10, paddingRight: 10, paddingTop: 10, paddingBottom: 10}}>
+                    <Card style={{backgroundColor: "#F4F6F8"}}>
+                        <CardContent>
+                            <Typography color="primary" style={{fontSize: 18}}>
+                                <b>{retailerEntry.getName()}</b>
+                            </Typography>
+                            <Typography style={{fontSize: 18}}>
+                                {retailerEntry.count} Artikel gekauft
+                            </Typography>
+                        </CardContent>
+                    </Card>
+                </Grid>
+            </React.Fragment>
+        );
+    }
+}
 
 
 class ListEntry extends Component {
@@ -27,9 +64,12 @@ class ListEntry extends Component {
             listEntry: this.props.listEntry,
         }
     }
+
+
     
     render() {
-        const { listEntry } = this.props;
+        const { listEntry} = this.props;
+        console.log(listEntry)
         var checkedTimestamp = ""
 
         if (listEntry.getCheckedTs() !== null) {
@@ -66,10 +106,13 @@ class ListEntryTable extends Component {
         super(props);
         this.state = {
             listEntryTableElements: [],
+            UserRetailer: [],
             filteredListEntryTableElements: [],
             userId : this.props.user.getId(),
             userName: this.props.user.getName(),
+            open: false,
             retailers: [],
+            userRetailer: [],
             filterArticleName: "",
             filterRetailerName: "",
             filterPurchasingUserName: "",
@@ -84,11 +127,15 @@ class ListEntryTable extends Component {
     componentDidMount(){
         if(this.state.userId){
             this.loadRetailers()
+            this.loadUserRetailers()
             this.loadListEntries().then(() => {
-                this.filterInput();
+                this.filterInput()
             })
           }
     }
+
+
+
 
     // dropdown selector for what fo filter
     filterInput = () => {
@@ -134,7 +181,7 @@ class ListEntryTable extends Component {
     }
   
     loadListEntries = () => {
-        // get listentries by user ID
+        // get entries by user ID
         return AppAPI.getAPI().getListEntriesByUserId(this.state.userId).then(listEntries => {
             console.log("Loaded list entries for user '" + this.state.userId + "':", listEntries)
             var listEntryTableElements = listEntries.map((listEntry) => <ListEntry listEntry={listEntry} loadListEntries={this.loadListEntries} />)
@@ -152,6 +199,23 @@ class ListEntryTable extends Component {
             })
         );  
     }
+
+    loadUserRetailers = () => {
+        return AppAPI.getAPI().getFrequentRetailerByUserId(this.state.userId).then((retailers) => {
+            console.log("Loaded all UserRetailers:", retailers)
+            var listEntryTableUserElements = retailers.map((retailer) => <RetailerEntry retailerEntry={retailer} loadListEntries={this.loadListEntries} />)
+            this.setState({
+            userRetailer: listEntryTableUserElements,
+            loadingInProgress: true, // loading indicator 
+            loadingError: null,
+        });
+        }).catch(e =>
+            this.setState({ // Reset state with error from catch 
+                loadingInProgress: false,
+                loadingError: e
+            })
+            );  
+        } 
     
     loadRetailers = () => {
         AppAPI.getAPI().getRetailers().then((retailers) => {
@@ -169,24 +233,6 @@ class ListEntryTable extends Component {
             );  
         } 
 
-   loadListEntriesByRetailer = (retailerId) => {
-        console.log("Current Retailer id:", retailerId)
-        // get listentries by Retailer ID
-        AppAPI.getAPI().getListEntriesByRetailerId(retailerId).then(listEntries => {
-            console.log("Loaded list entries for retailer '" + retailerId + "':", listEntries)
-            var listEntryTableElements = listEntries.map((listEntry) => <ListEntry listEntry={listEntry} loadListEntries={this.loadListEntries} />)
-            this.setState({
-                listEntryTableElements: listEntryTableElements,
-                loadingInProgress: true, // loading indicator 
-                loadingError: null
-                })
-            }).catch(e =>
-                this.setState({ // Reset state with error from catch 
-                loadingInProgress: false,
-                loadingError: e
-            })
-        );  
-    }
     
     handleInputChangeDate = async (key, date) => {
         let datum = new Date (date);
@@ -256,8 +302,15 @@ class ListEntryTable extends Component {
         this.loadListEntries()
     }
 
+    setOpen(bool) {
+        this.setState({
+            open: bool
+        })
+    }
+
     render() {
-        const {retailers, filterArticleName, filterRetailerName, filterChecked, filterStartDate, filterEndDate, filteredListEntryTableElements, userName} = this.state;
+        const {retailers, filterArticleName, filterRetailerName, filterChecked, filterStartDate, filterEndDate, filteredListEntryTableElements, userName, userRetailer, open} = this.state;
+        console.log("User Retailer:", this.state.userRetailer)
         return (
             <React.Fragment>  
                 <Grid 
@@ -274,6 +327,34 @@ class ListEntryTable extends Component {
                         </Typography>
                         <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>Deine persönliche Statistik:</Typography>
                     </Grid>
+                    <Grid item xs={9} sm={6} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
+                        <Typography align="right" className="title" style={{fontSize: 16, fontWeight: "bold"}}>Anzahl Einkäufe nach Einzelhändler</Typography>
+                    </Grid>
+                    <Grid item xs={3} sm={2} align="left" style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
+                        <IconButton aria-label="expand row" size="small" onClick={() => this.setOpen(!open)}>
+                            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                        </IconButton>
+                    </Grid>
+                    <Collapse in={this.state.open} timeout="auto" unmountOnExit>
+                        <Grid 
+                            container 
+                            direction="row" 
+                            justify="space-between" 
+                            alignItems="center" 
+                            style={{display: this.state.displayTable, minWidth: '100%', marginBottom:15, marginTop:15, }}
+                            >
+                            {userRetailer}
+                        </Grid>
+                    </Collapse>
+                </Grid>
+                <Grid 
+                    container 
+                    direction="row" 
+                    justify="space-between" 
+                    alignItems="center" 
+                    component={Paper} 
+                    style={{display: this.state.displayTable, minWidth: '100%', marginBottom:15, marginTop:15, }}
+                    >
                     <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
                         <Button 
                             variant="contained"
@@ -284,8 +365,8 @@ class ListEntryTable extends Component {
                         </Button>
                     </Grid>
                     <Grid item xs={12} sm={4}></Grid>
+                    <Grid item xs={12} sm={4}></Grid>
                 </Grid>
-                
                 
                 <Grid container direction="row" justify="space-between" alignItems="center" component={Paper} style={{marginTop: 15, display: this.state.filterOpen}}>
                     <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>

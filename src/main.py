@@ -823,7 +823,7 @@ class ArticleRelatedListEntryOperations(Resource):
 @holmaApp.route('/group/<int:group_id>/standardarticles')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('group_id', 'Die ID des group-Objekts')
-class GroupRelatedListEntryOperations(Resource):
+class GroupRelatedStandardarticleOperations(Resource):
     @holmaApp.marshal_with(list_entry)
     def get(self, group_id):
         """Auslesen von Listentry-Objekten (Markiert als Standardartikel)
@@ -840,7 +840,7 @@ class GroupRelatedListEntryOperations(Resource):
 @holmaApp.route('/group/<int:group_id>/listentries')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('group_id', 'Die ID des group-Objekts')
-class GroupRelatedListEntryOperations(Resource):
+class GroupRelatedListEntriesOperations(Resource):
     @holmaApp.marshal_with(list_entry)
     def get(self, group_id):
         """Auslesen von Listentry-Objekten, die Teil einer Shoppingliste der

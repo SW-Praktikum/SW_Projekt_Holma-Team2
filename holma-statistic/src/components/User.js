@@ -15,7 +15,15 @@ class UserProfil extends Component {
     this.state = {
       user: this.props.user,
       userName: this.props.user.name,
-      userId: this.props.user.Id
+      userId: this.props.user.Id,
+      retailer: [],
+    }
+  }
+
+  componentDidMount() {
+    if (this.props.user.id) {
+      this.loadRetailer();
+      console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
     }
   }
 
@@ -33,9 +41,18 @@ class UserProfil extends Component {
     );
   }
 
+  loadRetailer(){
+    AppAPI.getAPI().getFrequentRetailerByUserId(this.state.userId).then(retailer => {
+      this.setState({
+        retailer:retailer,
+      })
+    })
+  }
+
 
   render() {
-
+    
+    console.log("!!!!!!!!!!!!!!!")
       const { classes, user } = this.props;
       return (
           

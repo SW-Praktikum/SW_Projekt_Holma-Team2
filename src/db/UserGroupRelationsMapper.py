@@ -72,7 +72,7 @@ class UserGroupRelationsMapper(Mapper):
         return result
 
     def add_user_to_group(self, group, user):
-        """
+        """Einfügen eines Gr-Objekts
 
         :param group:
         :param user:
