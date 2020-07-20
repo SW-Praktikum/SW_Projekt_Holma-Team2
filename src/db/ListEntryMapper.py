@@ -12,7 +12,8 @@ class ListEntryMapper(Mapper):
 
     def find_all(self):
         """Auslesen aller vorhandenen Listeneinträge
-        :return
+        :return Listeneitrag-Objekt, das der übergebenen ID entspricht oder None
+                wenn DB-Tupel nicht vorhanden ist.
         """
         cursor = self._connection.cursor()
         command = "SELECT * FROM holma.list_entry"
@@ -28,7 +29,8 @@ class ListEntryMapper(Mapper):
 
     def find_by_id(self, list_entry_id):
         """Eindeutiges Auslesen eines Listeneintrags durch ID
-        :return
+        :return Listeneintrag-Objekt, das der übergebenen ID entspricht oder None
+                wenn DB-Tupel nicht vorhanden ist.
         """
         cursor = self._connection.cursor()
         command = "SELECT * FROM holma.list_entry " \
@@ -47,8 +49,8 @@ class ListEntryMapper(Mapper):
 
     def find_by_name(self, name):
         """Auslesen von Listeneinträgen durch Name
-        :param
-        :return
+        :param name:
+        :return Eine Sammlung mit Listeneintrag-Objekten.
         """
         cursor = self._connection.cursor()
         command = "SELECT * FROM holma.list_entry WHERE name LIKE '{}' " \
@@ -66,8 +68,8 @@ class ListEntryMapper(Mapper):
     def find_by_retailer(self, retailer_id):
         """Auslesen von Listeneinträgen durch Fremdschlüssel (retailer_id)
         geg. Einzelhändler
-        :param
-        :return
+        :param retailer_id:
+        :return Eine Sammlung mit Listeneintrag-Objekten.
         """
         cursor = self._connection.cursor()
         command = "SELECT * FROM holma.list_entry " \
@@ -85,8 +87,8 @@ class ListEntryMapper(Mapper):
     def find_by_purchasing_user(self, user_id):
         """Auslesen von Listeneinträgen durch Fremdschlüssel (user_id)
         geg. Einkaufender User
-        :param
-        :return
+        :param user_id:
+        :return Eine Sammlung mit Listeneintrag-Objekten.
         """
         cursor = self._connection.cursor()
         command = "SELECT * FROM holma.list_entry " \
@@ -104,8 +106,8 @@ class ListEntryMapper(Mapper):
     def find_list_entries_by_article(self, article_id):
         """Auslesen von Listeneinträgen durch Fremdschlüssel (article_id)
         geg. Artikel
-        :param
-        :return
+        :param article_id:
+        :return Eine Sammlung mit Listeneintrag-Objekten.
         """
         cursor = self._connection.cursor()
         command = "SELECT * FROM holma.list_entry " \
@@ -123,8 +125,8 @@ class ListEntryMapper(Mapper):
     def find_list_entries_by_shopping_list_id(self, shopping_list):
         """Auslesen von Listeneinträgen durch Fremdschlüssel (shopping_list_id)
         geg. Shoppingliste
-        :param
-        :return
+        :param shopping_list:
+        :return Eine Sammlung mit Listeneintrag-Objekten.
         """
         cursor = self._connection.cursor()
         command = "SELECT * FROM holma.list_entry " \
@@ -142,8 +144,8 @@ class ListEntryMapper(Mapper):
     def find_checked_list_entries_by_shopping_list_id(self, shopping_list_id):
         """Auslesen von abgehakten Listeneinträgen durch Fremdschlüssel
         (shopping_list_id) geg. Shoppingliste
-        :param
-        :return
+        :param shopping_list_id:
+        :return Eine Sammlung mit abgehakten Listeneintrag-Objekten.
         """
         cursor = self._connection.cursor()
         command = "SELECT * FROM holma.list_entry " \
@@ -161,8 +163,10 @@ class ListEntryMapper(Mapper):
 
     def find_list_entries_in_time_periode(self, from_date, to_date):
         """Auslesen von Listeneinträgen in einer bestimmten Zeitperiode
-        :param
-        :return
+        :param from_date:
+        :param to_date:
+        :return Eine Sammlung mit Listeneintrag-Objekten, deren last_updated
+                -Wert innerhalb der angegebenen Zeitperiode liegt.
         """
         cursor = self._connection.cursor()
         command = "SELECT * FROM holma.list_entry WHERE last_updated " \
@@ -183,7 +187,8 @@ class ListEntryMapper(Mapper):
         lastrowid returns the value generated for an AUTO_INCREMENT
         column by the previous INSERT
         :param
-        :return
+        :return das bereits übergebene Listeneintrag-Objekt,
+                jedoch mit korrekter ID
         """
         cursor = self._connection.cursor()
         command = "INSERT INTO holma.list_entry (list_entry_id, name, " \
@@ -215,8 +220,8 @@ class ListEntryMapper(Mapper):
     def update(self, list_entry):
         """Wiederholtes Schreiben / Aktualisieren eines
         Listeneintrag-Objekts
-        :param
-        :return
+        :param list_entry:
+        :return aktualisiertes Listeneintrag-Objekt
         """
         cursor = self._connection.cursor()
         command = "UPDATE holma.list_entry SET name=%s, purchasing_user=%s, " \
@@ -244,6 +249,9 @@ class ListEntryMapper(Mapper):
         return list_entry
 
     def delete(self, list_entry):
+        """Löschen der Daten eines Listeneintrag-Objekts aus der Datenbank
+        :param list_entry:
+        """
         self.delete_standardarticle_by_list_entry(list_entry)
 
         cursor = self._connection.cursor()
@@ -255,6 +263,10 @@ class ListEntryMapper(Mapper):
         cursor.close()
 
     def delete_by_shopping_list(self, shopping_list):
+        """Löschen der Daten eines Listeneintrag-Objekts aus der Datenbank anhand der
+        der hinterlegten Shoppingliste
+        :param shopping_list:
+        """
         cursor = self._connection.cursor()
         command = "DELETE FROM holma.list_entry " \
                   "WHERE shopping_list={}".format(shopping_list.get_id())
@@ -264,6 +276,10 @@ class ListEntryMapper(Mapper):
         cursor.close()
 
     def delete_by_article(self, article):
+        """Löschen der Daten eines Listeneintrag-Objekts aus der Datenbank anhand der
+        des hinterlegten Artikels
+        :param shopping_list:
+        """
         cursor = self._connection.cursor()
 
         command = "DELETE FROM holma.list_entry " \
@@ -274,9 +290,14 @@ class ListEntryMapper(Mapper):
         cursor.close()
 
     def delete_purchasing_user(self, user, shopping_list=None):
-        """Hier muss unterschieden werden zwischen User gruppenübergreifend
+        """Löschen der Daten eines User-Objekts aus der Datenbank anhand der
+        der hinterlegten Shoppingliste
+
+        Hier muss unterschieden werden zwischen User gruppenübergreifend
         als purchasing_user löschen (group = None) oder nur in einer
-        bestimmten Gruppe löschen (group_id = """
+        bestimmten Gruppe löschen (group_id = )
+        :param shopping_list:
+        """
         cursor = self._connection.cursor()
         if shopping_list is None:
             command = "UPDATE holma.list_entry SET purchasing_user= null " \
@@ -296,7 +317,11 @@ class ListEntryMapper(Mapper):
     def find_standardarticles_by_group_id(self, group_id):
         """Auslesen von als Standard-Artikel markierten
         Listeneinträgen durch Fremdschlüssel (group_id)
-        geg. Gruppe"""
+        geg. Gruppe
+        :param group_id:
+        :return Eine Sammlung mit Listeneintrag-Objekten, mit standardarticle
+                = 1.
+        """
         cursor = self._connection.cursor()
         command = "SELECT standard_article_group_relations.list_entry_id," \
                   " holma.list_entry.name, holma.list_entry.creation_date, " \
@@ -324,6 +349,11 @@ class ListEntryMapper(Mapper):
         return result
 
     def insert_standardarticle(self, list_entry, group):
+        """Einfügen eines Listeneintrag-Objekts in die Verbindungstabelle
+
+        :param list_entry:
+        :param group:
+        """
         cursor = self._connection.cursor()
         command = "INSERT INTO holma.standard_article_group_relations " \
                   "(list_entry_id, group_id) VALUES (%s, %s)"
@@ -335,6 +365,11 @@ class ListEntryMapper(Mapper):
         cursor.close()
 
     def delete_standardarticle(self, list_entry, group):
+        """Löschen der Daten eines Listeneintrag-Objekts aus der Datenbank anhand der
+        des hinterlegten Artikels
+        :param list_entry:
+        :param group:
+        """
         cursor = self._connection.cursor()
         command = "DELETE FROM holma.standard_article_group_relations " \
                   "WHERE list_entry_id={} and group_id={}".format(
@@ -346,6 +381,10 @@ class ListEntryMapper(Mapper):
         cursor.close()
 
     def delete_standardarticle_by_group(self, group):
+        """Löschen der Daten eines Listeneintrag-Objekts aus der Datenbank anhand der
+        des hinterlegten group
+        :param group:
+        """
         cursor = self._connection.cursor()
         command = "DELETE FROM holma.standard_article_group_relations " \
                   "WHERE group_id={}".format(group.get_id())
@@ -355,6 +394,10 @@ class ListEntryMapper(Mapper):
         cursor.close()
 
     def delete_standardarticle_by_list_entry(self, list_entry):
+        """Löschen der Daten eines Listeneintrag-Objekts aus der Datenbank anhand der
+        des hinterlegten Lisgt
+        :param list_entry:
+        """
         cursor = self._connection.cursor()
         command = "DELETE FROM holma.standard_article_group_relations " \
                   "WHERE list_entry_id={}".format(list_entry.get_id())
