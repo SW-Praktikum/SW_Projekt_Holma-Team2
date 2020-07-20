@@ -332,16 +332,7 @@ class ListEntryTable extends Component {
                 name: "Händler",
             },
             {
-                name: "Liste",
-            },
-            {
-                name: "Einkäufer",
-            },
-            {
                 name: "Kaufdatum",
-            },
-            {
-                name: "letzte Änderung",
             },
         ]
         const {retailers, filterArticleName, filterRetailerName, filterChecked, filterStartDate, filterEndDate, filteredListEntryTableElements, userName} = this.state;
