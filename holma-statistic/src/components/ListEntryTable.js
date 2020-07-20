@@ -95,7 +95,7 @@ class ListEntryTable extends Component {
             filterArticleName: "",
             filterRetailerName: "",
             filterPurchasingUserName: "",
-            filterChecked: false,
+            filterChecked: true,
             filterStartDate: null,
             filterEndDate: null,
             filterOpen: "none",
@@ -106,7 +106,7 @@ class ListEntryTable extends Component {
     componentDidMount(){
         if(this.state.userId){
             this.loadListEntries();
-            this.loadRetailers()
+            this.loadRetailers();
           }
     }
 
@@ -160,13 +160,13 @@ class ListEntryTable extends Component {
         AppAPI.getAPI().getListEntriesByUserId(this.state.userId).then(listEntries => {
             console.log("Loaded list entries for user '" + this.state.userId + "':", listEntries)
             var listEntryTableElements = listEntries.map((listEntry) => <ListEntry listEntry={listEntry} loadListEntries={this.loadListEntries} />)
-
             this.setState({
                 listEntryTableElements: listEntryTableElements,
                 filteredListEntryTableElements: listEntryTableElements,
                 loadingInProgress: true, // loading indicator 
                 loadingError: null
                 })
+            this.filterInput()
             }).catch(e =>
                 this.setState({ // Reset state with error from catch 
                 loadingInProgress: false,
