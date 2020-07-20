@@ -64,10 +64,8 @@ const randomImages = [
 
 class GroupEntry extends Component {
     render() {
-        
-        const path = "/grouplist/" + this.props.group.getId() + "/" + this.props.user.getId()
         return (
-        <Link to={path} style={{textDecoration: 'none'}}>
+          <Link to={'/OneGroupStat/' + this.props.group.getId()} style={{textDecoration: 'none'}}>
           <Card className="root" style={{/* minHeight: 250 ,  */minWidth: '100%', marginBottom:10, marginTop:10, backgroundColor: colors.teal[600]}}>
             <CardActionArea>
             <CardMedia className="media" style={{height: 10, paddingTop: '56.25%',}} image={randomImages[Math.floor(Math.random() * randomImages.length)]} title="Groupname"/>
