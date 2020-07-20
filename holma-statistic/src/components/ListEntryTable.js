@@ -134,7 +134,6 @@ class ListEntryTable extends Component {
     }
   
     loadListEntries = () => {
-        console.log("hier")
         // get listentries by user ID
         return AppAPI.getAPI().getListEntriesByUserId(this.state.userId).then(listEntries => {
             console.log("Loaded list entries for user '" + this.state.userId + "':", listEntries)
@@ -145,7 +144,7 @@ class ListEntryTable extends Component {
                 loadingInProgress: true, // loading indicator 
                 loadingError: null
                 })
-            return new Promise(function (resolve) {resolve(articles)})
+            return new Promise(function (resolve) {resolve(listEntries)})
             }).catch(e =>
                 this.setState({ // Reset state with error from catch 
                 loadingInProgress: false,
