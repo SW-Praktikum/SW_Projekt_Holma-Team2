@@ -20,6 +20,12 @@ import React, { Component } from 'react';
 import AppAPI from '../api/AppAPI';
 
 
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+
+import SortIcon from '@material-ui/icons/Sort';
+
+
 class ListEntry extends Component {
     constructor(props) {
         super(props);
@@ -77,7 +83,8 @@ class ListEntryTable extends Component {
             filterStartDate: null,
             filterEndDate: null,
             filterOpen: "none",
-            filterText: "Filter anzeigen"
+            filterText: "Filter anzeigen",
+            anchorEl: "false"
         }
     }
 
@@ -127,9 +134,59 @@ class ListEntryTable extends Component {
                 return parsedTime < filterEndDate;
             })
         }
-
         this.setState({
             filteredListEntryTableElements: filteredElements
+        })
+    }
+
+    handleSort = (e, value) => {
+        // sortieren von Listeneinträgen
+        if (value === null) {
+            var filteredElements = this.state.filteredListEntryTableElements
+        }
+        else {
+            var sortInput = value.name
+            var filteredElements = this.state.filteredListEntryTableElements
+        }
+           
+        if (sortInput === "Händler") {
+            //nach Einzelhändler sortieren
+            filteredElements = filteredElements.sort((a, b) => 
+                a.props.listEntry.retailerName > b.props.listEntry.retailerName ? 1 : -1)
+        }
+        else if (sortInput === "Artikel") {
+            //nach Artikel sortieren
+            filteredElements = filteredElements.sort((a, b) => 
+                a.props.listEntry.articleName > b.props.listEntry.articleName ? 1 : -1)
+        }
+        else if (sortInput === "Liste") {
+            //nach Shoppinglist sortieren
+            filteredElements = filteredElements.sort((a, b) => 
+                a.props.listEntry.shoppingListName > b.props.listEntry.shoppingListName ? 1 : -1)
+        }
+        else if (sortInput === "Einkäufer") {
+            //nach Einkäufer sortieren
+            filteredElements = filteredElements.sort((a, b) => 
+                a.props.listEntry.purchasingUserName > b.props.listEntry.purchasingUserName ? 1 : -1)
+        }
+        else if (sortInput === "Kaufdatum") {
+            //nach Kaufdatum sortieren           
+            filteredElements = filteredElements.sort((a, b) => 
+                Date.parse(a.props.listEntry.checkedTs) < Date.parse(b.props.listEntry.checkedTs) ? 1 : -1)
+        }
+        else if (sortInput === "letzte Änderung") {
+            //nach letzter Änderung sortieren
+            filteredElements = filteredElements.sort((a, b) => 
+                Date.parse(a.props.listEntry.lastUpdated) < Date.parse(b.props.listEntry.lastUpdated) ? 1 : -1)
+        }
+        this.setState({
+            filteredListEntryTableElements: filteredElements
+        })
+    }
+
+    openMenu = () => {
+        this.setState({
+            anchorEl: true
         })
     }
   
@@ -257,6 +314,26 @@ class ListEntryTable extends Component {
     }
 
     render() {
+        const sortFunctions = [
+            {
+                name: "Artikel",
+            },
+            {
+                name: "Händler",
+            },
+            {
+                name: "Liste",
+            },
+            {
+                name: "Einkäufer",
+            },
+            {
+                name: "Kaufdatum",
+            },
+            {
+                name: "letzte Änderung",
+            },
+        ]
         const {retailers, filterArticleName, filterRetailerName, filterChecked, filterStartDate, filterEndDate, filteredListEntryTableElements, userName} = this.state;
         return (
             <React.Fragment>  
@@ -283,7 +360,21 @@ class ListEntryTable extends Component {
                             {this.state.filterText}
                         </Button>
                     </Grid>
-                    <Grid item xs={12} sm={4}></Grid>
+                    
+                    
+                    <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
+                        <Autocomplete
+                            id="sortSelector"
+                            onChange={(event, value) => this.handleSort("sortSelector", value)}
+                            options={sortFunctions}
+                            
+                            defaultValue="filtern"
+                            getOptionLabel={(option) => option.name}
+                            renderInput={(params) => (
+                                <TextField {...params} variant="outlined" label="Sortieren" placeholder="Sortieren" />
+                            )}                
+                        />
+                    </Grid>
                 </Grid>
                 
                 
