@@ -43,6 +43,7 @@ class ListEntryTable extends Component {
             openDialog: false,
             liseEntry: "",
             shoppingListName: "",
+            lastUpdated: "",
         }
 
         console.log(this.state)
@@ -93,6 +94,7 @@ class ListEntryTable extends Component {
         AppAPI.getAPI().getShoppingListById(this.props.match.params.shoppingListId).then((shoppingList) => {
             this.setState({
                 shoppingListName: shoppingList[0].name,
+                lastUpdated: shoppingList[0].lastUpdated,
             })
         })
     }
@@ -188,7 +190,11 @@ class ListEntryTable extends Component {
                     </Grid>
                     </CardContent>   
                 </Card>
-                <Box m={1} />
+
+                <Card className="root" style={{minWidth: '100%', marginBottom:20, marginTop:20, backgroundColor: "ffffff"}}>
+                <Typography><b>Letze Änderung:</b> {this.state.shoppingListName} / am {this.state.lastUpdated}</Typography>
+                </Card>
+
                 <TableContainer  component={Paper} style={{marginTop: 15}}>
                     <Table>
                         <TableHead style={{backgroundColor: colors.teal[600]}}>
