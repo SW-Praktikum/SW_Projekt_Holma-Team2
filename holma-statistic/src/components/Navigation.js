@@ -76,8 +76,7 @@ export default function ScrollableTabsButtonForce() {
         >
           <IconButton label="Back">
           <ArrowBackIosRoundedIcon onClick={() => history.goBack()}/>
-          </IconButton>
-          <Tab label="User" icon={<PersonIcon />} {...a11yProps(0)} component={RouterLink} to={`/user-statistics`} />
+          </IconButton>  
           <Tab label="Gruppen" icon={<GroupIcon />} {...a11yProps(1)} component={RouterLink} to={`/groups`}/>
           <Tab label="App" icon={<ShoppingCartIcon />} {...a11yProps(1)} component={RouterLink} to={`/`}/>
           <Tab label="Konto" icon={<AccountCircleIcon />} {...a11yProps(4)} component={RouterLink} to={`/user`}/>
@@ -95,9 +94,6 @@ export default function ScrollableTabsButtonForce() {
       </TabPanel>
       <TabPanel value={value} index={3}>
         Statistik
-      </TabPanel>
-      <TabPanel value={value} index={4}>
-        User
       </TabPanel>
     </div>
   );

@@ -127,7 +127,7 @@ class App extends React.Component {
               {
                 user ?
                   <>
-                    <Redirect to='/groups'/>
+                    <Redirect to='/user-statistics'/>
                     <Navigation />
                     <Route path='/startpage' component={Startpage}/>
                     <Route path='/user-statistics'>

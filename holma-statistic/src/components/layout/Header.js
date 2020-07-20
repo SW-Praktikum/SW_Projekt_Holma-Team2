@@ -16,7 +16,7 @@ class Header extends React.Component {
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar >
-            <IconButton edge="false" className={classes.menuButton} color="inherit" aria-label="menu" component={RouterLink} to={`/groups`}>
+            <IconButton edge="false" className={classes.menuButton} color="inherit" aria-label="menu" component={RouterLink} to={`/user-statistics`}>
               <InsertChartIcon />
               <div>&nbsp;Holma Statistik</div>
             </IconButton>

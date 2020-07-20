@@ -110,7 +110,6 @@ class ListEntryTable extends Component {
                 shoppingListName: shoppingList[0].name,
                 lastUpdated: shoppingList[0].lastUpdated,
             })
-            this.getLastUpdated()
         })
     }
 
@@ -377,14 +376,6 @@ class ListEntryTable extends Component {
         this.filterInput();
     }
 
-    getLastUpdated = () => {
-        let lup = new Date(this.state.lastUpdated)
-        this.setState({
-            lastUpdated: lup.toDateString()
-        })
-    }
-
-
     render() {
         const sortFunctions = [
             {
@@ -405,6 +396,10 @@ class ListEntryTable extends Component {
         ]
         const {retailers, users, filterArticleName, filterPurchasingUserName, filterRetailerName, filterChecked, filterStartDate, filterEndDate, filteredListEntryTableElements, userName} = this.state;
         
+        var listLastUpdated = ""
+        let lud = new Date(this.state.lastUpdated)
+        listLastUpdated = lud.toDateString()
+        
         return (
             <React.Fragment>
                 <Box m={1} />
@@ -416,7 +411,7 @@ class ListEntryTable extends Component {
                             <Typography className="title" style={{fontSize: 16, color: colors.teal[600]}}><b>Id: </b>{this.props.match.params.shoppingListId}</Typography>
                         </Grid>
                         <Grid item xs={12} sm={6} align="right">
-                            <Typography className="title" style={{fontSize: 16, color: colors.teal[600]}}><b>Letzte Änderung: </b>{this.state.lastUpdated}</Typography>
+                            <Typography className="title" style={{fontSize: 16, color: colors.teal[600]}}><b>Letzte Änderung: </b>{listLastUpdated}</Typography>
                         </Grid>
                     </Grid>
                     <Grid container direction="row" justify="space-between" alignItems="center" spaching={2}>
