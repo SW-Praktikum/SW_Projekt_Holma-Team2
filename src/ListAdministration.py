@@ -313,7 +313,7 @@ class Administration():
             list_entries = mapper.find_checked_list_entries_by_shopping_list_id(
                 shopping_list_id)
         return [self.complete_list_entry(le) for le in list_entries]
-    
+
     """Einkaufsliste"""
     def complete_shopping_list(self, shopping_list):
         group_id = shopping_list.get_group()
@@ -398,9 +398,18 @@ class StatisticAdministration(Administration):
             return mapper.find_all()
 
     def get_all_list_entries(self):
-        # hier fehlt die complete_list_entry-Methode!
         with ListEntryMapper() as mapper:
-            return mapper.find_all()
+            list_entries = mapper.find_all()
+        return [self.complete_list_entry(le) for le in list_entries]
+
+    def get_list_entries_by_group(self, group):
+        with ShoppingListMapper() as mapper:
+            shopping_lists = mapper.find_by_group(group)
+
+        for shopping_list in shopping_lists:
+            with ListEntryMapper() as mapper:
+                return mapper.find_list_entries_by_shopping_list_id(shopping_list)
+
 
     def get_list_entries_in_time_period(self, from_date, to_date):
         with ListEntryMapper() as mapper:

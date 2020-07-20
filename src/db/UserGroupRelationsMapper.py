@@ -4,6 +4,8 @@ from db.Mapper import Mapper
 
 
 class UserGroupRelationsMapper(Mapper):
+    """Mapper-Klasse, die Verbindungen zwischen User und Gruppen auf der
+    relationalen DB abbildet (Fremdschlüssel."""
     def __init__(self):
         super().__init__()
 
@@ -26,6 +28,10 @@ class UserGroupRelationsMapper(Mapper):
         pass
 
     def find_groups_by_user_id(self, user_id):
+        """Auslesen von Gruppen durch Fremdschlüssel (user_id) geg. Mitglied
+        :param user_id:
+        :return Eine Sammlung mit Gruppen-Objekten.
+        """
         cursor = self._connection.cursor()
         command = "SELECT user_group_relations.group_id, holma.group.name, " \
                   "holma.group.creation_date, holma.group.owner, " \
@@ -44,6 +50,10 @@ class UserGroupRelationsMapper(Mapper):
         return result
 
     def find_users_by_group_id(self, group_id):
+        """Auslesen von Usern durch Fremdschlüssel (group_id) geg. Gruppe
+        :param group_id:
+        :return Eine Sammlung mit User-Objekten.
+        """
         cursor = self._connection.cursor()
         command = "SELECT user_group_relations.user_id, user.name, " \
                   "user.creation_date, user.email, user.google_id, " \
@@ -62,6 +72,12 @@ class UserGroupRelationsMapper(Mapper):
         return result
 
     def add_user_to_group(self, group, user):
+        """
+
+        :param group:
+        :param user:
+        :return
+        """
         cursor = self._connection.cursor()
         command = "INSERT INTO holma.user_group_relations (group_id, " \
                   "user_id) VALUES (%s, %s)"
@@ -83,6 +99,11 @@ class UserGroupRelationsMapper(Mapper):
         cursor.close()
 
     def delete_user_relations(self, user):
+        """
+
+        :param user:
+        :return:
+        """
         cursor = self._connection.cursor()
         command = "DELETE FROM holma.user_group_relations " \
                   "WHERE user_id={}".format(user.get_id())
@@ -92,6 +113,8 @@ class UserGroupRelationsMapper(Mapper):
         cursor.close()
 
     def delete_group_relations(self, group):
+        """Löschen der Verbindung aus der Datenbank anhand der
+        group_id"""
         cursor = self._connection.cursor()
         command = "DELETE FROM holma.user_group_relations " \
                   "WHERE group_id={}".format(group.get_id())
