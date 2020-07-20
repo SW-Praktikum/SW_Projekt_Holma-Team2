@@ -97,7 +97,7 @@ class ListEntry extends Component {
                     <TableCell padding="checkbox" align="left" style={{backgroundColor:"#ffffff"}}>
                         <Checkbox
                             color="primary"
-                            checked={this.state.checked}
+                            checked={listEntry.getChecked()}
                             onChange={this.handleChangeCheck}
                             inputProps={{ 'aria-label': 'primary checkbox' }}
                         />
