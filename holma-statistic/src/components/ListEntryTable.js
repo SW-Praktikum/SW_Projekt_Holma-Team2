@@ -12,6 +12,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import ClearIcon from '@material-ui/icons/Clear';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import Radio from '@material-ui/core/Radio';
 import {
     KeyboardDatePicker,
     MuiPickersUtilsProvider
@@ -87,7 +88,7 @@ class ListEntryTable extends Component {
             filterEndDate: null,
             filterOpen: "none",
             filterText: "Filter anzeigen",
-            anchorEl: "false"
+            anchorEl: "false",
         }
     }
 
@@ -419,15 +420,30 @@ class ListEntryTable extends Component {
                         />
                     </Grid>
                     <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
-                        <IconButton style={{paddingRight: 0}} aria-label="expand row" size="small" color="primary" onClick={() => this.handleCheckButton(true)}>
-                                <CheckBoxIcon/>
-                        </IconButton> abgehakt
-                        <IconButton style={{paddingLeft: 15, paddingRight: 0}} aria-label="expand row" size="small" color="primary" onClick={() => this.handleCheckButton(false)}>
-                                <CheckBoxOutlineBlankIcon/>
-                        </IconButton> offen
-                        <IconButton style={{paddingLeft: 15, paddingRight: 0}} aria-label="expand row" size="small" color="primary" onClick={() => this.handleCheckButton("all")}>
-                                <LibraryAddCheckIcon/>
-                        </IconButton> alle
+                        <Radio
+                            checked={filterChecked === true}
+                            onChange={() => this.handleCheckButton(true)}
+                            //value="true"
+                            color="primary"
+                            name="radio-button"
+                            //inputProps={{ 'aria-label': 'TRUE' }}
+                        /> abgehakt
+                        <Radio
+                            checked={filterChecked === false}
+                            onChange={() => this.handleCheckButton(false)}
+                            //value="d"
+                            color="primary"
+                            name="radio-button"
+                            //inputProps={{ 'aria-label': 'D' }}
+                        /> offen
+                        <Radio
+                            checked={filterChecked === "all"}
+                            onChange={() => this.handleCheckButton("all")}
+                            //value="e"
+                            color="primary"
+                            name="radio-button"
+                            //inputProps={{ 'aria-label': 'E' }}
+                        /> alle
                     </Grid>                   
                     <Grid item xs={10} sm={3} style={{paddingLeft: 20, paddingRight: 0, paddingTop: 10, paddingBottom: 10}}>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
