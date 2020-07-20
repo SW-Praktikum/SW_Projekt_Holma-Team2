@@ -18,6 +18,9 @@ import {
 } from '@material-ui/pickers';
 import React, { Component } from 'react';
 import AppAPI from '../api/AppAPI';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';   
+import LibraryAddCheckIcon from '@material-ui/icons/LibraryAddCheck';
 
 
 import Menu from '@material-ui/core/Menu';
@@ -118,6 +121,11 @@ class ListEntryTable extends Component {
         if (filterChecked == true) {
             filteredElements =  filteredElements.filter(function(item) {
                 return item.props.listEntry.checked == true;
+            });
+        }
+        if (filterChecked == false) {
+            filteredElements =  filteredElements.filter(function(item) {
+                return item.props.listEntry.checked == false;
             });
         }
 
@@ -265,11 +273,8 @@ class ListEntryTable extends Component {
         await this.filterInput()
     }
 
-    handleInputChangeCheckbox = async (e) => {
-        let key = e.target.id
-        let val = e.target.checked
-
-        await this.setState({[key] : val})
+    handleCheckButton = async (check) => {
+        await this.setState({filterChecked : check})
         await this.filterInput()
     }
 
@@ -414,18 +419,15 @@ class ListEntryTable extends Component {
                         />
                     </Grid>
                     <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    id="filterChecked"
-                                    color="primary"
-                                    checked={filterChecked}
-                                    onChange={this.handleInputChangeCheckbox}
-                                    inputProps={{ 'aria-label': 'primary checkbox' }}
-                                />
-                            }
-                            label="Gekauft"
-                        />
+                        <IconButton style={{paddingRight: 0}} aria-label="expand row" size="small" color="primary" onClick={() => this.handleCheckButton(true)}>
+                                <CheckBoxIcon/>
+                        </IconButton> abgehakt
+                        <IconButton style={{paddingLeft: 15, paddingRight: 0}} aria-label="expand row" size="small" color="primary" onClick={() => this.handleCheckButton(false)}>
+                                <CheckBoxOutlineBlankIcon/>
+                        </IconButton> offen
+                        <IconButton style={{paddingLeft: 15, paddingRight: 0}} aria-label="expand row" size="small" color="primary" onClick={() => this.handleCheckButton("all")}>
+                                <LibraryAddCheckIcon/>
+                        </IconButton> alle
                     </Grid>                   
                     <Grid item xs={10} sm={3} style={{paddingLeft: 20, paddingRight: 0, paddingTop: 10, paddingBottom: 10}}>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
