@@ -498,7 +498,7 @@ export default class AppAPI {
     }
 
     getListEntriesByGroupIdURL(groupId) {
-        return this.#fetchAdv(this.#getListEntriesByGroupIdURL(groupId).then((responseJSON) => {
+        return this.#fetchAdv(this.#getListEntriesByGroupIdURL(groupId)).then((responseJSON) => {
             let responseListEntry = ListEntryBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
                 resolve(responseListEntry)
