@@ -1,4 +1,4 @@
-  import DateFnsUtils from '@date-io/date-fns';
+import DateFnsUtils from '@date-io/date-fns';
 import { Button, Checkbox, colors, FormControlLabel, TextField } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
@@ -11,14 +11,55 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import ClearIcon from '@material-ui/icons/Clear';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import SortIcon from '@material-ui/icons/Sort';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import Collapse from '@material-ui/core/Collapse';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import {
     KeyboardDatePicker,
     MuiPickersUtilsProvider
 } from '@material-ui/pickers';
 import React, { Component } from 'react';
 import AppAPI from '../api/AppAPI';
+
   
+
+class AmountEntry extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            amountEntry: this.props.retailerEntry,
+        }
+    }
+
+
+    
+    render() {
+        const { amountEntry} = this.props;
+        console.log(amountEntry)
+        return (
+            <React.Fragment>
+                <Grid item xs={12} sm={6} style={{paddingLeft: 10, paddingRight: 10, paddingTop: 10, paddingBottom: 10}}>
+                    <Card style={{backgroundColor: "#F4F6F8"}}>
+                        <CardContent>
+                            <Typography color="primary" style={{fontSize: 18}}>
+                                <b>{amountEntry.getName()}</b>
+                            </Typography>
+                            <Typography style={{fontSize: 18}}>
+                                {amountEntry.count} Artikel gekauft
+                            </Typography>
+                        </CardContent>
+                    </Card>
+                </Grid>
+            </React.Fragment>
+        );
+    }
+}
   
   class ListEntry extends Component {
       constructor(props) {
@@ -70,6 +111,7 @@ import AppAPI from '../api/AppAPI';
               openDialog: false,
               groupId : this.props.match.params.groupId,
               retailers: [],
+              articleAmounts: [],
               retailerName: null,
               filterInput: "",
               filteredElements: [],
@@ -89,8 +131,11 @@ import AppAPI from '../api/AppAPI';
   
       componentDidMount(){
           if(this.state.groupId){
-              this.loadListEntries();
               this.loadRetailers()
+              this.loadArticleAmounts()
+              this.loadListEntries().then(() => {
+                  this.filterInput()
+                })
             }
       }
   
@@ -139,27 +184,94 @@ import AppAPI from '../api/AppAPI';
               filteredListEntryTableElements: filteredElements
           })
       }
+
+      handleSort = (e, value) => {
+        // sortieren von Listeneinträgen
+        if (value === null) {
+            var filteredElements = this.state.filteredListEntryTableElements
+        }
+        else {
+            var sortInput = value.name
+            var filteredElements = this.state.filteredListEntryTableElements
+        }
+           
+        if (sortInput === "Händler") {
+            //nach Einzelhändler sortieren
+            filteredElements = filteredElements.sort((a, b) => 
+                a.props.listEntry.retailerName > b.props.listEntry.retailerName ? 1 : -1)
+        }
+        else if (sortInput === "Artikel") {
+            //nach Artikel sortieren
+            filteredElements = filteredElements.sort((a, b) => 
+                a.props.listEntry.articleName > b.props.listEntry.articleName ? 1 : -1)
+        }
+        else if (sortInput === "Liste") {
+            //nach Shoppinglist sortieren
+            filteredElements = filteredElements.sort((a, b) => 
+                a.props.listEntry.shoppingListName > b.props.listEntry.shoppingListName ? 1 : -1)
+        }
+        else if (sortInput === "Einkäufer") {
+            //nach Einkäufer sortieren
+            filteredElements = filteredElements.sort((a, b) => 
+                a.props.listEntry.purchasingUserName > b.props.listEntry.purchasingUserName ? 1 : -1)
+        }
+        else if (sortInput === "Kaufdatum") {
+            //nach Kaufdatum sortieren           
+            filteredElements = filteredElements.sort((a, b) => 
+                Date.parse(a.props.listEntry.checkedTs) < Date.parse(b.props.listEntry.checkedTs) ? 1 : -1)
+        }
+        else if (sortInput === "letzte Änderung") {
+            //nach letzter Änderung sortieren
+            filteredElements = filteredElements.sort((a, b) => 
+                Date.parse(a.props.listEntry.lastUpdated) < Date.parse(b.props.listEntry.lastUpdated) ? 1 : -1)
+        }
+        this.setState({
+            filteredListEntryTableElements: filteredElements
+        })
+    }
+
+    openMenu = () => {
+        this.setState({
+            anchorEl: true
+        })
+    }
     
       loadListEntries = () => {
-          console.log("hier")
-          // get listentries by user ID
-          AppAPI.getAPI().getListEntriesByGroupId(this.state.groupId).then(listEntries => {
-              console.log("Loaded list entries for group '" + this.state.groupId + "':", listEntries)
-              var listEntryTableElements = listEntries.map((listEntry) => <ListEntry listEntry={listEntry} loadListEntries={this.loadListEntries} />)
-  
-              this.setState({
-                  listEntryTableElements: listEntryTableElements,
-                  filteredListEntryTableElements: listEntryTableElements,
-                  loadingInProgress: true, // loading indicator 
-                  loadingError: null
-                  })
-              }).catch(e =>
-                  this.setState({ // Reset state with error from catch 
-                  loadingInProgress: false,
-                  loadingError: e
-              })
-          );  
-      }
+        // get entries by group ID
+        return AppAPI.getAPI().getListEntriesByGroupId(this.state.groupId).then(listEntries => {
+            console.log("Loaded list entries for group '" + this.state.groupId + "':", listEntries)
+            var listEntryTableElements = listEntries.map((listEntry) => <ListEntry listEntry={listEntry} loadListEntries={this.loadListEntries} />)
+            this.setState({
+                listEntryTableElements: listEntryTableElements,
+                filteredListEntryTableElements: listEntryTableElements,
+                loadingInProgress: true, // loading indicator 
+                loadingError: null
+                })
+            return new Promise(function (resolve) {resolve(listEntries)})
+            }).catch(e =>
+                this.setState({ // Reset state with error from catch 
+                loadingInProgress: false,
+                loadingError: e
+            })
+        );  
+    }
+
+      loadArticleAmounts = () => {
+        return AppAPI.getAPI().getArticlesFrequencyByGroupId(this.state.groupId).then((articles) => {
+            console.log("Loaded all ArticleAmounts:", articles)
+            var articleAmounts = articles.map((article) => <AmountEntry amountEntry={article} loadListEntries={this.loadListEntries} />)
+            this.setState({
+            articleAmounts: articleAmounts,
+            loadingInProgress: true, // loading indicator 
+            loadingError: null,
+        });
+        }).catch(e =>
+            this.setState({ // Reset state with error from catch 
+                loadingInProgress: false,
+                loadingError: e
+            })
+            );  
+        } 
       
       loadRetailers = () => {
           AppAPI.getAPI().getRetailers().then((retailers) => {
@@ -177,25 +289,6 @@ import AppAPI from '../api/AppAPI';
               );  
           } 
   
-     loadListEntriesByRetailer = (retailerId) => {
-      console.log("Current Retailer id:", retailerId)
-      // get listentries by Retailer ID
-      AppAPI.getAPI().getListEntriesByRetailerId(retailerId).then(listEntries => {
-          console.log("Loaded list entries for retailer '" + retailerId + "':", listEntries)
-          var listEntryTableElements = listEntries.map((listEntry) => <ListEntry listEntry={listEntry} loadListEntries={this.loadListEntries} />)
-  
-          this.setState({
-              listEntryTableElements: listEntryTableElements,
-              loadingInProgress: true, // loading indicator 
-              loadingError: null
-              })
-          }).catch(e =>
-              this.setState({ // Reset state with error from catch 
-              loadingInProgress: false,
-              loadingError: e
-          })
-      );  
-  }
       
       handleInputChangeDate = async (key, date) => {
           let datum = new Date (date);
@@ -264,31 +357,102 @@ import AppAPI from '../api/AppAPI';
           })
           this.loadListEntries()
       }
+
+      setOpen(bool) {
+        this.setState({
+            open: bool
+        })
+    }
   
       render() {
-          const {retailers, filterArticleName, filterRetailerName, filterChecked, filterStartDate, filterEndDate, filteredListEntryTableElements} = this.state;
+        const sortFunctions = [
+            {
+                name: "Artikel",
+            },
+            {
+                name: "Händler",
+            },
+            {
+                name: "Liste",
+            },
+            {
+                name: "Einkäufer",
+            },
+            {
+                name: "Kaufdatum",
+            },
+            {
+                name: "letzte Änderung",
+            },
+        ]
+          const {retailers, filterArticleName, filterRetailerName, filterChecked, filterStartDate, filterEndDate, filteredListEntryTableElements, articleAmounts, open} = this.state;
           return (
-              <React.Fragment>  
-                  <Grid 
-                      container 
-                      direction="row" 
-                      justify="space-between" 
-                      alignItems="center" 
-                      component={Paper} 
-                      style={{display: this.state.displayTable, minWidth: '100%', marginBottom:15, marginTop:15, }}
-                      >
-                      <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
-                          <Button 
-                              variant="contained"
-                              fullWidth 
-                              color="primary"
-                              onClick={this.handleFilterOpen}>
-                              {this.state.filterText}
-                          </Button>
-                      </Grid>
-                      <Grid item xs={12} sm={4}></Grid>
-                  </Grid>
+        <React.Fragment>  
+            <Grid 
+                container 
+                direction="row" 
+                justify="space-between" 
+                alignItems="center" 
+                component={Paper} 
+                style={{display: this.state.displayTable, minWidth: '100%', marginBottom:15, marginTop:15, }}
+                >
+                <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
+                    <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>Das ist die Statistik der Gruppe {this.state.groupId}:</Typography>
+                </Grid>
+                <Grid item xs={9} sm={6} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
+                    <Typography align="right" className="title" style={{fontSize: 16, fontWeight: "bold"}}>Häufigste Artikel</Typography>
+                </Grid>
+                <Grid item xs={3} sm={2} align="left" style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
+                    <IconButton aria-label="expand row" size="small" onClick={() => this.setOpen(!open)}>
+                        {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                    </IconButton>
+                </Grid>
+                <Collapse in={this.state.open} timeout="auto" unmountOnExit>
+                    <Grid 
+                        container 
+                        direction="row" 
+                        justify="space-between" 
+                        alignItems="center" 
+                        style={{display: this.state.displayTable, minWidth: '100%', marginBottom:15, marginTop:15, }}
+                        >
+                        {articleAmounts}
+                    </Grid>
+                </Collapse>
+            </Grid>
+            <Grid 
+                container 
+                direction="row" 
+                justify="space-between" 
+                alignItems="center" 
+                component={Paper} 
+                style={{display: this.state.displayTable, minWidth: '100%', marginBottom:15, marginTop:15, }}
+                >
+                <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
+                    <Button 
+                        variant="contained"
+                        fullWidth 
+                        color="primary"
+                        onClick={this.handleFilterOpen}>
+                        {this.state.filterText}
+                    </Button>
+                </Grid>
+
+                <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
+                        <Autocomplete
+                            id="sortSelector"
+                            onChange={(event, value) => this.handleSort("sortSelector", value)}
+                            options={sortFunctions}
+                            
+                            defaultValue="filtern"
+                            getOptionLabel={(option) => option.name}
+                            renderInput={(params) => (
+                                <TextField {...params} variant="outlined" label="Sortieren" placeholder="Sortieren" />
+                            )}                
+                        />
+                    </Grid>
+                </Grid>
                   
+
                   
                   <Grid container direction="row" justify="space-between" alignItems="center" component={Paper} style={{marginTop: 15, display: this.state.filterOpen}}>
                       <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
@@ -384,6 +548,7 @@ import AppAPI from '../api/AppAPI';
                           </IconButton>
                       </Grid>
                   </Grid>
+
                   <TableContainer style={{marginTop: 15}} component={Paper}>
                       <Table aria-label="collapsible table">
                           <TableHead style={{backgroundColor: colors.teal[600]}}>
@@ -401,7 +566,7 @@ import AppAPI from '../api/AppAPI';
                           </TableBody>
                       </Table>
                   </TableContainer>
-              </React.Fragment>
+        </React.Fragment>
           )
       }
   }
