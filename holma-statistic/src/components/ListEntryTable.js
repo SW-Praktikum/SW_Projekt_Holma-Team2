@@ -134,7 +134,6 @@ class ListEntryTable extends Component {
     }
   
     loadListEntries = () => {
-        console.log("hier")
         // get listentries by user ID
         return AppAPI.getAPI().getListEntriesByUserId(this.state.userId).then(listEntries => {
             console.log("Loaded list entries for user '" + this.state.userId + "':", listEntries)
