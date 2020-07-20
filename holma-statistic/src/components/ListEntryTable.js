@@ -303,14 +303,18 @@ class ListEntryTable extends Component {
         this.setState({
             filterEndDate: null
         })
-        this.loadListEntries()
+        this.loadListEntries().then(() => {
+            this.filterInput();
+        })
     }
 
     clearStartDateInput = () => {
         this.setState({
             filterStartDate: null,
         })
-        this.loadListEntries()
+        this.loadListEntries().then(() => {
+            this.filterInput();
+        })
     }
 
     render() {
