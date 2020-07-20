@@ -103,7 +103,9 @@ import AppAPI from '../api/AppAPI';
   
           if (filterArticleName !== "") {
               filteredElements =  filteredElements.filter(function(item) {
-                  return item.props.listEntry.articleName.toLocaleLowerCase().includes(filterArticleName.toLocaleLowerCase());
+                console.log(item)  
+                console.log(filteredElements,"xD")
+                return item.props.listEntry.articleName.toLocaleLowerCase().includes(filterArticleName.toLocaleLowerCase());
               });
           }
   
