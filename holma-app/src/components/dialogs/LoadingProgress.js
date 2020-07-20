@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import { LinearProgress, withStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import { withStyles, LinearProgress } from '@material-ui/core';
+import React, { Component } from 'react';
 
 /**
  * Shows a loading progress, if the show prop is true.

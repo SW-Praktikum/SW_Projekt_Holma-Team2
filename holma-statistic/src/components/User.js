@@ -1,12 +1,7 @@
+import { Button, Grid, Paper, Typography, withStyles } from '@material-ui/core';
+import firebase from 'firebase/app';
 import React, { Component, createRef } from 'react';
 import AppAPI from '../api/AppAPI';
-import { Grid, Box, Button, withStyles, Paper, Typography, Avatar} from '@material-ui/core';
-import {Link} from 'react-router-dom';
-import User from '../api/UserBO';
-import ListWithBoxes from './ListWithBoxes';
-import firebase from 'firebase/app'
-import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
-import Navigation from '../components/Navigation';
 
 class UserProfil extends Component {
 
@@ -20,7 +15,15 @@ class UserProfil extends Component {
     this.state = {
       user: this.props.user,
       userName: this.props.user.name,
-      userId: this.props.user.Id
+      userId: this.props.user.Id,
+      retailer: [],
+    }
+  }
+
+  componentDidMount() {
+    if (this.props.user.id) {
+      this.loadRetailer();
+      console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
     }
   }
 
@@ -38,9 +41,18 @@ class UserProfil extends Component {
     );
   }
 
+  loadRetailer(){
+    AppAPI.getAPI().getFrequentRetailerByUserId(this.state.userId).then(retailer => {
+      this.setState({
+        retailer:retailer,
+      })
+    })
+  }
+
 
   render() {
-
+    
+    console.log("!!!!!!!!!!!!!!!")
       const { classes, user } = this.props;
       return (
           

@@ -5,15 +5,14 @@ from flask_cors import CORS
 # Wir nutzen RestX das auf Flask aufbaut
 from flask_restx import Api, Resource, fields
 
-# Wir greifen auf unsere BusinessObjects und Applikationslogik
-from ListAdministration import Administration
-from ListAdministration import StatisticAdministration
 from bo.Article import Article
 from bo.Group import Group
-from bo.ShoppingList import ShoppingList
-from bo.User import User
 from bo.ListEntry import ListEntry
 from bo.Retailer import Retailer
+from bo.ShoppingList import ShoppingList
+from bo.User import User
+# Wir greifen auf unsere BusinessObjects und Applikationslogik
+from ListAdministration import Administration, StatisticAdministration
 
 """Hier wird Flask instanziert"""
 app = Flask(__name__)

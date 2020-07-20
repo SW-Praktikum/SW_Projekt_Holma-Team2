@@ -2,6 +2,7 @@ from datetime import datetime
 
 from bo.BusinessObject import BusinessObject
 
+
 class Article(BusinessObject):
     def __init__(self):
         """Artikel, der für eine Gruppe erstellt wird."""

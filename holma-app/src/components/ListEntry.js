@@ -1,28 +1,23 @@
-import React, { Component } from 'react';
-import AppAPI from '../api/AppAPI';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/styles';
+import { colors } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
+import Checkbox from '@material-ui/core/Checkbox';
 import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import Typography from '@material-ui/core/Typography';
-import Checkbox from '@material-ui/core/Checkbox';
-import Paper from '@material-ui/core/Paper';
-import StarIcon from '@material-ui/icons/Star';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-import StarBorderIcon from '@material-ui/icons/StarBorder';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import StarIcon from '@material-ui/icons/Star';
+import StarBorderIcon from '@material-ui/icons/StarBorder';
+import { withStyles } from '@material-ui/styles';
+import React, { Component } from 'react';
+import AppAPI from '../api/AppAPI';
 import ListEntryEditDialog from './dialogs/ListEntryEditDialog';
-import ListEntryAddDialog from './dialogs/ListEntryAddDialog';
-import { colors } from '@material-ui/core';
 
 // classes for styling need to be created
 

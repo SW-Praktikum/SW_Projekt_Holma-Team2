@@ -108,7 +108,9 @@ class ListEntryTable extends Component {
         AppAPI.getAPI().getShoppingListById(this.props.match.params.shoppingListId).then((shoppingList) => {
             this.setState({
                 shoppingListName: shoppingList[0].name,
+                lastUpdated: shoppingList[0].lastUpdated,
             })
+            this.getLastUpdated()
         })
     }
 
@@ -375,6 +377,14 @@ class ListEntryTable extends Component {
         this.filterInput();
     }
 
+    getLastUpdated = () => {
+        let lup = new Date(this.state.lastUpdated)
+        this.setState({
+            lastUpdated: lup.toDateString()
+        })
+    }
+
+
     render() {
         const sortFunctions = [
             {
@@ -401,9 +411,12 @@ class ListEntryTable extends Component {
                 <Card className="root" style={{minWidth: '100%', marginBottom:10, marginTop:10, backgroundColor: "ffffff"}}>                
                     <CardContent>
                     <Grid container direction="row" justify="space-between" alignItems="center" spaching={2}>
-                        <Grid item xs={12} sm={12}>
+                        <Grid item xs={12} sm={6}>
                             <Typography className="title" style={{fontSize: 16, color: colors.teal[600]}}><b>Shoppingliste: </b>{this.state.shoppingListName}</Typography>
                             <Typography className="title" style={{fontSize: 16, color: colors.teal[600]}}><b>Id: </b>{this.props.match.params.shoppingListId}</Typography>
+                        </Grid>
+                        <Grid item xs={12} sm={6} align="right">
+                            <Typography className="title" style={{fontSize: 16, color: colors.teal[600]}}><b>Letzte Änderung: </b>{this.state.lastUpdated}</Typography>
                         </Grid>
                     </Grid>
                     <Grid container direction="row" justify="space-between" alignItems="center" spaching={2}>
@@ -557,8 +570,6 @@ class ListEntryTable extends Component {
                         </IconButton>
                     </Grid>
                 </Grid>
-
-
                 <TableContainer  component={Paper} style={{marginTop: 15}}>
                     <Table>
                         <TableHead style={{backgroundColor: colors.teal[600]}}>

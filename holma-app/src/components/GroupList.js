@@ -1,38 +1,18 @@
-import React, { Component } from 'react';
-import AppAPI from '../api/AppAPI';
-import { makeStyles } from '@material-ui/core/styles';
-import Fab from '@material-ui/core/Fab';
-import EditIcon from '@material-ui/icons/Edit';
-import Button from '@material-ui/core/Button';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { colors } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardContent from '@material-ui/core/CardContent';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import AppAPI from '../api/AppAPI';
 import ShoppingListBO from '../api/ShoppingListBO';
 import ShoppingListAddDialog from './dialogs/ShoppingListAddDialog';
-
-import TextField from '@material-ui/core/TextField';
-
-import Paper from '@material-ui/core/Paper';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-
-import Grid from '@material-ui/core/Grid';
 import ListWithBoxes from './ListWithBoxes';
-import GroupEntry from './GroupEntries';
-import { colors } from '@material-ui/core';
-import CardActionArea from '@material-ui/core/CardActionArea';
-
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
-
-
 
 class Grouplink extends Component{
   render(){

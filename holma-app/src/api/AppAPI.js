@@ -1,9 +1,9 @@
+import ArticleBO from './ArticleBO';
 import GroupBO from './GroupBO';
-import UserBO from './UserBO';
+import ListEntryBO from './ListEntryBO';
+import RetailerBO from './RetailerBO';
 import ShoppingListBO from './ShoppingListBO';
-import ArticleBO from './ArticleBO'
-import ListEntryBO from './ListEntryBO'
-import RetailerBO from './RetailerBO'
+import UserBO from './UserBO';
 
 export default class AppAPI {
 
@@ -497,7 +497,7 @@ export default class AppAPI {
         })
     }
 
-    getListEntriesByGroupIdURL(groupId) {
+    getListEntriesByGroupId(groupId) {
         return this.#fetchAdv(this.#getListEntriesByGroupIdURL(groupId)).then((responseJSON) => {
             let responseListEntry = ListEntryBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
