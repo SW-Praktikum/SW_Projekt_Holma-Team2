@@ -6,11 +6,15 @@ import os
 
 
 class Mapper(AbstractContextManager, ABC):
-
+    """Abstrakte Basisklasse aller Mapper-Klassen"""
     def __init__(self):
         self._connection = None
 
     def __enter__(self):
+        """Wenn die Umgebungsvaribale; OperatingSystem. get Environment-Variable
+        in der Form GoogleAppEngine-Environment exestiert und mit standard
+        gesetzt ist, dann ist die Anwendung deployt und die Verbindung wird
+        über die Google Cloud hergestellt. """
         # remote Database
         """if os.getenv('GAE_ENV', '').startswith('standard'):
             self._connection = mysql.connector.connect(

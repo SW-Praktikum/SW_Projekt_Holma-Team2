@@ -4,7 +4,17 @@ export default class RetailerBO extends BusinessObject {
 
     constructor(name) {
         super(name);
+        this.count = 0
+   };
+
+   getCount() {
+    return this.count
+   };
+
+   setCount(count){
+        this.count = count
    }
+
 
    static fromJSON(retailers) {
     let result = [];

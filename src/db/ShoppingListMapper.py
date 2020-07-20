@@ -3,11 +3,17 @@ from db.Mapper import Mapper
 
 
 class ShoppingListMapper(Mapper):
-
+    """Mapper-Klasse, die Shoppinglisten-Objekte auf der relationalen DB abbildet.
+    Das Mapping ist bidirektional. D.h., Objekte können
+    in DB-Strukturen und DB-Strukturen in Objekte umgewandelt werden.
+    """
     def __init__(self):
         super().__init__()
 
     def find_all(self):
+        """Auslesen aller vorhandenen Shoppinglisten
+        :return Eine Sammlung aller Shoppinglisten-Objekten.
+        """
         cursor = self._connection.cursor()
         command = "SELECT * FROM shopping_list"
         cursor.execute(command)
@@ -21,6 +27,11 @@ class ShoppingListMapper(Mapper):
         return result
 
     def find_by_id(self, user_id):
+        """Eindeutiges Auslesen einer Shoppingliste durch ID
+        :param user_id:
+        :return Shoppinglisten-Objekt, das der übergebenen ID entspricht
+                oder None wenn DB-Tupel nicht vorhanden ist.
+        """
         cursor = self._connection.cursor()
         command = "SELECT * FROM shopping_list " \
                   "WHERE shopping_list_id={}".format(user_id)
@@ -37,6 +48,10 @@ class ShoppingListMapper(Mapper):
         return result[0]
 
     def find_by_name(self, name):
+        """Auslesen von Shoppinglisten durch Name
+        :param name:
+        :return Eine Sammlung mit Shoppinglisten-Objekten.
+        """
         cursor = self._connection.cursor()
         command = "SELECT * FROM shopping_list WHERE name LIKE '{}' " \
                   "ORDER BY name".format(name)
@@ -51,6 +66,10 @@ class ShoppingListMapper(Mapper):
         return result
 
     def find_by_group(self, group):
+        """Auslesen von Shoppinglisten durch Fremdschlüssel (group_id) geg. Gruppe
+        :param group:
+        :return Eine Sammlung mit Shoppinglisten-Objekten.
+        """
         cursor = self._connection.cursor()
         command = "SELECT * FROM shopping_list " \
                   "WHERE group_id={}".format(group.get_id())
@@ -65,6 +84,14 @@ class ShoppingListMapper(Mapper):
         return result
 
     def insert(self, shopping_list):
+        """Einfügen eines Shoppinglisten-Objekts
+
+        lastrowid returns the value generated for an AUTO_INCREMENT
+        column by the previous INSERT
+        :param shopping_list:
+        :return das bereits übergebene Shoppinglisten-Objekt,
+                jedoch mit korrekter ID
+        """
         cursor = self._connection.cursor()
 
         command = "INSERT INTO shopping_list (shopping_list_id, name, " \
@@ -86,6 +113,10 @@ class ShoppingListMapper(Mapper):
         return shopping_list
 
     def update(self, shopping_list):
+        """Wiederholtes Schreiben / Aktualisieren eines Shoppinglisten-Objekts
+        :param shopping_list
+        :return aktualisiertes Shoppinglisten-Objekt
+        """
         cursor = self._connection.cursor()
         command = "UPDATE shopping_list SET name=%s, group_id=%s, " \
                   "last_updated=%s WHERE shopping_list_id=%s"
@@ -102,6 +133,9 @@ class ShoppingListMapper(Mapper):
         return shopping_list
 
     def delete(self, shopping_list):
+        """Löschen der Daten eines Shoppinglisten-Objekts aus der Datenbank
+        :param shopping_list
+        """
         cursor = self._connection.cursor()
 
         command = "DELETE FROM shopping_list " \
@@ -112,6 +146,10 @@ class ShoppingListMapper(Mapper):
         cursor.close()
 
     def delete_by_group(self, group):
+        """Löschen der Daten eines Shoppinglisten-Objekts aus der Datenbank
+        anhand der group_id
+        :param group
+        """
         cursor = self._connection.cursor()
 
         command = "DELETE FROM shopping_list " \

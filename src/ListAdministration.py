@@ -409,3 +409,7 @@ class StatisticAdministration(Administration):
     def get_article_count_by_group(self, group):
         with ArticleMapper() as mapper:
             return mapper.find_most_frequent_articles_by_group(group)
+
+    def get_retailer_count_by_user(self, user):
+        with RetailerMapper() as mapper:
+            return mapper.find_most_frequent_retailers(user)

@@ -14,27 +14,35 @@ class BusinessObject(ABC):
         return str(self._id)
 
     def get_name(self):
+        """Auslesen des Namens"""
         return self._name
 
     def get_id(self):
+        """Auslesen der ID"""
         return self._id
 
     def get_creation_date(self):
+        """Auslesen des Erstelldatums"""
         return self._creation_date
 
     def get_last_updated(self):
+        """Auslesen des Datums der letzten Änderung"""
         return self._last_updated
 
     def set_name(self, name):
+        """Setzen des Namens"""
         self._name = name
 
     def set_id(self, value):
+        """Setzen der ID"""
         self._id = value
 
     def set_creation_date(self, creation_date):
+        """Setzen des Erstelldatums"""
         self._creation_date = creation_date
 
     def set_last_updated(self, last_updated):
+        """Setzen des Datums der letzten Änderung"""
         self._last_updated = last_updated
 
     @staticmethod

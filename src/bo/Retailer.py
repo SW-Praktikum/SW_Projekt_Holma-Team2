@@ -6,6 +6,7 @@ class Retailer(BusinessObject):
         referenziert wird."""
 
         super().__init__()
+        self._count = 0
 
     def __str__(self):
         return "Retailer: {} {}, created: {}, " \
@@ -14,11 +15,18 @@ class Retailer(BusinessObject):
                                          self.get_creation_date(),
                                          self.get_last_updated())
 
+    def get_count(self):
+        return self._count
+
+    def set_count(self, count):
+        self._count = count
+
     @staticmethod
     def from_dict(dictionary=dict()):
         retailer = Retailer()
         retailer.set_id(dictionary["id"])
         retailer.set_name(dictionary["name"])
+        retailer.set_count(dictionary["count"])
         return retailer
 
     @staticmethod

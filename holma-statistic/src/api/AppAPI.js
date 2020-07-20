@@ -83,6 +83,8 @@ export default class AppAPI {
     #getRetailersURL = () => `${this.#appServerBaseURL}/retailers`;
     #getRetailerByIdURL = (retailerId) => `${this.#appServerBaseURL}/retailer/${retailerId}`;
     #getRetailersByNameURL = (name) => `${this.#appServerBaseURL}/by-name/${name}`;
+    #getFrequentRetailerByUserIdURL = (userId) => `${this.#appServerBaseURL}/user/${userId}/retailers/most-frequent`;
+
 
     static getAPI() {
         if (this.#api == null) {
@@ -626,6 +628,15 @@ export default class AppAPI {
             })
         })
     };
+
+    getFrequentRetailerByUserId(userId) {
+        return this.#fetchAdv(this.#getFrequentRetailerByUserIdURL(userId)).then((responseJSON) => {
+            let responseRetailer = RetailerBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+                resolve(responseRetailer)
+            })
+        })
+    }  
 
     getStandardArticlesByGroupId(groupId) {
         return this.#fetchAdv(this.#getStandardArticlesByGroupIdURL(groupId)).then((responseJSON) => {
