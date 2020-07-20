@@ -84,15 +84,28 @@ class ListEntryMapper(Mapper):
 
         return result
 
-    def find_by_purchasing_user(self, user_id):
+    def find_by_purchasing_user(self, user_id, archived_shopping_lists):
         """Auslesen von Listeneinträgen durch Fremdschlüssel (user_id)
         geg. Einkaufender User
         :param user_id:
         :return Eine Sammlung mit Listeneintrag-Objekten.
         """
+
         cursor = self._connection.cursor()
-        command = "SELECT * FROM holma.list_entry " \
-                  "WHERE purchasing_user={}".format(user_id)
+        if archived_shopping_lists == []:
+            command = "SELECT * FROM holma.list_entry " \
+                      "WHERE purchasing_user={}".format(user_id)
+        else:
+            shopping_list_ids = ", ".join([str(shopping_list.get_id())
+                                           for shopping_list
+                                           in archived_shopping_lists])
+
+            command = "SELECT * FROM holma.list_entry " \
+                      "WHERE purchasing_user={} " \
+                      "AND shopping_list " \
+                      "NOT IN ({})".format(user_id, shopping_list_ids)
+
+
         cursor.execute(command)
         tuples = cursor.fetchall()
 

@@ -38,9 +38,13 @@ class Administration():
         with UserGroupRelationsMapper() as mapper:
             return mapper.find_groups_by_user_id(user_id)
 
-    def get_list_entries_by_user_id(self, user_id):
+    def get_list_entries_by_user_id(self, user_id, include_archived=False):
+        shopping_lists = []
+        if include_archived == False:
+            shopping_lists = self.get_all_archived_shopping_lists()
         with ListEntryMapper() as mapper:
-            list_entries = mapper.find_by_purchasing_user(user_id)
+            list_entries = mapper.find_by_purchasing_user(user_id,
+                                                          shopping_lists)
         return [self.complete_list_entry(le) for le in list_entries]
 
     def create_user(self, name, email, google_id):
@@ -349,6 +353,15 @@ class Administration():
 
         with ShoppingListMapper() as mapper:
             mapper.delete(shopping_list)
+
+    def archive_shopping_list(self, shopping_list):
+        shopping_list.set_archived(True)
+        with ShoppingListMapper() as mapper:
+            return mapper.update(shopping_list)
+
+    def get_all_archived_shopping_lists(self):
+        with ShoppingListMapper() as mapper:
+            return mapper.find_all_archived()
 
     def save_shopping_list(self, shopping_list):
         shopping_list.set_last_updated(datetime.now())

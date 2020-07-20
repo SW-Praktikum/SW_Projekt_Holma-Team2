@@ -1,8 +1,12 @@
 import DateFnsUtils from '@date-io/date-fns';
-import { Button, Checkbox, colors, FormControlLabel, TextField } from '@material-ui/core';
+import { Button, Checkbox, colors, TextField } from '@material-ui/core';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
+import Radio from '@material-ui/core/Radio';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -11,25 +15,15 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import ClearIcon from '@material-ui/icons/Clear';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import SortIcon from '@material-ui/icons/Sort';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import Radio from '@material-ui/core/Radio';
-import Collapse from '@material-ui/core/Collapse';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import {
     KeyboardDatePicker,
     MuiPickersUtilsProvider
 } from '@material-ui/pickers';
 import React, { Component } from 'react';
 import AppAPI from '../api/AppAPI';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';   
-import LibraryAddCheckIcon from '@material-ui/icons/LibraryAddCheck';
 
 class RetailerEntry extends Component {
     constructor(props) {
@@ -223,7 +217,7 @@ class ListEntryTable extends Component {
   
     loadListEntries = () => {
         // get entries by user ID
-        return AppAPI.getAPI().getListEntriesByUserId(this.state.userId).then(listEntries => {
+        return AppAPI.getAPI().getListEntriesByUserId(this.state.userId, true).then(listEntries => {
             console.log("Loaded list entries for user '" + this.state.userId + "':", listEntries)
             var listEntryTableElements = listEntries.map((listEntry) => <ListEntry listEntry={listEntry} loadListEntries={this.loadListEntries} />)
             this.setState({

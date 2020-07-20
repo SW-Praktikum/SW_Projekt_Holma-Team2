@@ -133,14 +133,16 @@ class GroupEntries extends Component{
     }
 
     handleClickOpenMember = () => {
-      this.loadMembers()
-      this.setState({
-          openMember: true
-      });
+      this.loadMembers().then(async () => {
+        await this.setState({
+            openMember: true
+        });
+      })
+      
     }
 
-    handleCloseMember = () => {
-      this.setState({
+    handleCloseMember = async () => {
+      await this.setState({
         memberElements: [],
         openMember: false,
       })
@@ -153,19 +155,20 @@ class GroupEntries extends Component{
         this.setState({groupId: group.getId()})
         AppAPI.getAPI().addUserToGroup(group.getId(), user.getId()).then( () => {
           this.loadGroups();
+          this.loadMembers();
         })  
       })
       this.handleClose();
       this.handleClickOpenMember();//open new dialog
     }
 
-    addMember = () => {
+    addMember = async () => {
       // es muss gecheckt werden bei input ob der user existiert und ob er schon in der Gruppe ist,
       // checken ob user id vorhanden und ob user schon in group
-      AppAPI.getAPI().addUserToGroup(this.state.groupId, this.state.memberId).then(() => {
+      AppAPI.getAPI().addUserToGroup(this.state.groupId, this.state.memberId).then(async () => {
+        await this.setState({memberId: ""})
         this.loadMembers()
       })
-      this.setState({memberId: ""})
     }
     
     handleChangeMember = (e) => {
@@ -182,8 +185,8 @@ class GroupEntries extends Component{
       //this.setState({memberElements})
     }
 
-    loadMembers = () => {
-      AppAPI.getAPI().getUsersByGroupId(this.state.groupId).then(users => {
+    loadMembers = async () => {
+      AppAPI.getAPI().getUsersByGroupId(this.state.groupId).then(async (users) => {
         //console.log("Loaded users from database for group '" + this.state.groupId + "'")
         //console.log("Loaded users:", users)
         var memberElements = users.map((user) => 
@@ -205,12 +208,12 @@ class GroupEntries extends Component{
               </ListItem>
           
           )
-
-          this.setState({
+          await this.setState({
               memberElements: memberElements,
               loadingInProgress: true, // loading indicator 
               loadingError: null
             })
+            return new Promise(function (resolve) { resolve(memberElements) })
           }).catch(e =>
               this.setState({ // Reset state with error from catch 
                 loadingInProgress: false,
@@ -271,7 +274,6 @@ class GroupEntries extends Component{
             memberId={this.state.memberId}
             handleChangeMember={this.handleChangeMember}
             addMember={this.addMember}
-            handleClickOpenMember={this.handleClickOpenMember}
             handleCloseMember={this.handleCloseMember}
             openMember={this.state.openMember}/>
             

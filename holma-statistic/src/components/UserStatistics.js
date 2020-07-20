@@ -31,7 +31,7 @@ class UserStatistics extends React.Component {
   }
 
   loadListEntries(){
-    AppAPI.getAPI().getListEntriesByUserId(this.state.userId).then(entry =>{
+    AppAPI.getAPI().getListEntriesByUserId(this.state.userId, true).then(entry =>{
       this.setState({
         listElements:entry,
       })

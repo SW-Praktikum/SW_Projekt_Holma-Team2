@@ -55,11 +55,13 @@ export default class AppAPI {
     #getShoppingListByIdURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglist/${shoppingListId}`;
     #updateShoppingListURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglist/${shoppingListId}`;
     #deleteShoppingListURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglist/${shoppingListId}`;
-    
+    #archiveShoppingListURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglist/${shoppingListId}/archive`;
+
     // ListEntry related
     #getListEntryURL = () => `${this.#appServerBaseURL}/listentries`;
     #getListEntryByIdURL = (listEntryId) => `${this.#appServerBaseURL}/listentry/${listEntryId}`;
     #getListEntriesByUserIdURL = (userId) => `${this.#appServerBaseURL}/user/${userId}/listentries`;
+    #getListEntriesIncludeArchivedByUserIdURL = (userId) => `${this.#appServerBaseURL}/user/${userId}/listentries/include-archived`;
     
     #getListEntriesByArticleIdURL = (articleId) => `${this.#appServerBaseURL}/article/${articleId}/listentries`;
     #getListEntriesByShoppingListIdURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglist/${shoppingListId}/listentries`; 
@@ -383,6 +385,23 @@ export default class AppAPI {
         })
     }
 
+    archiveShoppingList(shoppingList) {
+        console.log("Archiving ShoppingList:", shoppingList)
+        return this.#fetchAdv(this.#archiveShoppingListURL(shoppingList.getId()), {
+            method: 'POST',
+                headers: {
+                    'Accept': 'application/json, text/plain',
+                    'Content-type': 'application/json',
+                },
+                body: JSON.stringify(shoppingList)
+        }).then((responseJSON) => {
+            let responseShoppingList = ShoppingListBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseShoppingList)
+            })
+        })
+    }
+
 
     getArticles() {
         return this.#fetchAdv(this.#getArticlesURL()).then((responseJSON) => {
@@ -470,13 +489,23 @@ export default class AppAPI {
         })
     };
 
-    getListEntriesByUserId(userId) {
-        return this.#fetchAdv(this.#getListEntriesByUserIdURL(userId)).then((responseJSON) => {
-            let responseListEntry = ListEntryBO.fromJSON(responseJSON);
-            return new Promise(function (resolve) {
-                resolve(responseListEntry)
+    getListEntriesByUserId(userId, includeArchived) {
+        if (includeArchived == true) {
+            return this.#fetchAdv(this.#getListEntriesIncludeArchivedByUserIdURL(userId)).then((responseJSON) => {
+                let responseListEntry = ListEntryBO.fromJSON(responseJSON);
+                return new Promise(function (resolve) {
+                    resolve(responseListEntry)
+                })
             })
-        })
+        }
+        else {
+            return this.#fetchAdv(this.#getListEntriesByUserIdURL(userId)).then((responseJSON) => {
+                let responseListEntry = ListEntryBO.fromJSON(responseJSON);
+                return new Promise(function (resolve) {
+                    resolve(responseListEntry)
+                })
+            })
+        }        
     }; 
 
     getListEntriesByArticleId(articleId) {

@@ -26,6 +26,23 @@ class ShoppingListMapper(Mapper):
 
         return result
 
+    def find_all_archived(self):
+        """Auslesen aller vorhandenen Shoppinglisten
+        :return Eine Sammlung aller Shoppinglisten-Objekten.
+        """
+        cursor = self._connection.cursor()
+        command = "SELECT * FROM shopping_list " \
+                  "WHERE archived = TRUE"
+        cursor.execute(command)
+        tuples = cursor.fetchall()
+
+        result = ShoppingList.from_tuples(tuples)
+
+        self._connection.commit()
+        cursor.close()
+
+        return result
+
     def find_by_id(self, user_id):
         """Eindeutiges Auslesen einer Shoppingliste durch ID
         :param user_id:
@@ -53,7 +70,8 @@ class ShoppingListMapper(Mapper):
         :return Eine Sammlung mit Shoppinglisten-Objekten.
         """
         cursor = self._connection.cursor()
-        command = "SELECT * FROM shopping_list WHERE name LIKE '{}' " \
+        command = "SELECT * FROM shopping_list " \
+                  "WHERE name LIKE '{}' AND archived = FALSE " \
                   "ORDER BY name".format(name)
         cursor.execute(command)
         tuples = cursor.fetchall()
@@ -72,7 +90,8 @@ class ShoppingListMapper(Mapper):
         """
         cursor = self._connection.cursor()
         command = "SELECT * FROM shopping_list " \
-                  "WHERE group_id={}".format(group.get_id())
+                  "WHERE group_id={} " \
+                  "AND archived = FALSE".format(group.get_id())
         cursor.execute(command)
         tuples = cursor.fetchall()
 
@@ -95,14 +114,15 @@ class ShoppingListMapper(Mapper):
         cursor = self._connection.cursor()
 
         command = "INSERT INTO shopping_list (shopping_list_id, name, " \
-                  "group_id, creation_date, last_updated) " \
-                  "VALUES (%s, %s, %s, %s, %s)"
+                  "group_id, creation_date, last_updated, archived) " \
+                  "VALUES (%s, %s, %s, %s, %s, %s)"
 
         data = (shopping_list.get_id(),
                 shopping_list.get_name(),
                 shopping_list.get_group(),
                 shopping_list.get_creation_date(),
-                shopping_list.get_last_updated())
+                shopping_list.get_last_updated(),
+                shopping_list.get_archived())
 
         cursor.execute(command, data)
 
@@ -119,10 +139,11 @@ class ShoppingListMapper(Mapper):
         """
         cursor = self._connection.cursor()
         command = "UPDATE shopping_list SET name=%s, group_id=%s, " \
-                  "last_updated=%s WHERE shopping_list_id=%s"
+                  "last_updated=%s, archived=%s WHERE shopping_list_id=%s"
         data = (shopping_list.get_name(),
                 shopping_list.get_group(),
                 shopping_list.get_last_updated(),
+                shopping_list.get_archived(),
                 shopping_list.get_id())
 
         cursor.execute(command, data)

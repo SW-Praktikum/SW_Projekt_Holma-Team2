@@ -60,7 +60,9 @@ shopping_list = api.inherit('ShoppingList', bo, {
     'groupId': fields.Integer(attribute='_group',
                               description='ID der Gruppe zu der diese Liste gehört'),
     'groupName': fields.String(attribute='_group_name',
-                               description='Name der Gruppe zu der diese Liste gehört')
+                               description='Name der Gruppe zu der diese Liste gehört'),
+    'archived': fields.Boolean(attribute='_archived',
+                                      description='Status der Shoppinglist')
 })
 
 list_entry = api.inherit('ListEntry', bo, {
@@ -519,8 +521,8 @@ class GroupRelatedShoppingListOperations(Resource):
         adm = Administration()
         sl = adm.get_group_by_id(group_id)
         if sl is not None:
-            shoppinglists_list = adm.get_shopping_lists_by_group_id(sl)
-            return shoppinglists_list
+            shopping_lists = adm.get_shopping_lists_by_group_id(sl)
+            return shopping_lists
         else:
             return "Group not found", 500
 
@@ -542,7 +544,7 @@ class GroupRelatedShoppingListOperations(Resource):
 
 @holmaApp.route('/shoppinglist/<int:shopping_list_id>')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@holmaApp.param('shoppinglist_id', 'Die ID des Shopping-List-Objekts')
+@holmaApp.param('shopping_list_id', 'Die ID des Shopping-List-Objekts')
 class ShoppingListOperations(Resource):
     @holmaApp.marshal_with(shopping_list)
     def get(self, shopping_list_id):
@@ -578,6 +580,19 @@ class ShoppingListOperations(Resource):
         else:
             return '', 500
 
+@holmaApp.route('/shoppinglist/<int:shopping_list_id>/archive')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@holmaApp.param('shopping_list_id', 'Die ID des Shopping-List-Objekts')
+class ShoppingListArchiveOperations(Resource):
+    def post(self, shopping_list_id):
+        """Einkaufsliste archivieren"""
+        adm = Administration()
+        sl = adm.get_shopping_list_by_id(shopping_list_id)
+        if sl is not None:
+            result = adm.archive_shopping_list(sl)
+            return result
+        else:
+            return "ShoppingList not found", 500
 
 @holmaApp.route('/shoppinglists')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigem Fehler kommt.')
@@ -753,9 +768,26 @@ class UserRelatedListEntryOperations(Resource):
             return "User not found", 500
 
 
+@holmaApp.route('/user/<int:user_id>/listentries/include-archived')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@holmaApp.param('user_id', 'Die ID des user-Objekts')
+class UserRelatedListEntryOperations(Resource):
+    @holmaApp.marshal_with(list_entry)
+    def get(self, user_id):
+        """Auslesen von Listentry-Objekten die zu einem bestimmten
+        User gehören."""
+        adm = Administration()
+        us = adm.get_user_by_id(user_id)
+        if us is not None:
+            listentry_list = adm.get_list_entries_by_user_id(user_id)
+            return listentry_list
+        else:
+            return "User not found", 500
+
+
 @holmaApp.route('/shoppinglist/<int:shopping_list_id>/listentries/checked')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@holmaApp.param('shoppinglist_id', 'Die ID des Shopping-List-Objekts')
+@holmaApp.param('shopping_list_id', 'Die ID des Shopping-List-Objekts')
 class ShoppingListRelatedCheckedByListEntryOperations(Resource):
     @holmaApp.marshal_with(list_entry)
     def get(self, shopping_list_id):

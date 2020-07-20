@@ -346,14 +346,18 @@ class AmountEntry extends Component {
           this.setState({
               filterEndDate: null
           })
-          this.loadListEntries()
+          this.loadListEntries().then(() => {
+            this.handleSort()
+          })          
       }
   
       clearStartDateInput = () => {
           this.setState({
               filterStartDate: null,
           })
-          this.loadListEntries()
+          this.loadListEntries().then(() => {
+            this.handleSort()
+          })
       }
 
       setOpen(bool) {

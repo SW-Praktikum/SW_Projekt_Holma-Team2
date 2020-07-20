@@ -6,6 +6,7 @@ export default class ShoppingListBO extends BusinessObject {
         super(name);
         this.groupId = groupId;
         this.groupName = groupName
+        this.archived = false
    }
 
     getGroupId() {
@@ -16,6 +17,10 @@ export default class ShoppingListBO extends BusinessObject {
         return this.groupName
     }
 
+    getArchived() {
+        return this.archived
+    }
+
     setGroupId(groupId) {
         this.groupId = groupId
     }
@@ -24,6 +29,9 @@ export default class ShoppingListBO extends BusinessObject {
         this.groupName = groupName
     }
 
+    setArchived(archived) {
+        this.archived = archived
+    }
 
     static fromJSON(shoppinglists) {
         let result = [];

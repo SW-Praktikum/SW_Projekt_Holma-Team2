@@ -123,6 +123,13 @@ class ShoppingListEdit extends Component {
         );
     }
 
+    handleDeleteShoppingList = () => {
+        console.log(this.state.shoppingListObject[0])
+        AppAPI.getAPI().archiveShoppingList(this.state.shoppingListObject[0]).then(() => 
+        window.location.reload()
+        );
+    }
+
     setOpen(bool) {
         this.setState({
             open: bool
@@ -210,10 +217,20 @@ class ShoppingListEdit extends Component {
                 <Grid container spaching={3}>
                     <Grid item xs={12} sm={4}>
                         <Button 
-                            
                             variant="contained"
                             fullWidth 
                             style={{marginBottom: 20, color: 'white',backgroundColor: '#D0021B'}} 
+                            onClick={this.handleDeleteShoppingList}>
+                            Liste archivieren
+                        </Button>
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                        <Button 
+                            variant="contained"
+                            fullWidth 
+                            style={{marginBottom: 20, color: '#D0021B'}} 
                             onClick={this.handleDeleteShoppingList}>
                             Liste löschen
                         </Button>

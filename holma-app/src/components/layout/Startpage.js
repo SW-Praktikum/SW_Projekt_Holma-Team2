@@ -1,5 +1,7 @@
-import React, { Component } from 'react';
+import { Button, Checkbox, colors, TextField } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import Radio from '@material-ui/core/Radio';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -7,14 +9,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
-import { colors, Button, TextField, Checkbox } from '@material-ui/core';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import Grid from '@material-ui/core/Grid';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import Radio from '@material-ui/core/Radio';
+import React, { Component } from 'react';
 import AppAPI from '../../api/AppAPI';
 
 class ListEntry extends Component {
@@ -165,7 +161,7 @@ class Startpage extends Component {
 
     loadListEntries = () => {
         // get listentries by user ID
-        return AppAPI.getAPI().getListEntriesByUserId(this.state.userId).then(listEntries => {
+        return AppAPI.getAPI().getListEntriesByUserId(this.state.userId, false).then(listEntries => {
             if (listEntries.length !== 0) {
                 this.setState({
                     displayTable: "",

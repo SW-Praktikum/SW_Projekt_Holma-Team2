@@ -12,6 +12,7 @@ class ShoppingList(BusinessObject):
         super().__init__()
         self._group = None  # nur als id (Fremdschlüssel)
         self._group_name = None
+        self._archived = False
 
     def __str__(self):
         return "Shopping list: {}, part of group: {}".format(self.get_name(),
@@ -23,11 +24,17 @@ class ShoppingList(BusinessObject):
     def get_group_name(self):
         return self._group_name
 
+    def get_archived(self):
+        return self._archived
+
     def set_group(self, group_id):
         self._group = group_id
 
     def set_group_name(self, group_name):
         self._group_name = group_name
+
+    def set_archived(self, archived):
+        self._archived = archived
 
     def to_dict(self):
         result = {
@@ -35,7 +42,8 @@ class ShoppingList(BusinessObject):
             "name": self.get_name(),
             "groupId": self.get_group(),
             "creationDate": self.get_creation_date(),
-            "lastUpdated": self.get_last_updated()
+            "lastUpdated": self.get_last_updated(),
+            "archived": self.get_archived()
         }
         return result
 
@@ -46,6 +54,7 @@ class ShoppingList(BusinessObject):
         shopping_list.set_name(dictionary["name"])
         shopping_list.set_group(dictionary["groupId"])
         shopping_list.set_group_name(dictionary["groupName"])
+        shopping_list.set_archived(dictionary["archived"])
         shopping_list.set_creation_date(ShoppingList.date_format(dictionary["creationDate"]))
         shopping_list.set_last_updated(ShoppingList.date_format(dictionary["lastUpdated"]))
         return shopping_list
@@ -53,12 +62,13 @@ class ShoppingList(BusinessObject):
     @staticmethod
     def from_tuples(tuples=list()):
         result = []
-        for (shopping_list_id, name, creation_date, group, last_update) in tuples:
+        for (shopping_list_id, name, creation_date, group, last_update, archived) in tuples:
             shopping_list = ShoppingList()
             shopping_list.set_id(shopping_list_id)
             shopping_list.set_name(name)
             shopping_list.set_group(group)
             shopping_list.set_creation_date(creation_date)
             shopping_list.set_last_updated(last_update)
+            shopping_list.set_archived(archived)
             result.append(shopping_list)
         return result
