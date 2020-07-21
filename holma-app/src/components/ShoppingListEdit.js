@@ -92,17 +92,17 @@ class ShoppingListEdit extends Component {
     }
 
     getDate = (shoppingList) => {
-        console.log(shoppingList)
         let lup = Date.parse(shoppingList[0].lastUpdated)
         let lup_iso = new Date(lup).toUTCString()
-        let lup_iso_str = (lup_iso.substring(0, 3) + lup_iso.substring(4, lup_iso.length - 13))
+        let lup_iso_str = (lup_iso.substring(0, 3) + lup_iso.substring(4, lup_iso.length - 7))
         let gcd = Date.parse(shoppingList[0].creationDate)
         let gcd_iso = new Date(gcd).toUTCString()
-        let gcd_iso_str = (gcd_iso.substring(0, 3) + gcd_iso.substring(4, lup_iso.length - 13))
+        let gcd_iso_str = (gcd_iso.substring(0, 3) + gcd_iso.substring(4, lup_iso.length - 7))
         this.setState({
             shoppingListCreationDate: gcd_iso_str,
             shoppingListLastUpdated: lup_iso_str
         })
+
     }
 
     handleChangeName = (e) => {

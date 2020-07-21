@@ -75,7 +75,8 @@ class ListEntry extends Component {
 
         if (listEntry.getCheckedTs() !== null) {
             let checkedTs = new Date(listEntry.getCheckedTs())
-            checkedTimestamp = checkedTs.toDateString()
+            let checkedTs_str = checkedTs.toString()
+            checkedTimestamp = checkedTs_str.substring(4, 21)
           }
         return (
             <React.Fragment>

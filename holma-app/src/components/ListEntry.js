@@ -70,8 +70,9 @@ class ListEntry extends Component {
         var groupLastUpdated = ""
 
         if (listEntry.getLastUpdated() !="") {
-            let lup = new Date(listEntry.getLastUpdated())
-            groupLastUpdated = lup.toDateString()
+            let lud = new Date(listEntry.getLastUpdated())
+            let luds = lud.toString()
+            groupLastUpdated = luds.substring(4, 21)
           }
 
         return (

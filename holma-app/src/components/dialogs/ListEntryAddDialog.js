@@ -189,6 +189,34 @@ class ListEntryAddDialog extends Component {
                 id: 'Stück',
             },
             {
+                name: 'mal',
+                id: 'mal',
+            },
+            {
+                name: 'Kasten',
+                id: 'Kasten',
+            },
+            {
+                name: 'Flasche',
+                id: 'Flasche',
+            },
+            {
+                name: 'Dose',
+                id: 'Dose',
+            },
+            {
+                name: 'Glas',
+                id: 'Glas',
+            },
+            {
+                name: 'Karton',
+                id: 'Karton',
+            },
+            {
+                name: 'Packung',
+                id: 'Packung',
+            },
+            {
                 name: 'g',
                 id: 'g',
             },

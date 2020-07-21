@@ -276,38 +276,6 @@ class ListEntryTable extends Component {
         );  
     }
 
-/** 
-    loadListEntries = () => {
-        console.log(this.state.shoppingListId)
-        return AppAPI.getAPI().getListEntriesByShoppingListId(this.state.shoppingListId).then(listEntries => {
-            console.log("Loaded list entries for shopping list '" + this.state.shoppingListId + "':", listEntries)
-            var listEntryTableElements = listEntries.map((listEntry) => 
-                <ListEntry 
-                    listEntry={listEntry} 
-                    loadListEntries={this.loadListEntries} 
-                    retailers={this.state.retailers}
-                    users={this.state.users}
-                    articles={this.state.articles}
-                    loadArticles={this.loadArticles}
-                    groupId={this.state.groupId}
-                />
-            )
-            this.setState({
-                listEntryTableElements: listEntryTableElements,
-                filteredListEntryTableElements: listEntryTableElements,
-                loadingInProgress: true, // loading indicator 
-                loadingError: null,
-            })
-            return new Promise(function (resolve) { resolve(listEntries) })
-            }).catch(e =>
-                this.setState({ // Reset state with error from catch 
-                loadingInProgress: false,
-                loadingError: e
-            })
-        );  
-    }
-    
-*/
     handleInputChangeDate = async (key, date) => {
         let datum = new Date (date);
         let convert = datum.getTime();
@@ -398,7 +366,8 @@ class ListEntryTable extends Component {
         
         var listLastUpdated = ""
         let lud = new Date(this.state.lastUpdated)
-        listLastUpdated = lud.toDateString()
+        let luds = lud.toString()
+        listLastUpdated = luds.substring(4, 21)
         
         return (
             <React.Fragment>
