@@ -92,7 +92,7 @@ class ArticleMapper(Mapper):
         cursor = self._connection.cursor()
         command = "SELECT article, COUNT(article) AS MOST_FREQUENT " \
                   "FROM holma.list_entry " \
-                  "WHERE article in ({}) " \
+                  "WHERE article in ({}) AND checked=1 " \
                   "GROUP BY article " \
                   "ORDER BY COUNT(article) DESC".format(article_ids)
 
