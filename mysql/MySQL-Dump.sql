@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 8.0.20, for macos10.15 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.20, for Win64 (x86_64)
 --
 -- Host: localhost    Database: holma
 -- ------------------------------------------------------
@@ -7,7 +7,7 @@
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -31,7 +31,7 @@ CREATE TABLE `article` (
   PRIMARY KEY (`article_id`),
   KEY `group_id` (`group_id`),
   CONSTRAINT `article_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `group` (`group_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5012 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5020 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +40,7 @@ CREATE TABLE `article` (
 
 LOCK TABLES `article` WRITE;
 /*!40000 ALTER TABLE `article` DISABLE KEYS */;
-INSERT INTO `article` VALUES (5000,'Milch','2020-07-02 15:07:23',2000,'2020-07-02 15:07:23'),(5001,'Brot','2020-07-02 15:07:23',2000,'2020-07-02 15:07:23'),(5002,'Fleisch','2020-07-02 15:07:23',2000,'2020-07-02 15:07:23'),(5003,'Banane','2020-07-02 15:07:23',2001,'2020-07-02 15:07:23'),(5004,'Hartweizengries','2020-07-02 15:07:23',2002,'2020-07-02 15:07:23'),(5006,'Shampoo','2020-07-02 15:08:07',2002,'2020-07-02 15:08:07'),(5007,'Banane','2020-07-15 14:42:05',2004,'2020-07-15 14:42:05'),(5008,'Äpfel','2020-07-15 14:47:50',2004,'2020-07-15 14:47:50'),(5009,'Milch','2020-07-15 14:49:09',2004,'2020-07-15 14:49:09'),(5010,'Mehl','2020-07-16 11:14:07',2004,'2020-07-16 11:14:07'),(5011,'Brot','2020-07-16 11:35:35',2004,'2020-07-16 11:35:35');
+INSERT INTO `article` VALUES (5019,'Mehl','2020-07-21 15:52:30',2008,'2020-07-21 15:52:30');
 /*!40000 ALTER TABLE `article` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -60,7 +60,7 @@ CREATE TABLE `group` (
   PRIMARY KEY (`group_id`),
   KEY `owner` (`owner`),
   CONSTRAINT `group_ibfk_1` FOREIGN KEY (`owner`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2005 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2009 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -69,7 +69,7 @@ CREATE TABLE `group` (
 
 LOCK TABLES `group` WRITE;
 /*!40000 ALTER TABLE `group` DISABLE KEYS */;
-INSERT INTO `group` VALUES (2000,'Monaco','2020-07-02 15:05:33',1000,'2020-07-02 15:05:33'),(2001,'Skiurlaub','2020-07-02 15:05:33',1000,'2020-07-02 15:05:33'),(2002,'Familie','2020-07-02 15:05:33',1001,'2020-07-02 15:05:33'),(2003,'HDM Ausfahrt','2020-07-02 15:05:34',1001,'2020-07-02 15:05:34'),(2004,'Beste Freunde','2020-07-02 15:09:35',1002,'2020-07-02 15:09:35');
+INSERT INTO `group` VALUES (2007,'Fußballverein','2020-07-21 15:46:24',1003,'2020-07-21 15:46:24'),(2008,'Familie','2020-07-21 15:50:45',1003,'2020-07-21 15:50:45');
 /*!40000 ALTER TABLE `group` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -103,7 +103,7 @@ CREATE TABLE `list_entry` (
   CONSTRAINT `list_entry_ibfk_2` FOREIGN KEY (`retailer`) REFERENCES `retailer` (`retailer_id`),
   CONSTRAINT `list_entry_ibfk_3` FOREIGN KEY (`shopping_list`) REFERENCES `shopping_list` (`shopping_list_id`),
   CONSTRAINT `list_entry_ibfk_4` FOREIGN KEY (`article`) REFERENCES `article` (`article_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4061 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4072 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -112,7 +112,7 @@ CREATE TABLE `list_entry` (
 
 LOCK TABLES `list_entry` WRITE;
 /*!40000 ALTER TABLE `list_entry` DISABLE KEYS */;
-INSERT INTO `list_entry` VALUES (4002,'Brot','2020-07-02 15:05:34',NULL,12,5000,'kg.',9000,1,0,NULL,'2020-07-02 15:05:34',NULL),(4011,'Äpfel','2020-07-15 14:47:54',1000,1,5008,'Stück',9007,0,0,3006,'2020-07-15 14:47:54',NULL),(4031,'Banane','2020-07-16 11:41:40',NULL,1,5007,'Stück',9007,1,0,NULL,'2020-07-16 11:41:40',NULL),(4033,'Banane','2020-07-16 11:42:11',NULL,1,5007,'g',9007,1,0,NULL,'2020-07-16 11:42:11',NULL),(4035,'Banane','2020-07-16 11:45:33',NULL,1000,5007,'g',9005,1,0,NULL,'2020-07-16 11:45:33',NULL),(4039,'Brot','2020-07-16 11:47:00',NULL,1,5011,'Stück',9007,1,0,NULL,'2020-07-16 11:47:00',NULL),(4041,'Banane','2020-07-16 12:07:15',NULL,1,5007,'Stück',9007,1,0,NULL,'2020-07-16 12:07:15',NULL),(4045,'Brot','2020-07-16 12:17:53',NULL,1,5011,'Stück',9006,1,0,NULL,'2020-07-16 12:17:53',NULL),(4052,'Banane','2020-07-16 12:58:10',1002,1,5007,'Stück',9005,0,0,3005,'2020-07-19 23:31:21',NULL),(4055,'Milch','2020-07-16 15:18:28',1001,1,5009,'Stück',9006,1,0,3005,'2020-07-16 15:18:28',NULL),(4056,'Milch','2020-07-16 15:18:28',NULL,1,5009,'Stück',9006,1,0,NULL,'2020-07-16 15:18:28',NULL),(4057,'Mehl','2020-07-16 16:09:23',1002,100,5010,'mg',9007,1,1,3005,'2020-07-18 14:04:16','2020-07-18 10:14:08'),(4058,'Mehl','2020-07-16 16:09:23',NULL,100,5010,'mg',9007,1,0,NULL,'2020-07-16 16:09:23',NULL),(4059,'Banane','2020-07-21 01:12:31',1002,1,5007,'mg',9007,1,0,3006,'2020-07-21 01:12:31',NULL),(4060,'Banane','2020-07-21 01:12:31',NULL,1,5007,'mg',9007,1,0,NULL,'2020-07-21 01:12:31',NULL);
+INSERT INTO `list_entry` VALUES (4071,'Mehl','2020-07-21 15:52:41',1003,1,5019,'kg',9000,0,1,3014,'2020-07-21 15:52:58','2020-07-21 13:52:58');
 /*!40000 ALTER TABLE `list_entry` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -129,7 +129,7 @@ CREATE TABLE `retailer` (
   `creation_date` datetime NOT NULL,
   `last_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`retailer_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9014 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9041 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -138,7 +138,7 @@ CREATE TABLE `retailer` (
 
 LOCK TABLES `retailer` WRITE;
 /*!40000 ALTER TABLE `retailer` DISABLE KEYS */;
-INSERT INTO `retailer` VALUES (9000,'Marktkauf','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9001,'ALDI','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9002,'Kaufland','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9003,'EDEKA','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9004,'Penny','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9005,'Real','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9006,'REWE','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9007,'Lidl','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9008,'Norma','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9009,'DM','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9010,'Müller','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9011,'Metzger','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9012,'Bäcker','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9013,'Teegut','2021-06-20 20:00:00','2021-06-20 20:00:00');
+INSERT INTO `retailer` VALUES (9000,'Aldi Nord','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9001,'Aldi Süd','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9002,'Alnatura','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9003,'Apotheke','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9004,'Bäcker','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9005,'Basic','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9006,'Bauer','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9007,'Billa','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9008,'Carrefour','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9009,'Denns','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9010,'DM','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9011,'Edeka','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9012,'Fressnapf','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9013,'Globus','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9014,'Grüner Markt','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9015,'Hamberger','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9016,'Kaufland','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9017,'Kroger','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9018,'Lekkerland','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9019,'Lidl','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9020,'Markt','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9021,'Markthalle','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9022,'Marktkauf','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9023,'Metro','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9024,'Metzger','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9025,'Mix Markt','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9026,'Müller','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9027,'Naturgut','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9028,'Netto','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9029,'Norma','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9030,'Penny','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9031,'Pro Biomarkt','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9032,'Real','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9033,'REWE','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9034,'REWE City','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9035,'Selgros','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9036,'Supermarkt','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9037,'Tankstelle','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9038,'Tesco','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9039,'Teegut','2021-06-20 20:00:00','2021-06-20 20:00:00'),(9040,'Sonstige','2021-06-20 20:00:00','2021-06-20 20:00:00');
 /*!40000 ALTER TABLE `retailer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -159,7 +159,7 @@ CREATE TABLE `shopping_list` (
   PRIMARY KEY (`shopping_list_id`),
   KEY `group_id` (`group_id`),
   CONSTRAINT `shopping_list_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `group` (`group_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3007 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3015 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -168,7 +168,7 @@ CREATE TABLE `shopping_list` (
 
 LOCK TABLES `shopping_list` WRITE;
 /*!40000 ALTER TABLE `shopping_list` DISABLE KEYS */;
-INSERT INTO `shopping_list` VALUES (3001,'Silvester','2020-07-02 15:05:34',2001,'2020-07-02 15:05:34',0),(3002,'Grillen Samstag','2020-07-02 15:05:34',2000,'2020-07-02 15:05:34',0),(3003,'Fahrtverpflegung','2020-07-02 15:05:34',2003,'2020-07-02 15:05:34',0),(3004,'Frühstück','2020-07-02 15:05:34',2002,'2020-07-02 15:05:34',0),(3005,'Reinorgeln am Samstag','2020-07-02 15:20:12',2004,'2020-07-02 15:20:12',1),(3006,'Abschlussball','2020-07-02 15:20:12',2004,'2020-07-02 15:20:12',0);
+INSERT INTO `shopping_list` VALUES (3013,'25-jähriges Jubiläum','2020-07-21 15:49:08',2007,'2020-07-21 15:49:08',0),(3014,'Wocheneinkauf 20.07','2020-07-21 15:52:13',2008,'2020-07-21 15:52:13',0);
 /*!40000 ALTER TABLE `shopping_list` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -195,7 +195,6 @@ CREATE TABLE `standard_article_group_relations` (
 
 LOCK TABLES `standard_article_group_relations` WRITE;
 /*!40000 ALTER TABLE `standard_article_group_relations` DISABLE KEYS */;
-INSERT INTO `standard_article_group_relations` VALUES (4031,2004),(4033,2004),(4035,2004),(4039,2004),(4041,2004),(4045,2004),(4056,2004),(4058,2004),(4060,2004);
 /*!40000 ALTER TABLE `standard_article_group_relations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -214,7 +213,7 @@ CREATE TABLE `user` (
   `google_id` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT ' ',
   `last_updated` datetime DEFAULT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1003 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1011 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -223,7 +222,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1000,'Michael Schumacher','2020-07-02 15:05:33','schumi@ferrari.it','KKD9SY8tF44FtsQuDwu39AEAWIL3','2020-07-02 15:05:33'),(1001,'Nihat Ö','2020-07-02 15:05:33','etwas_beeindruckendes@festgestellt.de','LZ1wBRXZhRz50RqCvPRycz4k4i3O','2020-07-02 15:05:33'),(1002,'Tim Reibe','2020-07-02 15:09:23','mail.timreibe@gmail.com','OP0Eqcb91JTM8iAeGFZjBcw66Ry1','2020-07-02 15:09:23');
+INSERT INTO `user` VALUES (1000,'Michael Schumacher','2020-07-02 15:05:33','schumi@ferrari.it','KKD9SY8tF44FtsQuDwu39AEAWIL3','2020-07-02 15:05:33'),(1001,'Nihat Ö','2020-07-02 15:05:33','etwas_beeindruckendes@festgestellt.de','LZ1wBRXZhRz50RqCvPRycz4k4i3O','2020-07-02 15:05:32'),(1002,'Tim Reibe','2020-07-02 15:09:23','mail.timreibe@gmail.com','OP0Eqcb91JTM8iAeGFZjBcw66Ry1','2020-07-02 15:09:23'),(1003,'Dominik K.','2020-07-21 08:48:19','dk108@hdm-stuttgart.de','aKShDCNsHvYGBFZ3XRN7tEyPLki2','2020-07-21 08:48:19'),(1004,'Angela Merköl','2020-07-02 15:05:33','angela@cdu.de','Ui1wBwasDSjsadjiJD2PRycz4k4i3O','2020-07-02 15:05:33'),(1005,'Fartin Morster','2020-07-02 15:05:33','morster@hotmail.de','LowWJsatF44FtsQuDwu39AasWIL3','2020-07-02 15:05:31'),(1006,'Alina Hofner','2020-07-02 15:05:33','17_Semester@Regelstudienzeit.de','AsdkkwkqsDSjsadjiJD2PRycz4k4i3O','2020-07-02 15:05:21'),(1007,'Friedrich Januar','2020-07-02 15:05:33','Januar@Kalt.de','iawdatF44FtsQu212Dwu39warijaif3','2020-07-02 15:05:21'),(1008,'Helmut Brokkoli','2020-07-02 15:05:33','Helmut_Brokkoli@mail.de','LowWJsatF44FtsQuDwu39AasWIL3','2020-07-02 17:01:22'),(1009,'Karl Lass-Ess','2020-07-02 15:05:33','Komm_in_die@Gruppe.de','WoroakKAsDSjsadjiJD2PRycz4k4i3O','2020-07-02 14:05:33'),(1010,'Jens Spreißel','2020-07-02 15:05:33','Sreißel@aua.com','asdWJsatF44FtsQuDwu39AasWIL3','2020-07-02 15:05:12');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -250,7 +249,7 @@ CREATE TABLE `user_group_relations` (
 
 LOCK TABLES `user_group_relations` WRITE;
 /*!40000 ALTER TABLE `user_group_relations` DISABLE KEYS */;
-INSERT INTO `user_group_relations` VALUES (2004,1000),(2004,1001),(2004,1002);
+INSERT INTO `user_group_relations` VALUES (2007,1000),(2007,1001),(2007,1002),(2008,1002),(2007,1003),(2008,1003),(2007,1004);
 /*!40000 ALTER TABLE `user_group_relations` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -263,4 +262,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-07-21  1:19:59
+-- Dump completed on 2020-07-21 16:07:07
