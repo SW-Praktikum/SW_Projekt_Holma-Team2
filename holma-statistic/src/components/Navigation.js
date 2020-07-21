@@ -7,13 +7,11 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
 import GroupIcon from '@material-ui/icons/Group';
 import InfoIcon from '@material-ui/icons/Info';
-import PersonIcon from '@material-ui/icons/Person';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import PropTypes from "prop-types";
 import React from "react";
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 
-//Navigation für Desktop 
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;

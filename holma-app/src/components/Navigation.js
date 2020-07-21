@@ -12,7 +12,6 @@ import PropTypes from "prop-types";
 import React from "react";
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 
-//Navigation für Desktop 
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;

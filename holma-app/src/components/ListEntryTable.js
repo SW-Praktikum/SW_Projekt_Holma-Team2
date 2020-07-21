@@ -1,9 +1,12 @@
-import { Button, colors,  TextField } from '@material-ui/core';
+import DateFnsUtils from '@date-io/date-fns';
+import { Button, colors, TextField } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
+import Radio from '@material-ui/core/Radio';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -11,20 +14,17 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
+import ClearIcon from '@material-ui/icons/Clear';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import {
+    KeyboardDatePicker,
+    MuiPickersUtilsProvider
+} from '@material-ui/pickers';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import AppAPI from '../api/AppAPI';
 import ListEntryAddDialog from './dialogs/ListEntryAddDialog';
 import ListEntry from './ListEntry';
-import ClearIcon from '@material-ui/icons/Clear';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import Radio from '@material-ui/core/Radio';
-import IconButton from '@material-ui/core/IconButton';
-import {
-    KeyboardDatePicker,
-    MuiPickersUtilsProvider
-} from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
 
 
 class ShoppingListLink extends Component{
@@ -89,7 +89,6 @@ class ListEntryTable extends Component {
     // Muss noch verschoben werden in GroupList.js!!
     loadRetailers = () => {
         return AppAPI.getAPI().getRetailers().then((retailers) => {
-            console.log("Loaded all retailers:", retailers)
             this.setState({
                 retailers: retailers,
                 loadingInProgress: true, // loading indicator 
@@ -115,7 +114,6 @@ class ListEntryTable extends Component {
 
     loadUsers = () => {
         return AppAPI.getAPI().getUsersByGroupId(this.state.groupId).then((users) => {
-            console.log("Loaded users for group '" + this.state.groupId + "':", users)
             this.setState({
                 users: users,
                 loadingInProgress: true, // loading indicator 
@@ -132,7 +130,6 @@ class ListEntryTable extends Component {
 
     loadArticles = () => {
         return AppAPI.getAPI().getArticlesByGroupId(this.state.groupId).then((articles) => {
-            console.log("Loaded articles for group '" + this.state.groupId + "':", articles)
             this.setState({
                 articles: articles,
                 loadingInProgress: true, // loading indicator 
@@ -246,9 +243,7 @@ class ListEntryTable extends Component {
     }
   
     loadListEntries = () => {
-        console.log(this.state.shoppingListId)
         AppAPI.getAPI().getListEntriesByShoppingListId(this.state.shoppingListId).then(listEntries => {
-            console.log("Loaded list entries for shopping list '" + this.state.shoppingListId + "':", listEntries)
             var listEntryTableElements = listEntries.map((listEntry) => 
                 <ListEntry 
                     listEntry={listEntry} 

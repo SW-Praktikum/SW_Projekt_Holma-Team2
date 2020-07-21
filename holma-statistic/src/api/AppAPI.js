@@ -100,14 +100,14 @@ export default class AppAPI {
     #fetchAdv = (url, init) => fetch(url, init)
         .then(response => {
             if (typeof init !== 'undefined' && "body" in init) {
-                console.log("[" + init.method + "]", url, JSON.parse(init.body))
+                //console.log("[" + init.method + "]", url, JSON.parse(init.body))
             }
             else {
-                console.log("[GET]", url)
+                //console.log("[GET]", url)
 
             }
             if (!response.ok){
-                console.log(`${response.status} ${response.statusText}`);
+                //console.log(`${response.status} ${response.statusText}`);
                 //throw Error(`${response.status} ${response.statusText}`)
             }
             return response.json();
@@ -235,7 +235,6 @@ export default class AppAPI {
     };
 
     createGroup(group) {
-        console.log("Creating Group:", group)
         return this.#fetchAdv(this.#createGroupURL(group.getOwner()), {
             method: 'POST',
             headers: {
@@ -347,7 +346,6 @@ export default class AppAPI {
     }
 
     createShoppingList(shoppingList) {
-        console.log("Creating ShoppingList:", shoppingList)
         return this.#fetchAdv(this.#createShoppingListURL(shoppingList.getGroupId()), {
         method: 'POST',
             headers: {
@@ -415,7 +413,6 @@ export default class AppAPI {
     }
 
     createArticle(article) {
-        console.log("Creating Article:", article)
         return this.#fetchAdv(this.#createArticleURL(article.getGroupId()), {
             method: 'POST',
             headers: {
@@ -564,7 +561,6 @@ export default class AppAPI {
     };
 
     createListEntry(listentry) {
-        console.log("Creating a ListEntry:", listentry)
         return this.#fetchAdv(this.#createListEntryURL(listentry.getShoppingListId()), {
         method: 'POST',
             headers: {

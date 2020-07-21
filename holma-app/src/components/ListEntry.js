@@ -19,7 +19,6 @@ import React, { Component } from 'react';
 import AppAPI from '../api/AppAPI';
 import ListEntryEditDialog from './dialogs/ListEntryEditDialog';
 
-// classes for styling need to be created
 
 class ListEntry extends Component {
     constructor(props) {

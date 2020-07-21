@@ -37,7 +37,6 @@ class RetailerEntry extends Component {
     
     render() {
         const { retailerEntry} = this.props;
-        console.log(retailerEntry)
         return (
             <React.Fragment>
                 <Grid item xs={12} sm={4} style={{paddingLeft: 10, paddingRight: 10, paddingTop: 10, paddingBottom: 10}}>
@@ -70,7 +69,6 @@ class ListEntry extends Component {
     
     render() {
         const { listEntry} = this.props;
-        console.log(listEntry)
         var checkedTimestamp = ""
 
         if (listEntry.getCheckedTs() !== null) {
@@ -219,7 +217,6 @@ class ListEntryTable extends Component {
     loadListEntries = () => {
         // get entries by user ID
         return AppAPI.getAPI().getListEntriesByUserId(this.state.userId, true).then(listEntries => {
-            console.log("Loaded list entries for user '" + this.state.userId + "':", listEntries)
             var listEntryTableElements = listEntries.map((listEntry) => <ListEntry listEntry={listEntry} loadListEntries={this.loadListEntries} />)
             this.setState({
                 listEntryTableElements: listEntryTableElements,
@@ -238,7 +235,6 @@ class ListEntryTable extends Component {
 
     loadUserRetailers = () => {
         return AppAPI.getAPI().getFrequentRetailerByUserId(this.state.userId).then((retailers) => {
-            console.log("Loaded all UserRetailers:", retailers)
             var listEntryTableUserElements = retailers.map((retailer) => <RetailerEntry retailerEntry={retailer} loadListEntries={this.loadListEntries} />)
             this.setState({
             userRetailer: listEntryTableUserElements,
@@ -255,7 +251,6 @@ class ListEntryTable extends Component {
     
     loadRetailers = () => {
         AppAPI.getAPI().getRetailers().then((retailers) => {
-            console.log("Loaded all retailers:", retailers)
             this.setState({
             retailers: retailers,
             loadingInProgress: true, // loading indicator 

@@ -166,7 +166,6 @@ class GroupList extends Component {
       }
 
     loadShoppingLists = () => {
-      console.log(this.props)
       AppAPI.getAPI().getShoppingListsByGroupId(this.props.match.params.groupId).then((lists) => {
         var listElements = lists.map((list) =>
         <Grid key={list.getId()} item xs={6} item lg={4}>

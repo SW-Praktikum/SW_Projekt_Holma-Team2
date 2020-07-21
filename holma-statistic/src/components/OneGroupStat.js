@@ -1,8 +1,12 @@
 import DateFnsUtils from '@date-io/date-fns';
-import { Button, Checkbox, colors, FormControlLabel, TextField } from '@material-ui/core';
+import { Button, Checkbox, colors, TextField } from '@material-ui/core';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
+import Radio from '@material-ui/core/Radio';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -11,16 +15,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import ClearIcon from '@material-ui/icons/Clear';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Radio from '@material-ui/core/Radio';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import SortIcon from '@material-ui/icons/Sort';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import Collapse from '@material-ui/core/Collapse';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import {
     KeyboardDatePicker,
     MuiPickersUtilsProvider
@@ -149,8 +146,6 @@ class AmountEntry extends Component {
   
           if (filterArticleName !== "") {
               filteredElements =  filteredElements.filter(function(item) {
-                console.log(item)  
-                console.log(filteredElements,"xD")
                 return item.props.listEntry.articleName.toLocaleLowerCase().includes(filterArticleName.toLocaleLowerCase());
               });
           }
@@ -241,7 +236,6 @@ class AmountEntry extends Component {
       loadListEntries = () => {
         // get entries by group ID
         return AppAPI.getAPI().getListEntriesByGroupId(this.state.groupId).then(listEntries => {
-            console.log("Loaded list entries for group '" + this.state.groupId + "':", listEntries)
             var listEntryTableElements = listEntries.map((listEntry) => <ListEntry listEntry={listEntry} loadListEntries={this.loadListEntries} />)
             this.setState({
                 listEntryTableElements: listEntryTableElements,
@@ -260,7 +254,6 @@ class AmountEntry extends Component {
 
       loadArticleAmounts = () => {
         return AppAPI.getAPI().getArticlesFrequencyByGroupId(this.state.groupId).then((articles) => {
-            console.log("Loaded all ArticleAmounts:", articles)
             var articleAmounts = articles.map((article) => <AmountEntry amountEntry={article} loadListEntries={this.loadListEntries} />)
             this.setState({
             articleAmounts: articleAmounts,
@@ -277,7 +270,6 @@ class AmountEntry extends Component {
       
       loadRetailers = () => {
           AppAPI.getAPI().getRetailers().then((retailers) => {
-              console.log("Loaded all retailers:", retailers)
               this.setState({
               retailers: retailers,
               loadingInProgress: true, // loading indicator 

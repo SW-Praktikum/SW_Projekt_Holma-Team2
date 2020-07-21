@@ -23,7 +23,6 @@ class UserProfil extends Component {
   componentDidMount() {
     if (this.props.user.id) {
       this.loadRetailer();
-      console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
     }
   }
 

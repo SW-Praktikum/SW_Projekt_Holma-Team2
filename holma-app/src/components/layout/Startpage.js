@@ -174,7 +174,6 @@ class Startpage extends Component {
                     displayEmptyTable: ""
                 })
             }
-            console.log("Loaded list entries for user '" + this.state.userId + "':", listEntries)
             var listEntryTableElements = listEntries.map((listEntry) => <ListEntry listEntry={listEntry} loadListEntries={this.loadListEntries} />)
             this.setState({
                 listEntryTableElements: listEntryTableElements,
@@ -193,7 +192,6 @@ class Startpage extends Component {
 
     loadRetailers = () => {
         AppAPI.getAPI().getRetailers().then((retailers) => {
-            console.log("Loaded all retailers:", retailers)
             this.setState({
             retailers: retailers,
             loadingInProgress: true, // loading indicator 
