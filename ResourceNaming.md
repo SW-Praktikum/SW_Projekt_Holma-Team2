@@ -160,9 +160,9 @@ Daraus ergeben sich folgende Ressourcen:
     ```
     POST /app/group/{group_id}/shoppinglists
    ```
-8. Eine Shoopingliste in einer Gruppe erstellen
+8. Alle archivierten Shoopinglisten auslesen
     ```
-   FEHLT!!!!!!!
+    GET /app/shoppinglist/{shopping_list_id}/archive
    ```
 
 Daraus ergeben sich folgende Ressourcen:
@@ -170,6 +170,7 @@ Daraus ergeben sich folgende Ressourcen:
 2. `ShoppingListOperations` mit den Operationen D.2, D.5, D.6
 3. `ShoppingListsByNameOperations`mit der Operation D.3
 4. `GroupRelatedShoppingListOperations`mit der Operation D.4, D.7
+5. `ShoppingListArchiveOperations` mit der Operation D.8
 
 ## E) Zugriff auf `Listentry`-Objekte
 1.  Alle Listentries auslesen:
@@ -255,11 +256,16 @@ Daraus ergeben sich folgende Ressourcen:
     ```
     GET /app/retailer/by-name/{name}
     ```
+4. Die oft Benutzten Retailer des Users auslesen
+    ```
+    Get /app/user/{user_id}/retailers/most-frequent
+    ```
 
 Daraus ergeben sich folgende Ressourcen:
 1. `RetailerListOperations` mit den Operationen F.1
 2. `RetailerOperations` mit den Operationen F.2
 3. `RetailerByNameOperations` mit der Operation F.3
+4. `UserRelatedRetailerFrequencyOperations` mit der Operation F.4
 
 ## Hinweise
 **POST** wird verwendet, wenn *neue* Objekte angelegt werden sollen.
