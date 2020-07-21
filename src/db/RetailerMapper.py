@@ -74,7 +74,7 @@ class RetailerMapper(Mapper):
         cursor = self._connection.cursor()
         command = "SELECT retailer, COUNT(retailer) AS MOST_FREQUENT " \
                   "FROM holma.list_entry " \
-                  "WHERE retailer in ({}) AND purchasing_user = {} " \
+                  "WHERE retailer in ({}) AND purchasing_user = {} AND checked=1 " \
                   "GROUP BY retailer " \
                   "ORDER BY COUNT(retailer) DESC".format(retailer_ids, user.get_id())
 
