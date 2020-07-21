@@ -7,6 +7,7 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
 import AssessmentIcon from '@material-ui/icons/Assessment';
 import GroupIcon from '@material-ui/icons/Group';
+import InfoIcon from '@material-ui/icons/Info';
 import PropTypes from "prop-types";
 import React from "react";
 import { Link as RouterLink, useHistory } from 'react-router-dom';
@@ -79,6 +80,7 @@ export default function ScrollableTabsButtonForce() {
           <Tab label="Gruppen" icon={<GroupIcon />} {...a11yProps(1)} component={RouterLink} to={`/groups`}/>
           <Tab label="Statistik" icon={<AssessmentIcon />} {...a11yProps(3)} component={RouterLink} to={`/shoppinglist`}/>
           <Tab label="Konto" icon={<AccountCircleIcon />} {...a11yProps(4)} component={RouterLink} to={`/user`}/>
+          <Tab label="Info" icon={<InfoIcon />} {...a11yProps(1)} component={RouterLink} to={`/about`}/>
         </Tabs>
       </AppBar>
       
