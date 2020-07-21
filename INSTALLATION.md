@@ -15,16 +15,14 @@ Folgende Abhängigkeiten müssen für den Haupt-Client installiert werden:
   - `npm install @material-ui/core`
   - `npm install @material-ui/lab`
   - `npm install @material-ui/icons`
+  - `npm install @material-ui/pickers`
+  - `npm install @date-io/date-fns`
+  - `npm install date-fns`
 - [Google firebase authentication](https://firebase.google.com/docs/web/setup)
   - `npm install --save firebase`
 
-Für den Statistic-Client müssen die oben genannten Dependencies plus folgende 
-Dependencies installiert werden:
 
-- [Material-UI](https://material-ui.com)
-    - `npm install @material-ui/pickers`
-    - `npm install @date-io/date-fns`
-    - `npm install date-fns`
+
 ### Wie wird der Development-Server gestartet?
 React bringt einen eignen Development-Server mit, mit welchem zur Echtzeit der React-Code in JavaScript übersetzt wird. Dies erfolgt im Hintergrund auf Basis von [Babel](https://babeljs.io), einem JavaScript Compiler.
 
