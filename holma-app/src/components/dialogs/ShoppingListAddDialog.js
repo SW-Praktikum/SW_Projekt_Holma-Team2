@@ -20,13 +20,9 @@ class ShoppingListAddDialog extends Component {
         this.state = {
         }        
     }
-    
-    _handleClick = () => {
-      //this.props.addGroup();
-    };
 
     render() {
-      const { classes } = this.props;
+      const { classes, minLength } = this.props;
         return (
           <div>
             <Typography className={classes.container} align="right">
@@ -39,6 +35,8 @@ class ShoppingListAddDialog extends Component {
               <DialogTitle id="form-dialog-title">Neue Shoppingliste</DialogTitle>
               <DialogContent>
                 <TextField
+                  error ={this.props.shoppingListName.length >= minLength ? false : true }
+                  helperText =  {this.props.shoppingListName.length >= minLength ? "" : "Mindestens " + minLength + " Zeichen" }
                   autoFocus
                   onChange={this.props.handleInputChange}
                   margin="dense"
@@ -58,7 +56,7 @@ class ShoppingListAddDialog extends Component {
                 <Button onClick={this.props.handleClose} color="primary">
                   abbrechen
                 </Button>
-                <Button onClick={this.props.checkStandard} color="primary">
+                <Button onClick={this.props.checkStandard} disabled={this.props.buttonDisabled} color="primary">
                   hinzufügen
                 </Button>
               </DialogActions>

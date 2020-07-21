@@ -84,7 +84,9 @@ class GroupList extends Component {
             shoppingListName: "",
             shoppingListId:"",
             newListId: "",
-            checked: false
+            checked: false,
+            minLength: 3,
+            buttonDisabled: true
         }}
       
     componentDidMount(){
@@ -137,9 +139,21 @@ class GroupList extends Component {
       })
     }
 
+
+
     handleInputChange = (e) => {
-      this.setState({shoppingListName: e.target.value})
+      let shoppingListName = e.target.value
+      let buttonDisabled = true
+      if (shoppingListName.length >= this.state.minLength) {
+        buttonDisabled = false
+      }
+      this.setState({
+        shoppingListName: shoppingListName,
+        buttonDisabled: buttonDisabled
+      })
+      
     }
+
 
     loadGroupName = () => {
       AppAPI.getAPI().getGroupById(this.state.groupId).then((group) => {
@@ -178,7 +192,7 @@ class GroupList extends Component {
       } 
 
     render() {
-      const {listElements} = this.state;
+      const {listElements, buttonDisabled, shoppingListName, minLength} = this.state;
           return(
             <React.Fragment>
               <Box m={1} />
@@ -208,7 +222,10 @@ class GroupList extends Component {
                 <ListWithBoxes groupElements={listElements}/>
                 <ShoppingListAddDialog 
                   openDialog={this.openDialog}
+                  buttonDisabled={buttonDisabled}
+                  minLength={minLength}
                   open={this.state.openDialog}
+                  shoppingListName={shoppingListName}
                   handleClose={this.handleClose}
                   checked={this.state.checked}
                   addStandardArticles={this.addStandardArticles}
