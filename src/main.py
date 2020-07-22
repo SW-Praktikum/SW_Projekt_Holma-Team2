@@ -636,8 +636,8 @@ class ShoppingListsByNameOperations(Resource):
 @holmaApp.param('shopping_list_id', 'Die ID des Shoppinglist-Objekts')
 class GroupShoppingListStandardArticleRelationOperations(Resource):
     def post(self, group_id, shopping_list_id):
-        """Füge eine bestimmte Shoppingliste
-        einer bestimmten Groupe hinzu"""
+        """Füge ein bestimmtes Standardarticle
+        einer bestimmten Shoppinglist hinzu"""
         adm = Administration()
         grp = adm.get_group_by_id(group_id)
         sl = adm.get_shopping_list_by_id(shopping_list_id)
@@ -777,7 +777,7 @@ class UserRelatedListEntryOperations(Resource):
 @holmaApp.route('/user/<int:user_id>/listentries/include-archived')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('user_id', 'Die ID des user-Objekts')
-class UserRelatedListEntryOperations(Resource):
+class UserRelatedAllListEntryOperations(Resource):
     @holmaApp.marshal_with(list_entry)
     def get(self, user_id):
         """Auslesen von Listentry-Objekten die zu einem bestimmten
