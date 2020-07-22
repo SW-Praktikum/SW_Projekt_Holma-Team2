@@ -1,9 +1,9 @@
 # Resource Naming
 
 ## Einleitung
-Für einen REST-Server/Service benötigen wir eine konsistente Bennenung aller Ressourcen.
-Wir verwenden die folgende Ressourcen-Struktur, um mittels REST auf den 
-Applikationsserver zuzugreifen.
+REST-Server/Services benötigen eine konsistente Bennenung aller Ressourcen.
+Folgend wird die Ressourcen-Struktur aufgezeigt. Mittels REST kann dann auf den 
+Applikationsserver zugegriffen werden.
 
 ## Festlegung Ressourcen-Präfix
 Die gesamte Applikation benutzt konsistent den Ressourcen-Präfix `/app`.
