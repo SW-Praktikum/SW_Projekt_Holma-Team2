@@ -220,7 +220,9 @@ class UserByNameOperations(Resource):
 class UserRelatedRetailerFrequencyOperations(Resource):
     @holmaApp.marshal_list_with(retailer)
     def get(self, user_id):
-
+        """ Auslesen von Retailer-Objekten von einen bestimmten User,
+        die am öftesten benutzten wurden
+        """
         adm = StatisticAdministration()
         us = adm.get_user_by_id(user_id)
         if us is not None:
@@ -228,6 +230,7 @@ class UserRelatedRetailerFrequencyOperations(Resource):
             return result, 200
         else:
             return "User nicht gefunden", 500
+
 
 @holmaApp.route('/group/<int:group_id>/users')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
@@ -278,7 +281,6 @@ class GroupOperations(Resource):
         grp = adm.get_group_by_id(group_id)
         return grp
 
-
     def delete(self, group_id):
         """Löschen eines bestimmten Group-Objekts.
 
@@ -313,6 +315,8 @@ class GroupOperations(Resource):
 class GroupRelatedArticleFrequencyOperations(Resource):
     @holmaApp.marshal_list_with(article)
     def get(self, group_id):
+        """Auslesen von Article-Objekten, die am meisten
+        von einer Gruppe benutzt wurden."""
 
         adm = StatisticAdministration()
         grp = adm.get_group_by_id(group_id)
@@ -344,7 +348,7 @@ class GroupsByNameOperations(Resource):
 class UserRelatedGroupOperations(Resource):
     @holmaApp.marshal_with(group)
     def get(self, user_id):
-        """Auslesen aller Group-Objekts eines bestimmten Users
+        """Auslesen aller Group-Objekten eines bestimmten Users
                       """
         adm = Administration()
         us = adm.get_user_by_id(user_id)
@@ -414,7 +418,7 @@ class ArticleListOperations(Resource):
     def get(self):
         """Auslesen aller article-Objekte.
 
-                        Sollten keine Article-Objekte verfügbar sein,
+                        Sollten kein Article-Objekt verfügbar sein,
                         so wird eine leere Sequenz zurückgegeben."""
         adm = StatisticAdministration()
         art_list = adm.get_all_articles()
@@ -529,7 +533,7 @@ class GroupRelatedShoppingListOperations(Resource):
     @holmaApp.marshal_with(shopping_list, code=201)
     @holmaApp.expect(shopping_list)
     def post(self, group_id):
-        """Anlegen eines neuen Shoppinglist-Objekts die zu einer bestimmten
+        """Anlegen eines neuen Shoppinglist-Objekts, der zu einer bestimmten
         Groupe gehören wird."""
         adm = Administration()
         sl = adm.get_group_by_id(group_id)
@@ -548,13 +552,13 @@ class GroupRelatedShoppingListOperations(Resource):
 class ShoppingListOperations(Resource):
     @holmaApp.marshal_with(shopping_list)
     def get(self, shopping_list_id):
-        """Auslesen einer bestimmten Shoppinglist-Objekt."""
+        """Auslesen einer bestimmten Shoppinglist."""
         adm = Administration()
         sl = adm.get_shopping_list_by_id(shopping_list_id)
         return sl
 
     def delete(self, shopping_list_id):
-        """Löschen einer bestimmten Shoppinglist-Objekt.
+        """Löschen einer bestimmten Shoppinglist.
 
             Das zu löschende Objekt wird durch die user_id in dem URI bestimmt.
                        """
@@ -580,6 +584,7 @@ class ShoppingListOperations(Resource):
         else:
             return '', 500
 
+
 @holmaApp.route('/shoppinglist/<int:shopping_list_id>/archive')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('shopping_list_id', 'Die ID des Shopping-List-Objekts')
@@ -593,6 +598,7 @@ class ShoppingListArchiveOperations(Resource):
             return result
         else:
             return "ShoppingList not found", 500
+
 
 @holmaApp.route('/shoppinglists')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigem Fehler kommt.')
@@ -630,7 +636,7 @@ class ShoppingListsByNameOperations(Resource):
 @holmaApp.param('shopping_list_id', 'Die ID des Shoppinglist-Objekts')
 class GroupShoppingListStandardArticleRelationOperations(Resource):
     def post(self, group_id, shopping_list_id):
-        """Füge ein bestimmte Shoppinglist-Objekt
+        """Füge eine bestimmte Shoppingliste
         einer bestimmten Groupe hinzu"""
         adm = Administration()
         grp = adm.get_group_by_id(group_id)
@@ -648,7 +654,7 @@ class GroupShoppingListStandardArticleRelationOperations(Resource):
 class ShoppingListRelatedListEntryListOperations(Resource):
     @holmaApp.marshal_list_with(list_entry)
     def get(self, shopping_list_id):
-        """Auslesen aller Listentry-Objekts einer bestimmten Shoppingliste
+        """Auslesen aller Listentry-Objekten einer bestimmten Shoppingliste
                               """
         adm = Administration()
         le = adm.get_shopping_list_by_id(shopping_list_id)
@@ -700,7 +706,7 @@ class ListEntryListOperations(Resource):
     def get(self):
         """Auslesen aller Listentry-Objekte.
 
-            Sollten keine Listentry-Objekte verfügbar sein, so wird eine
+            Sollten kein Listentry-Objekt verfügbar sein, so wird eine
             leere Sequenz zurückgegeben."""
         adm = StatisticAdministration()
         le_list = adm.get_all_list_entries()
@@ -885,13 +891,15 @@ class GroupRelatedListEntriesOperations(Resource):
         else:
             return "Group not found", 500
 
+
 @holmaApp.route('/group/<int:group_id>/shoppinglist/<int:shopping_list_id>/standardarticles')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('group_id', 'Die ID des Group-Objekts')
 @holmaApp.param('shopping_list_id', 'Die ID des Shoppinglist-Objekts')
 class GroupShoppingListStandardArticleRelationOperations(Resource):
     def post(self, group_id, shopping_list_id):
-        """Füge alle Standardartikel einer Gruppe zu einer Einkaufslite hinzu"""
+        """Füge alle Standardartikel einer Gruppe
+        zu einer Einkaufslite hinzu"""
         adm = Administration()
         grp = adm.get_group_by_id(group_id)
         sl = adm.get_shopping_list_by_id(shopping_list_id)
@@ -910,7 +918,7 @@ class GroupShoppingListStandardArticleRelationOperations(Resource):
 class GroupListEntryStandardArticleRelationOperations(Resource):
     @holmaApp.marshal_with(list_entry)
     def post(self, group_id, list_entry_id):
-        """Füge einen Standardartikel zu einer einer Groupe hinzu"""
+        """Füge einen Standardartikel zu einer Groupe hinzu"""
         adm = Administration()
         grp = adm.get_group_by_id(group_id)
         le = adm.get_list_entry_by_id(list_entry_id)
@@ -922,7 +930,7 @@ class GroupListEntryStandardArticleRelationOperations(Resource):
             return "Group or ListEntry not found", 500
 
     def delete(self, group_id, list_entry_id):
-        """Lösch einen Standardartikel einer Gruppe"""
+        """Lösch den Standardartikel einer Gruppe"""
         adm = Administration()
         grp = adm.get_group_by_id(group_id)
         le = adm.get_list_entry_by_id(list_entry_id)
