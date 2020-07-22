@@ -2,7 +2,7 @@ import { Container, CssBaseline, ThemeProvider } from '@material-ui/core';
 import firebase from "firebase/app";
 import "firebase/auth";
 import React from 'react';
-import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom';
+import { HashRouter as Router, Redirect, Route } from 'react-router-dom';
 import AppAPI from './api/AppAPI';
 import UserBO from './api/UserBO';
 import Articles from './components/Articles';
@@ -32,6 +32,7 @@ class App extends React.Component {
     storageBucket: "swprojekt-team2.appspot.com",
     messagingSenderId: "243051164107",
     appId: "1:243051164107:web:7233ae995fc88619bcc64e",
+    measurementId: "G-Z0GE8FXSJ0"
   };
 
   constructor(props) {
