@@ -219,6 +219,7 @@ class GroupList extends Component {
                     </CardContent>
                 </Card>
                 <ListWithBoxes groupElements={listElements}/>
+                <Box m={10} />
                 <ShoppingListAddDialog 
                   openDialog={this.openDialog}
                   buttonDisabled={buttonDisabled}

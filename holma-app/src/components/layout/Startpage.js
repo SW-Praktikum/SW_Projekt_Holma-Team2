@@ -1,4 +1,5 @@
 import { Button, Checkbox, colors, TextField } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Radio from '@material-ui/core/Radio';
@@ -16,8 +17,7 @@ import AppAPI from '../../api/AppAPI';
 class ListEntry extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            listEntry: this.props.listEntry,
+        this.state = { 
             userId : this.props.userId,
             checked: this.props.listEntry.getChecked(),
         }
@@ -27,8 +27,9 @@ class ListEntry extends Component {
       this.setState({
           checked: e.target.checked
       })
-      this.state.listEntry.setChecked(e.target.checked)
-      AppAPI.getAPI().updateListEntry(this.state.listEntry)
+      var listEntryChecked = this.props.listEntry
+      listEntryChecked.setChecked(e.target.checked)
+      AppAPI.getAPI().updateListEntry(listEntryChecked)
     }
 
 
@@ -64,8 +65,8 @@ class Startpage extends Component {
             listEntryTableElements: [],
             userId : this.props.user.getId(),
             userName: this.props.user.getName(),
-            displayTable: "none",
-            displayEmptyTable: "",
+            displayTable: "",
+            displayEmptyTable: "none",
             retailers: [],
             filterArticleName: "",
             filterListName: "",
@@ -83,10 +84,30 @@ class Startpage extends Component {
         if(this.state.userId){
             this.loadRetailers()
             this.loadListEntries().then(() => {
-                this.filterInput();
-            })
+                this.filterInput()
+                this.displayRelevant()
+                })
           }
+          
     }
+
+
+    displayRelevant = () => {
+        console.log(this.state.filteredListEntryTableElements.length)
+        if (this.state.filteredListEntryTableElements.length !== 0) {
+            this.setState({
+                displayTable: "",
+                displayEmptyTable: "none"
+            })
+        }
+        else {
+            this.setState({
+                displayTable: "none",
+                displayEmptyTable: ""
+            })
+        }
+    }
+
 
     // dropdown selector for what fo filter
     filterInput = () => {
@@ -162,18 +183,6 @@ class Startpage extends Component {
     loadListEntries = () => {
         // get listentries by user ID
         return AppAPI.getAPI().getListEntriesByUserId(this.state.userId, false).then(listEntries => {
-            if (listEntries.length !== 0) {
-                this.setState({
-                    displayTable: "",
-                    displayEmptyTable: "none"
-                })
-            }
-            else {
-                this.setState({
-                    displayTable: "none",
-                    displayEmptyTable: ""
-                })
-            }
             var listEntryTableElements = listEntries.map((listEntry) => <ListEntry listEntry={listEntry} loadListEntries={this.loadListEntries} />)
             this.setState({
                 listEntryTableElements: listEntryTableElements,
@@ -293,7 +302,7 @@ class Startpage extends Component {
                             defaultValue="filtern"
                             getOptionLabel={(option) => option.name}
                             renderInput={(params) => (
-                                <TextField {...params} variant="outlined" label="Sortieren" placeholder="Sortieren" />
+                                <TextField {...params} margin="dense" variant="outlined" label="Sortieren" placeholder="Sortieren" />
                             )}                
                         />
                     </Grid>
@@ -311,7 +320,7 @@ class Startpage extends Component {
                         <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>
                             Hallo {userName},
                         </Typography>
-                        <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>Du hast noch keine Listeneinträge die dir zugeordnet sind.</Typography>
+                        <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>Du hast aktuell keine Listeneinträge zu erledigen.</Typography>
                     </Grid>
                     <Grid item xs={12} sm={4}/>
                     <Grid item xs={12} sm={4}/>
@@ -410,11 +419,12 @@ class Startpage extends Component {
                                     align="left"><b style={{ color: '#ffffff'}}>Liste</b></TableCell>
                             </TableRow>
                         </TableHead>
-                        <TableBody>
+                        <TableBody >
                             {filteredListEntryTableElements}
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <Box m={10} />
             </React.Fragment>
         )
     }

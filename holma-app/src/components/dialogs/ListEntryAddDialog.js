@@ -262,6 +262,7 @@ class ListEntryAddDialog extends Component {
                 {/* Anzahl */}
                 <TextField
                     type="number"
+                    required
                     value={amount}
                     onChange={this.setAmount}
                     margin="dense"
@@ -276,7 +277,7 @@ class ListEntryAddDialog extends Component {
                     onChange={(event, unit) => {this.setUnit(unit);}}
                     defaultValue={unit}
                     getOptionLabel={(option) => option.name}
-                    renderInput={(params) => <TextField {...params} label="Einheit" variant="standard" placeholder="Einheit" />}
+                    renderInput={(params) => <TextField required {...params} label="Einheit" variant="standard" placeholder="Einheit" />}
                 />
 
                 {/* Artikel */}
@@ -322,7 +323,7 @@ class ListEntryAddDialog extends Component {
                       }}                    
                     renderOption={(option) => option.name}
                     freeSolo
-                    renderInput={(params) => <TextField {...params} label="Artikel" variant="standard" placeholder="Artikel" />}
+                    renderInput={(params) => <TextField required {...params} label="Artikel" variant="standard" placeholder="Artikel" />}
                 />
 
                 {/* Einkäufer */}
@@ -330,7 +331,7 @@ class ListEntryAddDialog extends Component {
                     options={users} 
                     onChange={(event, purchasingUser) => {this.setPurchasingUser(purchasingUser);}}
                     getOptionLabel={(option) => option.name}
-                    renderInput={(params) => <TextField {...params} label="Einkäufer" variant="standard" placeholder="Einkäufer" />}
+                    renderInput={(params) => <TextField required {...params} label="Einkäufer" variant="standard" placeholder="Einkäufer" />}
                 />
 
                 {/* Retailer */}
@@ -339,7 +340,7 @@ class ListEntryAddDialog extends Component {
                     onChange={(event, retailer) => {this.setRetailer(retailer);}}
                     defaultValue={retailer}
                     getOptionLabel={(option) => option.name}
-                    renderInput={(params) => <TextField {...params} label="Retailer" variant="standard" placeholder="Retailer" />}
+                    renderInput={(params) => <TextField required {...params} label="Retailer" variant="standard" placeholder="Retailer" />}
                 />
 
 

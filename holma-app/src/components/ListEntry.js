@@ -26,7 +26,6 @@ class ListEntry extends Component {
         this.state = {
             open: false,
             openDialog: false,
-            listEntry: this.props.listEntry,
             checked: this.props.listEntry.getChecked(),
             articles: this.props.articles
         }
@@ -52,9 +51,11 @@ class ListEntry extends Component {
         this.setState({
             checked: e.target.checked
         })
-        this.state.listEntry.setChecked(e.target.checked)
-        AppAPI.getAPI().updateListEntry(this.state.listEntry)
-    }
+        var listEntryChecked = this.props.listEntry
+        listEntryChecked.setChecked(e.target.checked)
+        AppAPI.getAPI().updateListEntry(listEntryChecked)
+        }
+
 
     deleteEntry = (entry) => {
         AppAPI.getAPI().deleteListEntry(entry).then(() => {
