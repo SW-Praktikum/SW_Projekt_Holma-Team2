@@ -93,7 +93,7 @@ class Startpage extends Component {
 
 
     displayRelevant = () => {
-        console.log(this.state.filteredListEntryTableElements.length)
+        //console.log(this.state.filteredListEntryTableElements.length)
         if (this.state.filteredListEntryTableElements.length !== 0) {
             this.setState({
                 displayTable: "",

@@ -99,14 +99,14 @@ export default class AppAPI {
     #fetchAdv = (url, init={credentials: 'include'}) => fetch(url, init)
         .then(response => {
             if (typeof init !== 'undefined' && "body" in init) {
-                //console.log("[" + init.method + "]", url, JSON.parse(init.body))
+                console.log("[" + init.method + "]", url, JSON.parse(init.body))
             }
             else {
-                //console.log("[GET]", url)
+                console.log("[GET]", url)
             }
             if (!response.ok){
-                //console.log(`${response.status} ${response.statusText}`);
-                //throw Error(`${response.status} ${response.statusText}`)
+                console.log(`${response.status} ${response.statusText}`);
+                throw Error(`${response.status} ${response.statusText}`)
             }
             return response.json();
         });

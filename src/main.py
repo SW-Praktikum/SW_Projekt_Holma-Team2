@@ -125,7 +125,6 @@ class UserListOperations(Resource):
 
     @holmaApp.marshal_with(user, code=200)
     @holmaApp.expect(user)  # Wir erwarten ein USer-Objekt von Client-Seite.
-    @secured
     def post(self):
         """Anlegen eines neuen User-Objekts."""
         adm = Administration()
@@ -194,7 +193,6 @@ class UserOperations(Resource):
 @holmaApp.param('google_id', 'Die ID des User-Objekts')
 class UserByGoogleIdOperation(Resource):
     @holmaApp.marshal_with(user)
-    @secured
     def get(self, google_id):
         """Auslesen eines bestimmten User-Objekts.
 
