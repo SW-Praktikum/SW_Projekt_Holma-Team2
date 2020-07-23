@@ -17,11 +17,11 @@ class SignIn extends Component{
             
             <Paper elevation={0} className={classes.root}>
                 <div className={classes.content}>
-                    <h2>Guten Tag & Herzlichen Willkommen zu <span className={classes.text}>Holma-Statistics</span>!<br/>
-                    Holma-Statistic erlaubt dir Insights deiner Einkauflisten und Einträge der Holma-App auszugeben</h2>
-                    <p>Melde dich bitte hier an, um Holma-Statistics mit all seinen Funktionen nutzen zu können.</p>
+                    <h2>Guten Tag & Herzlich Willkommen zu <span className={classes.text}>Holma Statistik</span>!<br/>
+                    Holma Statistik erlaubt dir Insights deiner Einkauflisten und Einträge der Holma App auszugeben</h2>
+                    <p>Melde dich bitte hier an, um Holma Statistik mit all seinen Funktionen nutzen zu können.</p>
                     <Button variant="contained" color="primary" onClick={this.handleSignInButtonClicked}>
-                        Sign in with Google
+                        Anmelden mit Google
                     </Button>
                 </div>
             </Paper>
