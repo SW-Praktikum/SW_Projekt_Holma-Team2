@@ -230,7 +230,7 @@ export default class AppAPI {
     };
     
     getGroupsByUserId(userId) {
-        return this.#fetchAdv(this.#getGroupsByUserIdURL(userId)).then((responseJSON) => {
+        return this.#fetchAdv(this.#getGroupsByUserIdURL(userId), {credentials:'include'}).then((responseJSON) => {
             let responseGroups = GroupBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
                 resolve(responseGroups)

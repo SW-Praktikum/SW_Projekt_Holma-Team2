@@ -58,7 +58,8 @@ class App extends React.Component {
       });
 
       user.getIdToken().then(token => {
-        document.cookie = `token=${token};path=/;domain=holma-sw-praktikum.ey.r.appspot.com`;
+        document.cookie = `token=${token}; path=/; domain=appspot.com;`;
+        console.log(document.cookie)
         this.setState({
           googleUserData: user,
           authError:null,
