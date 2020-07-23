@@ -187,7 +187,7 @@ class GroupInformation extends Component {
               id="outlined-basic"
               variant="outlined"
               label="Mitglieds ID"
-              type="ID"
+              type="number"
               fullWidth
               value={this.props.memberId}        
             />
@@ -287,9 +287,12 @@ handleClose = () => {
     })
   }
 
-  handleChangeMember = (e) => {
-    this.setState({memberId: e.target.value})
-  }
+  handleChangeMember = async(e) => {
+    const re = /^[0-9\b]+$/;
+    if (e.target.value === '' || re.test(e.target.value)) {
+      await this.setState({memberId: e.target.value})
+  }}
+
 
   getGroupDetails(){
     AppAPI.getAPI().getGroupById(this.state.groupId).then(group => {

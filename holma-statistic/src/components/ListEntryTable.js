@@ -415,11 +415,10 @@ class ListEntryTable extends Component {
                             id="sortSelector"
                             onChange={(event, value) => this.handleSort("sortSelector", value)}
                             options={sortFunctions}
-                            
                             defaultValue="filtern"
                             getOptionLabel={(option) => option.name}
                             renderInput={(params) => (
-                                <TextField {...params} variant="outlined" label="Sortieren" placeholder="Sortieren" />
+                            <TextField {...params} margin="dense" variant="outlined" label="Sortieren" placeholder="Sortieren" />
                             )}                
                         />
                     </Grid>

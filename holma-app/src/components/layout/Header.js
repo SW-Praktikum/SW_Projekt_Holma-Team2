@@ -25,7 +25,7 @@ class Header extends React.Component {
                 user ?
                 <>
                     <div user={user} style={{fontStyle: "italic"}}>
-                      <div>Benutzer:&nbsp;{user.getName()} </div>
+                      <div>{user.getName()} </div>
                       <div>Id:&nbsp;{user.getId()}</div> 
                     </div>
                 </>

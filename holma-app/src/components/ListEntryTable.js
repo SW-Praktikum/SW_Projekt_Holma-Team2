@@ -374,7 +374,8 @@ class ListEntryTable extends Component {
                             <Typography className="title" style={{fontSize: 16, color: colors.teal[600]}}><b>Shoppingliste: </b>{this.state.shoppingListName}</Typography>
                             <Typography className="title" style={{fontSize: 16, color: colors.teal[600]}}><b>Id: </b>{this.props.match.params.shoppingListId}</Typography>
                         </Grid>
-                        <Grid item xs={12} sm={6} align="right">
+                        <Grid item xs={0} sm={2} ></Grid>
+                        <Grid item xs={12} sm={4} align="left">
                             <Typography className="title" style={{fontSize: 16, color: colors.teal[600]}}><b>Letzte Änderung: </b>{listLastUpdated}</Typography>
                         </Grid>
                     </Grid>
@@ -401,7 +402,7 @@ class ListEntryTable extends Component {
                                 defaultValue="filtern"
                                 getOptionLabel={(option) => option.name}
                                 renderInput={(params) => (
-                                    <TextField {...params} variant="outlined" label="Sortieren" placeholder="Sortieren" />
+                                    <TextField {...params} margin="dense" variant="outlined" label="Sortieren" placeholder="Sortieren" />
                                 )} />
                         </Grid>
                     </Grid>
@@ -547,6 +548,7 @@ class ListEntryTable extends Component {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <Box m={10} />
                 <ListEntryAddDialog
                     loadListEntries={this.loadListEntries} 
                     retailers={this.state.retailers}
