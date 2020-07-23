@@ -316,14 +316,12 @@ class Startpage extends Component {
                     component={Paper} 
                     style={{display: this.state.displayEmptyTable, minWidth: '100%', marginBottom:15, marginTop:15, }}
                     >
-                    <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
+                    <Grid item xs={12} sm={12} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
                         <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>
                             Hallo {userName},
                         </Typography>
                         <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>Du hast aktuell keine Listeneinträge zu erledigen.</Typography>
                     </Grid>
-                    <Grid item xs={12} sm={4}/>
-                    <Grid item xs={12} sm={4}/>
                 </Grid>
                 
                 <Grid container direction="row" justify="space-between" alignItems="center" component={Paper} style={{marginTop: 15, display: this.state.filterOpen}}>
