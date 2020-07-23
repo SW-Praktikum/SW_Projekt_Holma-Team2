@@ -95,7 +95,6 @@ class GroupEntries extends Component{
     }
 
     nextPath(path) {
-      console.log(path)
       this.props.history.push(path);
     }
 
@@ -161,7 +160,6 @@ class GroupEntries extends Component{
       this.handleClose();
       this.handleClickOpenMember();//open new dialog
     }
-
     addMember = async () => {
       // es muss gecheckt werden bei input ob der user existiert und ob er schon in der Gruppe ist,
       // checken ob user id vorhanden und ob user schon in group
