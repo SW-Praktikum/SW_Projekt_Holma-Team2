@@ -1,0 +1,9 @@
+dispatch:
+    - url: "statistik.holma.xyz/*"
+      service: statistic
+
+    - url: "holma.xyz/*"
+      service: app
+    
+    - url: "backend.holma.xyz/*"
+      service: default

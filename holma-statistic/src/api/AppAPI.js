@@ -13,7 +13,7 @@ export default class AppAPI {
     //#appServerBaseURL = 'http://localhost:5000/app';
     
     // Remote Backend:
-    #appServerBaseURL = 'https://holma-sw-praktikum.ey.r.appspot.com/app';
+    #appServerBaseURL = 'http://backend.holma.xyz/app';
 
 
 
