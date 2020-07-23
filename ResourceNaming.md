@@ -123,13 +123,17 @@ Daraus ergeben sich folgende Ressourcen:
 7. Ein Article erstellen:
     ```
     POST /app/group/{group_id}/articles
-   ```
-
+    ```
+8. Die oft benutzten Articles einer Groupe auslesen
+    ```
+    GET /app/group/{group_id}/articles/most-frequent
+    ```
 Daraus ergeben sich folgende Ressourcen:
 1. `ArticleListOperations` mit den Operationen C.1
 2. `ArticleOperations` mit den Operationen C.2, C.5, C.6
 3. `ArticlesByNameOperations`mit der Operation C.3
 4. `GroupRelatedArticleOperations`mit der Operation C.4, C.7
+5. `GroupRelatedArticleFrequencyOperations`mit der Operation C.8
 
 ## D) Zugriff auf `Shoppinglist`-Objekte
 1.  Alle Shoppinglisten auslesen:
@@ -159,17 +163,23 @@ Daraus ergeben sich folgende Ressourcen:
 7. Eine Shoopingliste erstellen:
     ```
     POST /app/group/{group_id}/shoppinglists
-   ```
-8. Eine Shoopingliste in einer Gruppe erstellen
     ```
-   FEHLT!!!!!!!
-   ```
+8. Alle archivierten Shoopinglisten auslesen:
+    ```
+    GET /app/shoppinglist/{shopping_list_id}/archive
+    ```
+9. Standardarticle einer Shoppingliste hinzufügen:
+    ```
+    POST /app/group/{group_id}/shoppinglists/{shopping_list_id}
+    ```
 
 Daraus ergeben sich folgende Ressourcen:
 1. `ShoppingListListOperations` mit den Operationen D.1
 2. `ShoppingListOperations` mit den Operationen D.2, D.5, D.6
 3. `ShoppingListsByNameOperations`mit der Operation D.3
 4. `GroupRelatedShoppingListOperations`mit der Operation D.4, D.7
+5. `ShoppingListArchiveOperations` mit der Operation D.8
+6. `GroupShoppingListStandardArticleRelationOperations` mit der Operation D.9
 
 ## E) Zugriff auf `Listentry`-Objekte
 1.  Alle Listentries auslesen:
@@ -224,22 +234,37 @@ Daraus ergeben sich folgende Ressourcen:
     ```
     POST /app/shoppinglist/{int:shopping_list_id}/listentries
     ```
-14. Ein Standardarticle einer Gruppe hinzufügen
+14. Ein Standardarticle einer Gruppe hinzufügen:
     ```
     POST /app/group/{group_id}/listentry/{list_entry_id}
     ```
-
+15. Alle Listentries eines bestimmten Users auslesen, Archive included:
+    ```
+    GET /app/user/{user_id}/listentries/include-archive
+    ```
+16. Alle Standardarticles einer bestimmten Gruppe auslesen:
+    ```
+    GET /app/group/{group_id}/standardarticles
+    ```
+17. Alle Standardarticles einer bestimmten Gruppe hinzufügen:
+    ```
+    POST /app/group/{group_id}/shoppinglist/{shopping_list_id}
+    ```
+    
 Daraus ergeben sich folgende Ressourcen:
 1. `ListEntryListOperations` mit den Operationen E.1
 2. `ListEntryOperations` mit den Operationen E.2, E.10, E.11
 3. `UserRelatedListEntryOperations` mit der Operation E.5
 4. `GroupRelatedListEntryOperations` mit der Operation E.6,
-5. `ArticleRelatedListEntryOperations` mit der Operation E.7
+5. `ArticleRelatedListEntriesOperations` mit der Operation E.7
 6. `ShoppingListRelatedCheckedByListEntryOperations` mit der Operation E.4
 7. `ShoppingListRelatedListEntryListOperations` mit der Operation E.3, E.13
 8. `RetailerRelatedListEntryOperations` mit der Operation E.8
 9. `GroupListEntryStandardArticleRelationOperations` mit der Operation E.12, E.14
 10. `ListEntryDateTimeRelationOperations` mit der Operation E.9
+11. `UserRelatedAllListEntryOperations` mit der Operation E.15
+12. `GroupRelatedStandardarticleOperations` mit der Operation E.16,
+13. `GroupShoppingListStandardArticleRelationOperations` mit der Operation E.17
 
 ## F) Zugriff auf `Retailer`-Objekte
 
@@ -255,11 +280,16 @@ Daraus ergeben sich folgende Ressourcen:
     ```
     GET /app/retailer/by-name/{name}
     ```
+4. Die oft benutzten Retailer des Users auslesen
+    ```
+    Get /app/user/{user_id}/retailers/most-frequent
+    ```
 
 Daraus ergeben sich folgende Ressourcen:
 1. `RetailerListOperations` mit den Operationen F.1
 2. `RetailerOperations` mit den Operationen F.2
 3. `RetailerByNameOperations` mit der Operation F.3
+4. `UserRelatedRetailerFrequencyOperations` mit der Operation F.4
 
 ## Hinweise
 **POST** wird verwendet, wenn *neue* Objekte angelegt werden sollen.

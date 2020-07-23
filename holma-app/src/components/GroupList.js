@@ -18,7 +18,7 @@ class Grouplink extends Component{
   render(){
       return(
           <Button align="center" variant="contained" fullWidth  color="primary" >
-              Gruppendetails
+              Details
           </Button>
       )
   }
