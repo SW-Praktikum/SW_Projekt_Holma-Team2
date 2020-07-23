@@ -5,15 +5,14 @@ from flask_cors import CORS
 # Wir nutzen RestX, das auf Flask aufbaut.
 from flask_restx import Api, Resource, fields
 
+# Wir greifen auf unsere BusinessObjects und Applikationslogik zu.
+from ListAdministration import Administration, StatisticAdministration
+from SecurityDecorator import secured
 from bo.Article import Article
 from bo.Group import Group
 from bo.ListEntry import ListEntry
-from bo.Retailer import Retailer
 from bo.ShoppingList import ShoppingList
-from SecurityDecorator import secured
 from bo.User import User
-# Wir greifen auf unsere BusinessObjects und Applikationslogik zu.
-from ListAdministration import Administration, StatisticAdministration
 
 """Hier wird Flask instanziert"""
 app = Flask(__name__)
@@ -35,13 +34,13 @@ bo = api.model('BusinessObject', {
                          description='Der Unique Identifier '
                                      'eines Business Object'),
     'creationDate': fields.DateTime(attribute='_creation_date',
-                                description='Erstellungsdatum des BOs, wird '
-                                            'durch Unix Time Stamp ermittlet',
+                                    description='Erstellungsdatum des BOs, wird '
+                                                'durch Unix Time Stamp ermittlet',
                                     dt_format="iso8601"),
     'lastUpdated': fields.DateTime(attribute='_last_updated',
                                    description='Änderungsdatum des BOs, wird durch'
-                                           'Unix Time Stamp ermittlet',
-                                    dt_format="iso8601")
+                                               'Unix Time Stamp ermittlet',
+                                   dt_format="iso8601")
 })
 
 user = api.inherit('User', bo, {
@@ -63,12 +62,12 @@ shopping_list = api.inherit('ShoppingList', bo, {
     'groupName': fields.String(attribute='_group_name',
                                description='Name der Gruppe, zu der diese Liste gehört.'),
     'archived': fields.Boolean(attribute='_archived',
-                                      description='Status der Shoppinglist')
+                               description='Status der Shoppinglist')
 })
 
 list_entry = api.inherit('ListEntry', bo, {
     'articleId': fields.Integer(attribute='_article',
-                                 description='Zu welchem Artikel gehört dieser Listeneintrag? '),
+                                description='Zu welchem Artikel gehört dieser Listeneintrag? '),
     'articleName': fields.String(attribute='_article_name',
                                  description='Zu welchem Artikel gehört dieser Listeneintrag? '),
     'amount': fields.Float(attribute='_amount',
@@ -76,17 +75,17 @@ list_entry = api.inherit('ListEntry', bo, {
     'unit': fields.String(attribute='_unit',
                           description='Einheit des Listeneintrags '),
     'purchasingUserId': fields.Integer(attribute='_purchasing_user',
-                                    description='Wer den Artikel kaufen muss. '),
+                                       description='Wer den Artikel kaufen muss. '),
     'purchasingUserName': fields.String(attribute='_purchasing_user_name',
-                                    description='Wer den Artikel kaufen muss. '),
+                                        description='Wer den Artikel kaufen muss. '),
     'shoppingListId': fields.Integer(attribute='_shopping_list',
-                                   description='Zu welcher Liste dieser Listeneintrag gehört.'),
+                                     description='Zu welcher Liste dieser Listeneintrag gehört.'),
     'shoppingListName': fields.String(attribute='_shopping_list_name',
-                                   description='Zu welcher Liste dieser Listeneintrag gehört.'),
+                                      description='Zu welcher Liste dieser Listeneintrag gehört.'),
     'retailerId': fields.Integer(attribute='_retailer',
-                              description='Bei wem wurde der Artikel gekauft.  '),
+                                 description='Bei wem wurde der Artikel gekauft.  '),
     'retailerName': fields.String(attribute='_retailer_name',
-                              description='Bei wem der Artikel gekauft wurde.  '),
+                                  description='Bei wem der Artikel gekauft wurde.  '),
     'checked': fields.Boolean(attribute='_checked',
                               description='Wurde es bereits gekauft?'),
     'checkedTs': fields.DateTime(attribute='_checked_ts',
@@ -98,7 +97,7 @@ list_entry = api.inherit('ListEntry', bo, {
 
 article = api.inherit('Article', bo, {
     'groupId': fields.Integer(attribute='_group',
-                               description='Zu welcher Gruppe dieser Artikel gehört.'),
+                              description='Zu welcher Gruppe dieser Artikel gehört.'),
     'count': fields.Integer(attribute='_count',
                             description='Vorkommen in Listeneinträgen')
 
@@ -308,7 +307,7 @@ class GroupOperations(Resource):
             return '', 500
 
     @holmaApp.marshal_with(group)
-    @holmaApp.expect(group)#, validate=True)
+    @holmaApp.expect(group)  # , validate=True)
     @secured
     def put(self, group_id):
         """Update eines bestimmten Gruppen-Objekts."""
@@ -470,7 +469,7 @@ class ArticleOperations(Resource):
         return 'deleted', 200
 
     @holmaApp.marshal_with(article)
-    @holmaApp.expect(article) #validate=True)
+    @holmaApp.expect(article)  # validate=True)
     @secured
     def put(self, article_id):
         """Update eines bestimmten Artikel-Objekts."""
@@ -726,7 +725,8 @@ class ShoppingListRelatedListEntryListOperations(Resource):
             )
 
             if proposal.is_standardarticle():
-                shopping_list = adm.get_shopping_list_by_id(proposal.get_shopping_list())
+                shopping_list = adm.get_shopping_list_by_id(
+                    proposal.get_shopping_list())
                 group = adm.get_group_by_id(shopping_list.get_group())
                 adm.add_standardarticle_to_group(result, group)
 
@@ -782,7 +782,7 @@ class ListEntryOperations(Resource):
             return 'ListEntry not found', 500
 
     @holmaApp.marshal_with(list_entry)
-    @holmaApp.expect(list_entry)#, validate=True)
+    @holmaApp.expect(list_entry)  # , validate=True)
     @secured
     def put(self, list_entry_id):
         """Update eines bestimmten Listeneintrag-Objekts."""
@@ -844,7 +844,8 @@ class ShoppingListRelatedCheckedByListEntryOperations(Resource):
         adm = Administration()
         sl = adm.get_shopping_list_by_id(shopping_list_id)
         if sl is not None:
-            result = adm.get_checked_list_entries_by_shopping_list_id(shopping_list_id)
+            result = adm.get_checked_list_entries_by_shopping_list_id(
+                shopping_list_id)
             return result
         else:
             return "Shopping List not found", 500
@@ -855,7 +856,7 @@ class ShoppingListRelatedCheckedByListEntryOperations(Resource):
 @holmaApp.param('from_date', 'Datum ab wann die Listeneintrag-Objekte'
                              ' ausgegeben werden sollen')
 @holmaApp.param('to_date', 'Datum bis wann die Listeneintrag-Objekte'
-                             'ausgegeben werden sollen')
+                           'ausgegeben werden sollen')
 class ListEntryDateTimeRelationOperations(Resource):
     @holmaApp.marshal_with(list_entry)
     @secured
@@ -940,7 +941,8 @@ class GroupRelatedListEntriesOperations(Resource):
             return "Group not found", 500
 
 
-@holmaApp.route('/group/<int:group_id>/shoppinglist/<int:shopping_list_id>/standardarticles')
+@holmaApp.route(
+    '/group/<int:group_id>/shoppinglist/<int:shopping_list_id>/standardarticles')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('group_id', 'Die ID des Gruppen-Objekts')
 @holmaApp.param('shopping_list_id', 'Die ID des Shoppinglisten-Objekts')
@@ -987,7 +989,7 @@ class GroupListEntryStandardArticleRelationOperations(Resource):
         le = adm.get_list_entry_by_id(list_entry_id)
         if grp is not None and le is not None:
             result = adm.delete_standardarticle(le, grp)
-            return "Deleted standardarticle!", 200 
+            return "Deleted standardarticle!", 200
         else:
             return "Group or Listentry not found", 500
 
