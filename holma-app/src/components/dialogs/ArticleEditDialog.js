@@ -35,7 +35,7 @@ class ArticleEditDialog extends Component {
       const { classes } = this.props;
         return (
             <Dialog className={classes.dialog} open={this.props.open} onClose={this.props.handleClose} aria-labelledby="form-dialog-title">
-              <DialogTitle id="form-dialog-editEntry">Artikel bearbeiten</DialogTitle>
+              <DialogTitle id="form-dialog-editEntry">Namen ändern</DialogTitle>
               <DialogContent>
                 <TextField
                     type="text"
