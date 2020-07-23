@@ -11,7 +11,7 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import PropTypes from "prop-types";
 import React from "react";
 import { Link as RouterLink, useHistory } from 'react-router-dom';
-
+import ShoppingBasket from '@material-ui/icons/ShoppingBasket';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -77,7 +77,7 @@ export default function ScrollableTabsButtonForce() {
           <ArrowBackIosRoundedIcon onClick={() => history.goBack()}/>
           </IconButton>  
           <Tab label="Gruppen" icon={<GroupIcon />} {...a11yProps(1)} component={RouterLink} to={`/groups`}/>
-          <Tab label="App" icon={<ShoppingCartIcon />} href="https://app-dot-holma-sw-praktikum.ey.r.appspot.com"/>
+          <Tab label="App" icon={<ShoppingBasket />} href="https://app-dot-holma-sw-praktikum.ey.r.appspot.com"/>
           <Tab label="Konto" icon={<AccountCircleIcon />} {...a11yProps(4)} component={RouterLink} to={`/user`}/>
           <Tab label="Info" icon={<InfoIcon />} {...a11yProps(1)} component={RouterLink} to={`/about`}/>
         </Tabs>

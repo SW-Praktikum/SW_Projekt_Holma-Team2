@@ -149,7 +149,7 @@ class GroupInformation extends Component {
       <Paper style={{paddingTop: 15, paddingLeft: 15, paddingRight: 15, paddingBottom: 15, marginTop: 15}} elevation={0}>
 
         <Typography  variant="h4" gutterBottom>
-          Artikel bearbeiten:
+          Artikel:
         </Typography>
         
         <Grid container spaching={3}>
@@ -182,7 +182,6 @@ class GroupInformation extends Component {
 
           <Grid item xs={12} sm={4} style={{paddingRight: 20}}>
             <TextField
-              autoFocus
               onChange={this.props.handleChangeMember}
               margin="dense"
               id="outlined-basic"
@@ -222,7 +221,7 @@ class ArticleLink extends Component{
             variant="contained" 
             fullWidth 
             color='primary'>
-              Artikel anzeigen
+              Artikel
           </Button>
       )
   }

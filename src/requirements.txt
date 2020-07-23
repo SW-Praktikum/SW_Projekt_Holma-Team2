@@ -2,3 +2,5 @@ flask
 Flask-Cors
 flask-restx
 mysql-connector-python
+google.auth
+requests

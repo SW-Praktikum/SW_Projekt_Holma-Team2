@@ -10,10 +10,10 @@ export default class AppAPI {
     static #api = null;
 
     //Local Python Backend
-    //#appServerBaseURL = 'http://localhost:5000/app';
+    #appServerBaseURL = 'http://localhost:5000/app';
     
     // Remote Backend:
-    #appServerBaseURL = 'https://holma-sw-praktikum.ey.r.appspot.com/app';
+    //#appServerBaseURL = 'https://holma-sw-praktikum.ey.r.appspot.com/app';
 
 
 
@@ -96,14 +96,13 @@ export default class AppAPI {
     // fetchAdv frägt eine URL an und gibt die Antwort direkt als JSON Objekt zurück
     // init wird später für alle requests verwendet, die nicht GET sind:
     // default 'GET' wird überschrieben mit jeweiliger Methode
-    #fetchAdv = (url, init) => fetch(url, init)
+    #fetchAdv = (url, init={credentials: 'include'}) => fetch(url, init)
         .then(response => {
             if (typeof init !== 'undefined' && "body" in init) {
                 //console.log("[" + init.method + "]", url, JSON.parse(init.body))
             }
             else {
                 //console.log("[GET]", url)
-
             }
             if (!response.ok){
                 //console.log(`${response.status} ${response.statusText}`);
@@ -113,6 +112,7 @@ export default class AppAPI {
         });
 
         // Gibt eine Promise zurück mit einer Liste von UserBOs
+
     getUsers() {
         return this.#fetchAdv(this.#getUsersURL()).then((responseJSON) => {
             let responseUsers = UserBO.fromJSON(responseJSON);
@@ -131,7 +131,9 @@ export default class AppAPI {
             headers: {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
+                'Credentials': 'include'
             },
+            credentials:'include',
             body: JSON.stringify(user)
         }).then((responseJSON) => {
             let responseUser = UserBO.fromJSON(responseJSON)[0];
@@ -148,6 +150,7 @@ export default class AppAPI {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
+            credentials:'include',
             body: JSON.stringify(user)
         }).then((responseJSON) => {
             let responseUser = UserBO.fromJSON(responseJSON)[0];
@@ -164,6 +167,7 @@ export default class AppAPI {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
+            credentials:'include',
             body: JSON.stringify(user)
         }).then((responseJSON) => {
             let responseUser = UserBO.fromJSON(responseJSON)[0];
@@ -203,6 +207,7 @@ export default class AppAPI {
     addUserToGroup(groupId, userId) {
         return this.#fetchAdv(this.#addUserToGroupURL(groupId, userId), {
             method: 'POST',
+            credentials:'include',
             headers: {
                 'Accept': 'application/json, text/plain'
             },
@@ -217,6 +222,7 @@ export default class AppAPI {
     deleteUsersFromGroup(group, user) {
         return this.#fetchAdv(this.#deleteUsersFromGroupURL(group, user), {
             method: 'DELETE',
+            credentials:'include',
             headers: {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
@@ -240,7 +246,8 @@ export default class AppAPI {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
-            body: JSON.stringify(group)
+            body: JSON.stringify(group),
+            credentials: 'include'
         }).then((responseJSON) => {
             let responseGroup = GroupBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
@@ -283,6 +290,7 @@ export default class AppAPI {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
+            credentials:'include',
             body: JSON.stringify(group)
         }).then((responseJSON) => {
             let responseGroup = GroupBO.fromJSON(responseJSON)[0];
@@ -299,6 +307,7 @@ export default class AppAPI {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
+            credentials:'include',
             body: JSON.stringify(group)
         }).then((responseJSON) => {
             let responseGroup = GroupBO.fromJSON(responseJSON)[0];
@@ -337,11 +346,12 @@ export default class AppAPI {
 
     createShoppingList(shoppingList) {
         return this.#fetchAdv(this.#createShoppingListURL(shoppingList.getGroupId()), {
-        method: 'POST',
+            method: 'POST',
             headers: {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
+            credentials:'include',
             body: JSON.stringify(shoppingList)
         }).then((responseJSON) => {
             let responseShoppingList = ShoppingListBO.fromJSON(responseJSON)[0];
@@ -358,6 +368,7 @@ export default class AppAPI {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
+            credentials:'include',
             body: JSON.stringify(shoppingList)
         }).then((responseJSON) => {
             let responseShoppingList = ShoppingListBO.fromJSON(responseJSON)[0];
@@ -374,6 +385,7 @@ export default class AppAPI {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
+            credentials:'include',
             body: JSON.stringify(shoppingList)
         }).then((responseJSON) => {
             let responseShoppingList = ShoppingListBO.fromJSON(responseJSON)[0];
@@ -386,11 +398,12 @@ export default class AppAPI {
     archiveShoppingList(shoppingList) {
         return this.#fetchAdv(this.#archiveShoppingListURL(shoppingList.getId()), {
             method: 'POST',
-                headers: {
-                    'Accept': 'application/json, text/plain',
-                    'Content-type': 'application/json',
-                },
-                body: JSON.stringify(shoppingList)
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+            credentials:'include',
+            body: JSON.stringify(shoppingList)
         }).then((responseJSON) => {
             let responseShoppingList = ShoppingListBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
@@ -425,6 +438,7 @@ export default class AppAPI {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
+            credentials:'include',
             body: JSON.stringify(article)
         }).then((responseJSON) => {
             let responseArticle = ArticleBO.fromJSON(responseJSON)[0];
@@ -450,6 +464,7 @@ export default class AppAPI {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
+            credentials:'include',
             body: JSON.stringify(article)
         }).then((responseJSON) => {
             let responseArticle = ArticleBO.fromJSON(responseJSON)[0];
@@ -466,6 +481,7 @@ export default class AppAPI {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
+            credentials:'include',
             body: JSON.stringify(article)
         }).then((responseJSON) => {
             let responseArticle = ArticleBO.fromJSON(responseJSON)[0];
@@ -578,11 +594,12 @@ export default class AppAPI {
 
     createListEntry(listentry) {
         return this.#fetchAdv(this.#createListEntryURL(listentry.getShoppingListId()), {
-        method: 'POST',
+            method: 'POST',
             headers: {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
+            credentials:'include',
             body: JSON.stringify(listentry)
         }).then((responseJSON) => {
             let responseListEntry = ListEntryBO.fromJSON(responseJSON)[0];
@@ -599,6 +616,7 @@ export default class AppAPI {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
+            credentials:'include',
             body: JSON.stringify(listentry)
         }).then((responseJSON) => {
             let responseListEntry = ListEntryBO.fromJSON(responseJSON)[0];
@@ -615,6 +633,7 @@ export default class AppAPI {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
+            credentials:'include',
             body: JSON.stringify(listentry)
         }).then((responseJSON) => {
             let responseListEntry = ListEntryBO.fromJSON(responseJSON)[0];
@@ -677,6 +696,7 @@ export default class AppAPI {
     addStandardArticlesToShoppingList(groupId, shoppingListId) {
         return this.#fetchAdv(this.#addStandardArticlesToShoppingListURL(groupId, shoppingListId), {
             method: 'POST',
+            credentials:'include',
             headers: {
                 'Accept': 'application/json, text/plain'
             },
@@ -691,6 +711,7 @@ export default class AppAPI {
     deleteStandardArticleFromGroup(groupId, listentry) {
         return this.#fetchAdv(this.#deleteStandardArticleFromGroupURL(groupId, listentry.getId()), {
             method: 'DELETE',
+            credentials:'include',
             headers: {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
