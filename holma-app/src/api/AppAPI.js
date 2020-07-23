@@ -130,8 +130,7 @@ export default class AppAPI {
             method: 'POST',
             headers: {
                 'Accept': 'application/json, text/plain',
-                'Content-type': 'application/json',
-                'Credentials': 'include'
+                'Content-type': 'application/json'
             },
             credentials:'include',
             body: JSON.stringify(user)
