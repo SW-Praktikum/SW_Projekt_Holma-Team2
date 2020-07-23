@@ -31,7 +31,7 @@ class ShoppingListLink extends Component{
     render(){
         return(
             <Button align="center" variant="contained" fullWidth  color="primary" >
-                Shoppinglistdetails
+                Details
             </Button>
         )
     }
