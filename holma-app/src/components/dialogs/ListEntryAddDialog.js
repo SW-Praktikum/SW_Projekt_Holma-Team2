@@ -340,7 +340,7 @@ class ListEntryAddDialog extends Component {
                     onChange={(event, retailer) => {this.setRetailer(retailer);}}
                     defaultValue={retailer}
                     getOptionLabel={(option) => option.name}
-                    renderInput={(params) => <TextField required {...params} label="Retailer" variant="standard" placeholder="Retailer" />}
+                    renderInput={(params) => <TextField required {...params} label="Händler" variant="standard" placeholder="Retailer" />}
                 />
 
 
