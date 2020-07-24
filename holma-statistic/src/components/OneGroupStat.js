@@ -527,7 +527,7 @@ class AmountEntry extends Component {
                                   variant="inline"
                                   format="dd/MM/yyyy"
                                   margin="normal"
-                                  id="date-picker-start"
+                                  id="date-picker-end"
                                   label=" Kauf Enddatum"
                                   value={filterEndDate}
                                   onChange={(date) => this.handleInputChangeDate("filterEndDate", date)}

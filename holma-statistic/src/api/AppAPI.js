@@ -108,7 +108,7 @@ export default class AppAPI {
             }
             if (!response.ok){
                 //console.log(`${response.status} ${response.statusText}`);
-                //throw Error(`${response.status} ${response.statusText}`)
+                throw Error(`${response.status} ${response.statusText}`)
             }
             return response.json();
         });

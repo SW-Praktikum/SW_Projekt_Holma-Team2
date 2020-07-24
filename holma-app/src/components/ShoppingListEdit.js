@@ -83,19 +83,18 @@ class ShoppingListEdit extends Component {
             AppAPI.getAPI().getShoppingListById(this.state.shoppingListId).then((shoppingList) => {
                 this.setState({
                     shoppingListObject: shoppingList,
-                    shoppingListName: shoppingList[0].name,
+                    shoppingListName: shoppingList.getName(),
                 })
                 this.getDate(shoppingList)
             })
-            
         }
     }
 
     getDate = (shoppingList) => {
-        let lup = Date.parse(shoppingList[0].lastUpdated)
+        let lup = Date.parse(shoppingList.lastUpdated)
         let lup_iso = new Date(lup).toUTCString()
         let lup_iso_str = (lup_iso.substring(0, 3) + lup_iso.substring(4, lup_iso.length - 7))
-        let gcd = Date.parse(shoppingList[0].creationDate)
+        let gcd = Date.parse(shoppingList.creationDate)
         let gcd_iso = new Date(gcd).toUTCString()
         let gcd_iso_str = (gcd_iso.substring(0, 3) + gcd_iso.substring(4, lup_iso.length - 7))
         this.setState({
@@ -106,26 +105,26 @@ class ShoppingListEdit extends Component {
     }
 
     handleChangeName = (e) => {
-        this.state.shoppingListObject[0].name = e.target.value
+        this.state.shoppingListObject.name = e.target.value
         }
   
     saveChanges = () => {
-        AppAPI.getAPI().updateShoppingList(this.state.shoppingListObject[0]).then(()=>
+        AppAPI.getAPI().updateShoppingList(this.state.shoppingListObject).then(()=>
         this.componentDidMount(),
         this.handleClose()
         )
     }
 
     handleDeleteShoppingList = () => {
-        console.log(this.state.shoppingListObject[0])
-        AppAPI.getAPI().deleteShoppingList(this.state.shoppingListObject[0]).then(() => 
+        console.log(this.state.shoppingListObject)
+        AppAPI.getAPI().deleteShoppingList(this.state.shoppingListObject).then(() => 
         window.location.reload()
         );
     }
 
     handleDeleteShoppingList = () => {
-        console.log(this.state.shoppingListObject[0])
-        AppAPI.getAPI().archiveShoppingList(this.state.shoppingListObject[0]).then(() => 
+        console.log(this.state.shoppingListObject)
+        AppAPI.getAPI().archiveShoppingList(this.state.shoppingListObject).then(() => 
         window.location.reload()
         );
     }
