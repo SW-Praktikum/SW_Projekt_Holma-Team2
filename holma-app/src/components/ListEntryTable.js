@@ -511,7 +511,7 @@ class ListEntryTable extends Component {
                                 variant="inline"
                                 format="dd/MM/yyyy"
                                 margin="normal"
-                                id="date-picker-start"
+                                id="date-picker-end"
                                 label="letzte Änderung Ende"
                                 value={filterEndDate}
                                 onChange={(date) => this.handleInputChangeDate("filterEndDate", date)}

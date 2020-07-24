@@ -169,7 +169,7 @@ class StandardArticleEdit extends Component {
       
       loadArticles = () => {
         return AppAPI.getAPI().getArticlesByGroupId(this.state.groupId).then((articles) => {
-            console.log("Loaded articles for group '" + this.state.groupId + "':", articles)
+            //console.log("Loaded articles for group '" + this.state.groupId + "':", articles)
             this.setState({
                 articles: articles,
                 loadingInProgress: true, // loading indicator 
@@ -209,7 +209,7 @@ class StandardArticleEdit extends Component {
 
     loadUsers = () => {
         return AppAPI.getAPI().getUsersByGroupId(this.state.groupId).then((users) => {
-            console.log("Loaded users for group '" + this.state.groupId + "':", users)
+            //console.log("Loaded users for group '" + this.state.groupId + "':", users)
             this.setState({
                 users: users,
                 loadingInProgress: true, // loading indicator 
@@ -226,7 +226,7 @@ class StandardArticleEdit extends Component {
 
     loadRetailers = () => {
         return AppAPI.getAPI().getRetailers().then((retailers) => {
-            console.log("Loaded all retailers:", retailers)
+            //console.log("Loaded all retailers:", retailers)
             this.setState({
                 retailers: retailers,
                 loadingInProgress: true, // loading indicator 
