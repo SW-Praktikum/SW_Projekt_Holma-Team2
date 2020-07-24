@@ -26,14 +26,14 @@ class RetailerMapper(Mapper):
 
         return result
 
-    def find_by_id(self, id):
+    def find_by_id(self, retailer_id):
         """Eindeutiges Auslesen eines Einzelhändlers durch ID
         :param
         :return Einzelhändler-Objekt, das der übergebenen ID entspricht oder None
                 wenn DB-Tupel nicht vorhanden ist.
         """
         cursor = self._connection.cursor()
-        command = "SELECT * FROM holma.retailer WHERE retailer_id={}".format(id)
+        command = "SELECT * FROM holma.retailer WHERE retailer_id={}".format(retailer_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
