@@ -41,15 +41,6 @@ class UserProfil extends Component {
     );
   }
 
-  loadRetailer(){
-    AppAPI.getAPI().getFrequentRetailerByUserId(this.state.userId).then(retailer => {
-      this.setState({
-        retailer:retailer,
-      })
-    })
-  }
-
-
   render() {
       const { classes, user } = this.props;
       var userCreationDate = ""
