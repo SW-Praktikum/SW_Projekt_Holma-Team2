@@ -14,6 +14,20 @@ import EditIcon from '@material-ui/icons/Edit';
 import React, { Component } from 'react';
 import AppAPI from '../api/AppAPI';
 
+/**
+ * ShoppingListEdit wird durch das Anklicken des 'Details' Button in der ListEntryTable aufgerufen.
+ * 
+ * 
+ * Die Details der angesprochenen Shoppinglist werden hier angezeigt.
+ * 
+ * Der Listenname kann durch das Aufrufen von ShoppingListEditDialog geändert werden
+ * 
+ * 
+ * Der Button 'Liste löschen' ermöglicht es, die Gruppe komplett aus der Datenbank zu löschen.
+ * 
+ * Der Button 'Liste archivieren' ermöglicht es, die Shoppinglist nicht mehr unter Grouplist anzuzeigen, aber nicht aus der DB zu löschen. Dadurch kann Shoppinglist weiterhin im Report-Client 'Holma Statistik' angezeigt werden.
+ */
+
 class ShoppingListNameEditDialog extends Component {
     constructor (props) {
         super(props)

@@ -17,6 +17,9 @@ import AppAPI from '../../api/AppAPI';
 import ArticleBO from '../../api/ArticleBO';
 import ListEntryBO from '../../api/ListEntryBO';
 
+/**
+ * Innerhalb einer Shoppinglist kann durch diesen Dialog ein neuer Listeneintrag hinzugefügt werden.
+ */
 
 class ListEntryAddDialog extends Component {
     constructor (props) {

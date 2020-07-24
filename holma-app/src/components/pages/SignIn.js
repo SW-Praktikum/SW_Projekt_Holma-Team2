@@ -2,6 +2,12 @@ import { Button, colors, Paper, withStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
+/**
+ * Das ist die erste Seite der Holma App.
+ * 
+ * Es wird der Benutzer gegrüßt und ermöglicht die Anmeldung mit dem Google-Konto
+ */
+
 class SignIn extends Component{
     
     //Das passiert, wenn der User auf den SignIn-Button drückt

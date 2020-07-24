@@ -26,6 +26,20 @@ import AppAPI from '../api/AppAPI';
 import ListEntryAddDialog from './dialogs/ListEntryAddDialog';
 import ListEntry from './ListEntry';
 
+/**
+ * Es werden die gesamten Listeneinträge einer Shoppinglist gesammelt in einer Tabelle ausgegeben.
+ * 
+ * Es können neue Listeneinträge durch das Ansprechen von 'ListEntryAddDialog' der Shoppingliste hinzugefügt werden
+ * 
+ * Die enthaltenene Filterfunktion kann durch das Angeben eines Artikels, Einkäufers, Händlers oder einem Zeitraum die gesamten Listeneinträge filtern.
+ * 
+ * Durch die enthaltene Sortierfunktion können die Listeneinträge nach einem ausgewählten Attributs sortiert werden.
+ * 
+ * Die letzte Änderung wird durch das Ändern eines Listeneintrags aktualisiert und markiert somit die letzte Änderung in einer Shoppinglist.
+ * 
+ * Die Details einer Shoppinglist können durch den Button 'Details' aufgerufen werden.
+ */
+
 
 class ShoppingListLink extends Component{
     render(){

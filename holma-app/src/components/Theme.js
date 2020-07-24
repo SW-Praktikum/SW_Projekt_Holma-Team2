@@ -1,12 +1,16 @@
 import { colors } from '@material-ui/core';
 import { createMuiTheme } from '@material-ui/core/styles';
 
+/**
+ * Es sind die verschiedenen Styling-Elemente der Holma App enthalten.
+ */
+
 const white = '#FFFFFF';
 const black = '#000000';
 
 const theme = createMuiTheme({
 
-  //define breakpoints for responsive handling
+  //Definition der verschiedenen Breakpoints
   breakpoints: {
     values: {
       xs: 0,
@@ -17,7 +21,7 @@ const theme = createMuiTheme({
     },
   },
 
-    // define different color themes
+    // Definition verschiedener Farb-Varianten
     palette: {
       black,
       white,

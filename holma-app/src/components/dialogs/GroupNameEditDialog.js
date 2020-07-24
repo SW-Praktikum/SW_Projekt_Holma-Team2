@@ -9,6 +9,10 @@ import { withStyles } from '@material-ui/styles';
 import React, { Component } from 'react';
 import AppAPI from '../../api/AppAPI';
 
+/**
+ * In 'GroupEdit' kann der Gruppenname durch dieses Dialog geändert werden.
+ */
+
 class GroupNameEditDialog extends Component {
     constructor (props) {
         super(props)

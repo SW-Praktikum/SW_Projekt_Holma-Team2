@@ -4,6 +4,10 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import React from 'react';
 
+/**
+ * Es sind die Details zu der Holma App enthalten
+ */
+
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',

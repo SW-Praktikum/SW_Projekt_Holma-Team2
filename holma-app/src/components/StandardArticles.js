@@ -17,6 +17,15 @@ import React, { Component } from 'react';
 import AppAPI from '../api/AppAPI';
 import StandardArticleEditDialog from './dialogs/StandardArticleEditDialog';
 
+/**
+ * Es werden alle Standardartikel einer Gruppe angezeigt. 
+ * 
+ * Die dargestellten Standardartikel können durch das StandardArticleEditDialog bearbeitet werden.
+ * 
+ * Die Standardartikel können gelöscht werden.
+ * Dadurch werden diese beim hinzufügen der Standardartikel zu einer neu erstellten Shoppinglist, nicht mehr als Standardartikel hinzugefügt.
+ */
+
 
 
 class StandardArticles extends Component {

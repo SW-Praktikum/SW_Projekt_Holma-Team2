@@ -8,6 +8,12 @@ import { withStyles } from '@material-ui/styles';
 import React, { Component } from 'react';
 import AppAPI from '../../api/AppAPI';
 
+/**
+ * Dieser Dialog wird in 'Articles' aufgerufen.
+ * 
+ * Die Bezeichnung bereits bestehender Artikel, kann dadurch neu gesetzt werden.
+ */
+
 class ArticleEditDialog extends Component {
     constructor (props) {
         super(props)
