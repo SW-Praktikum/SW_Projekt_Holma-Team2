@@ -49,9 +49,9 @@ class ListEntry extends Component {
                     </TableCell>
                     <TableCell padding="none" style={{paddingLeft: 0, paddingTop: 0, paddingBottom: 0, paddingRight: 5}} align="right">{listEntry.getAmount()}</TableCell>
                     <TableCell padding="none" align="left">{listEntry.getUnit()}</TableCell>
-                    <TableCell padding="none" align="left">{listEntry.getName()}</TableCell>
-                    <TableCell padding="none" align="left">{listEntry.getRetailerName()}</TableCell> 
-                    <TableCell padding="none" align="left">{listEntry.getShoppingListName()}</TableCell>
+                    <TableCell padding="none" align="left">{listEntry.article.getName()}</TableCell>
+                    <TableCell padding="none" align="left">{listEntry.retailer.getName()}</TableCell> 
+                    <TableCell padding="none" align="left">{listEntry.shoppingList.getName()}</TableCell>
                 </TableRow>
             </React.Fragment>
         );
@@ -117,19 +117,19 @@ class Startpage extends Component {
 
         if (filterArticleName !== "") {
             filteredElements =  filteredElements.filter(function(item) {
-                return item.props.listEntry.articleName.toLocaleLowerCase().includes(filterArticleName.toLocaleLowerCase());
+                return item.props.listEntry.article.getName().toLocaleLowerCase().includes(filterArticleName.toLocaleLowerCase());
             });
         }
 
         if (filterListName !== "") {
             filteredElements =  filteredElements.filter(function(item) {
-                return item.props.listEntry.shoppingListName.toLocaleLowerCase().includes(filterListName.toLocaleLowerCase());
+                return item.props.listEntry.shoppingList.getName().toLocaleLowerCase().includes(filterListName.toLocaleLowerCase());
             });
         }
 
         if (filterRetailerName !== "") {
             filteredElements =  filteredElements.filter(function(item) {
-                return item.props.listEntry.retailerName.toLocaleLowerCase().includes(filterRetailerName.toLocaleLowerCase());
+                return item.props.listEntry.retailer.getName().toLocaleLowerCase().includes(filterRetailerName.toLocaleLowerCase());
             });
         }
 
@@ -162,17 +162,17 @@ class Startpage extends Component {
         if (sortInput === "Händler") {
             //nach Einzelhändler sortieren
             filteredElements = filteredElements.sort((a, b) => 
-                a.props.listEntry.retailerName > b.props.listEntry.retailerName ? 1 : -1)
+                a.props.listEntry.retailer.getName() > b.props.listEntry.retailer.getName() ? 1 : -1)
         }
         else if (sortInput === "Artikel") {
             //nach Artikel sortieren
             filteredElements = filteredElements.sort((a, b) => 
-                a.props.listEntry.articleName > b.props.listEntry.articleName ? 1 : -1)
+                a.props.listEntry.article.getName() > b.props.listEntry.article.getName() ? 1 : -1)
         }
         else if (sortInput === "Liste") {
             //nach Shoppinglist sortieren
             filteredElements = filteredElements.sort((a, b) => 
-                a.props.listEntry.shoppingListName > b.props.listEntry.shoppingListName ? 1 : -1)
+                a.props.listEntry.shoppingList.getName() > b.props.listEntry.shoppingList.getName() ? 1 : -1)
         }
         this.setState({
             filteredListEntryTableElements: filteredElements
@@ -180,23 +180,20 @@ class Startpage extends Component {
     }
 
 
-    loadListEntries = () => {
+    loadListEntries = async () => {
         // get listentries by user ID
-        return AppAPI.getAPI().getListEntriesByUserId(this.state.userId, false).then(listEntries => {
-            var listEntryTableElements = listEntries.map((listEntry) => <ListEntry listEntry={listEntry} loadListEntries={this.loadListEntries} />)
-            this.setState({
-                listEntryTableElements: listEntryTableElements,
-                filteredListEntryTableElements: listEntryTableElements,
-                loadingInProgress: true, // loading indicator 
-                loadingError: null
-                })
-            return new Promise(function (resolve) {resolve(listEntries)})
-            }).catch(e =>
-                this.setState({ // Reset state with error from catch 
-                loadingInProgress: false,
-                loadingError: e
-            })
-        );  
+        const listEntries = await AppAPI.getAPI().getListEntriesByUserId(this.state.userId, false)
+        for (const listEntry of listEntries) {
+            await AppAPI.getAPI().completeListEntry(listEntry)
+        }
+
+        var listEntryTableElements = listEntries.map((listEntry) => <ListEntry listEntry={listEntry} loadListEntries={this.loadListEntries} />)
+        this.setState({
+            listEntryTableElements: listEntryTableElements,
+            filteredListEntryTableElements: listEntryTableElements,
+            loadingInProgress: true, // loading indicator 
+            loadingError: null
+        })
     }
 
     loadRetailers = () => {

@@ -132,47 +132,42 @@ class ListEntryAddDialog extends Component {
         };
     }
     
-    saveChanges = () => {
-      var listEntry = new ListEntryBO(
-        this.state.article.id,
-        this.state.article.name,
-        this.state.amount, 
-        this.state.unit.name, 
-        this.state.retailer.id, 
-        this.state.retailer.name, 
-        this.state.purchasingUser.id, 
-        this.state.purchasingUser.name, 
-        this.props.shoppingListId, 
-        this.state.article.name,
-        false, 
-        null, //checkedTs
-        this.state.isStandard,
+    saveChanges = async () => {
+        var listEntry = new ListEntryBO(
+            this.state.article.id,
+            this.state.amount, 
+            this.state.unit.name, 
+            this.state.retailer.id, 
+            this.state.purchasingUser.id, 
+            this.props.shoppingListId, 
+            false, 
+            null, //checkedTs
+            this.state.isStandard,
         )
-      listEntry.setName(this.state.article.name)
-      AppAPI.getAPI().createListEntry(listEntry).then(() => {
-        this.setState({
-          amount: 1,
-          unit: {
-              name: "",
-              id: ""
-          },
-          purchasingUser: {
-              name: "",
-              id: ""
-          },
-          article: {
-              name: "",
-              id: ""
-          },
-          retailer: {
-              name: "",
-              id: ""
-          },
-          isStandard: false,
-        },
-        this.props.loadListEntries())
-      })
-      this.props.handleClose()
+        listEntry.setName(this.state.article.name)
+        let newListEntry = await AppAPI.getAPI().createListEntry(listEntry)
+        await this.setState({
+            amount: 1,
+            unit: {
+                name: "",
+                id: ""
+            },
+            purchasingUser: {
+                name: "",
+                id: ""
+            },
+            article: {
+                name: "",
+                id: ""
+            },
+            retailer: {
+                name: "",
+                id: ""
+            },
+            isStandard: false,
+        })
+        this.props.loadListEntries()
+        this.props.handleClose()
     }
 
     undoChanges = () => {

@@ -10,10 +10,10 @@ export default class AppAPI {
     static #api = null;
 
     //Local Python Backend
-    //#appServerBaseURL = 'http://localhost:5000/app';
+    #appServerBaseURL = 'http://localhost:5000/app';
     
     // Remote Backend:
-    #appServerBaseURL = 'http://backend.holma.xyz/app';
+    //#appServerBaseURL = 'http://backend.holma.xyz/app';
 
 
 
@@ -336,7 +336,7 @@ export default class AppAPI {
 
     getShoppingListById(shoppingListId) {
         return this.#fetchAdv(this.#getShoppingListByIdURL(shoppingListId)).then((responseJSON) => {
-            let responseShoppingLists = ShoppingListBO.fromJSON(responseJSON);
+            let responseShoppingLists = ShoppingListBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
                 resolve(responseShoppingLists)
             })
@@ -503,21 +503,35 @@ export default class AppAPI {
     getListEntriesByUserId(userId, includeArchived) {
         if (includeArchived == true) {
             return this.#fetchAdv(this.#getListEntriesIncludeArchivedByUserIdURL(userId)).then((responseJSON) => {
-                let responseListEntry = ListEntryBO.fromJSON(responseJSON);
+                let responseListEntries = ListEntryBO.fromJSON(responseJSON);
+                console.log(responseListEntries)
                 return new Promise(function (resolve) {
-                    resolve(responseListEntry)
+                    resolve(responseListEntries)
                 })
             })
         }
         else {
             return this.#fetchAdv(this.#getListEntriesByUserIdURL(userId)).then((responseJSON) => {
-                let responseListEntry = ListEntryBO.fromJSON(responseJSON);
-                return new Promise(function (resolve) {
-                    resolve(responseListEntry)
-                })
+                let responseListEntries = ListEntryBO.fromJSON(responseJSON);
+                return new Promise(function async (resolve) {
+                    resolve(responseListEntries)
+                })                
             })
         }        
     }; 
+
+    async completeListEntry(listEntry) {
+        let article = await this.getArticleById(listEntry.getArticleId())
+        listEntry.article = article
+        let retailer = await this.getRetailerById(listEntry.getRetailerId())
+        listEntry.retailer = retailer
+        let purchasingUser = await this.getUserById(listEntry.getPurchasingUserId())
+        listEntry.purchasingUser = purchasingUser
+        let shoppingList = await this.getShoppingListById(listEntry.getShoppingListId())
+        listEntry.shoppingList = shoppingList
+        return new Promise(function (resolve) {
+            resolve(listEntry)
+        })    }
 
     getListEntriesByArticleId(articleId) {
         return this.#fetchAdv(this.#getListEntriesByArticleIdURL(articleId)).then((responseJSON) => {
@@ -653,7 +667,7 @@ export default class AppAPI {
 
     getRetailerById(retailerId) {
         return this.#fetchAdv(this.#getRetailerByIdURL(retailerId)).then((responseJSON) => {
-            let responseRetailer = ListEntryBO.fromJSON(responseJSON)[0];
+            let responseRetailer = RetailerBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
                 resolve(responseRetailer)
             })
@@ -662,7 +676,7 @@ export default class AppAPI {
 
     getRetailersByName(name) {
         return this.#fetchAdv(this.#getRetailersByNameURL(name)).then((responseJSON) => {
-            let responseRetailer = ListEntryBO.fromJSON(responseJSON);
+            let responseRetailer = RetailerBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
                 resolve(responseRetailer)
             })

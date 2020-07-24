@@ -21,6 +21,8 @@ def secured(function):
     firebase_request_adapter = requests.Request()
 
     def wrapper(*args, **kwargs):
+        objects = function(*args, **kwargs)
+        return objects
         # Verify Firebase auth.
         id_token = request.cookies.get("token")
         error_message = None

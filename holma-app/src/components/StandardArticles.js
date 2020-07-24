@@ -84,7 +84,7 @@ return (
         <TableRow>
             <TableCell padding="dense" align="right">{standardArticle.getAmount()}</TableCell>
             <TableCell padding="dense" align="left">{standardArticle.getUnit()}</TableCell>
-            <TableCell padding="dense" style={{paddingLeft: 0, paddingTop: 0, paddingBottom: 0, paddingRight: 0}} align="left">{standardArticle.getArticleName()}</TableCell>
+            <TableCell padding="dense" style={{paddingLeft: 0, paddingTop: 0, paddingBottom: 0, paddingRight: 0}} align="left">{standardArticle.article.getName()}</TableCell>
             <TableCell padding="dense">
                 <IconButton aria-label="expand row" size="small" onClick={() => this.setOpen(!open)}>
                     {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
@@ -114,8 +114,8 @@ return (
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                <TableCell style={{borderBottom: "none"}} colSpan={4} padding="none" align="left">{standardArticle.getPurchasingUserName()}</TableCell>
-                                <TableCell style={{borderBottom: "none"}} colSpan={4} padding="none" align="left">{standardArticle.getRetailerName()}</TableCell>
+                                <TableCell style={{borderBottom: "none"}} colSpan={4} padding="none" align="left">{standardArticle.purchasingUser.getName()}</TableCell>
+                                <TableCell style={{borderBottom: "none"}} colSpan={4} padding="none" align="left">{standardArticle.retailer.getName()}</TableCell>
                                 <TableCell style={{borderBottom: "none"}} colSpan={4} padding="none" align="left">{standardArticle.getArticleId()}</TableCell>
                             </TableBody>
                         </Table>
@@ -184,9 +184,13 @@ class StandardArticleEdit extends Component {
         );  
     } 
 
-    loadStandardArticles = () => {
-        AppAPI.getAPI().getStandardArticlesByGroupId(this.state.groupId).then((articles) => {
-        var StandardElements = articles.map((standard) => 
+    loadStandardArticles = async () => {
+        const standardArticles = await AppAPI.getAPI().getListEntriesByUserId(this.state.userId, true)
+        for (const standardArticle of standardArticles) {
+            await AppAPI.getAPI().completeListEntry(standardArticle)
+        }
+        
+        var standardElements = standardArticles.map((standard) => 
         <StandardArticles 
             groupId={this.state.groupId} 
             standardArticle={standard} 
@@ -196,18 +200,11 @@ class StandardArticleEdit extends Component {
             loadStandardArticles={this.loadStandardArticles} 
             loadArticles={this.loadArticles}
         />)
-            this.setState({
-                StandardElements: StandardElements,
-                loadingInProgress: true,
-                loadingError: null,
-                });
-                return new Promise(function (resolve) { resolve(1) });
-            }).catch(e =>
-                    this.setState({ // Reset state with error from catch 
-                    loadingInProgress: false,
-                    loadingError: e
-                })
-        );  
+        this.setState({
+            StandardElements: standardElements,
+            loadingInProgress: true,
+            loadingError: null,
+        });
     }
 
     loadUsers = () => {

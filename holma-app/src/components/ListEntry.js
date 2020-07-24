@@ -100,7 +100,7 @@ class ListEntry extends Component {
                     </TableCell>
                     <TableCell style={{paddingLeft: 0, paddingTop: 0, paddingBottom: 0, paddingRight: 0}} align="right">{listEntry.getAmount()}</TableCell>
                     <TableCell align="left">{listEntry.getUnit()}</TableCell>
-                    <TableCell padding="default" align="left">{listEntry.getArticleName()}</TableCell>
+                    <TableCell padding="default" align="left">{listEntry.article.getName()}</TableCell>
                     <TableCell padding="none" >
                         <IconButton aria-label="expand row" size="small" onClick={() => this.setOpen(!open)}>
                             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
@@ -131,8 +131,8 @@ class ListEntry extends Component {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        <TableCell className={classes.tableCell} colSpan={3} padding="none" align="left">{listEntry.getPurchasingUserName()}</TableCell>
-                                        <TableCell className={classes.tableCell} colSpan={2} padding="none" align="left">{listEntry.getRetailerName()}</TableCell>
+                                        <TableCell className={classes.tableCell} colSpan={3} padding="none" align="left">{listEntry.purchasingUser.getName()}</TableCell>
+                                        <TableCell className={classes.tableCell} colSpan={2} padding="none" align="left">{listEntry.retailer.getName()}</TableCell>
                                         <TableCell className={classes.tableCell} colSpan={4} padding="none" align="left">{groupLastUpdated}</TableCell>
                                         <TableCell className={classes.tableCell} colSpan={1} padding="none" align='center'>
                                             <IconButton disabled="true" aria-label="expand row" size="small" >

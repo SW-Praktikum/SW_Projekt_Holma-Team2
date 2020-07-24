@@ -77,9 +77,8 @@ class Administration():
         if include_archived == False:
             shopping_lists = self.get_all_archived_shopping_lists()
         with ListEntryMapper() as mapper:
-            list_entries = mapper.find_by_purchasing_user(user_id,
+            return mapper.find_by_purchasing_user(user_id,
                                                           shopping_lists)
-        return [self.complete_list_entry(le) for le in list_entries]
 
     def create_user(self, name: str, email: str, google_id: str):
         """User anlegen
@@ -178,8 +177,7 @@ class Administration():
         :return: Liste mit Einkaufslisten
         """
         with ShoppingListMapper() as mapper:
-            shopping_lists = mapper.find_by_group(group_id)
-        return [self.complete_shopping_list(le) for le in shopping_lists]
+            return mapper.find_by_group(group_id)
 
     def get_standardarticles_by_group_id(self, group_id: int):
         """Standardartikel der Gruppe anhand ihrer ID ausgeben
@@ -188,8 +186,7 @@ class Administration():
         :return: Liste mit Standardartikeln (Listeneinträge)
         """
         with ListEntryMapper() as mapper:
-            list_entries = mapper.find_standardarticles_by_group_id(group_id)
-        return [self.complete_list_entry(le) for le in list_entries]
+            return mapper.find_standardarticles_by_group_id(group_id)
 
     def add_member_to_group(self, group: Group, user: User):
         """User zu einer Gruppe hinzufügen
@@ -383,34 +380,6 @@ class Administration():
 
     """Listentry"""
 
-    def complete_list_entry(self, list_entry: ListEntry):
-        """Daten der Verknüpften Objekte zum Listeneintrag hinzufügen
-
-        :param list_entry: Listeneintrag-Objekt
-        :return: Aktualisiertes Listeneintrag-Objekt
-        """
-        article_id = list_entry.get_article()
-        shopping_list_id = list_entry.get_shopping_list()
-        retailer_id = list_entry.get_retailer()
-        purchasing_user_id = list_entry.get_purchasing_user()
-
-        if article_id is not None:
-            article = self.get_article_by_id(article_id)
-            list_entry.set_article_name(article.get_name())
-
-        if shopping_list_id is not None:
-            shopping_list = self.get_shopping_list_by_id(shopping_list_id)
-            list_entry.set_shopping_list_name(shopping_list.get_name())
-
-        if retailer_id is not None:
-            retailer = self.get_retailer_by_id(retailer_id)
-            list_entry.set_retailer_name(retailer.get_name())
-
-        if purchasing_user_id is not None:
-            purchasing_user = self.get_user_by_id(purchasing_user_id)
-            list_entry.set_purchasing_user_name(purchasing_user.get_name())
-
-        return list_entry
 
     def get_all_list_entries(self):
         """Alle Listeneinträge der Datenbank ausgeben
@@ -418,8 +387,8 @@ class Administration():
         :return: Liste mit Listeneinträgen
         """
         with ListEntryMapper() as mapper:
-            list_entries = mapper.find_all()
-        return [self.complete_list_entry(le) for le in list_entries]
+            return mapper.find_all()
+
 
     def get_list_entry_by_id(self, list_entry_id: int):
         """Listeneintrag anhand seiner ID ausgeben
@@ -428,7 +397,7 @@ class Administration():
         :return: Listeneintrag-Objekt
         """
         with ListEntryMapper() as mapper:
-            return self.complete_list_entry(mapper.find_by_id(list_entry_id))
+            return mapper.find_by_id(list_entry_id)
 
     def create_list_entry(self, name: str, amount, article_id: int, unit: str,
                           purchasing_user_id: int, retailer_id: int,
@@ -485,8 +454,8 @@ class Administration():
         :return: Liste mit Listeneintrag-Objekten
         """
         with ListEntryMapper() as mapper:
-            list_entries = mapper.find_by_retailer(retailer_id)
-        return [self.complete_list_entry(le) for le in list_entries]
+            return mapper.find_by_retailer(retailer_id)
+
 
     def get_list_entries_by_article_id(self, article_id: int):
         """Listeneinträge anhand der ID des Artikels ausgeben
@@ -495,8 +464,8 @@ class Administration():
         :return: Liste mit Listeneintrag-Objekten
         """
         with ListEntryMapper() as mapper:
-            list_entries = mapper.find_list_entries_by_article(article_id)
-        return [self.complete_list_entry(le) for le in list_entries]
+            return mapper.find_list_entries_by_article(article_id)
+
 
     def get_list_entries_by_shopping_list_id(self, shopping_list_id: int):
         """Listeneinträge anhand der ID der Einkaufsliste ausgeben
@@ -505,9 +474,9 @@ class Administration():
         :return: Liste mit Listeneintrag-Objekten
         """
         with ListEntryMapper() as mapper:
-            list_entries = mapper.find_list_entries_by_shopping_list_id(
+            return mapper.find_list_entries_by_shopping_list_id(
                 shopping_list_id)
-        return [self.complete_list_entry(le) for le in list_entries]
+
 
     def get_checked_list_entries_by_shopping_list_id(self,
                                                      shopping_list_id: int):
@@ -518,25 +487,11 @@ class Administration():
         :return: Liste mit Listeneintrag-Objekten
         """
         with ListEntryMapper() as mapper:
-            list_entries = mapper.find_checked_list_entries_by_shopping_list_id(
+            return mapper.find_checked_list_entries_by_shopping_list_id(
                 shopping_list_id)
-        return [self.complete_list_entry(le) for le in list_entries]
+
 
     """Einkaufsliste"""
-
-    def complete_shopping_list(self, shopping_list: ShoppingList):
-        """Daten der Verknüpften Objekte zur Einkaufsliste hinzufügen
-
-        :param shopping_list: Einkaufslisten-Objekt
-        :return: Aktualisiertes Einkaufslisten-Objekt
-        """
-        group_id = shopping_list.get_group()
-
-        if group_id is not None:
-            group = self.get_group_by_id(group_id)
-            shopping_list.set_group_name(group.get_name())
-
-        return shopping_list
 
     def get_shopping_list_by_id(self, shopping_list_id: int):
         """Einkaufsliste anhand ihrer ID ausgeben
@@ -545,8 +500,7 @@ class Administration():
         :return: Einkaufslisten-Objekt
         """
         with ShoppingListMapper() as mapper:
-            return self.complete_shopping_list(
-                mapper.find_by_id(shopping_list_id))
+            return mapper.find_by_id(shopping_list_id)
 
     def get_shopping_list_by_name(self, name: str):
         """Einkaufslisten anhand ihres Namens ausgeben
@@ -555,8 +509,7 @@ class Administration():
         :return: Einkaufslisten-Objekte
         """
         with ShoppingListMapper() as mapper:
-            shopping_lists = mapper.find_by_name(name)
-        return [self.complete_shopping_list(le) for le in shopping_lists]
+            return mapper.find_by_name(name)
 
     def create_shopping_list(self, name: str, group_id: int):
         """Einkaufsliste erstellen
@@ -673,8 +626,7 @@ class StatisticAdministration(Administration):
         :return: Liste mit Einkaufslisten
         """
         with ShoppingListMapper() as mapper:
-            shopping_lists = mapper.find_all()
-        return [self.complete_shopping_list(le) for le in shopping_lists]
+            return mapper.find_all()
 
     def get_all_articles(self):
         """Alle Artikel der Datenbank ausgeben
@@ -695,9 +647,9 @@ class StatisticAdministration(Administration):
 
         for shopping_list in shopping_lists:
             with ListEntryMapper() as mapper:
-                list_entries = mapper.find_list_entries_by_shopping_list_id(
+                return mapper.find_list_entries_by_shopping_list_id(
                     shopping_list)
-                return [self.complete_list_entry(le) for le in list_entries]
+        
 
     def get_list_entries_in_time_period(self, from_date: datetime,
                                         to_date: datetime):
@@ -709,9 +661,8 @@ class StatisticAdministration(Administration):
         :return: Liste Mit Listeneinträgen
         """
         with ListEntryMapper() as mapper:
-            list_entries = mapper.find_list_entries_in_time_periode(from_date,
-                                                                    to_date)
-            return [self.complete_list_entry(le) for le in list_entries]
+            return mapper.find_list_entries_in_time_periode(from_date, to_date)
+    
 
     def get_article_count_by_group(self, group: Group):
         """Artikel einer Gruppe absteigend sortiert nach der

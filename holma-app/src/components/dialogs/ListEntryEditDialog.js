@@ -23,15 +23,15 @@ class ListEntryEditDialog extends Component {
                 id: this.props.listEntry.getUnit()
             },
             purchasingUser: {
-                "name": this.props.listEntry.getPurchasingUserName(),
+                "name": this.props.listEntry.purchasingUser.getName(),
                 "id": this.props.listEntry.getPurchasingUserId()
             },
             article: {
-                "name": this.props.listEntry.getArticleName(),
+                "name": this.props.listEntry.article.getName(),
                 "id": this.props.listEntry.getArticleId()
             },
             retailer: {
-                "name": this.props.listEntry.getRetailerName(),
+                "name": this.props.listEntry.retailer.getName(),
                 "id": this.props.listEntry.getRetailerId()
             },
         }
@@ -76,7 +76,6 @@ class ListEntryEditDialog extends Component {
             })
             let localListEntry = this.state.localListEntry
             localListEntry.setPurchasingUserId(purchasingUser.id)
-            localListEntry.setPurchasingUserName(purchasingUser.name)
             this.updateLocalListEntry(localListEntry)
         }
     }
@@ -91,7 +90,6 @@ class ListEntryEditDialog extends Component {
             })
             let localListEntry = this.state.localListEntry
             localListEntry.setArticleId(article.id)
-            localListEntry.setArticleName(article.name)
             this.updateLocalListEntry(localListEntry)
         }
     }
@@ -119,7 +117,6 @@ class ListEntryEditDialog extends Component {
             })
             let localListEntry = this.state.localListEntry
             localListEntry.setRetailerId(retailer.id)
-            localListEntry.setRetailerName(retailer.name)
             this.updateLocalListEntry(localListEntry)
         }
     }
@@ -141,17 +138,14 @@ class ListEntryEditDialog extends Component {
     saveChanges = () => {
         let { localListEntry } = this.state
         let { listEntry } = this.state
-        localListEntry.setName(localListEntry.articleName)
+        localListEntry.setName(localListEntry.article.getName())
         AppAPI.getAPI().updateListEntry(localListEntry)
         
         listEntry.setAmount(localListEntry.getAmount())
         listEntry.setUnit(localListEntry.getUnit())
         listEntry.setArticleId(localListEntry.getArticleId())
-        listEntry.setArticleName(localListEntry.getArticleName())
         listEntry.setPurchasingUserId(localListEntry.getPurchasingUserId())
-        listEntry.setPurchasingUserName(localListEntry.getPurchasingUserName())
         listEntry.setRetailerId(localListEntry.getRetailerId())
-        listEntry.setRetailerName(localListEntry.getRetailerName())
 
         this.props.closeDialog()
 

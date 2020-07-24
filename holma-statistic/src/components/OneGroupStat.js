@@ -89,7 +89,7 @@ class AmountEntry extends Component {
                       <TableCell style={{paddingLeft: 5, paddingTop: 0, paddingBottom: 0, paddingRight: 10}} align="right">{listEntry.getAmount()}</TableCell>
                       <TableCell padding="dense" align="left">{listEntry.getUnit()}</TableCell>
                       <TableCell padding="dense" align="left">{listEntry.getName()}</TableCell>
-                      <TableCell padding="dense" align="left">{listEntry.getRetailerName()}</TableCell> 
+                      <TableCell padding="dense" align="left">{listEntry.retailer.getName()}</TableCell> 
                       <TableCell padding="dense" align="left">{checkedTimestamp}</TableCell> 
   
                   </TableRow>
@@ -110,7 +110,6 @@ class AmountEntry extends Component {
               groupId : this.props.match.params.groupId,
               retailers: [],
               articleAmounts: [],
-              retailerName: null,
               filterInput: "",
               filteredElements: [],
               filterObject: "articleName",
@@ -146,13 +145,13 @@ class AmountEntry extends Component {
   
           if (filterArticleName !== "") {
               filteredElements =  filteredElements.filter(function(item) {
-                return item.props.listEntry.articleName.toLocaleLowerCase().includes(filterArticleName.toLocaleLowerCase());
+                return item.props.listEntry.article.getName().toLocaleLowerCase().includes(filterArticleName.toLocaleLowerCase());
               });
           }
   
           if (filterRetailerName !== "") {
               filteredElements =  filteredElements.filter(function(item) {
-                  return item.props.listEntry.retailerName.toLocaleLowerCase().includes(filterRetailerName.toLocaleLowerCase());
+                  return item.props.listEntry.retailer.getName().toLocaleLowerCase().includes(filterRetailerName.toLocaleLowerCase());
               });
           }
   
@@ -200,22 +199,22 @@ class AmountEntry extends Component {
         if (sortInput === "Händler") {
             //nach Einzelhändler sortieren
             filteredElements = filteredElements.sort((a, b) => 
-                a.props.listEntry.retailerName > b.props.listEntry.retailerName ? 1 : -1)
+                a.props.listEntry.retailer.getName() > b.props.listEntry.retailer.getName() ? 1 : -1)
         }
         else if (sortInput === "Artikel") {
             //nach Artikel sortieren
             filteredElements = filteredElements.sort((a, b) => 
-                a.props.listEntry.articleName > b.props.listEntry.articleName ? 1 : -1)
+                a.props.listEntry.article.getName() > b.props.listEntry.article.getName() ? 1 : -1)
         }
         else if (sortInput === "Liste") {
             //nach Shoppinglist sortieren
             filteredElements = filteredElements.sort((a, b) => 
-                a.props.listEntry.shoppingListName > b.props.listEntry.shoppingListName ? 1 : -1)
+                a.props.listEntry.shoppingList.getName() > b.props.listEntry.shoppingList.getName() ? 1 : -1)
         }
         else if (sortInput === "Einkäufer") {
             //nach Einkäufer sortieren
             filteredElements = filteredElements.sort((a, b) => 
-                a.props.listEntry.purchasingUserName > b.props.listEntry.purchasingUserName ? 1 : -1)
+                a.props.listEntry.purchasingUser.getName() > b.props.listEntry.purchasingUser.getName() ? 1 : -1)
         }
         else if (sortInput === "Kaufdatum") {
             //nach Kaufdatum sortieren           
@@ -233,23 +232,20 @@ class AmountEntry extends Component {
         })
     }
     
-      loadListEntries = () => {
-        // get entries by group ID
-        return AppAPI.getAPI().getListEntriesByGroupId(this.state.groupId).then(listEntries => {
-            var listEntryTableElements = listEntries.map((listEntry) => <ListEntry listEntry={listEntry} loadListEntries={this.loadListEntries} />)
-            this.setState({
-                listEntryTableElements: listEntryTableElements,
-                filteredListEntryTableElements: listEntryTableElements,
-                loadingInProgress: true, // loading indicator 
-                loadingError: null
-                })
-            return new Promise(function (resolve) {resolve(listEntries)})
-            }).catch(e =>
-                this.setState({ // Reset state with error from catch 
-                loadingInProgress: false,
-                loadingError: e
-            })
-        );  
+    loadListEntries = async () => {
+        // get listentries by user ID
+        const listEntries = await AppAPI.getAPI().getListEntriesByGroupId(this.state.groupId)
+        for (const listEntry of listEntries) {
+            await AppAPI.getAPI().completeListEntry(listEntry)
+        }
+
+        var listEntryTableElements = listEntries.map((listEntry) => <ListEntry listEntry={listEntry} loadListEntries={this.loadListEntries} />)
+        this.setState({
+            listEntryTableElements: listEntryTableElements,
+            filteredListEntryTableElements: listEntryTableElements,
+            loadingInProgress: true, // loading indicator 
+            loadingError: null
+        })
     }
 
       loadArticleAmounts = () => {
