@@ -10,10 +10,10 @@ export default class AppAPI {
     static #api = null;
 
     //Local Python Backend
-    //#appServerBaseURL = 'http://localhost:5000/app';
+    #appServerBaseURL = 'http://localhost:5000/app';
     
     // Remote Backend:
-    #appServerBaseURL = 'http://backend.holma.xyz/app';
+    //#appServerBaseURL = 'http://backend.holma.xyz/app';
 
 
 
@@ -99,13 +99,13 @@ export default class AppAPI {
     #fetchAdv = (url, init={credentials: 'include'}) => fetch(url, init)
         .then(response => {
             if (typeof init !== 'undefined' && "body" in init) {
-                //console.log("[" + init.method + "]", url, JSON.parse(init.body))
+                console.log("[" + init.method + "]", url, JSON.parse(init.body))
             }
             else {
-                //console.log("[GET]", url)
+                console.log("[GET]", url)
             }
             if (!response.ok){
-                //console.log(`${response.status} ${response.statusText}`);
+                console.log(`${response.status} ${response.statusText}`);
                 throw Error(`${response.status} ${response.statusText}`)
             }
             return response.json();
@@ -521,14 +521,34 @@ export default class AppAPI {
     }; 
 
     async completeListEntry(listEntry) {
-        let article = await this.getArticleById(listEntry.getArticleId())
-        listEntry.article = article
-        let retailer = await this.getRetailerById(listEntry.getRetailerId())
-        listEntry.retailer = retailer
-        let purchasingUser = await this.getUserById(listEntry.getPurchasingUserId())
-        listEntry.purchasingUser = purchasingUser
-        let shoppingList = await this.getShoppingListById(listEntry.getShoppingListId())
-        listEntry.shoppingList = shoppingList
+        if (listEntry.getArticleId() !== null) {
+            let article = await this.getArticleById(listEntry.getArticleId())
+            listEntry.article = article
+        } else {
+            listEntry.article = new ArticleBO("", 0)
+        }
+        
+        if (listEntry.getRetailerId() !== null) {
+            let retailer = await this.getRetailerById(listEntry.getRetailerId())
+            listEntry.retailer = retailer    
+        } else {
+            listEntry.retailer = new RetailerBO("")
+        }
+
+        if (listEntry.getPurchasingUserId() !== null) {
+            let purchasingUser = await this.getUserById(listEntry.getPurchasingUserId())
+            listEntry.purchasingUser = purchasingUser
+        } else {
+            listEntry.purchasingUser = new UserBO("", "", "")
+        }
+
+        if (listEntry.getShoppingListId() !== null) {
+            let shoppingList = await this.getShoppingListById(listEntry.getShoppingListId())
+            listEntry.shoppingList = shoppingList    
+        } else {
+            listEntry.shoppingList = new ShoppingListBO("", 0, "")
+        }
+
         return new Promise(function (resolve) {
             resolve(listEntry)
         })    }

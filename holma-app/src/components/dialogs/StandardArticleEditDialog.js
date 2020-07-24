@@ -143,6 +143,7 @@ class StandardArticleEditDialog extends Component {
         standardArticle.setPurchasingUserId(localStandardArticle.getPurchasingUserId())
         standardArticle.setRetailerId(localStandardArticle.getRetailerId())
 
+        this.props.loadStandardArticles()
         this.props.closeDialog()
 
     }
