@@ -2,6 +2,15 @@ import { Typography } from '@material-ui/core';
 import React from 'react';
 import AppAPI from '../api/AppAPI';
 
+/**
+ * Es wird die Statistik des eingeloggten Benutzers angezeigt.
+ * 
+ * Die enthaltenene Filterfunktion kann durch das Angeben eines Artikels, Einkäufers, Händlers oder einem Zeitraum die gesamten Listeneinträge filtern.
+ * Durch die enthaltene Sortierfunktion können die Listeneinträge nach einem ausgewählten Attributs sortiert werden.
+ * 
+ * Die angegebenen 'Anzahl Einkäufe nach Einzelhändler' stellt die Häufigkeit der eingekauften Artikel bezogen auf den jeweiligen Einzelhändler dar.
+ * Dabei werden die Einträge nach Häufigkeit absteigend dargestellt.
+ */
 
 class UserStatistics extends React.Component {
   constructor(props) {

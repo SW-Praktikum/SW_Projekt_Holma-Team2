@@ -25,6 +25,16 @@ import {
 import React, { Component } from 'react';
 import AppAPI from '../api/AppAPI';
 
+/**
+ * Es werden die gesamten Listeneinträge einer Shoppinglist gesammelt in einer Tabelle ausgegeben.
+ * 
+ * Die enthaltenene Filterfunktion kann durch das Angeben eines Artikels, Einkäufers, Händlers oder einem Zeitraum die gesamten Listeneinträge filtern.
+ * 
+ * Durch die enthaltene Sortierfunktion können die Listeneinträge nach einem ausgewählten Attributs sortiert werden.
+ * 
+ * Die letzte Änderung wird durch das Ändern eines Listeneintrags aktualisiert und markiert somit die letzte Änderung in einer Shoppinglist.
+ */
+
 class RetailerEntry extends Component {
     constructor(props) {
         super(props);

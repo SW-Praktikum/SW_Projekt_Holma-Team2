@@ -3,15 +3,16 @@ import firebase from 'firebase/app';
 import React, { Component, createRef } from 'react';
 import AppAPI from '../api/AppAPI';
 
+/**
+ * Es werden die Details des angemeldeten Benutzers angezeigt.
+ */
+
 class UserProfil extends Component {
 
-  // a refernce to the avatar button
   #avatarButtonRef = createRef();
 
   constructor(props) {
     super(props);
-
-    // Init the state
     this.state = {
       user: this.props.user,
       userName: this.props.user.name,

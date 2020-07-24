@@ -4,7 +4,12 @@ import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-//Hier müssen verschiedene Elemente von Material-UI importiert werden
+
+/**
+ * Sobald im System ein Error entsteht, wird diese ContextErrorMessage ausgegeben.
+ * 
+ * Dadurch weiß der Benutzer, welcher Fehler entstanden ist.
+ */
 
 class ContextErrorMessage extends Component {
     #defaultText = 'Das hätte nicht passieren sollen, entschuldige!';

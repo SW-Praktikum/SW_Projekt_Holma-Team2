@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 /**
  * Das ist die erste Seite der Holma App.
  * 
- * Es wird der Benutzer gegrüßt und ermöglicht die Anmeldung mit dem Google-Konto
+ * Es wird ermöglicht sich mit dem Google-Konto anzumelden.
  */
 
 class SignIn extends Component{

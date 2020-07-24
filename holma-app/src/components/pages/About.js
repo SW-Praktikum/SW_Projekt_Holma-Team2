@@ -5,7 +5,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import React from 'react';
 
 /**
- * Es sind die Details zu der Holma App enthalten
+ * Es werden die Details der Holma App angezeigt
  */
 
 const useStyles = makeStyles(theme => ({
