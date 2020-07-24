@@ -25,6 +25,14 @@ import {
 import React, { Component } from 'react';
 import AppAPI from '../api/AppAPI';
 
+/**
+ * Es wird die Statistik einer ausgewählten Gruppe dargestellt.
+ * Die enthaltenene Filterfunktion kann durch das Angeben eines Artikels, Einkäufers, Händlers oder einem Zeitraum die gesamten Listeneinträge filtern.
+ * Durch die enthaltene Sortierfunktion können die Listeneinträge nach einem ausgewählten Attributs sortiert werden.
+ * 
+ * Die angegebenen 'Häufigsten Artikel' stellen die Gesamtanzahl der bisherigen Einkäufe jedes Artikels dar.
+ * Dabei werden die Einträge nach Häufigkeit absteigend dargestellt.
+ */
   
 
 class AmountEntry extends Component {

@@ -15,9 +15,7 @@ import ListWithBoxes from './ListWithBoxes';
 
 
 /**
- * When adding more member to a Group and then adding a new group emediateley, deleting meber Elements from state not working properly
- * 
- * also rendering on open dialog not working as it sould
+ * Es werden alle Gruppen der Holma Statistik dargestellt.
  */
 
 

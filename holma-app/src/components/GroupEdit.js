@@ -22,6 +22,22 @@ import GroupNameEditDialog from '../components/dialogs/GroupNameEditDialog';
 import MemberAddDialog from '../components/dialogs/MemberAddDialog';
 import ListWithBoxes from './ListWithBoxes';
 
+/**
+ * GroupEdit wird durch das Anklicken des 'Details' Button in der GroupList aufgerufen.
+ * 
+ * Die Details der angesprochenen Gruppe werden hier angezeigt.
+ * 
+ * Der Gruppenname kann durch das Aufrufen des GroupNameEditDialogs geändert werden.
+ * 
+ * Durch die Buttons 'Artikel' und 'Standardartikel' werden die enthaltenden Artikel und Standardartikel der Gruppe angezeigt.
+ * 
+ * Es werden alle Gruppenmitglieder angezeigt.
+ * 
+ * Der MemberAddDialog ermöglicht durch das Eingeben der Mitglieds-Id, das Hinzufügen eines neuen Mitglieds zu der angesprochenen Gruppe.
+ * 
+ * Der Button 'Gruppe löschen' ermöglicht es, die Gruppe komplett aus der Datenbank zu löschen.
+ */
+
 class GroupInformation extends Component {
   constructor(props) {
     super(props)

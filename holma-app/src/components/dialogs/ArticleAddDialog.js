@@ -6,6 +6,11 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import React, { Component } from 'react';
 
+/**
+ * Es können Article einer Gruppe hinzugefügt werden.
+ * 
+ */
+
 
 class ArticleAddDialog extends Component {
     constructor (props) {

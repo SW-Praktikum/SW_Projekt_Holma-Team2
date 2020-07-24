@@ -10,6 +10,13 @@ import React, { Component } from 'react';
 import AppAPI from '../../api/AppAPI';
 import ArticleBO from '../../api/ArticleBO';
 
+/**
+ * Dieser Dialog wird in 'StandardArticles' aufgerufen.
+ * 
+ * Die beim Anlegen angegebenen Attribute können nachträglich angepasst werden.
+ * 
+ */
+
 
 class StandardArticleEditDialog extends Component {
     constructor (props) {

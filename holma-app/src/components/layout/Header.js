@@ -5,6 +5,14 @@ import ShoppingBasket from '@material-ui/icons/ShoppingBasket';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
+/**
+ * Es wird das Logo und der Name der Holma App angezeigt.
+ * 
+ * Der Name und die ID des angemeldeten Benutzers werden dargestellt.
+ * 
+ * Der Header wird durchgehend angezeigt.
+ */
+
 class Header extends React.Component {
   constructor(props) {
     super(props)

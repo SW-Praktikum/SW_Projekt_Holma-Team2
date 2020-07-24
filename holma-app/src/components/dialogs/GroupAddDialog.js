@@ -10,6 +10,11 @@ import AddIcon from '@material-ui/icons/Add';
 import { withStyles } from '@material-ui/styles';
 import React, { Component } from 'react';
 
+/**
+ * Diese Component wird in 'GroupList' aufgerufen.
+ * 
+ * Dadurch kann eine Gruppe angelegt werden.
+ */
 
 
 class GroupAddDialog extends Component {

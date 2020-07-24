@@ -26,9 +26,9 @@ import MemberAddDialog from './dialogs/MemberAddDialog';
 import ListWithBoxes from './ListWithBoxes';
 
 /**
- * When adding more member to a Group and then adding a new group emediateley, deleting meber Elements from state not working properly
+ * Es werden alle Gruppen der Holma App dargestellt.
  * 
- * also rendering on open dialog not working as it sould
+ * Durch das MemberAddDialog können weitere Gruppen hinzugefügt werden und werden als neue Gruppe der Übersicht hinzugefügt.
  */
 
 

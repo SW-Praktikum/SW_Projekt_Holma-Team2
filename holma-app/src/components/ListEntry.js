@@ -19,6 +19,12 @@ import React, { Component } from 'react';
 import AppAPI from '../api/AppAPI';
 import ListEntryEditDialog from './dialogs/ListEntryEditDialog';
 
+/**
+ * Diese Component wird im ListEntryTable.js benötigt und beschreibt die Darstellung eines Listeneintrags.
+ * 
+ * Die ListEntryEditDialog wird hinter dem EditIcon aufgerufen, wodurch der Listeneintrag bearbeitet werden kann.
+ */
+
 
 class ListEntry extends Component {
     constructor(props) {

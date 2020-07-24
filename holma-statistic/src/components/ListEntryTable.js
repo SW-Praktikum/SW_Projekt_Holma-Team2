@@ -25,6 +25,16 @@ import {
 import React, { Component } from 'react';
 import AppAPI from '../api/AppAPI';
 
+/**
+ * Es werden die gesamten Listeneinträge des eingeloggten Users in einer Tabelle dargestellt.
+ * 
+ * Standardmäßig wir nach abgehakten Listenelementen gefiltert.
+ * 
+ * Die enthaltenene Filterfunktion kann durch das Angeben eines Artikels, Einkäufers, Händlers oder einem Zeitraum die gesamten Listeneinträge filtern.
+ * 
+ * Durch die enthaltene Sortierfunktion können die Listeneinträge nach einem ausgewählten Attributs sortiert werden.
+ */
+
 class RetailerEntry extends Component {
     constructor(props) {
         super(props);
