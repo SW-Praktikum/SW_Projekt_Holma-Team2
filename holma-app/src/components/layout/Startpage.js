@@ -1,4 +1,5 @@
 import { Button, Checkbox, colors, TextField } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Radio from '@material-ui/core/Radio';
@@ -16,8 +17,7 @@ import AppAPI from '../../api/AppAPI';
 class ListEntry extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            listEntry: this.props.listEntry,
+        this.state = { 
             userId : this.props.userId,
             checked: this.props.listEntry.getChecked(),
         }
@@ -27,8 +27,9 @@ class ListEntry extends Component {
       this.setState({
           checked: e.target.checked
       })
-      this.state.listEntry.setChecked(e.target.checked)
-      AppAPI.getAPI().updateListEntry(this.state.listEntry)
+      var listEntryChecked = this.props.listEntry
+      listEntryChecked.setChecked(e.target.checked)
+      AppAPI.getAPI().updateListEntry(listEntryChecked)
     }
 
 
@@ -48,9 +49,9 @@ class ListEntry extends Component {
                     </TableCell>
                     <TableCell padding="none" style={{paddingLeft: 0, paddingTop: 0, paddingBottom: 0, paddingRight: 5}} align="right">{listEntry.getAmount()}</TableCell>
                     <TableCell padding="none" align="left">{listEntry.getUnit()}</TableCell>
-                    <TableCell padding="none" align="left">{listEntry.getName()}</TableCell>
-                    <TableCell padding="none" align="left">{listEntry.getRetailerName()}</TableCell> 
-                    <TableCell padding="none" align="left">{listEntry.getShoppingListName()}</TableCell>
+                    <TableCell padding="none" align="left">{listEntry.article.getName()}</TableCell>
+                    <TableCell padding="none" align="left">{listEntry.retailer.getName()}</TableCell> 
+                    <TableCell padding="none" align="left">{listEntry.shoppingList.getName()}</TableCell>
                 </TableRow>
             </React.Fragment>
         );
@@ -64,8 +65,8 @@ class Startpage extends Component {
             listEntryTableElements: [],
             userId : this.props.user.getId(),
             userName: this.props.user.getName(),
-            displayTable: "none",
-            displayEmptyTable: "",
+            displayTable: "",
+            displayEmptyTable: "none",
             retailers: [],
             filterArticleName: "",
             filterListName: "",
@@ -83,10 +84,30 @@ class Startpage extends Component {
         if(this.state.userId){
             this.loadRetailers()
             this.loadListEntries().then(() => {
-                this.filterInput();
-            })
+                this.filterInput()
+                this.displayRelevant()
+                })
           }
+          
     }
+
+
+    displayRelevant = () => {
+        //console.log(this.state.filteredListEntryTableElements.length)
+        if (this.state.filteredListEntryTableElements.length !== 0) {
+            this.setState({
+                displayTable: "",
+                displayEmptyTable: "none"
+            })
+        }
+        else {
+            this.setState({
+                displayTable: "none",
+                displayEmptyTable: ""
+            })
+        }
+    }
+
 
     // dropdown selector for what fo filter
     filterInput = () => {
@@ -96,19 +117,19 @@ class Startpage extends Component {
 
         if (filterArticleName !== "") {
             filteredElements =  filteredElements.filter(function(item) {
-                return item.props.listEntry.articleName.toLocaleLowerCase().includes(filterArticleName.toLocaleLowerCase());
+                return item.props.listEntry.article.getName().toLocaleLowerCase().includes(filterArticleName.toLocaleLowerCase());
             });
         }
 
         if (filterListName !== "") {
             filteredElements =  filteredElements.filter(function(item) {
-                return item.props.listEntry.shoppingListName.toLocaleLowerCase().includes(filterListName.toLocaleLowerCase());
+                return item.props.listEntry.shoppingList.getName().toLocaleLowerCase().includes(filterListName.toLocaleLowerCase());
             });
         }
 
         if (filterRetailerName !== "") {
             filteredElements =  filteredElements.filter(function(item) {
-                return item.props.listEntry.retailerName.toLocaleLowerCase().includes(filterRetailerName.toLocaleLowerCase());
+                return item.props.listEntry.retailer.getName().toLocaleLowerCase().includes(filterRetailerName.toLocaleLowerCase());
             });
         }
 
@@ -141,17 +162,17 @@ class Startpage extends Component {
         if (sortInput === "Händler") {
             //nach Einzelhändler sortieren
             filteredElements = filteredElements.sort((a, b) => 
-                a.props.listEntry.retailerName > b.props.listEntry.retailerName ? 1 : -1)
+                a.props.listEntry.retailer.getName() > b.props.listEntry.retailer.getName() ? 1 : -1)
         }
         else if (sortInput === "Artikel") {
             //nach Artikel sortieren
             filteredElements = filteredElements.sort((a, b) => 
-                a.props.listEntry.articleName > b.props.listEntry.articleName ? 1 : -1)
+                a.props.listEntry.article.getName() > b.props.listEntry.article.getName() ? 1 : -1)
         }
         else if (sortInput === "Liste") {
             //nach Shoppinglist sortieren
             filteredElements = filteredElements.sort((a, b) => 
-                a.props.listEntry.shoppingListName > b.props.listEntry.shoppingListName ? 1 : -1)
+                a.props.listEntry.shoppingList.getName() > b.props.listEntry.shoppingList.getName() ? 1 : -1)
         }
         this.setState({
             filteredListEntryTableElements: filteredElements
@@ -159,35 +180,20 @@ class Startpage extends Component {
     }
 
 
-    loadListEntries = () => {
+    loadListEntries = async () => {
         // get listentries by user ID
-        return AppAPI.getAPI().getListEntriesByUserId(this.state.userId, false).then(listEntries => {
-            if (listEntries.length !== 0) {
-                this.setState({
-                    displayTable: "",
-                    displayEmptyTable: "none"
-                })
-            }
-            else {
-                this.setState({
-                    displayTable: "none",
-                    displayEmptyTable: ""
-                })
-            }
-            var listEntryTableElements = listEntries.map((listEntry) => <ListEntry listEntry={listEntry} loadListEntries={this.loadListEntries} />)
-            this.setState({
-                listEntryTableElements: listEntryTableElements,
-                filteredListEntryTableElements: listEntryTableElements,
-                loadingInProgress: true, // loading indicator 
-                loadingError: null
-                })
-            return new Promise(function (resolve) {resolve(listEntries)})
-            }).catch(e =>
-                this.setState({ // Reset state with error from catch 
-                loadingInProgress: false,
-                loadingError: e
-            })
-        );  
+        const listEntries = await AppAPI.getAPI().getListEntriesByUserId(this.state.userId, false)
+        for (const listEntry of listEntries) {
+            await AppAPI.getAPI().completeListEntry(listEntry)
+        }
+
+        var listEntryTableElements = listEntries.map((listEntry) => <ListEntry listEntry={listEntry} loadListEntries={this.loadListEntries} />)
+        this.setState({
+            listEntryTableElements: listEntryTableElements,
+            filteredListEntryTableElements: listEntryTableElements,
+            loadingInProgress: true, // loading indicator 
+            loadingError: null
+        })
     }
 
     loadRetailers = () => {
@@ -293,7 +299,7 @@ class Startpage extends Component {
                             defaultValue="filtern"
                             getOptionLabel={(option) => option.name}
                             renderInput={(params) => (
-                                <TextField {...params} variant="outlined" label="Sortieren" placeholder="Sortieren" />
+                                <TextField {...params} margin="dense" variant="outlined" label="Sortieren" placeholder="Sortieren" />
                             )}                
                         />
                     </Grid>
@@ -307,14 +313,12 @@ class Startpage extends Component {
                     component={Paper} 
                     style={{display: this.state.displayEmptyTable, minWidth: '100%', marginBottom:15, marginTop:15, }}
                     >
-                    <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
+                    <Grid item xs={12} sm={12} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
                         <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>
                             Hallo {userName},
                         </Typography>
-                        <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>Du hast noch keine Listeneinträge die dir zugeordnet sind.</Typography>
+                        <Typography align="left" className="title" style={{fontSize: 16, fontWeight: "bold", color: colors.teal[600]}}>Du hast aktuell keine Listeneinträge zu erledigen.</Typography>
                     </Grid>
-                    <Grid item xs={12} sm={4}/>
-                    <Grid item xs={12} sm={4}/>
                 </Grid>
                 
                 <Grid container direction="row" justify="space-between" alignItems="center" component={Paper} style={{marginTop: 15, display: this.state.filterOpen}}>
@@ -410,11 +414,12 @@ class Startpage extends Component {
                                     align="left"><b style={{ color: '#ffffff'}}>Liste</b></TableCell>
                             </TableRow>
                         </TableHead>
-                        <TableBody>
+                        <TableBody >
                             {filteredListEntryTableElements}
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <Box m={10} />
             </React.Fragment>
         )
     }

@@ -1,4 +1,5 @@
 import { colors } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
 import Avatar from '@material-ui/core/Avatar';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -60,7 +61,7 @@ class GroupEntry extends Component {
         const path = "/grouplist/" + this.props.group.getId() + "/" + this.props.user.getId()
         return (
         <Link to={path} style={{textDecoration: 'none'}}>
-          <Card className="root" style={{/* minHeight: 250 ,  */minWidth: '100%', marginBottom:10, marginTop:10, backgroundColor: colors.teal[600]}}>
+          <Card className="root" style={{minWidth: '100%', backgroundColor: colors.teal[600]}}>
             <CardActionArea>
             <CardMedia className="media" style={{height: 10, paddingTop: '56.25%',}} image={randomImages[Math.floor(Math.random() * randomImages.length)]} title="Groupname"/>
             <CardContent>
@@ -95,7 +96,6 @@ class GroupEntries extends Component{
     }
 
     nextPath(path) {
-      console.log(path)
       this.props.history.push(path);
     }
 
@@ -161,7 +161,6 @@ class GroupEntries extends Component{
       this.handleClose();
       this.handleClickOpenMember();//open new dialog
     }
-
     addMember = async () => {
       // es muss gecheckt werden bei input ob der user existiert und ob er schon in der Gruppe ist,
       // checken ob user id vorhanden und ob user schon in group
@@ -171,11 +170,14 @@ class GroupEntries extends Component{
       })
     }
     
-    handleChangeMember = (e) => {
-      this.setState({memberId: e.target.value}, () => {
+    handleChangeMember = async(e) => {
+      const re = /^[0-9\b]+$/;
+      if (e.target.value === '' || re.test(e.target.value)) {
+        await this.setState({memberId: e.target.value}, () => {
         this.loadMembers()
       })
-    }
+    }}
+
 
     deleteUser = (userId) => {
       AppAPI.getAPI().deleteUsersFromGroup(this.state.groupId, userId).then(() => {
@@ -254,8 +256,9 @@ class GroupEntries extends Component{
         const {groupElements, memberElements, groupName,buttonDisabled, minLength} = this.state;
 
         return (
-          <div>
+          <div style={{marginTop: 15}}>
             <ListWithBoxes groupElements={groupElements}/>
+            <Box m={10} />
             <GroupAddDialog 
             addGroup={this.addGroup} 
             open={this.state.open}

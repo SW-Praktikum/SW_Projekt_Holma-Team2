@@ -31,7 +31,7 @@ class ShoppingListLink extends Component{
     render(){
         return(
             <Button align="center" variant="contained" fullWidth  color="primary" >
-                Shoppinglistdetails
+                Details
             </Button>
         )
     }
@@ -106,8 +106,8 @@ class ListEntryTable extends Component {
     loadShoppingListName = () => {
         AppAPI.getAPI().getShoppingListById(this.props.match.params.shoppingListId).then((shoppingList) => {
             this.setState({
-                shoppingListName: shoppingList[0].name,
-                lastUpdated: shoppingList[0].lastUpdated,
+                shoppingListName: shoppingList.name,
+                lastUpdated: shoppingList.lastUpdated,
             })
         })
     }
@@ -152,19 +152,19 @@ class ListEntryTable extends Component {
 
         if (filterArticleName !== "") {
             filteredElements =  filteredElements.filter(function(item) {
-                return item.props.listEntry.articleName.toLocaleLowerCase().includes(filterArticleName.toLocaleLowerCase());
+                return item.props.listEntry.article.getName().toLocaleLowerCase().includes(filterArticleName.toLocaleLowerCase());
             });
         }
 
         if (filterRetailerName !== "") {
             filteredElements =  filteredElements.filter(function(item) {
-                return item.props.listEntry.retailerName.toLocaleLowerCase().includes(filterRetailerName.toLocaleLowerCase());
+                return item.props.listEntry.retailer.getName().toLocaleLowerCase().includes(filterRetailerName.toLocaleLowerCase());
             });
         }
 
         if (filterPurchasingUserName !== "") {
             filteredElements =  filteredElements.filter(function(item) {
-                return item.props.listEntry.purchasingUserName.toLocaleLowerCase().includes(filterPurchasingUserName.toLocaleLowerCase());
+                return item.props.listEntry.purchasingUser.getName().toLocaleLowerCase().includes(filterPurchasingUserName.toLocaleLowerCase());
             });
         }
 
@@ -210,22 +210,22 @@ class ListEntryTable extends Component {
         if (sortInput === "Händler") {
             //nach Einzelhändler sortieren
             filteredElements = filteredElements.sort((a, b) => 
-                a.props.listEntry.retailerName > b.props.listEntry.retailerName ? 1 : -1)
+                a.props.listEntry.retailer.getName() > b.props.listEntry.retailer.getName() ? 1 : -1)
         }
         else if (sortInput === "Artikel") {
             //nach Artikel sortieren
             filteredElements = filteredElements.sort((a, b) => 
-                a.props.listEntry.articleName > b.props.listEntry.articleName ? 1 : -1)
+                a.props.listEntry.article.getName() > b.props.listEntry.article.getName() ? 1 : -1)
         }
         else if (sortInput === "Liste") {
             //nach Shoppinglist sortieren
             filteredElements = filteredElements.sort((a, b) => 
-                a.props.listEntry.shoppingListName > b.props.listEntry.shoppingListName ? 1 : -1)
+                a.props.listEntry.shoppingList.getName() > b.props.listEntry.shoppingList.getName() ? 1 : -1)
         }
         else if (sortInput === "Einkäufer") {
             //nach Einkäufer sortieren
             filteredElements = filteredElements.sort((a, b) => 
-                a.props.listEntry.purchasingUserName > b.props.listEntry.purchasingUserName ? 1 : -1)
+                a.props.listEntry.purchasingUser.getName() > b.props.listEntry.purchasingUser.getName() ? 1 : -1)
         }
         else if (sortInput === "Kaufdatum") {
             //nach Kaufdatum sortieren           
@@ -242,33 +242,31 @@ class ListEntryTable extends Component {
         })
     }
   
-    loadListEntries = () => {
-        AppAPI.getAPI().getListEntriesByShoppingListId(this.state.shoppingListId).then(listEntries => {
-            var listEntryTableElements = listEntries.map((listEntry) => 
-                <ListEntry 
-                    listEntry={listEntry} 
-                    loadListEntries={this.loadListEntries} 
-                    retailers={this.state.retailers}
-                    users={this.state.users}
-                    articles={this.state.articles}
-                    loadArticles={this.loadArticles}
-                    groupId={this.state.groupId}
-                />
-            )
+    loadListEntries = async () => {
+        // get listentries by user ID
+        const listEntries = await AppAPI.getAPI().getListEntriesByShoppingListId(this.state.shoppingListId)
+        for (const listEntry of listEntries) {
+            await AppAPI.getAPI().completeListEntry(listEntry)
+        }
 
-            this.setState({
-                listEntryTableElements: listEntryTableElements,
-                filteredListEntryTableElements: listEntryTableElements,
-                loadingInProgress: true, // loading indicator 
-                loadingError: null,
-            })
-            return new Promise(function (resolve) { resolve(1) })
-            }).catch(e =>
-                this.setState({ // Reset state with error from catch 
-                loadingInProgress: false,
-                loadingError: e
-            })
-        );  
+        var listEntryTableElements = listEntries.map((listEntry) => 
+            <ListEntry 
+                listEntry={listEntry} 
+                loadListEntries={this.loadListEntries} 
+                retailers={this.state.retailers}
+                users={this.state.users}
+                articles={this.state.articles}
+                loadArticles={this.loadArticles}
+                groupId={this.state.groupId}
+            />
+        )
+
+        this.setState({
+            listEntryTableElements: listEntryTableElements,
+            filteredListEntryTableElements: listEntryTableElements,
+            loadingInProgress: true, // loading indicator 
+            loadingError: null,
+        })
     }
 
     handleInputChangeDate = async (key, date) => {
@@ -374,7 +372,8 @@ class ListEntryTable extends Component {
                             <Typography className="title" style={{fontSize: 16, color: colors.teal[600]}}><b>Shoppingliste: </b>{this.state.shoppingListName}</Typography>
                             <Typography className="title" style={{fontSize: 16, color: colors.teal[600]}}><b>Id: </b>{this.props.match.params.shoppingListId}</Typography>
                         </Grid>
-                        <Grid item xs={12} sm={6} align="right">
+                        <Grid item xs={0} sm={2} ></Grid>
+                        <Grid item xs={12} sm={4} align="left">
                             <Typography className="title" style={{fontSize: 16, color: colors.teal[600]}}><b>Letzte Änderung: </b>{listLastUpdated}</Typography>
                         </Grid>
                     </Grid>
@@ -401,7 +400,7 @@ class ListEntryTable extends Component {
                                 defaultValue="filtern"
                                 getOptionLabel={(option) => option.name}
                                 renderInput={(params) => (
-                                    <TextField {...params} variant="outlined" label="Sortieren" placeholder="Sortieren" />
+                                    <TextField {...params} margin="dense" variant="outlined" label="Sortieren" placeholder="Sortieren" />
                                 )} />
                         </Grid>
                     </Grid>
@@ -512,7 +511,7 @@ class ListEntryTable extends Component {
                                 variant="inline"
                                 format="dd/MM/yyyy"
                                 margin="normal"
-                                id="date-picker-start"
+                                id="date-picker-end"
                                 label="letzte Änderung Ende"
                                 value={filterEndDate}
                                 onChange={(date) => this.handleInputChangeDate("filterEndDate", date)}
@@ -547,6 +546,7 @@ class ListEntryTable extends Component {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <Box m={10} />
                 <ListEntryAddDialog
                     loadListEntries={this.loadListEntries} 
                     retailers={this.state.retailers}

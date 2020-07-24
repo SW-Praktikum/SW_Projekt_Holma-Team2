@@ -362,8 +362,7 @@ class ListEntryMapper(Mapper):
         return result
 
     def insert_standardarticle(self, list_entry, group):
-        """Einfügen eines Listeneintrag-Objekts in die Verbindungstabelle
-
+        """Verknüpfung eines Listeneintrag-Objekts mit einer Gruppe.
         :param list_entry:
         :param group:
         """
@@ -378,8 +377,7 @@ class ListEntryMapper(Mapper):
         cursor.close()
 
     def delete_standardarticle(self, list_entry, group):
-        """Löschen der Daten eines Listeneintrag-Objekts aus der Datenbank anhand der
-        des hinterlegten Artikels
+        """Löschen der Verbindung zwischen Listeneintrag und Gruppe.
         :param list_entry:
         :param group:
         """
@@ -394,8 +392,7 @@ class ListEntryMapper(Mapper):
         cursor.close()
 
     def delete_standardarticle_by_group(self, group):
-        """Löschen der Daten eines Listeneintrag-Objekts aus der Datenbank anhand der
-        des hinterlegten group
+        """Löschen der Verknüpfung anhand der Gruppe.
         :param group:
         """
         cursor = self._connection.cursor()
@@ -407,8 +404,7 @@ class ListEntryMapper(Mapper):
         cursor.close()
 
     def delete_standardarticle_by_list_entry(self, list_entry):
-        """Löschen der Daten eines Listeneintrag-Objekts aus der Datenbank anhand der
-        des hinterlegten Lisgt
+        """Löschen der Verknüpfung anhand des Listeneintrags.
         :param list_entry:
         """
         cursor = self._connection.cursor()

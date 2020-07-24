@@ -72,11 +72,10 @@ class UserGroupRelationsMapper(Mapper):
         return result
 
     def add_user_to_group(self, group, user):
-        """Einfügen eines Gr-Objekts
-
+        """Einfügen eines Users in eine Gruppe. Dazu azugeben den
+        User und die jeweilige Gruppe
         :param group:
         :param user:
-        :return
         """
         cursor = self._connection.cursor()
         command = "INSERT INTO holma.user_group_relations (group_id, " \
@@ -89,6 +88,11 @@ class UserGroupRelationsMapper(Mapper):
         cursor.close()
 
     def remove_user_from_group(self, group, user):
+        """Löschen eines Users aus einer Gruppe. Dazu azugeben den zu löschenden
+        User und die jeweilige Gruppe
+        :param group:
+        :param user:
+        """
         cursor = self._connection.cursor()
         command = "DELETE FROM holma.user_group_relations " \
                   "WHERE group_id={} and user_id={}".format(group.get_id(),
@@ -99,10 +103,9 @@ class UserGroupRelationsMapper(Mapper):
         cursor.close()
 
     def delete_user_relations(self, user):
-        """
-
+        """Löschen der Verbindung aus der Datenbank anhand der
+        user_id
         :param user:
-        :return:
         """
         cursor = self._connection.cursor()
         command = "DELETE FROM holma.user_group_relations " \
@@ -114,7 +117,9 @@ class UserGroupRelationsMapper(Mapper):
 
     def delete_group_relations(self, group):
         """Löschen der Verbindung aus der Datenbank anhand der
-        group_id"""
+        group_id
+        :param group:
+        """
         cursor = self._connection.cursor()
         command = "DELETE FROM holma.user_group_relations " \
                   "WHERE group_id={}".format(group.get_id())

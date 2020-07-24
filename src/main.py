@@ -1,24 +1,24 @@
-# Unser Service basiert auf Flask
+# Unser Service basiert auf Flask.
 from flask import Flask
-# Wir benutzen noch eine Flask-Erweiterung für Cross-Origin Resource Sharing
+# Wir benutzen noch eine Flask-Erweiterung für Cross-Origin Resource Sharing.
 from flask_cors import CORS
-# Wir nutzen RestX das auf Flask aufbaut
+# Wir nutzen RestX, das auf Flask aufbaut.
 from flask_restx import Api, Resource, fields
 
+# Wir greifen auf unsere BusinessObjects und Applikationslogik zu.
+from ListAdministration import Administration, StatisticAdministration
+from SecurityDecorator import secured
 from bo.Article import Article
 from bo.Group import Group
 from bo.ListEntry import ListEntry
-from bo.Retailer import Retailer
 from bo.ShoppingList import ShoppingList
 from bo.User import User
-# Wir greifen auf unsere BusinessObjects und Applikationslogik
-from ListAdministration import Administration, StatisticAdministration
 
 """Hier wird Flask instanziert"""
 app = Flask(__name__)
 
 """Flask-Erweiterung für Cross-Origin Resource Sharing"""
-CORS(app, resources=r'/app/*')
+CORS(app, resources=r'/app/*', supports_credentials=True)
 
 api = Api(app, version='1.0', title='HOLMA API',
           description='Eine rudimentäre Demo-API für Listenerstellung.')
@@ -26,7 +26,7 @@ api = Api(app, version='1.0', title='HOLMA API',
 """Namespaces"""
 holmaApp = api.namespace('app', description="Funktionen der App")
 
-"""Hier wird definiert wie die Businessobjects beim Marshelling definiert 
+"""Hier wird definiert, wie die Businessobjects beim Marshelling definiert 
 werden sollen in der JSON"""
 bo = api.model('BusinessObject', {
     'name': fields.String(attribute='_name', description='Name eines Objekts'),
@@ -34,13 +34,13 @@ bo = api.model('BusinessObject', {
                          description='Der Unique Identifier '
                                      'eines Business Object'),
     'creationDate': fields.DateTime(attribute='_creation_date',
-                                description='Erstellungsdatum des BOs, wird '
-                                            'durch Unix Time Stamp ermittlet',
+                                    description='Erstellungsdatum des BOs, wird '
+                                                'durch Unix Time Stamp ermittlet',
                                     dt_format="iso8601"),
     'lastUpdated': fields.DateTime(attribute='_last_updated',
                                    description='Änderungsdatum des BOs, wird durch'
-                                           'Unix Time Stamp ermittlet',
-                                    dt_format="iso8601")
+                                               'Unix Time Stamp ermittlet',
+                                   dt_format="iso8601")
 })
 
 user = api.inherit('User', bo, {
@@ -58,46 +58,36 @@ group = api.inherit('Group', bo, {
 shopping_list = api.inherit('ShoppingList', bo, {
 
     'groupId': fields.Integer(attribute='_group',
-                              description='ID der Gruppe zu der diese Liste gehört'),
-    'groupName': fields.String(attribute='_group_name',
-                               description='Name der Gruppe zu der diese Liste gehört'),
+                              description='ID der Gruppe, zu der diese Liste gehört.'),
     'archived': fields.Boolean(attribute='_archived',
-                                      description='Status der Shoppinglist')
+                               description='Status der Shoppinglist')
 })
 
 list_entry = api.inherit('ListEntry', bo, {
     'articleId': fields.Integer(attribute='_article',
-                                 description='zu welchem Artikel gehört dieses Entry? '),
-    'articleName': fields.String(attribute='_article_name',
-                                 description='zu welchem Artikel gehört dieses Entry? '),
+                                description='Zu welchem Artikel gehört dieser Listeneintrag? '),
     'amount': fields.Float(attribute='_amount',
-                           description='Menge des Entries '),
+                           description='Menge des Listeneintrags '),
     'unit': fields.String(attribute='_unit',
-                          description='Einheit des Entries '),
+                          description='Einheit des Listeneintrags '),
     'purchasingUserId': fields.Integer(attribute='_purchasing_user',
-                                    description='Wer den Artikel kaufen muss '),
-    'purchasingUserName': fields.String(attribute='_purchasing_user_name',
-                                    description='Wer den Artikel kaufen muss '),
+                                       description='Wer den Artikel kaufen muss. '),
     'shoppingListId': fields.Integer(attribute='_shopping_list',
-                                   description='zu welcher Liste diese Entry gehört?'),
-    'shoppingListName': fields.String(attribute='_shopping_list_name',
-                                   description='zu welcher Liste diese Entry gehört?'),
+                                     description='Zu welcher Liste dieser Listeneintrag gehört.'),
     'retailerId': fields.Integer(attribute='_retailer',
-                              description='Bei wem das Artikle gekauft  '),
-    'retailerName': fields.String(attribute='_retailer_name',
-                              description='Bei wem das Artikle gekauft  '),
+                                 description='Bei wem wurde der Artikel gekauft.  '),
     'checked': fields.Boolean(attribute='_checked',
-                              description='wurde es bereits gekauft'),
+                              description='Wurde es bereits gekauft?'),
     'checkedTs': fields.DateTime(attribute='_checked_ts',
-                                 description='wann wurde es gekauft',
+                                 description='Wann wurde es gekauft?',
                                  dt_format="iso8601"),
     'standardarticle': fields.Boolean(attribute='_standardarticle',
-                                      description='ist es ein Standardartikle')
+                                      description='Ist es ein Standardartikel? ')
 })
 
 article = api.inherit('Article', bo, {
     'groupId': fields.Integer(attribute='_group',
-                               description='zu welcher Groupe dieses Artikle gehört?'),
+                              description='Zu welcher Gruppe dieser Artikel gehört.'),
     'count': fields.Integer(attribute='_count',
                             description='Vorkommen in Listeneinträgen')
 
@@ -113,7 +103,7 @@ retailer = api.inherit('Retailer', bo, {
 @holmaApp.response(500, 'Falls es zu einem Server -seitigen Fehler kommt')
 class UserListOperations(Resource):
     @holmaApp.marshal_list_with(user)
-    #@ secured
+    @secured
     def get(self):
         """Auslesen aller User-Objekte.
 
@@ -149,7 +139,7 @@ class UserListOperations(Resource):
 @holmaApp.param('user_id', 'Die ID des User-Objekts')
 class UserOperations(Resource):
     @holmaApp.marshal_with(user)
-    # @ secured
+    @secured
     def get(self, user_id):
         """Auslesen eines bestimmten User-Objekts.
 
@@ -159,7 +149,7 @@ class UserOperations(Resource):
         usr = adm.get_user_by_id(user_id)
         return usr
 
-    # @ secured
+    @secured
     def delete(self, user_id):
         """Löschen eines bestimmten User-Objekts.
 
@@ -175,7 +165,7 @@ class UserOperations(Resource):
 
     @holmaApp.marshal_with(user)
     @holmaApp.expect(user, validate=True)
-    # @ secured
+    @secured
     def put(self, user_id):
         """Update eines bestimmten User-Objekts."""
         adm = Administration()
@@ -210,7 +200,7 @@ class UserByGoogleIdOperation(Resource):
 @holmaApp.param('name', 'Der Name des Users')
 class UserByNameOperations(Resource):
     @holmaApp.marshal_with(user)
-    # @ secured
+    @secured
     def get(self, name):
         """ Auslesen von User-Objekten, die durch den Namen bestimmt werden.
 
@@ -223,13 +213,13 @@ class UserByNameOperations(Resource):
 
 @holmaApp.route('/user/<int:user_id>/retailers/most-frequent')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@holmaApp.param('user_id', 'Die ID des Group-Objekts')
+@holmaApp.param('user_id', 'Die ID des Gruppen-Objekts')
 class UserRelatedRetailerFrequencyOperations(Resource):
     @holmaApp.marshal_list_with(retailer)
-    # @ secured
+    @secured
     def get(self, user_id):
         """ Auslesen von Retailer-Objekten von einen bestimmten User,
-        die am öftesten benutzten wurden
+        die am meisten benutzten wurden.
         """
         adm = StatisticAdministration()
         us = adm.get_user_by_id(user_id)
@@ -242,14 +232,14 @@ class UserRelatedRetailerFrequencyOperations(Resource):
 
 @holmaApp.route('/group/<int:group_id>/users')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@holmaApp.param('group_id', 'Die ID des Group-Objekts')
+@holmaApp.param('group_id', 'Die ID des Gruppen-Objekts')
 class GroupRelatedUserOperations(Resource):
     @holmaApp.marshal_with(user)
-    # @ secured
+    @secured
     def get(self, group_id):
         """Auslesen aller User-Objekte einer bestimmten Groupe.
 
-                        Sollten keine Group-Objekte verfügbar sein,
+                        Sollten keine Gruppen-Objekte verfügbar sein,
                         so wird eine leere Sequenz zurückgegeben."""
         # objekt nicht benötigt, nur group ID
         adm = Administration()
@@ -266,11 +256,11 @@ class GroupRelatedUserOperations(Resource):
 @holmaApp.response(500, 'Falls es zu einem Server-seitigem Fehler kommt.')
 class GroupListOperations(Resource):
     @holmaApp.marshal_list_with(group)
-    # @ secured
+    @secured
     def get(self):
-        """Auslesen aller Group-Objekte.
+        """Auslesen aller Gruppen-Objekte.
 
-    Sollten keine Group-Objekte verfügbar sein, so wird eine
+    Sollten keine Gruppen-Objekte verfügbar sein, so wird eine
     leere Sequenz zurückgegeben."""
         adm = Administration()
         group_list = adm.get_all_groups()
@@ -279,12 +269,12 @@ class GroupListOperations(Resource):
 
 @holmaApp.route('/group/<int:group_id>')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@holmaApp.param('group_id', 'Die ID des Group-Objekts')
+@holmaApp.param('group_id', 'Die ID des Gruppen-Objekts')
 class GroupOperations(Resource):
     @holmaApp.marshal_with(group)
-    # @ secured
+    @secured
     def get(self, group_id):
-        """Auslesen eines bestimmten Group-Objekts.
+        """Auslesen eines bestimmten Gruppen-Objekts.
 
     Das auszulesende Objekt wird durch die group_id in dem URI bestimmt.
                """
@@ -292,9 +282,9 @@ class GroupOperations(Resource):
         grp = adm.get_group_by_id(group_id)
         return grp
 
-    # @ secured
+    @secured
     def delete(self, group_id):
-        """Löschen eines bestimmten Group-Objekts.
+        """Löschen eines bestimmten Gruppen-Objekts.
 
            Das auszulesende Objekt wird durch die group_id in dem URI bestimmt.
                """
@@ -307,10 +297,10 @@ class GroupOperations(Resource):
             return '', 500
 
     @holmaApp.marshal_with(group)
-    @holmaApp.expect(group)#, validate=True)
-    # @ secured
+    @holmaApp.expect(group)  # , validate=True)
+    @secured
     def put(self, group_id):
-        """Update eines bestimmten Group-Objekts."""
+        """Update eines bestimmten Gruppen-Objekts."""
         adm = Administration()
         grp = Group.from_dict(api.payload)
 
@@ -324,12 +314,12 @@ class GroupOperations(Resource):
 
 @holmaApp.route('/group/<int:group_id>/articles/most-frequent')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@holmaApp.param('group_id', 'Die ID des Group-Objekts')
+@holmaApp.param('group_id', 'Die ID des Gruppen-Objekts')
 class GroupRelatedArticleFrequencyOperations(Resource):
     @holmaApp.marshal_list_with(article)
-    # @ secured
+    @secured
     def get(self, group_id):
-        """Auslesen von Article-Objekten, die am meisten
+        """Auslesen von Artikel-Objekten, die am meisten
         von einer Gruppe benutzt wurden."""
 
         adm = StatisticAdministration()
@@ -346,9 +336,9 @@ class GroupRelatedArticleFrequencyOperations(Resource):
 @holmaApp.param('name', 'Der Name der Gruppe')
 class GroupsByNameOperations(Resource):
     @holmaApp.marshal_with(group)
-    # @ secured
+    @secured
     def get(self, name):
-        """ Auslesen von Group-Objekten, die durch den Namen bestimmt werden
+        """ Auslesen von Gruppen-Objekten, die durch den Namen bestimmt werden.
 
      Die auszulesenden Objekte werden durch name in dem URI bestimmt.
                 """
@@ -362,9 +352,9 @@ class GroupsByNameOperations(Resource):
 @holmaApp.param('user_id', 'Die ID des User-Objekts')
 class UserRelatedGroupOperations(Resource):
     @holmaApp.marshal_with(group)
-    # @ secured
+    @secured
     def get(self, user_id):
-        """Auslesen aller Group-Objekten eines bestimmten Users
+        """Auslesen aller Gruppen-Objekte eines bestimmten Users.
                       """
         adm = Administration()
         us = adm.get_user_by_id(user_id)
@@ -377,16 +367,15 @@ class UserRelatedGroupOperations(Resource):
 
     @holmaApp.marshal_with(group, code=201)
     @holmaApp.expect(group)
-    # @ secured
+    @secured
     def post(self, user_id):
         """ Wir verwenden Namen und user_id des Proposals für
-                die Erzeugung eines Group-Objekts. Das serverseitig erzeugte
+                die Erzeugung eines Gruppen-Objekts. Das serverseitig erzeugte
                      Objekt ist das maßgebliche und
-                    wird auch dem Client zurückgegeben. """
+                wird auch dem Client zurückgegeben. """
         adm = Administration()
         us = adm.get_user_by_id(user_id)
         proposal = Group.from_dict(api.payload)
-
         if us is not None and proposal is not None:
             result = adm.create_group(proposal.get_name(), user_id)
             return result
@@ -396,13 +385,13 @@ class UserRelatedGroupOperations(Resource):
 
 @holmaApp.route('/group/<int:group_id>/user/<int:user_id>')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@holmaApp.param('group_id', 'Die ID des Group-Objekts')
+@holmaApp.param('group_id', 'Die ID des Gruppen-Objekts')
 @holmaApp.param('user_id', 'Die ID des User-Objekts')
 class GroupUserRelationOperations(Resource):
     @holmaApp.marshal_with(group)
-    # @ secured
+    @secured
     def post(self, group_id, user_id):
-        """Füge ein bestimmten User Objekt einer bestimmten Groupe hinzu"""
+        """Füge ein bestimmtes User Objekt einer bestimmten Gruppe hinzu."""
         adm = Administration()
         grp = adm.get_group_by_id(group_id)
         us = adm.get_user_by_id(user_id)
@@ -413,9 +402,9 @@ class GroupUserRelationOperations(Resource):
         else:
             return "Group or User not found", 500
 
-    # @ secured
+    @secured
     def delete(self, group_id, user_id):
-        """Lösch ein bestimmten User Objekt von einer bestimmten Groupe"""
+        """Lösche ein bestimmtes User Objekt von einer bestimmten Gruppe."""
         adm = Administration()
         grp = adm.get_group_by_id(group_id)
         us = adm.get_user_by_id(user_id)
@@ -432,13 +421,13 @@ class GroupUserRelationOperations(Resource):
 @holmaApp.route('/articles')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigem Fehler kommt.')
 class ArticleListOperations(Resource):
-
+    @secured
     @holmaApp.marshal_list_with(article)
     # @ secured
     def get(self):
-        """Auslesen aller article-Objekte.
+        """Auslesen aller Artikel-Objekte.
 
-                        Sollten kein Article-Objekt verfügbar sein,
+                        Sollte kein Artikel-Objekt verfügbar sein,
                         so wird eine leere Sequenz zurückgegeben."""
         adm = StatisticAdministration()
         art_list = adm.get_all_articles()
@@ -447,12 +436,12 @@ class ArticleListOperations(Resource):
 
 @holmaApp.route('/article/<int:article_id>')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@holmaApp.param('article_id', 'Die ID des article-Objekts')
+@holmaApp.param('article_id', 'Die ID des Artikel-Objekts')
 class ArticleOperations(Resource):
     @holmaApp.marshal_list_with(article)
-    # @ secured
+    @secured
     def get(self, article_id):
-        """Auslesen eines bestimmten Article-Objekts.
+        """Auslesen eines bestimmten Artikel-Objekts.
 
         Das auszulesende Objekt wird durch die article_id in dem URI bestimmt.
                         """
@@ -460,9 +449,9 @@ class ArticleOperations(Resource):
         art = adm.get_article_by_id(article_id)
         return art
 
-    # @ secured
+    @secured
     def delete(self, article_id):
-        """Löschen eines bestimmten Article-Objekts.
+        """Löschen eines bestimmten Artikel-Objekts.
 
         Das zu löschende Objekt wird durch die article_id in dem URI bestimmt.
                       """
@@ -471,10 +460,10 @@ class ArticleOperations(Resource):
         return 'deleted', 200
 
     @holmaApp.marshal_with(article)
-    @holmaApp.expect(article) #validate=True)
-    # @ secured
+    @holmaApp.expect(article)  # validate=True)
+    @secured
     def put(self, article_id):
-        """Update eines bestimmten article-Objekts."""
+        """Update eines bestimmten Artikel-Objekts."""
         adm = Administration()
         art = Article.from_dict(api.payload)
 
@@ -488,12 +477,12 @@ class ArticleOperations(Resource):
 
 @holmaApp.route('/articles/by-name/<string:name>')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@holmaApp.param('name', 'Der Name des Articles')
+@holmaApp.param('name', 'Der Name des Artikel')
 class ArticlesByNameOperations(Resource):
     @holmaApp.marshal_list_with(article)
-    # @ secured
+    @secured
     def get(self, name):
-        """ Auslesen von Article-Objekten, die durch den Namen bestimmt werden.
+        """ Auslesen von Artikel-Objekten, die durch den Namen bestimmt werden.
 
            Die auszulesenden Objekte werden durch name in dem URI bestimmt.
                       """
@@ -507,11 +496,11 @@ class ArticlesByNameOperations(Resource):
 @holmaApp.param('group_id', 'Die ID des person-Objekts')
 class GroupRelatedArticleOperations(Resource):
     @holmaApp.marshal_with(article)
-    # @ secured
+    @secured
     def get(self, group_id):
-        """Auslesen aller Article-Objekte einer bestimmten Gruppe.
+        """Auslesen aller Artikel-Objekte einer bestimmten Gruppe.
 
-           Sollten keine Article-Objekte verfügbar sein, so wird eine
+           Sollten keine Artikel-Objekte verfügbar sein, so wird eine
            leere Sequenz zurückgegeben."""
         adm = Administration()
         grp = adm.get_group_by_id(group_id)
@@ -525,9 +514,9 @@ class GroupRelatedArticleOperations(Resource):
 
     @holmaApp.marshal_with(article, code=201)
     @holmaApp.expect(article)
-    # @ secured
+    @secured
     def post(self, group_id):
-        """Anlegen eines neuen Article-Objekts."""
+        """Anlegen eines neuen Artikel-Objekts."""
         adm = Administration()
         art = adm.get_group_by_id(group_id)
 
@@ -542,13 +531,13 @@ class GroupRelatedArticleOperations(Resource):
 
 @holmaApp.route('/group/<int:group_id>/shoppinglists')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@holmaApp.param('group_id', 'Die ID des group-Objekts')
+@holmaApp.param('group_id', 'Die ID des Gruppen-Objekts')
 class GroupRelatedShoppingListOperations(Resource):
     @holmaApp.marshal_list_with(shopping_list)
-    # @ secured
+    @secured
     def get(self, group_id):
-        """Auslesen eines neuen Shoppinglist-Objekts die zu einer bestimmten
-        Groupe gehören."""
+        """Auslesen eines neuen Shoppinglisten-Objekts, das zu einer bestimmten
+        Grruppe gehört."""
         adm = Administration()
         sl = adm.get_group_by_id(group_id)
         if sl is not None:
@@ -559,10 +548,10 @@ class GroupRelatedShoppingListOperations(Resource):
 
     @holmaApp.marshal_with(shopping_list, code=201)
     @holmaApp.expect(shopping_list)
-    # @ secured
+    @secured
     def post(self, group_id):
-        """Anlegen eines neuen Shoppinglist-Objekts, der zu einer bestimmten
-        Groupe gehören wird."""
+        """Anlegen eines neuen Shoppinglisten-Objekts, das zu einer bestimmten
+        Gruppe gehören wird."""
         adm = Administration()
         sl = adm.get_group_by_id(group_id)
         proposal = ShoppingList.from_dict(api.payload)
@@ -576,19 +565,19 @@ class GroupRelatedShoppingListOperations(Resource):
 
 @holmaApp.route('/shoppinglist/<int:shopping_list_id>')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@holmaApp.param('shopping_list_id', 'Die ID des Shopping-List-Objekts')
+@holmaApp.param('shopping_list_id', 'Die ID des Shoppinglisten-Objekts')
 class ShoppingListOperations(Resource):
     @holmaApp.marshal_with(shopping_list)
-    # @ secured
+    @secured
     def get(self, shopping_list_id):
-        """Auslesen einer bestimmten Shoppinglist."""
+        """Auslesen einer bestimmten Shoppingliste."""
         adm = Administration()
         sl = adm.get_shopping_list_by_id(shopping_list_id)
         return sl
 
-    # @ secured
+    @secured
     def delete(self, shopping_list_id):
-        """Löschen einer bestimmten Shoppinglist.
+        """Löschen einer bestimmten Shoppingliste.
 
             Das zu löschende Objekt wird durch die user_id in dem URI bestimmt.
                        """
@@ -602,9 +591,9 @@ class ShoppingListOperations(Resource):
 
     @holmaApp.marshal_with(shopping_list)
     @holmaApp.expect(shopping_list, validate=True)
-    # @ secured
+    @secured
     def put(self, shopping_list_id):
-        """Update eines bestimmten ShoppingList-Objekts."""
+        """Update eines bestimmten Shoppinglisten-Objekts."""
         adm = Administration()
         sl = ShoppingList.from_dict(api.payload)
 
@@ -618,9 +607,9 @@ class ShoppingListOperations(Resource):
 
 @holmaApp.route('/shoppinglist/<int:shopping_list_id>/archive')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@holmaApp.param('shopping_list_id', 'Die ID des Shopping-List-Objekts')
+@holmaApp.param('shopping_list_id', 'Die ID des Shoppinglisten-Objekts')
 class ShoppingListArchiveOperations(Resource):
-    # @ secured
+    @secured
     def post(self, shopping_list_id):
         """Einkaufsliste archivieren"""
         adm = Administration()
@@ -636,11 +625,11 @@ class ShoppingListArchiveOperations(Resource):
 @holmaApp.response(500, 'Falls es zu einem Server-seitigem Fehler kommt.')
 class ShoppingListListOperations(Resource):
     @holmaApp.marshal_list_with(shopping_list)
-    # @ secured
+    @secured
     def get(self):
-        """Auslesen aller Shoppinglist-Objekte.
+        """Auslesen aller Shoppinglisten-Objekte.
 
-                        Sollten keine Shoppinglist-Objekte verfügbar sein,
+                        Sollten keine Shoppinglisten-Objekte verfügbar sein,
                         so wird eine leere Sequenz zurückgegeben."""
         adm = StatisticAdministration()
         sl_list = adm.get_all_shopping_lists()
@@ -649,12 +638,12 @@ class ShoppingListListOperations(Resource):
 
 @holmaApp.route('/shoppinglists/by-name/<string:name>')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@holmaApp.param('name', 'Der Name der Shoppinglist')
+@holmaApp.param('name', 'Der Name der Shoppingliste')
 class ShoppingListsByNameOperations(Resource):
     @holmaApp.marshal_list_with(shopping_list)
-    # @ secured
+    @secured
     def get(self, name):
-        """Auslesen von Shoppinglist-Objekten, die durch den Namen
+        """Auslesen von Shoppinglisten-Objekten, die durch den Namen
         bestimmt wurden.
 
         Die auszulesenden Objekte werden durch name in dem URI bestimmt.
@@ -666,13 +655,13 @@ class ShoppingListsByNameOperations(Resource):
 
 @holmaApp.route('/group/<int:group_id>/shoppinglist/<int:shopping_list_id>')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@holmaApp.param('group_id', 'Die ID des Group-Objekts')
-@holmaApp.param('shopping_list_id', 'Die ID des Shoppinglist-Objekts')
+@holmaApp.param('group_id', 'Die ID des Gruppen-Objekts')
+@holmaApp.param('shopping_list_id', 'Die ID des Shoppinglisten-Objekts')
 class GroupShoppingListStandardArticleRelationOperations(Resource):
-    # @ secured
+    @secured
     def post(self, group_id, shopping_list_id):
-        """Füge ein bestimmtes Standardarticle
-        einer bestimmten Shoppinglist hinzu"""
+        """Füge einen bestimmten Standardartikel
+        einer bestimmten Shoppingliste hinzu."""
         adm = Administration()
         grp = adm.get_group_by_id(group_id)
         sl = adm.get_shopping_list_by_id(shopping_list_id)
@@ -688,9 +677,9 @@ class GroupShoppingListStandardArticleRelationOperations(Resource):
 @holmaApp.response(500, 'Falls es zu einem Server -seitigen Fehler kommt')
 class ShoppingListRelatedListEntryListOperations(Resource):
     @holmaApp.marshal_list_with(list_entry)
-    # @ secured
+    @secured
     def get(self, shopping_list_id):
-        """Auslesen aller Listentry-Objekten einer bestimmten Shoppingliste
+        """Auslesen aller Listeneintrag-Objekte einer bestimmten Shoppingliste.
                               """
         adm = Administration()
         le = adm.get_shopping_list_by_id(shopping_list_id)
@@ -702,12 +691,13 @@ class ShoppingListRelatedListEntryListOperations(Resource):
 
     @holmaApp.marshal_with(list_entry, code=200)
     @holmaApp.expect(list_entry)
+    @secured
     # Wir erwarten ein User-Objekt von Client-Seite.
     # @ secured
     def post(self, shopping_list_id):
         """ Wir verwenden Namen, amount, article, Unit, Purchasing_user,
          retailer und shoppinglist des Proposals für die Erzeugung
-        eines Group-Objekts. Das serverseitig erzeugte
+        eines Gruppen-Objekts. Das serverseitig erzeugte
         Objekt ist das maßgebliche und
         wird auch dem Client zurückgegeben. """
         adm = Administration()
@@ -727,7 +717,8 @@ class ShoppingListRelatedListEntryListOperations(Resource):
             )
 
             if proposal.is_standardarticle():
-                shopping_list = adm.get_shopping_list_by_id(proposal.get_shopping_list())
+                shopping_list = adm.get_shopping_list_by_id(
+                    proposal.get_shopping_list())
                 group = adm.get_group_by_id(shopping_list.get_group())
                 adm.add_standardarticle_to_group(result, group)
 
@@ -740,11 +731,11 @@ class ShoppingListRelatedListEntryListOperations(Resource):
 @holmaApp.response(500, 'Falls es zu einem Server-seitigem Fehler kommt.')
 class ListEntryListOperations(Resource):
     @holmaApp.marshal_list_with(list_entry)
-    # @ secured
+    @secured
     def get(self):
-        """Auslesen aller Listentry-Objekte.
+        """Auslesen aller Listeneintrag-Objekte.
 
-            Sollten kein Listentry-Objekt verfügbar sein, so wird eine
+            Sollte kein Listeneintrag-Objekt verfügbar sein, so wird eine
             leere Sequenz zurückgegeben."""
         adm = StatisticAdministration()
         le_list = adm.get_all_list_entries()
@@ -753,12 +744,12 @@ class ListEntryListOperations(Resource):
 
 @holmaApp.route('/listentry/<int:list_entry_id>')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@holmaApp.param('list_entry_id', 'Die ID des ListEntry-Objekts')
+@holmaApp.param('list_entry_id', 'Die ID des Listeneintrag-Objekts')
 class ListEntryOperations(Resource):
     @holmaApp.marshal_with(list_entry)
-    # @ secured
+    @secured
     def get(self, list_entry_id):
-        """Auslesen eines bestimmten Listentry-Objekts.
+        """Auslesen eines bestimmten Listeneintrag-Objekts.
 
         Das auszulesende Objekt wird durch die list_entry_id
         in dem URI bestimmt.
@@ -767,9 +758,9 @@ class ListEntryOperations(Resource):
         le = adm.get_list_entry_by_id(list_entry_id)
         return le
 
-    # @ secured
+    @secured
     def delete(self, list_entry_id):
-        """Löschen eines bestimmten Listentry-Objekts.
+        """Löschen eines bestimmten Listeneintrag-Objekts.
 
          Das auszulesende Objekt wird durch die list_entry_id
          in dem URI bestimmt.
@@ -783,10 +774,10 @@ class ListEntryOperations(Resource):
             return 'ListEntry not found', 500
 
     @holmaApp.marshal_with(list_entry)
-    @holmaApp.expect(list_entry)#, validate=True)
-    # @ secured
+    @holmaApp.expect(list_entry)  # , validate=True)
+    @secured
     def put(self, list_entry_id):
-        """Update eines bestimmten Listentry-Objekts."""
+        """Update eines bestimmten Listeneintrag-Objekts."""
         adm = Administration()
         le = ListEntry.from_dict(api.payload)
 
@@ -803,9 +794,9 @@ class ListEntryOperations(Resource):
 @holmaApp.param('user_id', 'Die ID des user-Objekts')
 class UserRelatedListEntryOperations(Resource):
     @holmaApp.marshal_with(list_entry)
-    # @ secured
+    @secured
     def get(self, user_id):
-        """Auslesen von Listentry-Objekten die zu einem bestimmten
+        """Auslesen von Listeneintrag-Objekten, die zu einem bestimmten
         User gehören."""
         adm = Administration()
         us = adm.get_user_by_id(user_id)
@@ -821,9 +812,9 @@ class UserRelatedListEntryOperations(Resource):
 @holmaApp.param('user_id', 'Die ID des user-Objekts')
 class UserRelatedAllListEntryOperations(Resource):
     @holmaApp.marshal_with(list_entry)
-    # @ secured
+    @secured
     def get(self, user_id):
-        """Auslesen von Listentry-Objekten die zu einem bestimmten
+        """Auslesen von Listeneintrag-Objekten, die zu einem bestimmten
         User gehören."""
         adm = Administration()
         us = adm.get_user_by_id(user_id)
@@ -836,16 +827,17 @@ class UserRelatedAllListEntryOperations(Resource):
 
 @holmaApp.route('/shoppinglist/<int:shopping_list_id>/listentries/checked')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@holmaApp.param('shopping_list_id', 'Die ID des Shopping-List-Objekts')
+@holmaApp.param('shopping_list_id', 'Die ID des Shoppinglisten-Objekts')
 class ShoppingListRelatedCheckedByListEntryOperations(Resource):
     @holmaApp.marshal_with(list_entry)
-    # @ secured
+    @secured
     def get(self, shopping_list_id):
-        """Auslesen von Listentry-Objekten die bereits gecheckt wurden """
+        """Auslesen von Listeneintrag-Objekten die bereits gecheckt wurden """
         adm = Administration()
         sl = adm.get_shopping_list_by_id(shopping_list_id)
         if sl is not None:
-            result = adm.get_checked_list_entries_by_shopping_list_id(shopping_list_id)
+            result = adm.get_checked_list_entries_by_shopping_list_id(
+                shopping_list_id)
             return result
         else:
             return "Shopping List not found", 500
@@ -853,15 +845,15 @@ class ShoppingListRelatedCheckedByListEntryOperations(Resource):
 
 @holmaApp.route('/listentries/by-date/<string:from_date>/<string:to_date>')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@holmaApp.param('from_date', 'Datum ab wann die ListEntry-Objekte'
+@holmaApp.param('from_date', 'Datum ab wann die Listeneintrag-Objekte'
                              ' ausgegeben werden sollen')
-@holmaApp.param('to_date', 'Datum bis wann die ListEntry-Objekte'
-                             'ausgegeben werden sollen')
+@holmaApp.param('to_date', 'Datum bis wann die Listeneintrag-Objekte'
+                           'ausgegeben werden sollen')
 class ListEntryDateTimeRelationOperations(Resource):
     @holmaApp.marshal_with(list_entry)
-    # @ secured
+    @secured
     def get(self, from_date, to_date):
-        """Auslesen aller Listentry-Objekten die zwischen den zwei eingegebenen
+        """Auslesen aller Listeneintrag-Objekte, die zwischen den zwei eingegebenen
         Daten geupdaten wurden.
                                """
         adm = StatisticAdministration()
@@ -871,12 +863,12 @@ class ListEntryDateTimeRelationOperations(Resource):
 
 @holmaApp.route('/retailer/<int:retailer_id>/listentries')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@holmaApp.param('retailer_id', 'Die ID des retailer-Objekts')
+@holmaApp.param('retailer_id', 'Die ID des Retailer-Objekts')
 class RetailerRelatedListEntryOperations(Resource):
     @holmaApp.marshal_with(list_entry)
-    # @ secured
+    @secured
     def get(self, retailer_id):
-        """Auslesen von Listentry-Objekten die zu einem bestimmten
+        """Auslesen von Listeneintrag-Objekten, die zu einem bestimmten
         Retailer gehören."""
         adm = Administration()
         rtl = adm.get_retailer_by_id(retailer_id)
@@ -889,13 +881,13 @@ class RetailerRelatedListEntryOperations(Resource):
 
 @holmaApp.route('/article/<int:article_id>/listentries')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@holmaApp.param('article_id', 'Die ID des Article-Objekts')
+@holmaApp.param('article_id', 'Die ID des Artikel-Objekts')
 class ArticleRelatedListEntryOperations(Resource):
     @holmaApp.marshal_with(list_entry)
-    # @ secured
+    @secured
     def get(self, article_id):
-        """Auslesen von Listentry-Objekten die zu einem bestimmten
-        Article gehören."""
+        """Auslesen von Listeneintrag-Objekten die zu einem bestimmten
+        Artikel gehören."""
         adm = Administration()
         art = adm.get_article_by_id(article_id)
         if art is not None:
@@ -907,12 +899,12 @@ class ArticleRelatedListEntryOperations(Resource):
 
 @holmaApp.route('/group/<int:group_id>/standardarticles')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@holmaApp.param('group_id', 'Die ID des group-Objekts')
+@holmaApp.param('group_id', 'Die ID des Gruppen-Objekts')
 class GroupRelatedStandardarticleOperations(Resource):
     @holmaApp.marshal_with(list_entry)
-    # @ secured
+    @secured
     def get(self, group_id):
-        """Auslesen von Listentry-Objekten (Markiert als Standardartikel)
+        """Auslesen von Listeneintrag-Objekten (Markiert als Standardartikel),
         die zu einer bestimmten Gruppe gehören."""
         adm = Administration()
         grp = adm.get_group_by_id(group_id)
@@ -925,13 +917,13 @@ class GroupRelatedStandardarticleOperations(Resource):
 
 @holmaApp.route('/group/<int:group_id>/listentries')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@holmaApp.param('group_id', 'Die ID des group-Objekts')
+@holmaApp.param('group_id', 'Die ID des Gruppen-Objekts')
 class GroupRelatedListEntriesOperations(Resource):
     @holmaApp.marshal_with(list_entry)
-    # @ secured
+    @secured
     def get(self, group_id):
-        """Auslesen von Listentry-Objekten, die Teil einer Shoppingliste der
-        angegebenen Gruppe sind"""
+        """Auslesen von Listeneintrag-Objekten, die Teil einer Shoppingliste der
+        angegebenen Gruppe sind."""
         adm = StatisticAdministration()
         grp = adm.get_group_by_id(group_id)
         if grp is not None:
@@ -941,15 +933,16 @@ class GroupRelatedListEntriesOperations(Resource):
             return "Group not found", 500
 
 
-@holmaApp.route('/group/<int:group_id>/shoppinglist/<int:shopping_list_id>/standardarticles')
+@holmaApp.route(
+    '/group/<int:group_id>/shoppinglist/<int:shopping_list_id>/standardarticles')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@holmaApp.param('group_id', 'Die ID des Group-Objekts')
-@holmaApp.param('shopping_list_id', 'Die ID des Shoppinglist-Objekts')
+@holmaApp.param('group_id', 'Die ID des Gruppen-Objekts')
+@holmaApp.param('shopping_list_id', 'Die ID des Shoppinglisten-Objekts')
 class GroupShoppingListStandardArticleRelationOperations(Resource):
-    # @ secured
+    @secured
     def post(self, group_id, shopping_list_id):
         """Füge alle Standardartikel einer Gruppe
-        zu einer Einkaufslite hinzu"""
+        zu einer Einkaufslite hinzu."""
         adm = Administration()
         grp = adm.get_group_by_id(group_id)
         sl = adm.get_shopping_list_by_id(shopping_list_id)
@@ -963,13 +956,13 @@ class GroupShoppingListStandardArticleRelationOperations(Resource):
 
 @holmaApp.route('/group/<int:group_id>/standardarticle/<int:list_entry_id>')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@holmaApp.param('group_id', 'Die ID des Group-Objekts')
-@holmaApp.param('list_entry_id', 'Die ID des Listentry-Objekts')
+@holmaApp.param('group_id', 'Die ID des Gruppen-Objekts')
+@holmaApp.param('list_entry_id', 'Die ID des Listeneintrag-Objekts')
 class GroupListEntryStandardArticleRelationOperations(Resource):
     @holmaApp.marshal_with(list_entry)
-    # @ secured
+    @secured
     def post(self, group_id, list_entry_id):
-        """Füge einen Standardartikel zu einer Groupe hinzu"""
+        """Füge einen Standardartikel zu einer Gruppe hinzu."""
         adm = Administration()
         grp = adm.get_group_by_id(group_id)
         le = adm.get_list_entry_by_id(list_entry_id)
@@ -980,15 +973,15 @@ class GroupListEntryStandardArticleRelationOperations(Resource):
         else:
             return "Group or ListEntry not found", 500
 
-    # @ secured
+    @secured
     def delete(self, group_id, list_entry_id):
-        """Lösch den Standardartikel einer Gruppe"""
+        """Lösche den Standardartikel einer Gruppe"""
         adm = Administration()
         grp = adm.get_group_by_id(group_id)
         le = adm.get_list_entry_by_id(list_entry_id)
         if grp is not None and le is not None:
             result = adm.delete_standardarticle(le, grp)
-            return "Deleted standardarticle!", 200 
+            return "Deleted standardarticle!", 200
         else:
             return "Group or Listentry not found", 500
 
@@ -997,7 +990,7 @@ class GroupListEntryStandardArticleRelationOperations(Resource):
 @holmaApp.response(500, 'Falls es zu einem Server-seitigem Fehler kommt.')
 class RetailerListOperations(Resource):
     @holmaApp.marshal_list_with(retailer)
-    # @ secured
+    @secured
     def get(self):
         """Auslesen aller Retailer-Objekte.
 
@@ -1010,10 +1003,10 @@ class RetailerListOperations(Resource):
 
 @holmaApp.route('/retailer/<int:retailer_id>')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
-@holmaApp.param('retailer_id', 'Die ID des retailer-Objekts')
+@holmaApp.param('retailer_id', 'Die ID des Retailer-Objekts')
 class RetailerOperations(Resource):
     @holmaApp.marshal_list_with(retailer)
-    # @ secured
+    @secured
     def get(self, retailer_id):
         """Auslesen eines bestimmten Retailer-Objekts.
          Das auszulesende Objekt wird durch die retailer_id
@@ -1029,7 +1022,7 @@ class RetailerOperations(Resource):
 @holmaApp.param('name', 'Der Name des Retailers')
 class RetailerByNameOperations(Resource):
     @holmaApp.marshal_list_with(retailer)
-    # @ secured
+    @secured
     def get(self, name):
         """ Auslesen von Retailer-Objekten, die durch den Namen bestimmt werden
 

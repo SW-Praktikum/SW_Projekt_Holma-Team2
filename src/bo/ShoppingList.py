@@ -21,17 +21,11 @@ class ShoppingList(BusinessObject):
     def get_group(self):
         return self._group
 
-    def get_group_name(self):
-        return self._group_name
-
     def get_archived(self):
         return self._archived
 
     def set_group(self, group_id):
         self._group = group_id
-
-    def set_group_name(self, group_name):
-        self._group_name = group_name
 
     def set_archived(self, archived):
         self._archived = archived
@@ -53,7 +47,6 @@ class ShoppingList(BusinessObject):
         shopping_list.set_id(dictionary["id"])
         shopping_list.set_name(dictionary["name"])
         shopping_list.set_group(dictionary["groupId"])
-        shopping_list.set_group_name(dictionary["groupName"])
         shopping_list.set_archived(dictionary["archived"])
         shopping_list.set_creation_date(ShoppingList.date_format(dictionary["creationDate"]))
         shopping_list.set_last_updated(ShoppingList.date_format(dictionary["lastUpdated"]))

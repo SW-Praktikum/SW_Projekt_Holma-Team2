@@ -23,15 +23,15 @@ class StandardArticleEditDialog extends Component {
                 id: this.props.standardArticle.getUnit()
             },
             purchasingUser: {
-                "name": this.props.standardArticle.getPurchasingUserName(),
+                "name": this.props.standardArticle.purchasingUser.getName(),
                 "id": this.props.standardArticle.getPurchasingUserId()
             },
             article: {
-                "name": this.props.standardArticle.getArticleName(),
+                "name": this.props.standardArticle.article.getName(),
                 "id": this.props.standardArticle.getArticleId()
             },
             retailer: {
-                "name": this.props.standardArticle.getRetailerName(),
+                "name": this.props.standardArticle.retailer.getName(),
                 "id": this.props.standardArticle.getRetailerId()
             },
         }
@@ -72,8 +72,6 @@ class StandardArticleEditDialog extends Component {
             })
             let localStandardArticle = this.state.localStandardArticle
             localStandardArticle.setPurchasingUserId(purchasingUser.id)
-            localStandardArticle.setPurchasingUserName(purchasingUser.name)
-
         }
     }
 
@@ -87,8 +85,6 @@ class StandardArticleEditDialog extends Component {
             })
             let localStandardArticle = this.state.localStandardArticle
             localStandardArticle.setArticleId(article.id)
-            localStandardArticle.setArticleName(article.name)
-
         }
     }
 
@@ -104,8 +100,6 @@ class StandardArticleEditDialog extends Component {
             
             let localStandardArticle = this.state.localStandardArticle
             localStandardArticle.setRetailerId(retailer.id)
-            localStandardArticle.setRetailerName(retailer.name)
-
         }
     }
 
@@ -140,17 +134,14 @@ class StandardArticleEditDialog extends Component {
     saveChanges = () => {
         let { localStandardArticle } = this.state
         let { standardArticle } = this.state
-        localStandardArticle.setName(localStandardArticle.articleName)
+        localStandardArticle.setName(localStandardArticle.article.getName())
         AppAPI.getAPI().updateListEntry(localStandardArticle)
         
         standardArticle.setAmount(localStandardArticle.getAmount())
         standardArticle.setUnit(localStandardArticle.getUnit())
         standardArticle.setArticleId(localStandardArticle.getArticleId())
-        standardArticle.setArticleName(localStandardArticle.getArticleName())
         standardArticle.setPurchasingUserId(localStandardArticle.getPurchasingUserId())
-        standardArticle.setPurchasingUserName(localStandardArticle.getPurchasingUserName())
         standardArticle.setRetailerId(localStandardArticle.getRetailerId())
-        standardArticle.setRetailerName(localStandardArticle.getRetailerName())
 
         this.props.closeDialog()
 

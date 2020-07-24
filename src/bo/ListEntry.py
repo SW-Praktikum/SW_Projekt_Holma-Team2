@@ -32,9 +32,6 @@ class ListEntry(BusinessObject):
     def get_article(self):
         return self._article
 
-    def get_article_name(self):
-        return self._article_name
-
     def get_amount(self):
         return self._amount
 
@@ -44,23 +41,14 @@ class ListEntry(BusinessObject):
     def get_retailer(self):
         return self._retailer
 
-    def get_retailer_name(self):
-        return self._retailer_name
-
     def get_standardarticle(self):
         return self._standardarticle
 
     def get_purchasing_user(self):
         return self._purchasing_user
 
-    def get_purchasing_user_name(self):
-        return self._purchasing_user_name
-
     def get_shopping_list(self):
         return self._shopping_list
-
-    def get_shopping_list_name(self):
-        return self._shopping_list_name
 
     def get_checked(self):
         return self._checked
@@ -71,9 +59,6 @@ class ListEntry(BusinessObject):
     def set_article(self, article_id):
         self._article = article_id
 
-    def set_article_name(self, article_name):
-        self._article_name = article_name
-
     def set_amount(self, amount):
         self._amount = amount
 
@@ -83,20 +68,11 @@ class ListEntry(BusinessObject):
     def set_retailer(self, retailer_id):
         self._retailer = retailer_id
 
-    def set_retailer_name(self, retailer_name):
-        self._retailer_name = retailer_name
-
     def set_purchasing_user(self, user_id):
         self._purchasing_user = user_id
 
-    def set_purchasing_user_name(self, user_name):
-        self._purchasing_user_name = user_name
-
     def set_shopping_list(self, shopping_list_id):
         self._shopping_list = shopping_list_id
-
-    def set_shopping_list_name(self, shopping_list_name):
-        self._shopping_list_name = shopping_list_name
 
     def set_checked(self, checked):
         self._checked = checked
@@ -122,17 +98,13 @@ class ListEntry(BusinessObject):
         list_entry.set_id(dictionary["id"])
         list_entry.set_name(dictionary["name"])
         list_entry.set_purchasing_user(dictionary["purchasingUserId"])
-        list_entry.set_purchasing_user_name(dictionary["purchasingUserName"])
         list_entry.set_amount(dictionary["amount"])
         list_entry.set_article(dictionary["articleId"])
-        list_entry.set_article_name(dictionary["articleName"])
         list_entry.set_unit(dictionary["unit"])
         list_entry.set_retailer(dictionary["retailerId"])
-        list_entry.set_retailer_name(dictionary["retailerName"])
         list_entry.set_standardarticle(dictionary["standardarticle"])
         list_entry.set_checked(dictionary["checked"])
         list_entry.set_shopping_list(dictionary["shoppingListId"])
-        list_entry.set_shopping_list_name(dictionary["shoppingListName"])
         list_entry.set_checked_ts(ListEntry.date_format(dictionary["checkedTs"]))
         list_entry.set_creation_date(ListEntry.date_format(dictionary["creationDate"]))
         list_entry.set_last_updated(ListEntry.date_format(dictionary["lastUpdated"]))

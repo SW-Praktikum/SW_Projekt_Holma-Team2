@@ -18,7 +18,7 @@ class Grouplink extends Component{
   render(){
       return(
           <Button align="center" variant="contained" fullWidth  color="primary" >
-              Gruppendetails
+              Details
           </Button>
       )
   }
@@ -219,6 +219,7 @@ class GroupList extends Component {
                     </CardContent>
                 </Card>
                 <ListWithBoxes groupElements={listElements}/>
+                <Box m={10} />
                 <ShoppingListAddDialog 
                   openDialog={this.openDialog}
                   buttonDisabled={buttonDisabled}

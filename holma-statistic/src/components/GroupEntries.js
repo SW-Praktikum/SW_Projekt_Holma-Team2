@@ -48,7 +48,7 @@ class GroupEntry extends Component {
     render() {
         return (
           <Link to={'/OneGroupStat/' + this.props.group.getId()} style={{textDecoration: 'none'}}>
-          <Card className="root" style={{/* minHeight: 250 ,  */minWidth: '100%', marginBottom:10, marginTop:10, backgroundColor: colors.teal[600]}}>
+          <Card className="root" style={{minWidth: '100%', backgroundColor: colors.teal[600]}}>
             <CardActionArea>
             <CardMedia className="media" style={{height: 10, paddingTop: '56.25%',}} image={randomImages[Math.floor(Math.random() * randomImages.length)]} title="Groupname"/>
             <CardContent>
@@ -119,7 +119,7 @@ class GroupEntries extends Component{
         const {groupElements, memberElements, groupName,buttonDisabled, minLength} = this.state;
 
         return (
-          <div>
+          <div style={{marginTop: 15}}>
             <ListWithBoxes groupElements={groupElements}/>
             
           </div>

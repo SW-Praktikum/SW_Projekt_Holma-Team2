@@ -132,47 +132,42 @@ class ListEntryAddDialog extends Component {
         };
     }
     
-    saveChanges = () => {
-      var listEntry = new ListEntryBO(
-        this.state.article.id,
-        this.state.article.name,
-        this.state.amount, 
-        this.state.unit.name, 
-        this.state.retailer.id, 
-        this.state.retailer.name, 
-        this.state.purchasingUser.id, 
-        this.state.purchasingUser.name, 
-        this.props.shoppingListId, 
-        this.state.article.name,
-        false, 
-        null, //checkedTs
-        this.state.isStandard,
+    saveChanges = async () => {
+        var listEntry = new ListEntryBO(
+            this.state.article.id,
+            this.state.amount, 
+            this.state.unit.name, 
+            this.state.retailer.id, 
+            this.state.purchasingUser.id, 
+            this.props.shoppingListId, 
+            false, 
+            null, //checkedTs
+            this.state.isStandard,
         )
-      listEntry.setName(this.state.article.name)
-      AppAPI.getAPI().createListEntry(listEntry).then(() => {
-        this.setState({
-          amount: 1,
-          unit: {
-              name: "",
-              id: ""
-          },
-          purchasingUser: {
-              name: "",
-              id: ""
-          },
-          article: {
-              name: "",
-              id: ""
-          },
-          retailer: {
-              name: "",
-              id: ""
-          },
-          isStandard: false,
-        },
-        this.props.loadListEntries())
-      })
-      this.props.handleClose()
+        listEntry.setName(this.state.article.name)
+        let newListEntry = await AppAPI.getAPI().createListEntry(listEntry)
+        await this.setState({
+            amount: 1,
+            unit: {
+                name: "",
+                id: ""
+            },
+            purchasingUser: {
+                name: "",
+                id: ""
+            },
+            article: {
+                name: "",
+                id: ""
+            },
+            retailer: {
+                name: "",
+                id: ""
+            },
+            isStandard: false,
+        })
+        this.props.loadListEntries()
+        this.props.handleClose()
     }
 
     undoChanges = () => {
@@ -262,6 +257,7 @@ class ListEntryAddDialog extends Component {
                 {/* Anzahl */}
                 <TextField
                     type="number"
+                    required
                     value={amount}
                     onChange={this.setAmount}
                     margin="dense"
@@ -276,7 +272,7 @@ class ListEntryAddDialog extends Component {
                     onChange={(event, unit) => {this.setUnit(unit);}}
                     defaultValue={unit}
                     getOptionLabel={(option) => option.name}
-                    renderInput={(params) => <TextField {...params} label="Einheit" variant="standard" placeholder="Einheit" />}
+                    renderInput={(params) => <TextField required {...params} label="Einheit" variant="standard" placeholder="Einheit" />}
                 />
 
                 {/* Artikel */}
@@ -322,7 +318,7 @@ class ListEntryAddDialog extends Component {
                       }}                    
                     renderOption={(option) => option.name}
                     freeSolo
-                    renderInput={(params) => <TextField {...params} label="Artikel" variant="standard" placeholder="Artikel" />}
+                    renderInput={(params) => <TextField required {...params} label="Artikel" variant="standard" placeholder="Artikel" />}
                 />
 
                 {/* Einkäufer */}
@@ -330,7 +326,7 @@ class ListEntryAddDialog extends Component {
                     options={users} 
                     onChange={(event, purchasingUser) => {this.setPurchasingUser(purchasingUser);}}
                     getOptionLabel={(option) => option.name}
-                    renderInput={(params) => <TextField {...params} label="Einkäufer" variant="standard" placeholder="Einkäufer" />}
+                    renderInput={(params) => <TextField required {...params} label="Einkäufer" variant="standard" placeholder="Einkäufer" />}
                 />
 
                 {/* Retailer */}
@@ -339,7 +335,7 @@ class ListEntryAddDialog extends Component {
                     onChange={(event, retailer) => {this.setRetailer(retailer);}}
                     defaultValue={retailer}
                     getOptionLabel={(option) => option.name}
-                    renderInput={(params) => <TextField {...params} label="Retailer" variant="standard" placeholder="Retailer" />}
+                    renderInput={(params) => <TextField required {...params} label="Händler" variant="standard" placeholder="Retailer" />}
                 />
 
 

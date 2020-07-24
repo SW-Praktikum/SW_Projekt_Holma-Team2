@@ -90,7 +90,7 @@ class ListEntry extends Component {
                     <TableCell style={{paddingLeft: 5, paddingTop: 0, paddingBottom: 0, paddingRight: 10}} align="right">{listEntry.getAmount()}</TableCell>
                     <TableCell padding="dense" align="left">{listEntry.getUnit()}</TableCell>
                     <TableCell padding="dense" align="left">{listEntry.getName()}</TableCell>
-                    <TableCell padding="dense" align="left">{listEntry.getRetailerName()}</TableCell> 
+                    <TableCell padding="dense" align="left">{listEntry.retailer.getName()}</TableCell> 
                     <TableCell padding="dense" align="left">{checkedTimestamp}</TableCell> 
 
                 </TableRow>
@@ -145,13 +145,13 @@ class ListEntryTable extends Component {
 
         if (filterArticleName !== "") {
             filteredElements =  filteredElements.filter(function(item) {
-                return item.props.listEntry.articleName.toLocaleLowerCase().includes(filterArticleName.toLocaleLowerCase());
+                return item.props.listEntry.article.getName().toLocaleLowerCase().includes(filterArticleName.toLocaleLowerCase());
             });
         }
 
         if (filterRetailerName !== "") {
             filteredElements =  filteredElements.filter(function(item) {
-                return item.props.listEntry.retailerName.toLocaleLowerCase().includes(filterRetailerName.toLocaleLowerCase());
+                return item.props.listEntry.retailer.getName().toLocaleLowerCase().includes(filterRetailerName.toLocaleLowerCase());
             });
         }
 
@@ -197,12 +197,12 @@ class ListEntryTable extends Component {
         if (sortInput === "Händler") {
             //nach Einzelhändler sortieren
             filteredElements = filteredElements.sort((a, b) => 
-                a.props.listEntry.retailerName > b.props.listEntry.retailerName ? 1 : -1)
+                a.props.listEntry.retailer.getName() > b.props.listEntry.retailer.getName() ? 1 : -1)
         }
         else if (sortInput === "Artikel") {
             //nach Artikel sortieren
             filteredElements = filteredElements.sort((a, b) => 
-                a.props.listEntry.articleName > b.props.listEntry.articleName ? 1 : -1)
+                a.props.listEntry.article.getName() > b.props.listEntry.article.getName() ? 1 : -1)
         }
         else if (sortInput === "Kaufdatum") {
             //nach Kaufdatum sortieren           
@@ -213,24 +213,21 @@ class ListEntryTable extends Component {
             filteredListEntryTableElements: filteredElements
         })
     }
-  
-    loadListEntries = () => {
-        // get entries by user ID
-        return AppAPI.getAPI().getListEntriesByUserId(this.state.userId, true).then(listEntries => {
-            var listEntryTableElements = listEntries.map((listEntry) => <ListEntry listEntry={listEntry} loadListEntries={this.loadListEntries} />)
-            this.setState({
-                listEntryTableElements: listEntryTableElements,
-                filteredListEntryTableElements: listEntryTableElements,
-                loadingInProgress: true, // loading indicator 
-                loadingError: null
-                })
-            return new Promise(function (resolve) {resolve(listEntries)})
-            }).catch(e =>
-                this.setState({ // Reset state with error from catch 
-                loadingInProgress: false,
-                loadingError: e
-            })
-        );  
+    
+    loadListEntries = async () => {
+        // get listentries by user ID
+        const listEntries = await AppAPI.getAPI().getListEntriesByUserId(this.state.userId, true)
+        for (const listEntry of listEntries) {
+            await AppAPI.getAPI().completeListEntry(listEntry)
+        }
+
+        var listEntryTableElements = listEntries.map((listEntry) => <ListEntry listEntry={listEntry} loadListEntries={this.loadListEntries} />)
+        this.setState({
+            listEntryTableElements: listEntryTableElements,
+            filteredListEntryTableElements: listEntryTableElements,
+            loadingInProgress: true, // loading indicator 
+            loadingError: null
+        })
     }
 
     loadUserRetailers = () => {
@@ -415,11 +412,10 @@ class ListEntryTable extends Component {
                             id="sortSelector"
                             onChange={(event, value) => this.handleSort("sortSelector", value)}
                             options={sortFunctions}
-                            
                             defaultValue="filtern"
                             getOptionLabel={(option) => option.name}
                             renderInput={(params) => (
-                                <TextField {...params} variant="outlined" label="Sortieren" placeholder="Sortieren" />
+                            <TextField {...params} margin="dense" variant="outlined" label="Sortieren" placeholder="Sortieren" />
                             )}                
                         />
                     </Grid>

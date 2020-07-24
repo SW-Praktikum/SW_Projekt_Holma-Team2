@@ -13,9 +13,6 @@ export default class ShoppingListBO extends BusinessObject {
         return this.groupId
     }
 
-    getGroupName() {
-        return this.groupName
-    }
 
     getArchived() {
         return this.archived
@@ -23,10 +20,6 @@ export default class ShoppingListBO extends BusinessObject {
 
     setGroupId(groupId) {
         this.groupId = groupId
-    }
-
-    setGroupName(groupName) {
-        this.groupName = groupName
     }
 
     setArchived(archived) {

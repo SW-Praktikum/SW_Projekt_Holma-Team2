@@ -33,7 +33,7 @@ class MemberAddDialog extends Component {
                   id="outlined-basic"
                   variant="outlined"
                   label="Mitglieds ID"
-                  type="email"
+                  type="number"
                   value={this.props.memberId}
                   fullWidth
                 />

@@ -54,8 +54,8 @@ class App extends React.Component {
       });
 
       user.getIdToken().then(token => {
-        document.cookie = `token=${token};path=/`;
-
+        document.cookie = `token=${token}; path=/; domain=.holma.xyz;`;
+        console.log(document.cookie)
         this.setState({
           googleUserData: user,
           authError:null,
