@@ -606,6 +606,7 @@ class ShoppingListOperations(Resource):
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('shopping_list_id', 'Die ID des Shoppinglisten-Objekts')
 class ShoppingListArchiveOperations(Resource):
+    @holmaApp.marshal_with(shopping_list)
     @secured
     def post(self, shopping_list_id):
         """Einkaufsliste archivieren"""

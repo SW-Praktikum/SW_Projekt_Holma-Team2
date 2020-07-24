@@ -89,6 +89,7 @@ class ListEntry extends Component {
                     users={users}
                     articles={articles}
                     retailers={retailers}
+                    loadListEntries={this.props.loadListEntries}
                     loadArticles={this.props.loadArticles}
                     open={this.state.openDialog}
                     openDialog={this.openDialog}

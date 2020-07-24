@@ -86,6 +86,7 @@ return (
             articles={articles}
             retailers={retailers}
             loadArticles={this.props.loadArticles}
+            loadStandardArticles={this.props.loadStandardArticles}
             open={this.state.openDialog}
             openDialog={this.openDialog}
             closeDialog={this.closeDialog}
@@ -194,7 +195,7 @@ class StandardArticleEdit extends Component {
     } 
 
     loadStandardArticles = async () => {
-        const standardArticles = await AppAPI.getAPI().getListEntriesByGroupId(this.state.groupId, true)
+        const standardArticles = await AppAPI.getAPI().getStandardArticlesByGroupId(this.state.groupId)
         for (const standardArticle of standardArticles) {
             await AppAPI.getAPI().completeListEntry(standardArticle)
         }
