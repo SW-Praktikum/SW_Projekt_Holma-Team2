@@ -93,19 +93,22 @@ class Startpage extends Component {
 
 
     displayRelevant = () => {
-        //console.log(this.state.filteredListEntryTableElements.length)
-        if (this.state.filteredListEntryTableElements.length !== 0) {
-            this.setState({
-                displayTable: "",
-                displayEmptyTable: "none"
-            })
-        }
-        else {
-            this.setState({
-                displayTable: "none",
-                displayEmptyTable: ""
-            })
-        }
+        try {
+            if (this.state.filteredListEntryTableElements.length !== 0) {
+                this.setState({
+                    displayTable: "",
+                    displayEmptyTable: "none"
+                })
+            }
+            else {
+                this.setState({
+                    displayTable: "none",
+                    displayEmptyTable: ""
+                })
+            }
+          } catch (error) {
+            // error occured
+          }
     }
 
 

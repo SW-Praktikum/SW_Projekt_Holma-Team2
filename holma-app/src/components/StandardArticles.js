@@ -185,7 +185,7 @@ class StandardArticleEdit extends Component {
     } 
 
     loadStandardArticles = async () => {
-        const standardArticles = await AppAPI.getAPI().getListEntriesByUserId(this.state.userId, true)
+        const standardArticles = await AppAPI.getAPI().getListEntriesByGroupId(this.state.groupId, true)
         for (const standardArticle of standardArticles) {
             await AppAPI.getAPI().completeListEntry(standardArticle)
         }
