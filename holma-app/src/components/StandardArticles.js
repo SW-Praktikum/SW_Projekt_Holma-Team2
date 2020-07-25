@@ -28,7 +28,7 @@ import StandardArticleEditDialog from './dialogs/StandardArticleEditDialog';
 
 
 
-class StandardArticles extends Component {
+class StandardArticle extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -75,7 +75,7 @@ class StandardArticles extends Component {
 
 render(){
     const {standardArticle, articles, groupId, users, retailers} = this.props;
-    const { open} = this.state;
+    const { open } = this.state;
 
 return (
     <React.Fragment>
@@ -106,7 +106,7 @@ return (
                 </IconButton>
             </TableCell>
             <TableCell padding="dense" style={{paddingLeft: 0, paddingTop: 0, paddingBottom: 0, paddingRight: 10}} align='right'>
-                <IconButton aria-label="expand row" size="small" onClick={() => this.deleteEntry(standardArticle)}>
+                <IconButton aria-label="expand row" size="small" onClick={() => this.deleteStandardArticle(standardArticle)}>
                     <ClearRoundedIcon/>
                 </IconButton>
             </TableCell>
@@ -201,7 +201,7 @@ class StandardArticleEdit extends Component {
         }
         
         var standardElements = standardArticles.map((standard) => 
-        <StandardArticles 
+        <StandardArticle
             groupId={this.state.groupId} 
             standardArticle={standard} 
             retailers={this.state.retailers}

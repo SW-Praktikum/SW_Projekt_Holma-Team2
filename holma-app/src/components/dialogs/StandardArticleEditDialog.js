@@ -138,9 +138,9 @@ class StandardArticleEditDialog extends Component {
         )
     }
     
-    saveChanges = () => {
+    saveChanges = async () => {
         let { localStandardArticle } = this.state
-        let { standardArticle } = this.state
+        let { standardArticle } = this.props
         localStandardArticle.setName(localStandardArticle.article.getName())
         AppAPI.getAPI().updateListEntry(localStandardArticle)
         
@@ -149,8 +149,8 @@ class StandardArticleEditDialog extends Component {
         standardArticle.setArticleId(localStandardArticle.getArticleId())
         standardArticle.setPurchasingUserId(localStandardArticle.getPurchasingUserId())
         standardArticle.setRetailerId(localStandardArticle.getRetailerId())
-
-        this.props.loadStandardArticles()
+        
+        await AppAPI.getAPI().completeListEntry(standardArticle)
         this.props.closeDialog()
 
     }
