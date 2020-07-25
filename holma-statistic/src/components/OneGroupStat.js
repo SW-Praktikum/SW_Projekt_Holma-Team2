@@ -25,6 +25,14 @@ import {
 import React, { Component } from 'react';
 import AppAPI from '../api/AppAPI';
 
+/**
+ * Es wird die Statistik einer ausgewählten Gruppe dargestellt.
+ * Die enthaltenene Filterfunktion kann durch das Angeben eines Artikels, Einkäufers, Händlers oder einem Zeitraum die gesamten Listeneinträge filtern.
+ * Durch die enthaltene Sortierfunktion können die Listeneinträge nach einem ausgewählten Attributs sortiert werden.
+ * 
+ * Die angegebenen 'Häufigsten Artikel' stellen die Gesamtanzahl der bisherigen Einkäufe jedes Artikels dar.
+ * Dabei werden die Einträge nach Häufigkeit absteigend dargestellt.
+ */
   
 
 class AmountEntry extends Component {
@@ -71,7 +79,11 @@ class AmountEntry extends Component {
           var checkedTimestamp = ""
   
           if (listEntry.getCheckedTs() !== null) {
-              let checkedTs = new Date(listEntry.getCheckedTs())
+            Date.prototype.addHours = function(h) {
+                this.setTime(this.getTime() + (h*60*60*1000));
+                return this;
+              }  
+            let checkedTs = new Date(listEntry.getCheckedTs()).addHours(2)
               let checkedTs_str = checkedTs.toString()
               checkedTimestamp = checkedTs_str.substring(4, 21)
             }

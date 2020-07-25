@@ -14,6 +14,16 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import React, { Component } from 'react';
 import AppAPI from '../../api/AppAPI';
 
+
+/**
+ * Das ist die erste Seite, die der Benutzer nach dem erfolgreichen Anmelden angezeigt wird. Darin werden die dem Benutzer zugeordneten Listeneinträge angezeigt.
+ * 
+ * Die Startseite stellt die persönliche Einkaufsliste dar, mit der ein Benutzer eine Übersicht über seine zu erledigenden Einkäufe erhält.
+ * 
+ * Durch die vorhandene Checkbox kann ein Listeneintrag abgehakt und somit als erledigt gekennzeichnet werden.
+ * 
+ */
+
 class ListEntry extends Component {
     constructor(props) {
         super(props);
@@ -93,19 +103,22 @@ class Startpage extends Component {
 
 
     displayRelevant = () => {
-        //console.log(this.state.filteredListEntryTableElements.length)
-        if (this.state.filteredListEntryTableElements.length !== 0) {
-            this.setState({
-                displayTable: "",
-                displayEmptyTable: "none"
-            })
-        }
-        else {
-            this.setState({
-                displayTable: "none",
-                displayEmptyTable: ""
-            })
-        }
+        try {
+            if (this.state.filteredListEntryTableElements.length !== 0) {
+                this.setState({
+                    displayTable: "",
+                    displayEmptyTable: "none"
+                })
+            }
+            else {
+                this.setState({
+                    displayTable: "none",
+                    displayEmptyTable: ""
+                })
+            }
+          } catch (error) {
+            // error occured
+          }
     }
 
 

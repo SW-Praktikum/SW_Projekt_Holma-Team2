@@ -7,11 +7,23 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
 import GroupIcon from '@material-ui/icons/Group';
 import InfoIcon from '@material-ui/icons/Info';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import ShoppingBasket from '@material-ui/icons/ShoppingBasket';
 import PropTypes from "prop-types";
 import React from "react";
 import { Link as RouterLink, useHistory } from 'react-router-dom';
-import ShoppingBasket from '@material-ui/icons/ShoppingBasket';
+
+/**
+ * Die Navigation stellt das Menü innerhalb der Holma Statistik dar. 
+ * 
+ * Durch das anklicken der einzelnen Elemente wird ein hinterlegter Link angesprochen.
+ * 
+ * 'Gruppen': Weiterleitung zu GroupList
+ * 'App': Weiterleitung zu Holma App
+ * 'Konto': Weiterleitung zu User
+ * 'Info': Weiterleitung zu about
+ * 
+ * Der Pfeil stellt die Zurückfunktion dar, mit der zur letzten verwendeten Seite springt.
+ */
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;

@@ -295,7 +295,7 @@ class Administration():
             # Übrige Listeneinträge nach Artikel löschen
             with ListEntryMapper() as mapper:
                 for article in articles:
-                    mapper.delete_by_article(article.get_id())
+                    mapper.delete_by_article(article)
 
             article_mapper.delete_by_group(group)
 

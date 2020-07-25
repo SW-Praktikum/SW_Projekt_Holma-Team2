@@ -3,15 +3,16 @@ import firebase from 'firebase/app';
 import React, { Component, createRef } from 'react';
 import AppAPI from '../api/AppAPI';
 
-class UserProfil extends Component {
+/**
+ * Es werden die Details des angemeldeten Benutzers angezeigt.
+ */
 
-  // a refernce to the avatar button
+class UserProfile extends Component {
+
   #avatarButtonRef = createRef();
 
   constructor(props) {
     super(props);
-
-    // Init the state
     this.state = {
       user: this.props.user,
       userName: this.props.user.name,
@@ -47,7 +48,6 @@ class UserProfil extends Component {
       })
     })
   }
-
 
   render() {
       const { classes, user } = this.props;
@@ -119,4 +119,4 @@ const styles = theme => ({
   }
 });
 
-export default withStyles(styles)(UserProfil);
+export default withStyles(styles)(UserProfile);

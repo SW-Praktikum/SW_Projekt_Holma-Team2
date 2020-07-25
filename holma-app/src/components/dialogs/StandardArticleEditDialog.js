@@ -10,6 +10,13 @@ import React, { Component } from 'react';
 import AppAPI from '../../api/AppAPI';
 import ArticleBO from '../../api/ArticleBO';
 
+/**
+ * Dieser Dialog wird in 'StandardArticles' aufgerufen.
+ * 
+ * Die beim Anlegen angegebenen Attribute können nachträglich angepasst werden.
+ * 
+ */
+
 
 class StandardArticleEditDialog extends Component {
     constructor (props) {
@@ -131,9 +138,9 @@ class StandardArticleEditDialog extends Component {
         )
     }
     
-    saveChanges = () => {
+    saveChanges = async () => {
         let { localStandardArticle } = this.state
-        let { standardArticle } = this.state
+        let { standardArticle } = this.props
         localStandardArticle.setName(localStandardArticle.article.getName())
         AppAPI.getAPI().updateListEntry(localStandardArticle)
         
@@ -142,7 +149,8 @@ class StandardArticleEditDialog extends Component {
         standardArticle.setArticleId(localStandardArticle.getArticleId())
         standardArticle.setPurchasingUserId(localStandardArticle.getPurchasingUserId())
         standardArticle.setRetailerId(localStandardArticle.getRetailerId())
-
+        
+        await AppAPI.getAPI().completeListEntry(standardArticle)
         this.props.closeDialog()
 
     }

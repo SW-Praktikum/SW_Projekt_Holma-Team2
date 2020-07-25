@@ -56,11 +56,13 @@ export default class AppAPI {
     #getShoppingListByIdURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglist/${shoppingListId}`;
     #updateShoppingListURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglist/${shoppingListId}`;
     #deleteShoppingListURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglist/${shoppingListId}`;
-    
+    #archiveShoppingListURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglist/${shoppingListId}/archive`;
+
     // ListEntry related
     #getListEntryURL = () => `${this.#appServerBaseURL}/listentries`;
     #getListEntryByIdURL = (listEntryId) => `${this.#appServerBaseURL}/listentry/${listEntryId}`;
     #getListEntriesByUserIdURL = (userId) => `${this.#appServerBaseURL}/user/${userId}/listentries`;
+    #getListEntriesIncludeArchivedByUserIdURL = (userId) => `${this.#appServerBaseURL}/user/${userId}/listentries/include-archived`;
     
     #getListEntriesByArticleIdURL = (articleId) => `${this.#appServerBaseURL}/article/${articleId}/listentries`;
     #getListEntriesByShoppingListIdURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglist/${shoppingListId}/listentries`; 
@@ -86,7 +88,6 @@ export default class AppAPI {
     #getRetailersByNameURL = (name) => `${this.#appServerBaseURL}/by-name/${name}`;
     #getFrequentRetailerByUserIdURL = (userId) => `${this.#appServerBaseURL}/user/${userId}/retailers/most-frequent`;
 
-
     static getAPI() {
         if (this.#api == null) {
             this.#api = new AppAPI();
@@ -97,23 +98,23 @@ export default class AppAPI {
     // fetchAdv frägt eine URL an und gibt die Antwort direkt als JSON Objekt zurück
     // init wird später für alle requests verwendet, die nicht GET sind:
     // default 'GET' wird überschrieben mit jeweiliger Methode
-    #fetchAdv = (url, init) => fetch(url, init)
+    #fetchAdv = (url, init={credentials: 'include'}) => fetch(url, init)
         .then(response => {
             if (typeof init !== 'undefined' && "body" in init) {
-                //console.log("[" + init.method + "]", url, JSON.parse(init.body))
+                console.log("[" + init.method + "]", url, JSON.parse(init.body))
             }
             else {
-                //console.log("[GET]", url)
-
+                console.log("[GET]", url)
             }
             if (!response.ok){
-                //console.log(`${response.status} ${response.statusText}`);
+                console.log(`${response.status} ${response.statusText}`);
                 throw Error(`${response.status} ${response.statusText}`)
             }
             return response.json();
         });
 
         // Gibt eine Promise zurück mit einer Liste von UserBOs
+
     getUsers() {
         return this.#fetchAdv(this.#getUsersURL()).then((responseJSON) => {
             let responseUsers = UserBO.fromJSON(responseJSON);
@@ -131,8 +132,9 @@ export default class AppAPI {
             method: 'POST',
             headers: {
                 'Accept': 'application/json, text/plain',
-                'Content-type': 'application/json',
+                'Content-type': 'application/json'
             },
+            credentials:'include',
             body: JSON.stringify(user)
         }).then((responseJSON) => {
             let responseUser = UserBO.fromJSON(responseJSON)[0];
@@ -149,6 +151,7 @@ export default class AppAPI {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
+            credentials:'include',
             body: JSON.stringify(user)
         }).then((responseJSON) => {
             let responseUser = UserBO.fromJSON(responseJSON)[0];
@@ -165,6 +168,7 @@ export default class AppAPI {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
+            credentials:'include',
             body: JSON.stringify(user)
         }).then((responseJSON) => {
             let responseUser = UserBO.fromJSON(responseJSON)[0];
@@ -204,6 +208,7 @@ export default class AppAPI {
     addUserToGroup(groupId, userId) {
         return this.#fetchAdv(this.#addUserToGroupURL(groupId, userId), {
             method: 'POST',
+            credentials:'include',
             headers: {
                 'Accept': 'application/json, text/plain'
             },
@@ -218,6 +223,7 @@ export default class AppAPI {
     deleteUsersFromGroup(group, user) {
         return this.#fetchAdv(this.#deleteUsersFromGroupURL(group, user), {
             method: 'DELETE',
+            credentials:'include',
             headers: {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
@@ -226,7 +232,7 @@ export default class AppAPI {
     };
     
     getGroupsByUserId(userId) {
-        return this.#fetchAdv(this.#getGroupsByUserIdURL(userId)).then((responseJSON) => {
+        return this.#fetchAdv(this.#getGroupsByUserIdURL(userId), {credentials:'include'}).then((responseJSON) => {
             let responseGroups = GroupBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
                 resolve(responseGroups)
@@ -241,7 +247,8 @@ export default class AppAPI {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
-            body: JSON.stringify(group)
+            body: JSON.stringify(group),
+            credentials: 'include'
         }).then((responseJSON) => {
             let responseGroup = GroupBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
@@ -284,6 +291,7 @@ export default class AppAPI {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
+            credentials:'include',
             body: JSON.stringify(group)
         }).then((responseJSON) => {
             let responseGroup = GroupBO.fromJSON(responseJSON)[0];
@@ -300,6 +308,7 @@ export default class AppAPI {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
+            credentials:'include',
             body: JSON.stringify(group)
         }).then((responseJSON) => {
             let responseGroup = GroupBO.fromJSON(responseJSON)[0];
@@ -318,15 +327,6 @@ export default class AppAPI {
         })
     }
 
-    getArticlesFrequencyByGroupId(groupId) {
-        return this.#fetchAdv(this.#getArticlesFrequencyByGroupIdURL(groupId)).then((responseJSON) => {
-            let responseArticle = ArticleBO.fromJSON(responseJSON);
-            return new Promise(function (resolve) {
-                resolve(responseArticle)
-            })
-        })
-    }
-
     getShoppingListsByGroupId(groupId) {
         return this.#fetchAdv(this.#getShoppingListsByGroupIdURL(groupId)).then((responseJSON) => {
             let responseShoppingLists = ShoppingListBO.fromJSON(responseJSON);
@@ -338,7 +338,7 @@ export default class AppAPI {
 
     getShoppingListById(shoppingListId) {
         return this.#fetchAdv(this.#getShoppingListByIdURL(shoppingListId)).then((responseJSON) => {
-            let responseShoppingLists = ShoppingListBO.fromJSON(responseJSON);
+            let responseShoppingLists = ShoppingListBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
                 resolve(responseShoppingLists)
             })
@@ -347,11 +347,12 @@ export default class AppAPI {
 
     createShoppingList(shoppingList) {
         return this.#fetchAdv(this.#createShoppingListURL(shoppingList.getGroupId()), {
-        method: 'POST',
+            method: 'POST',
             headers: {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
+            credentials:'include',
             body: JSON.stringify(shoppingList)
         }).then((responseJSON) => {
             let responseShoppingList = ShoppingListBO.fromJSON(responseJSON)[0];
@@ -368,6 +369,7 @@ export default class AppAPI {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
+            credentials:'include',
             body: JSON.stringify(shoppingList)
         }).then((responseJSON) => {
             let responseShoppingList = ShoppingListBO.fromJSON(responseJSON)[0];
@@ -384,6 +386,24 @@ export default class AppAPI {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
+            credentials:'include',
+            body: JSON.stringify(shoppingList)
+        }).then((responseJSON) => {
+            let responseShoppingList = ShoppingListBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseShoppingList)
+            })
+        })
+    }
+
+    archiveShoppingList(shoppingList) {
+        return this.#fetchAdv(this.#archiveShoppingListURL(shoppingList.getId()), {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/plain',
+                'Content-type': 'application/json',
+            },
+            credentials:'include',
             body: JSON.stringify(shoppingList)
         }).then((responseJSON) => {
             let responseShoppingList = ShoppingListBO.fromJSON(responseJSON)[0];
@@ -419,6 +439,7 @@ export default class AppAPI {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
+            credentials:'include',
             body: JSON.stringify(article)
         }).then((responseJSON) => {
             let responseArticle = ArticleBO.fromJSON(responseJSON)[0];
@@ -444,6 +465,7 @@ export default class AppAPI {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
+            credentials:'include',
             body: JSON.stringify(article)
         }).then((responseJSON) => {
             let responseArticle = ArticleBO.fromJSON(responseJSON)[0];
@@ -460,6 +482,7 @@ export default class AppAPI {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
+            credentials:'include',
             body: JSON.stringify(article)
         }).then((responseJSON) => {
             let responseArticle = ArticleBO.fromJSON(responseJSON)[0];
@@ -479,14 +502,58 @@ export default class AppAPI {
         })
     };
 
-    getListEntriesByUserId(userId) {
-        return this.#fetchAdv(this.#getListEntriesByUserIdURL(userId)).then((responseJSON) => {
-            let responseListEntry = ListEntryBO.fromJSON(responseJSON);
-            return new Promise(function (resolve) {
-                resolve(responseListEntry)
+    getListEntriesByUserId(userId, includeArchived) {
+        if (includeArchived == true) {
+            return this.#fetchAdv(this.#getListEntriesIncludeArchivedByUserIdURL(userId)).then((responseJSON) => {
+                let responseListEntries = ListEntryBO.fromJSON(responseJSON);
+                console.log(responseListEntries)
+                return new Promise(function (resolve) {
+                    resolve(responseListEntries)
+                })
             })
-        })
+        }
+        else {
+            return this.#fetchAdv(this.#getListEntriesByUserIdURL(userId)).then((responseJSON) => {
+                let responseListEntries = ListEntryBO.fromJSON(responseJSON);
+                return new Promise(function async (resolve) {
+                    resolve(responseListEntries)
+                })                
+            })
+        }        
     }; 
+
+    async completeListEntry(listEntry) {
+        if (listEntry.getArticleId() !== null) {
+            let article = await this.getArticleById(listEntry.getArticleId())
+            listEntry.article = article
+        } else {
+            listEntry.article = new ArticleBO("", 0)
+        }
+        
+        if (listEntry.getRetailerId() !== null) {
+            let retailer = await this.getRetailerById(listEntry.getRetailerId())
+            listEntry.retailer = retailer    
+        } else {
+            listEntry.retailer = new RetailerBO("")
+        }
+
+        if (listEntry.getPurchasingUserId() !== null) {
+            let purchasingUser = await this.getUserById(listEntry.getPurchasingUserId())
+            listEntry.purchasingUser = purchasingUser
+        } else {
+            listEntry.purchasingUser = new UserBO("", "", "")
+        }
+
+        if (listEntry.getShoppingListId() !== null) {
+            let shoppingList = await this.getShoppingListById(listEntry.getShoppingListId())
+            listEntry.shoppingList = shoppingList    
+        } else {
+            listEntry.shoppingList = new ShoppingListBO("", 0, "")
+        }
+
+        return new Promise(function (resolve) {
+            resolve(listEntry)
+        })    }
 
     getListEntriesByArticleId(articleId) {
         return this.#fetchAdv(this.#getListEntriesByArticleIdURL(articleId)).then((responseJSON) => {
@@ -497,6 +564,15 @@ export default class AppAPI {
         })
     } 
 
+     getListEntriesByShoppingListId(shoppingListId) {
+        return this.#fetchAdv(this.#getListEntriesByShoppingListIdURL(shoppingListId)).then((responseJSON) => {
+            let responseListEntry = ListEntryBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+                resolve(responseListEntry)
+            })
+        })
+    }
+
     getListEntriesByGroupId(groupId) {
         return this.#fetchAdv(this.#getListEntriesByGroupIdURL(groupId)).then((responseJSON) => {
             let responseListEntry = ListEntryBO.fromJSON(responseJSON);
@@ -505,15 +581,6 @@ export default class AppAPI {
             })
         })
     }
-
-     getListEntriesByShoppingListId(shoppingListId) {
-        return this.#fetchAdv(this.#getListEntriesByShoppingListIdURL(shoppingListId)).then((responseJSON) => {
-            let responseListEntry = ListEntryBO.fromJSON(responseJSON);
-            return new Promise(function (resolve) {
-                resolve(responseListEntry)
-            })
-        })
-    }  
 
     getUpdatedListEntriesByTimePeriod(fromDate, toDate) {
         return this.#fetchAdv(this.#getUpdatedListEntriesByTimePeriodURL(fromDate, toDate)).then((responseJSON) => {
@@ -562,11 +629,12 @@ export default class AppAPI {
 
     createListEntry(listentry) {
         return this.#fetchAdv(this.#createListEntryURL(listentry.getShoppingListId()), {
-        method: 'POST',
+            method: 'POST',
             headers: {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
+            credentials:'include',
             body: JSON.stringify(listentry)
         }).then((responseJSON) => {
             let responseListEntry = ListEntryBO.fromJSON(responseJSON)[0];
@@ -583,6 +651,7 @@ export default class AppAPI {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
+            credentials:'include',
             body: JSON.stringify(listentry)
         }).then((responseJSON) => {
             let responseListEntry = ListEntryBO.fromJSON(responseJSON)[0];
@@ -599,6 +668,7 @@ export default class AppAPI {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
+            credentials:'include',
             body: JSON.stringify(listentry)
         }).then((responseJSON) => {
             let responseListEntry = ListEntryBO.fromJSON(responseJSON)[0];
@@ -619,7 +689,7 @@ export default class AppAPI {
 
     getRetailerById(retailerId) {
         return this.#fetchAdv(this.#getRetailerByIdURL(retailerId)).then((responseJSON) => {
-            let responseRetailer = ListEntryBO.fromJSON(responseJSON)[0];
+            let responseRetailer = RetailerBO.fromJSON(responseJSON)[0];
             return new Promise(function (resolve) {
                 resolve(responseRetailer)
             })
@@ -628,21 +698,12 @@ export default class AppAPI {
 
     getRetailersByName(name) {
         return this.#fetchAdv(this.#getRetailersByNameURL(name)).then((responseJSON) => {
-            let responseRetailer = ListEntryBO.fromJSON(responseJSON);
-            return new Promise(function (resolve) {
-                resolve(responseRetailer)
-            })
-        })
-    };
-
-    getFrequentRetailerByUserId(userId) {
-        return this.#fetchAdv(this.#getFrequentRetailerByUserIdURL(userId)).then((responseJSON) => {
             let responseRetailer = RetailerBO.fromJSON(responseJSON);
             return new Promise(function (resolve) {
                 resolve(responseRetailer)
             })
         })
-    }  
+    };
 
     getStandardArticlesByGroupId(groupId) {
         return this.#fetchAdv(this.#getStandardArticlesByGroupIdURL(groupId)).then((responseJSON) => {
@@ -670,6 +731,7 @@ export default class AppAPI {
     addStandardArticlesToShoppingList(groupId, shoppingListId) {
         return this.#fetchAdv(this.#addStandardArticlesToShoppingListURL(groupId, shoppingListId), {
             method: 'POST',
+            credentials:'include',
             headers: {
                 'Accept': 'application/json, text/plain'
             },
@@ -681,13 +743,40 @@ export default class AppAPI {
         })
     };
 
-    deleteStandardArticleFromGroup(group, listentry) {
-        return this.#fetchAdv(this.#deleteStandardArticleFromGroupURL(group, listentry), {
+    deleteStandardArticleFromGroup(groupId, listentry) {
+        return this.#fetchAdv(this.#deleteStandardArticleFromGroupURL(groupId, listentry.getId()), {
             method: 'DELETE',
+            credentials:'include',
             headers: {
                 'Accept': 'application/json, text/plain',
                 'Content-type': 'application/json',
             },
+            body: JSON.stringify(listentry)
+        }).then((responseJSON) => {
+            let responseListEntry = ListEntryBO.fromJSON(responseJSON)[0];
+            return new Promise(function (resolve) {
+                resolve(responseListEntry)
+            })
         })
     };
+
+    getFrequentRetailerByUserId(userId) {
+        return this.#fetchAdv(this.#getFrequentRetailerByUserIdURL(userId)).then((responseJSON) => {
+            let responseRetailer = RetailerBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+                resolve(responseRetailer)
+            })
+        })
+    }  
+
+    getArticlesFrequencyByGroupId(groupId) {
+        return this.#fetchAdv(this.#getArticlesFrequencyByGroupIdURL(groupId)).then((responseJSON) => {
+            let responseArticle = ArticleBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+                resolve(responseArticle)
+            })
+        })
+    }
+
+
 }

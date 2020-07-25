@@ -17,9 +17,18 @@ import React, { Component } from 'react';
 import AppAPI from '../api/AppAPI';
 import StandardArticleEditDialog from './dialogs/StandardArticleEditDialog';
 
+/**
+ * Es werden alle Standardartikel einer Gruppe angezeigt. 
+ * 
+ * Die dargestellten Standardartikel können durch das StandardArticleEditDialog bearbeitet werden.
+ * 
+ * Die Standardartikel können gelöscht werden.
+ * Dadurch werden diese beim hinzufügen der Standardartikel zu einer neu erstellten Shoppinglist, nicht mehr als Standardartikel hinzugefügt.
+ */
 
 
-class StandardArticles extends Component {
+
+class StandardArticle extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -66,7 +75,7 @@ class StandardArticles extends Component {
 
 render(){
     const {standardArticle, articles, groupId, users, retailers} = this.props;
-    const { open} = this.state;
+    const { open } = this.state;
 
 return (
     <React.Fragment>
@@ -77,6 +86,7 @@ return (
             articles={articles}
             retailers={retailers}
             loadArticles={this.props.loadArticles}
+            loadStandardArticles={this.props.loadStandardArticles}
             open={this.state.openDialog}
             openDialog={this.openDialog}
             closeDialog={this.closeDialog}
@@ -96,7 +106,7 @@ return (
                 </IconButton>
             </TableCell>
             <TableCell padding="dense" style={{paddingLeft: 0, paddingTop: 0, paddingBottom: 0, paddingRight: 10}} align='right'>
-                <IconButton aria-label="expand row" size="small" onClick={() => this.deleteEntry(standardArticle)}>
+                <IconButton aria-label="expand row" size="small" onClick={() => this.deleteStandardArticle(standardArticle)}>
                     <ClearRoundedIcon/>
                 </IconButton>
             </TableCell>
@@ -185,13 +195,13 @@ class StandardArticleEdit extends Component {
     } 
 
     loadStandardArticles = async () => {
-        const standardArticles = await AppAPI.getAPI().getListEntriesByUserId(this.state.userId, true)
+        const standardArticles = await AppAPI.getAPI().getStandardArticlesByGroupId(this.state.groupId)
         for (const standardArticle of standardArticles) {
             await AppAPI.getAPI().completeListEntry(standardArticle)
         }
         
         var standardElements = standardArticles.map((standard) => 
-        <StandardArticles 
+        <StandardArticle
             groupId={this.state.groupId} 
             standardArticle={standard} 
             retailers={this.state.retailers}

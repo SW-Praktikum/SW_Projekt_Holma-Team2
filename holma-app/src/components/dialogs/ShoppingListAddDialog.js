@@ -12,7 +12,9 @@ import AddIcon from '@material-ui/icons/Add';
 import { withStyles } from '@material-ui/styles';
 import React, { Component } from 'react';
 
-
+/**
+ * Durch diesen Dialog kann eine neue Shoppinglist erstellt und der angesprochenen Gruppe hinzugefügt werden.
+ */
 
 class ShoppingListAddDialog extends Component {
     constructor (props) {

@@ -48,6 +48,7 @@ export default class AppAPI {
     #deleteArticleURL = (articleId) => `${this.#appServerBaseURL}/article/${articleId}` ;
     #getArticleByIdURL = (articleId) => `${this.#appServerBaseURL}/article/${articleId}`;
     #getArticlesByNameURL = (name) => `${this.#appServerBaseURL}/by-name/${name}`;
+    #getArticlesFrequencyByGroupIdURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/articles/most-frequent`;
 
     // Shoppinglist related
     #getShoppingListsByGroupIdURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/shoppinglists`;
@@ -85,6 +86,7 @@ export default class AppAPI {
     #getRetailersURL = () => `${this.#appServerBaseURL}/retailers`;
     #getRetailerByIdURL = (retailerId) => `${this.#appServerBaseURL}/retailer/${retailerId}`;
     #getRetailersByNameURL = (name) => `${this.#appServerBaseURL}/by-name/${name}`;
+    #getFrequentRetailerByUserIdURL = (userId) => `${this.#appServerBaseURL}/user/${userId}/retailers/most-frequent`;
 
     static getAPI() {
         if (this.#api == null) {
@@ -99,13 +101,13 @@ export default class AppAPI {
     #fetchAdv = (url, init={credentials: 'include'}) => fetch(url, init)
         .then(response => {
             if (typeof init !== 'undefined' && "body" in init) {
-                //console.log("[" + init.method + "]", url, JSON.parse(init.body))
+                console.log("[" + init.method + "]", url, JSON.parse(init.body))
             }
             else {
-                //console.log("[GET]", url)
+                console.log("[GET]", url)
             }
             if (!response.ok){
-                //console.log(`${response.status} ${response.statusText}`);
+                console.log(`${response.status} ${response.statusText}`);
                 throw Error(`${response.status} ${response.statusText}`)
             }
             return response.json();
@@ -547,14 +549,34 @@ export default class AppAPI {
     }; 
 
     async completeListEntry(listEntry) {
-        let article = await this.getArticleById(listEntry.getArticleId())
-        listEntry.article = article
-        let retailer = await this.getRetailerById(listEntry.getRetailerId())
-        listEntry.retailer = retailer
-        let purchasingUser = await this.getUserById(listEntry.getPurchasingUserId())
-        listEntry.purchasingUser = purchasingUser
-        let shoppingList = await this.getShoppingListById(listEntry.getShoppingListId())
-        listEntry.shoppingList = shoppingList
+        if (listEntry.getArticleId() !== null) {
+            let article = await this.getArticleById(listEntry.getArticleId())
+            listEntry.article = article
+        } else {
+            listEntry.article = new ArticleBO("", 0)
+        }
+        
+        if (listEntry.getRetailerId() !== null) {
+            let retailer = await this.getRetailerById(listEntry.getRetailerId())
+            listEntry.retailer = retailer    
+        } else {
+            listEntry.retailer = new RetailerBO("")
+        }
+
+        if (listEntry.getPurchasingUserId() !== null) {
+            let purchasingUser = await this.getUserById(listEntry.getPurchasingUserId())
+            listEntry.purchasingUser = purchasingUser
+        } else {
+            listEntry.purchasingUser = new UserBO("", "", "")
+        }
+
+        if (listEntry.getShoppingListId() !== null) {
+            let shoppingList = await this.getShoppingListById(listEntry.getShoppingListId())
+            listEntry.shoppingList = shoppingList    
+        } else {
+            listEntry.shoppingList = new ShoppingListBO("", 0, "")
+        }
+
         return new Promise(function (resolve) {
             resolve(listEntry)
         })    }
@@ -781,4 +803,24 @@ export default class AppAPI {
             })
         })
     };
+
+    getFrequentRetailerByUserId(userId) {
+        return this.#fetchAdv(this.#getFrequentRetailerByUserIdURL(userId)).then((responseJSON) => {
+            let responseRetailer = RetailerBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+                resolve(responseRetailer)
+            })
+        })
+    }  
+
+    getArticlesFrequencyByGroupId(groupId) {
+        return this.#fetchAdv(this.#getArticlesFrequencyByGroupIdURL(groupId)).then((responseJSON) => {
+            let responseArticle = ArticleBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+                resolve(responseArticle)
+            })
+        })
+    }
+
+
 }

@@ -1,6 +1,10 @@
 import { colors } from '@material-ui/core';
 import { createMuiTheme } from '@material-ui/core/styles';
 
+/**
+ * Es sind die verschiedenen Styling-Elemente der Holma Statistik enthalten.
+ */
+
 const white = '#FFFFFF';
 const black = '#000000';
 

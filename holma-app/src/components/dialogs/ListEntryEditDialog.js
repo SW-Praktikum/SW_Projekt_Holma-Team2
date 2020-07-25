@@ -10,6 +10,14 @@ import React, { Component } from 'react';
 import AppAPI from '../../api/AppAPI';
 import ArticleBO from '../../api/ArticleBO';
 
+/**
+ * Durch dieses Dialog kann ein Listeneintrag bearbeitet werden.
+ * 
+ * Es können die angegebenen Merkmale nachträglich noch angepasst werden.
+ * 
+ * Dadurch wird es ermöglicht, den Listeneintrag einem anderen Gruppenmitglied zuzuordnen,
+ * die Menge, den Händler oder den Artikel anzupassen.
+ */
 
 class ListEntryEditDialog extends Component {
     constructor (props) {
@@ -146,7 +154,8 @@ class ListEntryEditDialog extends Component {
         listEntry.setArticleId(localListEntry.getArticleId())
         listEntry.setPurchasingUserId(localListEntry.getPurchasingUserId())
         listEntry.setRetailerId(localListEntry.getRetailerId())
-
+        
+        this.props.loadListEntries()
         this.props.closeDialog()
 
     }

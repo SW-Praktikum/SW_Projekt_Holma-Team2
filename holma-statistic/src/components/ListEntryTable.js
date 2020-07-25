@@ -25,6 +25,16 @@ import {
 import React, { Component } from 'react';
 import AppAPI from '../api/AppAPI';
 
+/**
+ * Es werden die gesamten Listeneinträge des eingeloggten Users in einer Tabelle dargestellt.
+ * 
+ * Standardmäßig wir nach abgehakten Listenelementen gefiltert.
+ * 
+ * Die enthaltenene Filterfunktion kann durch das Angeben eines Artikels, Einkäufers, Händlers oder einem Zeitraum die gesamten Listeneinträge filtern.
+ * 
+ * Durch die enthaltene Sortierfunktion können die Listeneinträge nach einem ausgewählten Attributs sortiert werden.
+ */
+
 class RetailerEntry extends Component {
     constructor(props) {
         super(props);
@@ -72,7 +82,11 @@ class ListEntry extends Component {
         var checkedTimestamp = ""
 
         if (listEntry.getCheckedTs() !== null) {
-            let checkedTs = new Date(listEntry.getCheckedTs())
+            Date.prototype.addHours = function(h) {
+                this.setTime(this.getTime() + (h*60*60*1000));
+                return this;
+              }
+            let checkedTs = new Date(listEntry.getCheckedTs()).addHours(2)
             let checkedTs_str = checkedTs.toString()
             checkedTimestamp = checkedTs_str.substring(4, 21)
           }

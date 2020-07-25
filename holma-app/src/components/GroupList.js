@@ -14,6 +14,16 @@ import ShoppingListBO from '../api/ShoppingListBO';
 import ShoppingListAddDialog from './dialogs/ShoppingListAddDialog';
 import ListWithBoxes from './ListWithBoxes';
 
+
+/**
+ * Es werden die bestehenden Shoppinglisten einer Gruppe angezeigt.
+ * 
+ * Es können durch das ShoppingListAddDialog weitere Shoppinglisten hinzugefügt werden
+ * 
+ * Es werden die Gruppen-Id und der Gruppenname angezeigt und es besteht die Möglichkeit, die Gruppendetails aufzurufen.
+ * 
+ */
+
 class Grouplink extends Component{
   render(){
       return(
@@ -125,7 +135,8 @@ class GroupList extends Component {
         if (this.state.checked === true) {
           AppAPI.getAPI().getShoppingListsByGroupId(this.state.groupId).then((result) => {
             const liste  = result[result.length - 1]
-            AppAPI.getAPI().addStandardArticlesToShoppingList(this.state.groupId, liste.id).then (() => {
+
+            AppAPI.getAPI().addStandardArticlesToShoppingList(this.state.groupId, liste.getId()).then (() => {
               this.loadShoppingLists()
             })
             this.setState({

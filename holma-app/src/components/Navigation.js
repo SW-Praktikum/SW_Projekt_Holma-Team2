@@ -13,6 +13,19 @@ import React from "react";
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 
 
+/**
+ * Die Navigation stellt das Menü innerhalb der Holma App dar. 
+ * 
+ * Durch das anklicken der einzelnen Elemente wird ein hinterlegter Link angesprochen.
+ * 
+ * 'Gruppen': Weiterleitung zu GroupList
+ * 'Statistik': Weiterleitung zu Holma Statistik
+ * 'Konto': Weiterleitung zu User
+ * 'Info': Weiterleitung zu about
+ * 
+ * Der Pfeil stellt die Zurückfunktion dar, mit der zur letzten verwendeten Seite springt.
+ */
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 

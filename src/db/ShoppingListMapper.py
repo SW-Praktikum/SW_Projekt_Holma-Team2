@@ -43,7 +43,7 @@ class ShoppingListMapper(Mapper):
 
         return result
 
-    def find_by_id(self, user_id):
+    def find_by_id(self, shopping_list_id):
         """Eindeutiges Auslesen einer Shoppingliste durch ID
         :param user_id:
         :return Shoppinglisten-Objekt, das der übergebenen ID entspricht
@@ -51,7 +51,7 @@ class ShoppingListMapper(Mapper):
         """
         cursor = self._connection.cursor()
         command = "SELECT * FROM shopping_list " \
-                  "WHERE shopping_list_id={}".format(user_id)
+                  "WHERE shopping_list_id={}".format(shopping_list_id)
         cursor.execute(command)
         tuples = cursor.fetchall()
 

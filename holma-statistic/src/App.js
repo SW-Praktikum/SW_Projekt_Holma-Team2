@@ -9,14 +9,13 @@ import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import GroupEntries from './components/GroupEntries';
 import Header from './components/layout/Header';
-import Startpage from './components/layout/Startpage';
 import ListEntryTable from './components/ListEntryTable';
 import Navigation from './components/Navigation';
 import OneGroupStat from './components/OneGroupStat';
 import About from './components/pages/About';
 import SignIn from './components/pages/SignIn';
 import theme from './components/Theme';
-import User from './components/User';
+import UserProfile from './components/User';
 
 
 class App extends React.Component {
@@ -130,7 +129,6 @@ class App extends React.Component {
                   <>
                     <Redirect to='/user-statistics'/>
                     <Navigation />
-                    <Route path='/startpage' component={Startpage}/>
                     <Route path='/user-statistics'>
                       <ListEntryTable user={user}/>
                     </Route>
@@ -143,7 +141,7 @@ class App extends React.Component {
                       <About/>
                     </Route>
                     <Route path='/user'>
-                      <User user={user}/>
+                      <UserProfile user={user}/>
                     </Route>
                   </>
                   :

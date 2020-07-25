@@ -14,6 +14,20 @@ import EditIcon from '@material-ui/icons/Edit';
 import React, { Component } from 'react';
 import AppAPI from '../api/AppAPI';
 
+/**
+ * ShoppingListEdit wird durch das Anklicken des 'Details' Button in der ListEntryTable aufgerufen.
+ * 
+ * 
+ * Die Details der angesprochenen Shoppinglist werden hier angezeigt.
+ * 
+ * Der Listenname kann durch das Aufrufen von ShoppingListEditDialog geändert werden
+ * 
+ * 
+ * Der Button 'Liste löschen' ermöglicht es, die Gruppe komplett aus der Datenbank zu löschen.
+ * 
+ * Der Button 'Liste archivieren' ermöglicht es, die Shoppinglist nicht mehr unter Grouplist anzuzeigen, aber nicht aus der DB zu löschen. Dadurch kann Shoppinglist weiterhin im Report-Client 'Holma Statistik' angezeigt werden.
+ */
+
 class ShoppingListNameEditDialog extends Component {
     constructor (props) {
         super(props)
@@ -91,11 +105,15 @@ class ShoppingListEdit extends Component {
     }
 
     getDate = (shoppingList) => {
+        Date.prototype.addHours = function(h) {
+            this.setTime(this.getTime() + (h*60*60*1000));
+            return this;
+          }
         let lup = Date.parse(shoppingList.lastUpdated)
-        let lup_iso = new Date(lup).toUTCString()
+        let lup_iso = new Date(lup).addHours(4).toUTCString()
         let lup_iso_str = (lup_iso.substring(0, 3) + lup_iso.substring(4, lup_iso.length - 7))
         let gcd = Date.parse(shoppingList.creationDate)
-        let gcd_iso = new Date(gcd).toUTCString()
+        let gcd_iso = new Date(gcd).addHours(4).toUTCString()
         let gcd_iso_str = (gcd_iso.substring(0, 3) + gcd_iso.substring(4, lup_iso.length - 7))
         this.setState({
             shoppingListCreationDate: gcd_iso_str,

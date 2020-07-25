@@ -19,6 +19,12 @@ import React, { Component } from 'react';
 import AppAPI from '../api/AppAPI';
 import ListEntryEditDialog from './dialogs/ListEntryEditDialog';
 
+/**
+ * Diese Component wird im ListEntryTable.js benötigt und beschreibt die Darstellung eines Listeneintrags.
+ * 
+ * Die ListEntryEditDialog wird hinter dem EditIcon aufgerufen, wodurch der Listeneintrag bearbeitet werden kann.
+ */
+
 
 class ListEntry extends Component {
     constructor(props) {
@@ -70,7 +76,11 @@ class ListEntry extends Component {
         var groupLastUpdated = ""
 
         if (listEntry.getLastUpdated() !="") {
-            let lud = new Date(listEntry.getLastUpdated())
+            Date.prototype.addHours = function(h) {
+                this.setTime(this.getTime() + (h*60*60*1000));
+                return this;
+              }
+            let lud = new Date(listEntry.getLastUpdated()).addHours(2)
             let luds = lud.toString()
             groupLastUpdated = luds.substring(4, 21)
           }
@@ -83,6 +93,7 @@ class ListEntry extends Component {
                     users={users}
                     articles={articles}
                     retailers={retailers}
+                    loadListEntries={this.props.loadListEntries}
                     loadArticles={this.props.loadArticles}
                     open={this.state.openDialog}
                     openDialog={this.openDialog}

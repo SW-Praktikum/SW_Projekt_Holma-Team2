@@ -7,6 +7,12 @@ import List from '@material-ui/core/List';
 import TextField from '@material-ui/core/TextField';
 import React, { Component } from 'react';
 
+/**
+ * Durch diesen Dialog kann ein neues Gruppenmitglied einer Gruppe hinzugefügt werden.
+ * 
+ * Dieser Dialog wird unter 'Groupedit' aufgerufen.
+ */
+
 class MemberAddDialog extends Component {
     constructor (props) {
         super(props)

@@ -13,6 +13,11 @@ import React, { Component } from 'react';
 import AppAPI from '../api/AppAPI';
 import ArticleEditDialog from './dialogs/ArticleEditDialog';
 
+/**
+ * Es werden die gesamten Artikel einer Gruppe in einer Übersicht dargestellt.
+ * Die Artikel können hierbei geändert und gelöscht werden.
+ */
+
 class Articles extends Component {
     constructor(props) {
         super(props);
