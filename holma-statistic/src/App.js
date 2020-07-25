@@ -9,7 +9,10 @@ import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import GroupEntries from './components/GroupEntries';
 import Header from './components/layout/Header';
+<<<<<<< HEAD
 import Startpage from './components/ListEntryTable';
+=======
+>>>>>>> 612920773533a14b6a0dc25ff777564cd0f46bbc
 import ListEntryTable from './components/ListEntryTable';
 import Navigation from './components/Navigation';
 import OneGroupStat from './components/OneGroupStat';
@@ -130,7 +133,6 @@ class App extends React.Component {
                   <>
                     <Redirect to='/user-statistics'/>
                     <Navigation />
-                    <Route path='/startpage' component={Startpage}/>
                     <Route path='/user-statistics'>
                       <ListEntryTable user={user}/>
                     </Route>
