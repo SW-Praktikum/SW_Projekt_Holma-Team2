@@ -372,7 +372,11 @@ class ListEntryTable extends Component {
         const {retailers, users, filterArticleName, filterPurchasingUserName, filterRetailerName, filterChecked, filterStartDate, filterEndDate, filteredListEntryTableElements, userName} = this.state;
         
         var listLastUpdated = ""
-        let lud = new Date(this.state.lastUpdated)
+        Date.prototype.addHours = function(h) {
+            this.setTime(this.getTime() + (h*60*60*1000));
+            return this;
+          }
+        let lud = new Date(this.state.lastUpdated).addHours(2)
         let luds = lud.toString()
         listLastUpdated = luds.substring(4, 21)
         

@@ -76,7 +76,11 @@ class ListEntry extends Component {
         var groupLastUpdated = ""
 
         if (listEntry.getLastUpdated() !="") {
-            let lud = new Date(listEntry.getLastUpdated())
+            Date.prototype.addHours = function(h) {
+                this.setTime(this.getTime() + (h*60*60*1000));
+                return this;
+              }
+            let lud = new Date(listEntry.getLastUpdated()).addHours(2)
             let luds = lud.toString()
             groupLastUpdated = luds.substring(4, 21)
           }

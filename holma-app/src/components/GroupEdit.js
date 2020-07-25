@@ -94,9 +94,13 @@ class GroupInformation extends Component {
     var groupLastUpdated = ""
 
     if (this.props.groupCreationDate != ""&& this.props.groupLastUpdated !="") {
-      let gcd = new Date(this.props.groupCreationDate)
+      Date.prototype.addHours = function(h) {
+        this.setTime(this.getTime() + (h*60*60*1000));
+        return this;
+      }
+      let gcd = new Date(this.props.groupCreationDate).addHours(2)
       let gcds = gcd.toString()
-      let lup = new Date(this.props.groupLastUpdated)
+      let lup = new Date(this.props.groupLastUpdated).addHours(2)     
       let lups = lup.toString()
       groupCreationDate = gcds.substring(4, 21)
       groupLastUpdated = lups.substring(4, 21)
