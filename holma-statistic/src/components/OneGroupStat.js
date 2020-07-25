@@ -79,7 +79,11 @@ class AmountEntry extends Component {
           var checkedTimestamp = ""
   
           if (listEntry.getCheckedTs() !== null) {
-              let checkedTs = new Date(listEntry.getCheckedTs())
+            Date.prototype.addHours = function(h) {
+                this.setTime(this.getTime() + (h*60*60*1000));
+                return this;
+              }  
+            let checkedTs = new Date(listEntry.getCheckedTs()).addHours(2)
               let checkedTs_str = checkedTs.toString()
               checkedTimestamp = checkedTs_str.substring(4, 21)
             }

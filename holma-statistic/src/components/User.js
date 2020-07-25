@@ -7,7 +7,7 @@ import AppAPI from '../api/AppAPI';
  * Es werden die Details des angemeldeten Benutzers angezeigt.
  */
 
-class UserProfil extends Component {
+class UserProfile extends Component {
 
   #avatarButtonRef = createRef();
 
@@ -111,4 +111,4 @@ const styles = theme => ({
   }
 });
 
-export default withStyles(styles)(UserProfil);
+export default withStyles(styles)(UserProfile);

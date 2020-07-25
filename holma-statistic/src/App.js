@@ -15,7 +15,7 @@ import OneGroupStat from './components/OneGroupStat';
 import About from './components/pages/About';
 import SignIn from './components/pages/SignIn';
 import theme from './components/Theme';
-import User from './components/User';
+import UserProfile from './components/User';
 
 
 class App extends React.Component {
@@ -141,7 +141,7 @@ class App extends React.Component {
                       <About/>
                     </Route>
                     <Route path='/user'>
-                      <User user={user}/>
+                      <UserProfile user={user}/>
                     </Route>
                   </>
                   :
