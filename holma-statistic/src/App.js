@@ -9,7 +9,7 @@ import ContextErrorMessage from './components/dialogs/ContextErrorMessage';
 import LoadingProgress from './components/dialogs/LoadingProgress';
 import GroupEntries from './components/GroupEntries';
 import Header from './components/layout/Header';
-import Startpage from './components/layout/Startpage';
+import Startpage from './components/ListEntryTable';
 import ListEntryTable from './components/ListEntryTable';
 import Navigation from './components/Navigation';
 import OneGroupStat from './components/OneGroupStat';
