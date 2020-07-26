@@ -45,11 +45,13 @@ Die Server-Seite baut auf Python, Flask (Cors) sowie RestX auf.
 5. requests
 6. google-auth
 
-Flask, flask-cors sowie flask restx können per pip (und dem 
-zugehörigen Befehl ```pip install```) installiert werden.
+
+Die benötigten Packages können unter dem Befehl 
+```pip install -r src/requirements.txt``` installiert werden.
+
 
 Eine weitere Möglichkeit besteht darin, in PyCharm ein Virtual Environment 
-für das Projekt anzuelgen und darin die Packages ```flask```, ```flask-restx``` und ```flask-cors``` 
+für das Projekt anzuelgen und darin die Packages ```flask```, ```flask-restx```, ```flask-cors``` und ```mysql-connector-python``` 
 zu installieren. Diese Packages ziehen die Installation der Packages ```google-auth``` und ```requests``` 
 nach sich.
 

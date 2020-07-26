@@ -90,15 +90,25 @@ class Startpage extends Component {
         }
     }
 
-    componentDidMount(){
+    async componentDidMount(){
         if(this.state.userId){
             this.loadRetailers()
             this.loadListEntries().then(() => {
                 this.filterInput()
                 this.displayRelevant()
-                })
-          }
-          
+            })
+
+            try {
+                setInterval(async() => {
+                        this.loadListEntries().then(() => {
+                        this.filterInput()
+                        this.displayRelevant()
+                        })
+                }, 5000)
+            } catch(e) {
+                console.log("Error while fetching in loop", e)
+            }
+        }
     }
 
 
