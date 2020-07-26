@@ -22,12 +22,15 @@ class Group(BusinessObject):
         return s
 
     def get_owner(self):
+        """Auslesen des Fremdschlüssels Owner"""
         return self._owner
 
     def set_owner(self, user_id):
+        """Setzen des Fremdschlüssels Gruppe"""
         self._owner = user_id
 
     def to_dict(self):
+        """Umwandeln Group() in ein Python dict()"""
         result = {
             "id": self.get_id(),
             "name": self.get_name(),
@@ -39,6 +42,7 @@ class Group(BusinessObject):
 
     @staticmethod
     def from_dict(dictionary=dict()):
+        """Umwandeln eines Python dict() in eine Group()"""
         group = Group()
         group.set_id(dictionary["id"])
         group.set_name(dictionary["name"])
@@ -49,6 +53,7 @@ class Group(BusinessObject):
 
     @staticmethod
     def from_tuples(tuples=list()):
+        """Umwandeln eines DB tuples in eine Group() (Python Objekt)"""
         result = []
         for (group_id, name, creation_date, owner, last_update) in tuples:
             group = Group()
