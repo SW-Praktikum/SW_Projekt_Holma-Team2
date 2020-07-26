@@ -11,6 +11,7 @@ export default class ShoppingListBO extends BusinessObject {
         return this.groupId
     }
 
+    // Returns an Array of ShoppinglistBOs from a given JSON structure
     static fromJSON(shoppinglists) {
         let result = [];
 

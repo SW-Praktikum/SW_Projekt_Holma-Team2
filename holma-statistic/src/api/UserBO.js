@@ -24,6 +24,7 @@ export default class UserBO extends BusinessObject {
         this.googleId = googleId
     }
 
+    // Returns an Array of UserBOs from a given JSON structure
     static fromJSON(users) {
         let result = [];
 

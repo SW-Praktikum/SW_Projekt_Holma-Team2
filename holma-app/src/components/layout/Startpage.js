@@ -2,6 +2,10 @@ import { Button, Checkbox, colors, TextField } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import Collapse from '@material-ui/core/Collapse';
+import IconButton from '@material-ui/core/IconButton';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import Radio from '@material-ui/core/Radio';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -30,6 +34,7 @@ class ListEntry extends Component {
         this.state = { 
             userId : this.props.userId,
             checked: this.props.listEntry.getChecked(),
+            open: false
         }
     }
 
@@ -42,10 +47,36 @@ class ListEntry extends Component {
       AppAPI.getAPI().updateListEntry(listEntryChecked)
     }
 
+    setOpen(bool) {
+        this.setState({
+            open: bool
+        })
+    }
 
     render() {
         const { listEntry } = this.props;
         const { open } = this.state;
+        const classes = {
+            root: {
+              position: 'fixed'
+            },
+            tableCell: {
+                borderBottom: "none"
+            }
+        }
+
+        var groupLastUpdated = ""
+
+        if (listEntry.getLastUpdated() !="") {
+            Date.prototype.addHours = function(h) {
+                this.setTime(this.getTime() + (h*60*60*1000));
+                return this;
+              }
+            let lud = new Date(listEntry.getLastUpdated()).addHours(2)
+            let luds = lud.toString()
+            groupLastUpdated = luds.substring(4, 21)
+          }
+
         return (
             <React.Fragment>
                 <TableRow>
@@ -61,8 +92,33 @@ class ListEntry extends Component {
                     <TableCell padding="none" align="left">{listEntry.getUnit()}</TableCell>
                     <TableCell padding="none" align="left">{listEntry.article.getName()}</TableCell>
                     <TableCell padding="none" align="left">{listEntry.retailer.getName()}</TableCell> 
-                    <TableCell padding="none" align="left">{listEntry.shoppingList.getName()}</TableCell>
+                    <TableCell padding="none" >
+                        <IconButton aria-label="expand row" size="small" onClick={() => this.setOpen(!open)}>
+                            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                        </IconButton>
+                    </TableCell>
                 </TableRow>
+                <TableRow>
+                    <TableCell style={{ paddingBottom: 0, paddingTop: 0, backgroundColor: colors.grey[100]}} colSpan={10}>
+                        <Collapse in={this.state.open} timeout="auto" unmountOnExit>
+                            <Box margin={1}>
+                                <Table size="small" aria-label="purchases">
+                                    <TableHead >
+                                        <TableRow>
+                                            <TableCell className={classes.tableCell} colSpan={3} padding="none" align="left">Einkaufsliste</TableCell>
+                                            <TableCell className={classes.tableCell} colSpan={4} padding="none" align="left">Geändert</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        <TableCell className={classes.tableCell} colSpan={3} padding="none" align="left">{listEntry.shoppingList.getName()}</TableCell>
+                                        <TableCell className={classes.tableCell} colSpan={4} padding="none" align="left">{groupLastUpdated}</TableCell>
+                                    </TableBody>
+                                </Table>
+                            </Box>
+                        </Collapse>
+                    </TableCell>    
+                </TableRow>
+
             </React.Fragment>
         );
     }
@@ -90,15 +146,25 @@ class Startpage extends Component {
         }
     }
 
-    componentDidMount(){
+    async componentDidMount(){
         if(this.state.userId){
             this.loadRetailers()
             this.loadListEntries().then(() => {
                 this.filterInput()
                 this.displayRelevant()
-                })
-          }
-          
+            })
+
+            try {
+                setInterval(async() => {
+                        this.loadListEntries().then(() => {
+                        this.filterInput()
+                        this.displayRelevant()
+                        })
+                }, 5000)
+            } catch(e) {
+                console.log("Error while fetching in loop", e)
+            }
+        }
     }
 
 
@@ -421,10 +487,9 @@ class Startpage extends Component {
                                     align="left"><b style={{ color: '#ffffff'}}>Artikel</b></TableCell>
                                 <TableCell 
                                     style={{paddingLeft: 0, paddingTop: 15, paddingBottom: 15, paddingRight: 0}} 
-                                    align="left"><b style={{ color: '#ffffff'}}>Händler</b></TableCell>
-                                <TableCell 
-                                    style={{paddingLeft: 0, paddingTop: 15, paddingBottom: 15, paddingRight: 0}} 
-                                    align="left"><b style={{ color: '#ffffff'}}>Liste</b></TableCell>
+                                    align="left"><b style={{ color: '#ffffff'}}>Händler</b>
+                                </TableCell>
+                                <TableCell/>
                             </TableRow>
                         </TableHead>
                         <TableBody >
