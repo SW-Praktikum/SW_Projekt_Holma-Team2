@@ -20,18 +20,23 @@ class User(BusinessObject):
         return s
 
     def get_email(self):
+        """Auslesen der Email"""
         return self._email
 
     def get_google_id(self):
+        """Auslesen der Google_Id"""
         return self._google_id
 
     def set_email(self, email):
+        """Setzen der Email"""
         self._email = email
 
     def set_google_id(self, google_id):
+        """Setzen der Google_Id"""
         self._google_id = google_id
 
     def to_dict(self):
+        """Umwandeln User() in ein Python dict()"""
         result = {
             "id": self.get_id(),
             "name": self.get_name(),
@@ -44,6 +49,7 @@ class User(BusinessObject):
 
     @staticmethod
     def from_dict(dictionary=dict()):
+        """Umwandeln eines Python dict() in einen User()"""
         user = User()
         user.set_id(dictionary["id"])
         user.set_name(dictionary["name"])
@@ -55,6 +61,7 @@ class User(BusinessObject):
 
     @staticmethod
     def from_tuples(tuples=list()):
+        """Umwandeln eines DB tuples in einen User() (Python Objekt)"""
         result = []
         for (user_id, name, creation_date, email, google_id,
              last_updated) in tuples:

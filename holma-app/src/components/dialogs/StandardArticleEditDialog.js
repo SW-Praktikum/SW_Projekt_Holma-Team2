@@ -196,8 +196,8 @@ class StandardArticleEditDialog extends Component {
         const retailers = this.props.retailers.map(retailer => ({"name": retailer.getName(), "id": retailer.getId()}))
         const articles = this.props.articles.map(article => ({"name": article.getName(), "id": article.getId()}))
         const users = this.props.users.map(user => ({"name": user.getName(), "id": user.getId()}))
-        console.log(articles)
-        console.log(this.props.articles)
+        //console.log(articles)
+        //console.log(this.props.articles)
         
         return (
             <React.Fragment>

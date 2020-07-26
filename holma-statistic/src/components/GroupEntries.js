@@ -75,7 +75,7 @@ class GroupEntries extends Component{
     }
 
     nextPath(path) {
-      console.log(path)
+      //console.log(path)
       this.props.history.push(path);
     }
 

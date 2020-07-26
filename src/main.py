@@ -115,6 +115,7 @@ class UserListOperations(Resource):
 
     @holmaApp.marshal_with(user, code=200)
     @holmaApp.expect(user)  # Wir erwarten ein USer-Objekt von Client-Seite.
+    # @ secured
     def post(self):
         """Anlegen eines neuen User-Objekts."""
         adm = Administration()
@@ -183,6 +184,7 @@ class UserOperations(Resource):
 @holmaApp.param('google_id', 'Die ID des User-Objekts')
 class UserByGoogleIdOperation(Resource):
     @holmaApp.marshal_with(user)
+    # @ secured
     def get(self, google_id):
         """Auslesen eines bestimmten User-Objekts.
 
@@ -421,6 +423,7 @@ class GroupUserRelationOperations(Resource):
 class ArticleListOperations(Resource):
     @secured
     @holmaApp.marshal_list_with(article)
+    # @ secured
     def get(self):
         """Auslesen aller Artikel-Objekte.
 
@@ -691,6 +694,7 @@ class ShoppingListRelatedListEntryListOperations(Resource):
     @holmaApp.expect(list_entry)
     @secured
     # Wir erwarten ein User-Objekt von Client-Seite.
+    # @ secured
     def post(self, shopping_list_id):
         """ Wir verwenden Namen, amount, article, Unit, Purchasing_user,
          retailer und shoppinglist des Proposals für die Erzeugung

@@ -10,10 +10,10 @@ export default class AppAPI {
     static #api = null;
 
     //Local Python Backend
-    #appServerBaseURL = 'http://localhost:5000/app';
+    //#appServerBaseURL = 'http://localhost:5000/app';
     
     // Remote Backend:
-    //#appServerBaseURL = 'http://backend.holma.xyz/app';
+    #appServerBaseURL = 'http://backend.holma.xyz/app';
 
 
 
@@ -101,13 +101,13 @@ export default class AppAPI {
     #fetchAdv = (url, init={credentials: 'include'}) => fetch(url, init)
         .then(response => {
             if (typeof init !== 'undefined' && "body" in init) {
-                console.log("[" + init.method + "]", url, JSON.parse(init.body))
+                //console.log("[" + init.method + "]", url, JSON.parse(init.body))
             }
             else {
-                console.log("[GET]", url)
+                //console.log("[GET]", url)
             }
             if (!response.ok){
-                console.log(`${response.status} ${response.statusText}`);
+                //console.log(`${response.status} ${response.statusText}`);
                 throw Error(`${response.status} ${response.statusText}`)
             }
             return response.json();
@@ -144,6 +144,7 @@ export default class AppAPI {
         })
     };
 
+   // Updates an User and returns a Promise, which resolves to a UserBO.
     updateUser(user) {
         return this.#fetchAdv(this.#updateUserURL(user.getId()), {
             method: 'PUT',
@@ -161,6 +162,7 @@ export default class AppAPI {
         })
     };
 
+    // Deletes an User  
     deleteUser(user) {
         return this.#fetchAdv(this.#deleteUserURL(user.getId()), {
             method: 'DELETE',
@@ -178,6 +180,7 @@ export default class AppAPI {
         })
     };
 
+    //Returns a Promise, which resolves to an Array of defined UserBOs
     getUserById(userId) {
         return this.#fetchAdv(this.#getUserByIdURL(userId)).then((responseJSON) => {
             let responseUser = UserBO.fromJSON(responseJSON)[0];
@@ -187,6 +190,7 @@ export default class AppAPI {
         })
     };
 
+    //Returns a Promise, which resolves to an Array of defined UserBOs
     getUserByGoogleId(googleId) {
         return this.#fetchAdv(this.#getUserByGoogleIdURL(googleId)).then((responseJSON) => {
             let responseUser = UserBO.fromJSON(responseJSON)[0];
@@ -196,6 +200,7 @@ export default class AppAPI {
         })
     };
 
+    //Returns a Promise, which resolves to an Array of defined by name UserBOs
     getUsersByName(name) {
         return this.#fetchAdv(this.#getUsersByNameURL(name)).then((responseJSON) => {
             let responseUsers = UserBO.fromJSON(responseJSON);
@@ -205,6 +210,7 @@ export default class AppAPI {
         })
     };
 
+    //Adds a User to a Group and returns a Promise
     addUserToGroup(groupId, userId) {
         return this.#fetchAdv(this.#addUserToGroupURL(groupId, userId), {
             method: 'POST',
@@ -220,6 +226,7 @@ export default class AppAPI {
         })
     };
 
+    //Removes a User from a Group and returns a Promise
     deleteUsersFromGroup(group, user) {
         return this.#fetchAdv(this.#deleteUsersFromGroupURL(group, user), {
             method: 'DELETE',
@@ -231,6 +238,7 @@ export default class AppAPI {
         })
     };
     
+    //Returns a Promise, which resolves to an Array of defined by userId GroupBOs
     getGroupsByUserId(userId) {
         return this.#fetchAdv(this.#getGroupsByUserIdURL(userId), {credentials:'include'}).then((responseJSON) => {
             let responseGroups = GroupBO.fromJSON(responseJSON);
@@ -240,6 +248,7 @@ export default class AppAPI {
         })
     };
 
+    //Adds a Group and returns a Promise, which resolves to a new GroupBO object with it's defined attributes
     createGroup(group) {
         return this.#fetchAdv(this.#createGroupURL(group.getOwner()), {
             method: 'POST',
@@ -257,6 +266,7 @@ export default class AppAPI {
         })
     };
 
+    //Returns a Promise, which resolves to an Array of GroupBOs
     getGroups() {
         return this.#fetchAdv(this.#getGroupsURL()).then((responseJSON) => {
             let responseGroups = GroupBO.fromJSON(responseJSON);
@@ -266,6 +276,7 @@ export default class AppAPI {
         })
     };
 
+    //Returns a Promise, which resolves to an Array of defined GroupBOs
     getGroupById(groupId) {
         return this.#fetchAdv(this.#getGroupByIdURL(groupId)).then((responseJSON) => {
             let responseGroups = GroupBO.fromJSON(responseJSON)[0];
@@ -275,6 +286,7 @@ export default class AppAPI {
         })
     };
 
+    //Returns a Promise, which resolves to an Array of defined GroupBOs
     getGroupsByName(name) {
         return this.#fetchAdv(this.#getGroupsByNameURL(name)).then((responseJSON) => {
             let responseGroups = GroupBO.fromJSON(responseJSON);
@@ -284,6 +296,7 @@ export default class AppAPI {
         })
     };
 
+   // Updates a Group and returns a Promise, which resolves to a GroupBO.    
     updateGroup(group) {
         return this.#fetchAdv(this.#updateGroupURL(group.getId()), {
             method: 'PUT',
@@ -301,6 +314,7 @@ export default class AppAPI {
         })
     };
 
+    // Deletes a Group  
     deleteGroup(group) {
         return this.#fetchAdv(this.#deleteGroupURL(group.getId()), {
             method: 'DELETE',
@@ -318,6 +332,7 @@ export default class AppAPI {
         })
     };
 
+    //Returns a Promise, which resolves to an Array of defined by groupId UserBOs
     getUsersByGroupId(groupId) {
         return this.#fetchAdv(this.#getUsersByGroupIdURL(groupId)).then((responseJSON) => {
             let responseUsers = UserBO.fromJSON(responseJSON);
@@ -327,6 +342,7 @@ export default class AppAPI {
         })
     }
 
+    //Returns a Promise, which resolves to an Array of defined by groupId ShoppingListBOs
     getShoppingListsByGroupId(groupId) {
         return this.#fetchAdv(this.#getShoppingListsByGroupIdURL(groupId)).then((responseJSON) => {
             let responseShoppingLists = ShoppingListBO.fromJSON(responseJSON);
@@ -336,6 +352,7 @@ export default class AppAPI {
         })
     }
 
+    //Returns a Promise, which resolves to an Array of defined ShoppingListBOs
     getShoppingListById(shoppingListId) {
         return this.#fetchAdv(this.#getShoppingListByIdURL(shoppingListId)).then((responseJSON) => {
             let responseShoppingLists = ShoppingListBO.fromJSON(responseJSON)[0];
@@ -345,6 +362,7 @@ export default class AppAPI {
         })
     }
 
+    //Creates a Shoppinglist and returns a Promise, which resolves to a new ShoppingListBO object with it's defined attributes
     createShoppingList(shoppingList) {
         return this.#fetchAdv(this.#createShoppingListURL(shoppingList.getGroupId()), {
             method: 'POST',
@@ -362,6 +380,7 @@ export default class AppAPI {
         })
     }
 
+   // Updates a ShoppingList and returns a Promise, which resolves to a ShoppinglistBO.    
     updateShoppingList(shoppingList) {
         return this.#fetchAdv(this.#updateShoppingListURL(shoppingList.getId()), {
             method: 'PUT',
@@ -379,6 +398,7 @@ export default class AppAPI {
         })
     }
 
+    // Deletes a Shoppinglist  
     deleteShoppingList(shoppingList) {
         return this.#fetchAdv(this.#deleteShoppingListURL(shoppingList.getId()), {
             method: 'DELETE',
@@ -395,7 +415,7 @@ export default class AppAPI {
             })
         })
     }
-
+    //Returns a Promise, which resolves to an Array of archived ShoppingListBOs
     archiveShoppingList(shoppingList) {
         return this.#fetchAdv(this.#archiveShoppingListURL(shoppingList.getId()), {
             method: 'POST',
@@ -413,7 +433,7 @@ export default class AppAPI {
         })
     }
 
-
+    //Returns a Promise, which resolves to an Array of ArticleBOs
     getArticles() {
         return this.#fetchAdv(this.#getArticlesURL()).then((responseJSON) => {
             let responseArticles = ArticleBO.fromJSON(responseJSON);
@@ -423,6 +443,7 @@ export default class AppAPI {
         })
     };
 
+    //Returns a Promise, which resolves to an Array of defined by GroupId ArticleBOs
     getArticlesByGroupId(groupId) {
         return this.#fetchAdv(this.#getArticlesByGroupIdURL(groupId)).then((responseJSON) => {
             let responseArticles = ArticleBO.fromJSON(responseJSON);
@@ -432,6 +453,7 @@ export default class AppAPI {
         })
     }
 
+    //Adds an Article and returns a Promise, which resolves to a new ArticleBO object with it's defined attributes
     createArticle(article) {
         return this.#fetchAdv(this.#createArticleURL(article.getGroupId()), {
             method: 'POST',
@@ -449,6 +471,7 @@ export default class AppAPI {
         })
     };
 
+    //Returns a Promise, which resolves to an Array of defined by Name ArticleBOs
     getArticlesByName(name) {
         return this.#fetchAdv(this.#getArticlesByNameURL(name)).then((responseJSON) => {
             let responseArticles = ArticleBO.fromJSON(responseJSON);
@@ -458,6 +481,7 @@ export default class AppAPI {
         })
     };
 
+   // Updates an Article and returns a Promise, which resolves to an ArticleBO.    
     updateArticle(article) {
         return this.#fetchAdv(this.#updateArticleURL(article.getId()), {
             method: 'PUT',
@@ -475,6 +499,7 @@ export default class AppAPI {
         })
     };
 
+    // Deletes an Article  
     deleteArticle(article) {
         return this.#fetchAdv(this.#deleteArticleURL(article.getId()), {
             method: 'DELETE',
@@ -492,7 +517,7 @@ export default class AppAPI {
         })
     };
 
-
+    //Returns a Promise, which resolves to an Array of defined ArticleBO
     getArticleById(articleId) {
         return this.#fetchAdv(this.#getArticleByIdURL(articleId)).then((responseJSON) => {
             let responseArticle = ArticleBO.fromJSON(responseJSON)[0];
@@ -502,11 +527,11 @@ export default class AppAPI {
         })
     };
 
+    //Returns a Promise, which resolves to an Array of defined ListEntryBOs
     getListEntriesByUserId(userId, includeArchived) {
         if (includeArchived == true) {
             return this.#fetchAdv(this.#getListEntriesIncludeArchivedByUserIdURL(userId)).then((responseJSON) => {
                 let responseListEntries = ListEntryBO.fromJSON(responseJSON);
-                console.log(responseListEntries)
                 return new Promise(function (resolve) {
                     resolve(responseListEntries)
                 })
@@ -555,6 +580,7 @@ export default class AppAPI {
             resolve(listEntry)
         })    }
 
+    //Returns a Promise, which resolves to an Array of defined by articleId ListEntryBOs
     getListEntriesByArticleId(articleId) {
         return this.#fetchAdv(this.#getListEntriesByArticleIdURL(articleId)).then((responseJSON) => {
             let responseListEntry = ListEntryBO.fromJSON(responseJSON);
@@ -564,6 +590,7 @@ export default class AppAPI {
         })
     } 
 
+    //Returns a Promise, which resolves to an Array of defined shoppinglistId ListEntryBOs
      getListEntriesByShoppingListId(shoppingListId) {
         return this.#fetchAdv(this.#getListEntriesByShoppingListIdURL(shoppingListId)).then((responseJSON) => {
             let responseListEntry = ListEntryBO.fromJSON(responseJSON);
@@ -573,6 +600,7 @@ export default class AppAPI {
         })
     }
 
+    //Returns a Promise, which resolves to an Array of defined by groupId ListEntryBOs
     getListEntriesByGroupId(groupId) {
         return this.#fetchAdv(this.#getListEntriesByGroupIdURL(groupId)).then((responseJSON) => {
             let responseListEntry = ListEntryBO.fromJSON(responseJSON);
@@ -582,6 +610,7 @@ export default class AppAPI {
         })
     }
 
+    //Returns a Promise, which resolves to an Array of defined by Time Period ListEntryBOs
     getUpdatedListEntriesByTimePeriod(fromDate, toDate) {
         return this.#fetchAdv(this.#getUpdatedListEntriesByTimePeriodURL(fromDate, toDate)).then((responseJSON) => {
             let responseListEntry = ListEntryBO.fromJSON(responseJSON);
@@ -591,6 +620,7 @@ export default class AppAPI {
         })
     }  
 
+    //Returns a Promise, which resolves to an Array of defined ListEntryBOs
     getCheckedListEntriesByShoppingListId(shoppingListId) {
         return this.#fetchAdv(this.#getCheckedListEntriesByShoppingListIdURL(shoppingListId)).then((responseJSON) => {
             let responseListEntry = ListEntryBO.fromJSON(responseJSON);
@@ -600,6 +630,7 @@ export default class AppAPI {
         })
     }  
 
+    //Returns a Promise, which resolves to an Array of defined by retailerId ListEntryBOs
      getListEntriesByRetailerId(retailerId) {
         return this.#fetchAdv(this.#getListEntriesByRetailerIdURL(retailerId)).then((responseJSON) => {
             let responseListEntry = ListEntryBO.fromJSON(responseJSON);
@@ -609,6 +640,7 @@ export default class AppAPI {
         })
     }; 
 
+    //Returns a Promise, which resolves to an Array of a defined ListEntryBO
     getListEntryById(listEntryId) {
         return this.#fetchAdv(this.#getListEntryByIdURL(listEntryId)).then((responseJSON) => {
             let responseListEntry = ListEntryBO.fromJSON(responseJSON)[0];
@@ -618,6 +650,7 @@ export default class AppAPI {
         })
     } 
 
+    //Returns a Promise, which resolves to an Array of ListEntryBOs
     getListEntries() {
         return this.#fetchAdv(this.#getListEntryURL()).then((responseJSON) => {
             let responseListEntry = ListEntryBO.fromJSON(responseJSON);
@@ -627,6 +660,7 @@ export default class AppAPI {
         })
     };
 
+    //Adds a ListEntry and returns a Promise, which resolves to a new ListEntryBO object with it's defined attributes
     createListEntry(listentry) {
         return this.#fetchAdv(this.#createListEntryURL(listentry.getShoppingListId()), {
             method: 'POST',
@@ -644,6 +678,7 @@ export default class AppAPI {
         })
     }
 
+   // Updates a ListEntry and returns a Promise, which resolves to a ListEntryBO.    
     updateListEntry(listentry) {
         return this.#fetchAdv(this.#updateListEntryURL(listentry.getId()), {
             method: 'PUT',
@@ -661,6 +696,7 @@ export default class AppAPI {
         })
     };
 
+    // Deletes a ListEntry
     deleteListEntry(listentry) {
         return this.#fetchAdv(this.#deleteListEntryURL(listentry.getId()), {
             method: 'DELETE',
@@ -678,6 +714,7 @@ export default class AppAPI {
         })
     };
 
+    //Returns a Promise, which resolves to an Array of RetailerBOs
     getRetailers() {
         return this.#fetchAdv(this.#getRetailersURL()).then((responseJSON) => {
             let responseRetailer = RetailerBO.fromJSON(responseJSON);
@@ -687,6 +724,7 @@ export default class AppAPI {
         })
     };
 
+    //Returns a Promise, which resolves to an Array of a defined RetailerBO
     getRetailerById(retailerId) {
         return this.#fetchAdv(this.#getRetailerByIdURL(retailerId)).then((responseJSON) => {
             let responseRetailer = RetailerBO.fromJSON(responseJSON)[0];
@@ -696,6 +734,7 @@ export default class AppAPI {
         })
     }
 
+    //Returns a Promise, which resolves to an Array of defined by name RetailerBOs
     getRetailersByName(name) {
         return this.#fetchAdv(this.#getRetailersByNameURL(name)).then((responseJSON) => {
             let responseRetailer = RetailerBO.fromJSON(responseJSON);
@@ -705,6 +744,7 @@ export default class AppAPI {
         })
     };
 
+    //Returns a Promise, which resolves to an Array of defined by groupId ListEntryBOs
     getStandardArticlesByGroupId(groupId) {
         return this.#fetchAdv(this.#getStandardArticlesByGroupIdURL(groupId)).then((responseJSON) => {
             let responseListEntry = ListEntryBO.fromJSON(responseJSON);
@@ -714,6 +754,7 @@ export default class AppAPI {
         })
     }
 
+    //adds a Standardarticle to a Group and returns a Promise
     addStandardArticleToGroup(groupId, listEntryId) {
         return this.#fetchAdv(this.#addStandardArticleToGroupURL(groupId, listEntryId), {
             method: 'POST',
@@ -728,6 +769,7 @@ export default class AppAPI {
         })
     };
 
+    //adds a Standardarticle to a ShoppingList and returns a Promise
     addStandardArticlesToShoppingList(groupId, shoppingListId) {
         return this.#fetchAdv(this.#addStandardArticlesToShoppingListURL(groupId, shoppingListId), {
             method: 'POST',
@@ -743,6 +785,7 @@ export default class AppAPI {
         })
     };
 
+    //Removes a Standardarticle from a Group and returns a Promise
     deleteStandardArticleFromGroup(groupId, listentry) {
         return this.#fetchAdv(this.#deleteStandardArticleFromGroupURL(groupId, listentry.getId()), {
             method: 'DELETE',
