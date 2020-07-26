@@ -143,6 +143,7 @@ class Startpage extends Component {
             filterEndDate: null,
             filterOpen: "none",
             filterText: "Filter anzeigen",
+            sortingValue: null
         }
     }
 
@@ -159,8 +160,9 @@ class Startpage extends Component {
                         this.loadListEntries().then(() => {
                         this.filterInput()
                         this.displayRelevant()
-                        })
-                }, 5000)
+                        this.sortListEntries()
+                    })
+                }, 15000)
             } catch(e) {
                 console.log("Error while fetching in loop", e)
             }
@@ -228,13 +230,25 @@ class Startpage extends Component {
         })
     }
 
-    handleSort = (e, value) => {
+    setSortingState = (value) => {
+        new Promise(resolve => this.setState({
+            sortingValue: value
+        }, resolve))
+    }
+    
+    handleSort = async (e, value) => {
+        await this.setSortingState(value)
+        this.sortListEntries()
+    }
+
+    sortListEntries = () => {
         // sortieren von Listeneinträgen
+        let value = this.state.sortingValue
         if (value === null) {
             var filteredElements = this.state.filteredListEntryTableElements
         }
         else {
-            var sortInput = value.name
+            var sortInput =  value.name
             var filteredElements = this.state.filteredListEntryTableElements
         }
            
@@ -256,6 +270,7 @@ class Startpage extends Component {
         this.setState({
             filteredListEntryTableElements: filteredElements
         })
+
     }
 
 
