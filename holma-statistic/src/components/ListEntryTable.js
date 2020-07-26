@@ -103,7 +103,7 @@ class ListEntry extends Component {
                     </TableCell>
                     <TableCell style={{paddingLeft: 5, paddingTop: 0, paddingBottom: 0, paddingRight: 10}} align="right">{listEntry.getAmount()}</TableCell>
                     <TableCell padding="dense" align="left">{listEntry.getUnit()}</TableCell>
-                    <TableCell padding="dense" align="left">{listEntry.getName()}</TableCell>
+                    <TableCell padding="dense" align="left">{listEntry.article.getName()}</TableCell>
                     <TableCell padding="dense" align="left">{listEntry.retailer.getName()}</TableCell> 
                     <TableCell padding="dense" align="left">{checkedTimestamp}</TableCell> 
 
