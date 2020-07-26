@@ -10,10 +10,10 @@ export default class AppAPI {
     static #api = null;
 
     //Local Python Backend
-    #appServerBaseURL = 'http://localhost:5000/app';
+    //#appServerBaseURL = 'http://localhost:5000/app';
     
     // Remote Backend:
-    //#appServerBaseURL = 'http://backend.holma.xyz/app';
+    #appServerBaseURL = 'http://backend.holma.xyz/app';
 
 
 
