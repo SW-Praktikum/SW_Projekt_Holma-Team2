@@ -415,6 +415,8 @@ class Administration():
         Standardartikel ist
         :return: Listeneintrag-Objekt
         """
+        shopping_list = self.get_shopping_list_by_id(shopping_list_id)
+        self.save_shopping_list(shopping_list)
         list_entry = ListEntry()
         list_entry.set_id(0),
         list_entry.set_name(name),
@@ -434,6 +436,8 @@ class Administration():
         :param list_entry: Listeneintrag-Objekt
         :return:
         """
+        shopping_list = self.get_shopping_list_by_id(list_entry.get_shopping_list())
+        self.save_shopping_list(shopping_list)
         with ListEntryMapper() as mapper:
             mapper.delete(list_entry)
 
@@ -443,6 +447,8 @@ class Administration():
         :param list_entry: Listeneintrag-Objekt
         :return: Aktualisiertes Listeneintrag-Objekt
         """
+        shopping_list = self.get_shopping_list_by_id(list_entry.get_shopping_list())
+        self.save_shopping_list(shopping_list)
         list_entry.set_last_updated(datetime.now())
         with ListEntryMapper() as mapper:
             return mapper.update(list_entry)

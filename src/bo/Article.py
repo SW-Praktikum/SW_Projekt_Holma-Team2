@@ -19,6 +19,7 @@ class Article(BusinessObject):
         return self._group
 
     def get_count(self):
+        """Auslesen der Anzahl, die der Artikel gekauft wurde"""
         return self._count
 
     def set_group(self, group_id):
@@ -26,6 +27,7 @@ class Article(BusinessObject):
         self._group = group_id
 
     def set_count(self, count):
+        """Setzen der Anzahl, die der Artikel gekauft wurde"""
         self._count = count
 
 

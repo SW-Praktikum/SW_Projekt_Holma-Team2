@@ -19,18 +19,23 @@ class ShoppingList(BusinessObject):
                                                              self.get_group())
 
     def get_group(self):
+        """Auslesen des Fremdschlüssels Gruppe"""
         return self._group
 
     def get_archived(self):
+        """Auslesen ob ShoppingList archiviert"""
         return self._archived
 
     def set_group(self, group_id):
+        """Setzen des Fremdschlüssels Gruppe"""
         self._group = group_id
 
     def set_archived(self, archived):
+        """Setzen ob ShoppingList archiviert"""
         self._archived = archived
 
     def to_dict(self):
+        """Umwandeln ShoppingList() in ein Python dict()"""
         result = {
             "id": self.get_id(),
             "name": self.get_name(),
@@ -43,6 +48,7 @@ class ShoppingList(BusinessObject):
 
     @staticmethod
     def from_dict(dictionary=dict()):
+        """Umwandeln eines Python dict() in eine ShoppingList()"""
         shopping_list = ShoppingList()
         shopping_list.set_id(dictionary["id"])
         shopping_list.set_name(dictionary["name"])
@@ -54,6 +60,7 @@ class ShoppingList(BusinessObject):
 
     @staticmethod
     def from_tuples(tuples=list()):
+        """Umwandeln eines DB tuples in eine ShoppingList() (Python Objekt)"""
         result = []
         for (shopping_list_id, name, creation_date, group, last_update, archived) in tuples:
             shopping_list = ShoppingList()

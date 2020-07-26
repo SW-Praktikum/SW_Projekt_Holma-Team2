@@ -53,14 +53,15 @@ class ListEntry extends Component {
             openDialog: false})
         }
     
-    handleChangeCheck = (e) => {
+    handleChangeCheck = async (e) => {
         this.setState({
             checked: e.target.checked
         })
         var listEntryChecked = this.props.listEntry
         listEntryChecked.setChecked(e.target.checked)
-        AppAPI.getAPI().updateListEntry(listEntryChecked)
-        }
+        await AppAPI.getAPI().updateListEntry(listEntryChecked)
+        this.props.loadListEntries()
+    }
 
 
     deleteEntry = (entry) => {

@@ -16,13 +16,16 @@ class Retailer(BusinessObject):
                                          self.get_last_updated())
 
     def get_count(self):
+        """Auslesen der Anzahl, wie oft Retailer in ListEntry vorkam"""
         return self._count
 
     def set_count(self, count):
+        """Setzen der Anzahl, wie oft Retailer in ListEntry vorkam"""
         self._count = count
 
     @staticmethod
     def from_dict(dictionary=dict()):
+        """Umwandeln eines Python dict() in einen Retailer()"""
         retailer = Retailer()
         retailer.set_id(dictionary["id"])
         retailer.set_name(dictionary["name"])
@@ -31,6 +34,7 @@ class Retailer(BusinessObject):
 
     @staticmethod
     def from_tuples(tuples=list()):
+        """Umwandeln eines DB tuples in einen Retailer() (Python Objekt)"""
         result = []
         for (retailer_id, name, creation_date, last_update) in tuples:
             retailer = Retailer()
