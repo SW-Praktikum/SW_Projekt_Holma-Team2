@@ -89,7 +89,6 @@ class AmountEntry extends Component {
             }
           return (
               <React.Fragment>
-                  
                   <TableRow >
                       <TableCell padding="checkbox" >
                           <Checkbox

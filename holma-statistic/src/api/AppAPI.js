@@ -10,10 +10,10 @@ export default class AppAPI {
     static #api = null;
 
     //Local Python Backend
-    //#appServerBaseURL = 'http://localhost:5000/app';
+    #appServerBaseURL = 'http://localhost:5000/app';
     
     // Remote Backend:
-    #appServerBaseURL = 'http://backend.holma.xyz/app';
+    // #appServerBaseURL = 'http://backend.holma.xyz/app';
 
 
 
@@ -551,7 +551,11 @@ export default class AppAPI {
     async completeListEntry(listEntry) {
         if (listEntry.getArticleId() !== null) {
             let article = await this.getArticleById(listEntry.getArticleId())
-            listEntry.article = article
+            if (typeof article !== 'undefined') {
+                listEntry.article = article
+            } else {
+                listEntry.article = new ArticleBO("", 0)
+            }
         } else {
             listEntry.article = new ArticleBO("", 0)
         }
