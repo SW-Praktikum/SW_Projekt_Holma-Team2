@@ -37,7 +37,7 @@ class ShoppingListNameEditDialog extends Component {
 
     componentDidMount() {
       if (this.props.shoppingListName) {
-        console.log(this.props.shoppingListName)
+        //console.log(this.props.shoppingListName)
       }}
 
     
@@ -134,14 +134,14 @@ class ShoppingListEdit extends Component {
     }
 
     handleDeleteShoppingList = () => {
-        console.log(this.state.shoppingListObject)
+        //console.log(this.state.shoppingListObject)
         AppAPI.getAPI().deleteShoppingList(this.state.shoppingListObject).then(() => 
         window.location.reload()
         );
     }
 
     handleDeleteShoppingList = () => {
-        console.log(this.state.shoppingListObject)
+        //console.log(this.state.shoppingListObject)
         AppAPI.getAPI().archiveShoppingList(this.state.shoppingListObject).then(() => 
         window.location.reload()
         );

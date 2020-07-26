@@ -155,7 +155,7 @@ class ListEntryEditDialog extends Component {
         listEntry.setPurchasingUserId(localListEntry.getPurchasingUserId())
         listEntry.setRetailerId(localListEntry.getRetailerId())
         
-        console.log(localListEntry.getPurchasingUserId(), localListEntry.getArticleId())
+        //console.log(localListEntry.getPurchasingUserId(), localListEntry.getArticleId())
         this.props.loadListEntries()
         this.props.closeDialog()
 

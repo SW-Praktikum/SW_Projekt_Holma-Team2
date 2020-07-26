@@ -112,7 +112,7 @@ class ArticleEdit extends Component {
   
     loadArticles = () => { //Hier muss eine neue Methode - getArticlesByGroupId hinzugefügt werden
         AppAPI.getAPI().getArticlesByGroupId(this.props.match.params.groupId).then(articles => {
-            console.log("Loaded articles for group '" + this.props.match.params.groupId + "':", articles)
+            //console.log("Loaded articles for group '" + this.props.match.params.groupId + "':", articles)
             var ArticleElements = articles.map((article) => <Articles article={article} loadArticles={this.loadArticles} />)
             //hier noch ListEntrys ergänzen
             this.setState({
