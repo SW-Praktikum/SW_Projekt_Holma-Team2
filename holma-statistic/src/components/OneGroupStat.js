@@ -102,6 +102,7 @@ class AmountEntry extends Component {
                       <TableCell padding="dense" align="left">{listEntry.getUnit()}</TableCell>
                       <TableCell padding="dense" align="left">{listEntry.article.getName()}</TableCell>
                       <TableCell padding="dense" align="left">{listEntry.retailer.getName()}</TableCell> 
+                      <TableCell padding="dense" align="left">{listEntry.purchasingUser.getName()}</TableCell> 
                       <TableCell padding="dense" align="left">{checkedTimestamp}</TableCell> 
   
                   </TableRow>
@@ -121,6 +122,7 @@ class AmountEntry extends Component {
               openDialog: false,
               groupId : this.props.match.params.groupId,
               retailers: [],
+              users: [],
               articleAmounts: [],
               filterInput: "",
               filteredElements: [],
@@ -145,6 +147,7 @@ class AmountEntry extends Component {
               this.loadListEntries().then(() => {
                   this.filterInput()
                 })
+                this.loadUsers()
             }
       }
   
@@ -166,6 +169,12 @@ class AmountEntry extends Component {
                   return item.props.listEntry.retailer.getName().toLocaleLowerCase().includes(filterRetailerName.toLocaleLowerCase());
               });
           }
+
+          if (filterPurchasingUserName !== "") {
+            filteredElements =  filteredElements.filter(function(item) {
+                return item.props.listEntry.purchasingUser.getName().toLocaleLowerCase().includes(filterPurchasingUserName.toLocaleLowerCase());
+            });
+        }
   
           if (filterChecked == true) {
               filteredElements =  filteredElements.filter(function(item) {
@@ -291,7 +300,22 @@ class AmountEntry extends Component {
               );  
           } 
   
-      
+        loadUsers = () => {
+        return AppAPI.getAPI().getUsersByGroupId(this.state.groupId).then((users) => {
+            this.setState({
+                users: users,
+                loadingInProgress: true, // loading indicator 
+                loadingError: null,
+            });
+            return new Promise(function (resolve) {resolve(users)})
+        }).catch(e =>
+            this.setState({ // Reset state with error from catch 
+                loadingInProgress: false,
+                loadingError: e
+            })
+        );  
+        } 
+
       handleInputChangeDate = async (key, date) => {
           let datum = new Date (date);
           let convert = datum.getTime();
@@ -376,10 +400,13 @@ class AmountEntry extends Component {
                 name: "Händler",
             },
             {
+                name: "Einkäufer",
+            },
+            {
                 name: "Kaufdatum",
             },
         ]
-          const {retailers, filterArticleName, filterRetailerName, filterChecked, filterStartDate, filterEndDate, filteredListEntryTableElements, articleAmounts, open} = this.state;
+          const {retailers, users, filterArticleName, filterRetailerName, filterPurchasingUserName, filterChecked, filterStartDate, filterEndDate, filteredListEntryTableElements, articleAmounts, open} = this.state;
           return (
         <React.Fragment>  
             <Grid 
@@ -451,7 +478,7 @@ class AmountEntry extends Component {
 
                   
                   <Grid container direction="row" justify="space-between" alignItems="center" component={Paper} style={{marginTop: 15, display: this.state.filterOpen}}>
-                      <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
+                      <Grid item xs={12} sm={12} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
                           <Typography color="primary" style={{fontSize: 18}}>
                               Filter nach:
                           </Typography> 
@@ -468,6 +495,19 @@ class AmountEntry extends Component {
                                   value={filterArticleName}
                               /> 
                           </Grid>
+                          <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
+                            <Autocomplete
+                                id="filterPurchasingUserName"
+                                onChange={(event, value) => this.handleInputChangeAutoComplete("filterPurchasingUserName", value)}
+                                options={users} //liste der retailer laden
+                                defaultValue={filterPurchasingUserName}
+                                getOptionLabel={(option) => option.name}
+                                renderInput={(params) => (
+                                    <TextField {...params} variant="standard" label="Einkäufer" placeholder="Einkäufer" />
+                                )}                
+                            />
+                            </Grid>
+                      
                       <Grid item xs={12} sm={4} style={{paddingLeft: 20, paddingRight: 20, paddingTop: 10, paddingBottom: 10}}>
   
                           <Autocomplete
@@ -566,6 +606,7 @@ class AmountEntry extends Component {
                                   <TableCell align="left"><b style={{ color: '#ffffff'}}>Menge</b></TableCell>
                                   <TableCell align="left"><b style={{ color: '#ffffff'}}>Artikel</b></TableCell>
                                   <TableCell align="left"><b style={{ color: '#ffffff'}}>Händler</b></TableCell>
+                                  <TableCell align="left"><b style={{ color: '#ffffff'}}>Einkäufer</b></TableCell>
                                   <TableCell align="left"><b style={{ color: '#ffffff'}}>Gekauft</b></TableCell>
                               </TableRow>
                           </TableHead>
