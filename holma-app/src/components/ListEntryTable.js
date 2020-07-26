@@ -262,7 +262,6 @@ class ListEntryTable extends Component {
         for (const listEntry of listEntries) {
             await AppAPI.getAPI().completeListEntry(listEntry)
         }
-
         var listEntryTableElements = listEntries.map((listEntry) => 
             <ListEntry 
                 listEntry={listEntry} 

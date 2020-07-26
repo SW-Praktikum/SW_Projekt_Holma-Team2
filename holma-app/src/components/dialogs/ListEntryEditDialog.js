@@ -143,11 +143,11 @@ class ListEntryEditDialog extends Component {
         };
     }
     
-    saveChanges = () => {
+    saveChanges = async () => {
         let { localListEntry } = this.state
         let { listEntry } = this.state
         localListEntry.setName(localListEntry.article.getName())
-        AppAPI.getAPI().updateListEntry(localListEntry)
+        await AppAPI.getAPI().updateListEntry(localListEntry)
         
         listEntry.setAmount(localListEntry.getAmount())
         listEntry.setUnit(localListEntry.getUnit())
@@ -155,6 +155,7 @@ class ListEntryEditDialog extends Component {
         listEntry.setPurchasingUserId(localListEntry.getPurchasingUserId())
         listEntry.setRetailerId(localListEntry.getRetailerId())
         
+        console.log(localListEntry.getPurchasingUserId(), localListEntry.getArticleId())
         this.props.loadListEntries()
         this.props.closeDialog()
 
