@@ -24,6 +24,7 @@ export default class ArticleBO extends BusinessObject {
         this.count = count
     }
 
+    // Returns an Array of ArticleBOs from a given JSON structure
     static fromJSON(articles) {
         let result = [];
 

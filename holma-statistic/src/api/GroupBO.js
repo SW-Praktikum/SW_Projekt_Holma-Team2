@@ -15,6 +15,7 @@ export default class GroupBO extends BusinessObject {
         return this.owner;
     }
 
+    // Returns an Array of GroupBOs from a given JSON structure
     static fromJSON(groups) {
         let result = [];
         
