@@ -99,19 +99,19 @@ class ListEntry extends Component {
                     </TableCell>
                 </TableRow>
                 <TableRow>
-                    <TableCell style={{ paddingBottom: 0, paddingTop: 0, backgroundColor: colors.grey[100]}} colSpan={10}>
+                    <TableCell style={{paddingBottom: 0, paddingTop: 0, backgroundColor: colors.grey[100]}} colSpan={10}>
                         <Collapse in={this.state.open} timeout="auto" unmountOnExit>
                             <Box margin={1}>
                                 <Table size="small" aria-label="purchases">
                                     <TableHead >
                                         <TableRow>
-                                            <TableCell className={classes.tableCell} colSpan={3} padding="none" align="left">Einkaufsliste</TableCell>
-                                            <TableCell className={classes.tableCell} colSpan={4} padding="none" align="left">Geändert</TableCell>
+                                            <TableCell style={{borderBottom: "none"}} colSpan={3} padding="none" align="left">Einkaufsliste</TableCell>
+                                            <TableCell style={{borderBottom: "none"}} colSpan={4} padding="none" align="left">Geändert</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        <TableCell className={classes.tableCell} colSpan={3} padding="none" align="left">{listEntry.shoppingList.getName()}</TableCell>
-                                        <TableCell className={classes.tableCell} colSpan={4} padding="none" align="left">{groupLastUpdated}</TableCell>
+                                        <TableCell style={{borderBottom: "none"}} colSpan={3} padding="none" align="left">{listEntry.shoppingList.getName()}</TableCell>
+                                        <TableCell style={{borderBottom: "none"}} colSpan={4} padding="none" align="left">{groupLastUpdated}</TableCell>
                                     </TableBody>
                                 </Table>
                             </Box>
@@ -253,6 +253,11 @@ class Startpage extends Component {
             filteredElements = filteredElements.sort((a, b) => 
                 a.props.listEntry.shoppingList.getName() > b.props.listEntry.shoppingList.getName() ? 1 : -1)
         }
+        else if (sortInput === "letzte Änderung") {
+            //nach letzter Änderung sortieren
+            filteredElements = filteredElements.sort((a, b) => 
+                Date.parse(a.props.listEntry.lastUpdated) < Date.parse(b.props.listEntry.lastUpdated) ? 1 : -1)
+        }
         this.setState({
             filteredListEntryTableElements: filteredElements
         })
@@ -339,6 +344,9 @@ class Startpage extends Component {
             },
             {
                 name: "Liste",
+            },
+            {
+                name: "letzte Änderung",
             },
         ]
         const {retailers, filterArticleName, filterListName, filterRetailerName, filterChecked, filterStartDate, filterEndDate, filteredListEntryTableElements, userName} = this.state;
