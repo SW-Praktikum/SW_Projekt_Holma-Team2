@@ -5,6 +5,12 @@
 /.pnp
 .pnp.js
 SW_Projekt_Holma-Team2/venv
+SW_Projekt_Holma-Team2/holma-statistic/package-lock.json
+SW_Projekt_Holma-Team2/holma-statistic/package.json
+
+SW_Projekt_Holma-Team2/holma-app/package-lock.json
+SW_Projekt_Holma-Team2/holma-app/package.json
+
 
 # testing  
 /coverage
