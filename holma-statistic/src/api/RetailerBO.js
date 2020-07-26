@@ -15,7 +15,7 @@ export default class RetailerBO extends BusinessObject {
         this.count = count
    }
 
-
+    // Returns an Array of RetailerBOs from a given JSON structure
    static fromJSON(retailers) {
     let result = [];
 

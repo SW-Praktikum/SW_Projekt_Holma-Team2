@@ -6,6 +6,7 @@ export default class RetailerBO extends BusinessObject {
         super(name);
    }
 
+    // Returns an Array of RetailerBOs from a given JSON structure
    static fromJSON(retailers) {
     let result = [];
 

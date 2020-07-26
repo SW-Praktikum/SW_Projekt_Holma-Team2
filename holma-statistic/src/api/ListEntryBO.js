@@ -95,6 +95,7 @@ export default class ListEntryBO extends BusinessObject {
         this.standardarticle = standardarticle
     }
 
+    // Returns an Array of ListEntryBOs from a given JSON structure
     static fromJSON(listEntries) {
         let result = [];
         if (Array.isArray(listEntries)) {
