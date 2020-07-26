@@ -803,6 +803,7 @@ export default class AppAPI {
         })
     };
 
+    //Returns a Promise, which resolves to an Array of most used RetailerBOs
     getFrequentRetailerByUserId(userId) {
         return this.#fetchAdv(this.#getFrequentRetailerByUserIdURL(userId)).then((responseJSON) => {
             let responseRetailer = RetailerBO.fromJSON(responseJSON);
@@ -812,6 +813,7 @@ export default class AppAPI {
         })
     }  
 
+    //Returns a Promise, which resolves to an Array of most used ArticleBOs
     getArticlesFrequencyByGroupId(groupId) {
         return this.#fetchAdv(this.#getArticlesFrequencyByGroupIdURL(groupId)).then((responseJSON) => {
             let responseArticle = ArticleBO.fromJSON(responseJSON);
