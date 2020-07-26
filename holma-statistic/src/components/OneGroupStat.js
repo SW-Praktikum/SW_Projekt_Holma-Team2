@@ -254,7 +254,7 @@ class AmountEntry extends Component {
     
     loadListEntries = async () => {
         // get listentries by user ID
-        const listEntries = await AppAPI.getAPI().getListEntriesByGroupId(this.state.groupId)
+        const listEntries = await AppAPI.getAPI().getListEntriesIncludeArchivedByGroupId(this.state.groupId)
         for (const listEntry of listEntries) {
             await AppAPI.getAPI().completeListEntry(listEntry)
         }

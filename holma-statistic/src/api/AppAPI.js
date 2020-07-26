@@ -10,10 +10,10 @@ export default class AppAPI {
     static #api = null;
 
     //Local Python Backend
-    #appServerBaseURL = 'http://localhost:5000/app';
+     #appServerBaseURL = 'http://localhost:5000/app';
     
     // Remote Backend:
-    // #appServerBaseURL = 'http://backend.holma.xyz/app';
+    //#appServerBaseURL = 'http://backend.holma.xyz/app';
 
 
 
@@ -70,6 +70,7 @@ export default class AppAPI {
     #getCheckedListEntriesByShoppingListIdURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglist/${shoppingListId}/listentries/checked`; 
 
     #getListEntriesByGroupIdURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/listentries`;
+    #getListEntriesIncludeArchivedByGroupIdURL = (groupId) => `${this.#appServerBaseURL}/group/${groupId}/listentries/include-archived`;
     #getUpdatedListEntriesByTimePeriodURL = (fromDate, toDate) => `${this.#appServerBaseURL}/listentries/by-date/${fromDate}/${toDate}`; 
 
     #createListEntryURL = (shoppingListId) => `${this.#appServerBaseURL}/shoppinglist/${shoppingListId}/listentries`;
@@ -614,7 +615,18 @@ export default class AppAPI {
             })
         })
     }
+    
+    //Returns a Promise, which resolves to an Array of defined by groupId ListEntryBOs
+    getListEntriesIncludeArchivedByGroupId(groupId) {
+        return this.#fetchAdv(this.#getListEntriesIncludeArchivedByGroupIdURL(groupId)).then((responseJSON) => {
+            let responseListEntry = ListEntryBO.fromJSON(responseJSON);
+            return new Promise(function (resolve) {
+                resolve(responseListEntry)
+            })
+        })
+    }
 
+    
     //Returns a Promise, which resolves to an Array of defined by Time Period ListEntryBOs
     getUpdatedListEntriesByTimePeriod(fromDate, toDate) {
         return this.#fetchAdv(this.#getUpdatedListEntriesByTimePeriodURL(fromDate, toDate)).then((responseJSON) => {

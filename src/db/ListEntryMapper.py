@@ -110,7 +110,6 @@ class ListEntryMapper(Mapper):
         tuples = cursor.fetchall()
 
         result = ListEntry.from_tuples(tuples)
-
         self._connection.commit()
         cursor.close()
 
