@@ -820,7 +820,7 @@ class UserRelatedAllListEntryOperations(Resource):
         adm = Administration()
         us = adm.get_user_by_id(user_id)
         if us is not None:
-            listentry_list = adm.get_list_entries_by_user_id(user_id)
+            listentry_list = adm.get_list_entries_by_user_id(user_id, True)
             return listentry_list
         else:
             return "User not found", 500
@@ -929,6 +929,24 @@ class GroupRelatedListEntriesOperations(Resource):
         grp = adm.get_group_by_id(group_id)
         if grp is not None:
             result = adm.get_list_entries_by_group(grp)
+            return result
+        else:
+            return "Group not found", 500
+
+
+@holmaApp.route('/group/<int:group_id>/listentries/include-archived')
+@holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
+@holmaApp.param('group_id', 'Die ID des Gruppen-Objekts')
+class GroupRelatedListEntriesOperations(Resource):
+    @holmaApp.marshal_with(list_entry)
+    @secured
+    def get(self, group_id):
+        """Auslesen von Listeneintrag-Objekten, die Teil einer Shoppingliste der
+        angegebenen Gruppe sind."""
+        adm = StatisticAdministration()
+        grp = adm.get_group_by_id(group_id)
+        if grp is not None:
+            result = adm.get_list_entries_by_group(grp, True)
             return result
         else:
             return "Group not found", 500
