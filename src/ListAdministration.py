@@ -77,8 +77,7 @@ class Administration():
         if include_archived == False:
             shopping_lists = self.get_all_archived_shopping_lists()
         with ListEntryMapper() as mapper:
-            return mapper.find_by_purchasing_user(user_id,
-                                                          shopping_lists)
+            return mapper.find_by_purchasing_user(user_id, shopping_lists)
 
     def create_user(self, name: str, email: str, google_id: str):
         """User anlegen
@@ -642,20 +641,20 @@ class StatisticAdministration(Administration):
         with ArticleMapper() as mapper:
             return mapper.find_all()
 
-    def get_list_entries_by_group(self, group: Group):
+    def get_list_entries_by_group(self, group: Group, include_archived=False):
         """Alle Listeneinträge einer Gruppe ausgeben
 
         :param group: Gruppen-Objekt
         :return: Liste mit Listeneinträgen
         """
         with ShoppingListMapper() as mapper:
-            shopping_lists = mapper.find_by_group(group)
+            shopping_lists = mapper.find_by_group(group, include_archived)
 
+        list_entries = []
         for shopping_list in shopping_lists:
             with ListEntryMapper() as mapper:
-                return mapper.find_list_entries_by_shopping_list_id(
-                    shopping_list)
-        
+                list_entries += mapper.find_list_entries_by_shopping_list_id(shopping_list)
+        return list_entries
 
     def get_list_entries_in_time_period(self, from_date: datetime,
                                         to_date: datetime):

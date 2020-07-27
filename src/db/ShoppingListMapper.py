@@ -83,15 +83,22 @@ class ShoppingListMapper(Mapper):
 
         return result
 
-    def find_by_group(self, group):
+    def find_by_group(self, group, include_archived=False):
         """Auslesen von Shoppinglisten durch Fremdschlüssel (group_id) geg. Gruppe
-        :param group:
+        :param group: Gruppen-Objekt
+        :param include_archived: Angabe, ob archivierte Shoppinglists
+        ausgegeben werden sollen
         :return Eine Sammlung mit Shoppinglisten-Objekten.
         """
+
+        incl_arch = ""
+        if include_archived == False:
+            incl_arch = " AND archived = FALSE"
+        print(include_archived)
         cursor = self._connection.cursor()
         command = "SELECT * FROM shopping_list " \
-                  "WHERE group_id={} " \
-                  "AND archived = FALSE".format(group.get_id())
+                  "WHERE group_id={}{}".format(group.get_id(),
+                                               incl_arch)
         cursor.execute(command)
         tuples = cursor.fetchall()
 
