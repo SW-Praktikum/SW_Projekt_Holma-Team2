@@ -140,7 +140,7 @@ class ShoppingListEdit extends Component {
         );
     }
 
-    handleDeleteShoppingList = () => {
+    handleArchiveShoppingList = () => {
         //console.log(this.state.shoppingListObject)
         AppAPI.getAPI().archiveShoppingList(this.state.shoppingListObject).then(() => 
         window.location.reload()
@@ -237,7 +237,7 @@ class ShoppingListEdit extends Component {
                             variant="contained"
                             fullWidth 
                             style={{marginBottom: 20, color: 'white',backgroundColor: '#D0021B'}} 
-                            onClick={this.handleDeleteShoppingList}>
+                            onClick={this.handleArchiveShoppingList}>
                             Liste archivieren
                         </Button>
                     </Grid>

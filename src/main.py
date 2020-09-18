@@ -937,7 +937,7 @@ class GroupRelatedListEntriesOperations(Resource):
 @holmaApp.route('/group/<int:group_id>/listentries/include-archived')
 @holmaApp.response(500, 'Falls es zu einem Server-seitigen Fehler kommt.')
 @holmaApp.param('group_id', 'Die ID des Gruppen-Objekts')
-class GroupRelatedListEntriesOperations(Resource):
+class GroupRelatedListEntriesIncludingArchivedOperations(Resource):
     @holmaApp.marshal_with(list_entry)
     @secured
     def get(self, group_id):
