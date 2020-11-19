@@ -5,6 +5,7 @@
 /.pnp
 .pnp.js
 SW_Projekt_Holma-Team2/venv
+package-lock.json
 
 # testing  
 /coverage
